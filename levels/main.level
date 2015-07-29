@@ -1,0 +1,66 @@
+<Maratis version="3.0">
+
+<Level>
+
+	<properties currentScene="0" />
+
+	<Scene name="Scene-1">
+
+		<script file="../scripts/main.lua" />
+		<properties 
+			data="Static"
+			gravity="0.000000 0.000000 -0.981000" />
+
+		<Light name="Light0">
+			<active value="true" />
+			<transform 
+				position="-3.308383 -106.214722 85.906120"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 1.000000 1.000000"
+				intensity="100.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Camera name="Camera">
+			<active value="true" />
+			<transform 
+				position="0.000000 20.000008 15.000004"
+				rotation="90.000031 0.000010 -179.699997"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				clearColor="0.200000 0.300000 0.400000"
+				ortho="false"
+				fov="45.000000"
+				clippingNear="1.000000"
+				clippingFar="1000.000000"
+				fog="false"
+				fogDistance="0.000000" />
+			<Behavior name="Follow">
+				<properties 
+					target="Cart"
+					delay="10.000000"
+					offset="0.000000 20.000000 15.000000"
+					local="false" />
+			</Behavior>
+		</Camera>
+		<Entity name="Cart" file="../meshs/Strawberry_Cart.mesh">
+			<BoundingBox min="-0.742270 -1.043185 -0.006753" max="0.742268 1.628938 1.063209" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.000000 0.000000 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="10.000000 10.000000 10.000000" />
+			<properties 
+				invisible="false" />
+		</Entity>
+
+	</Scene>
+
+</Level>
+
+</Maratis>
