@@ -1,31 +1,33 @@
-local class = require("class")
 local hfsm = {
-	state = class.define(
-		{
-			init = function(params)
-				if (params == nil) then
-					params = {}
-				end
-				local inst = {
-					name = params.name or "hfsm",
-					on_entry = params.entry,
-					on_update = params.on_update,
-					on_exit = params.on_exit,
-					children = params.children || {},
-					transitions = params.transitions || {},
-					current = params.current,
-					initial = params.initial,
-					parent = params.parent,
-					level = 0
-				}
-				return inst
-			end
-		}
-	),
-	transition = class.define(
-		{
-		}
-	)
+	result = require("hfsm_result"),
+	state = require("hfsm_state"),
+	transition = require("hfsm_transition")
 }
+
+function lazy_print(message)
+	return function()
+		print(message)
+	end
+end
+
+local stateA = hfsm.state.new({
+	name = "State A",
+	on_entry = lazy_print("Hello State A!"),
+	on_update = lazy_print("Running State A..."),
+	on_exit = lazy_print("Goodbye State A!")
+})
+
+local stateB = hfsm.state.new({
+	name = "State B",
+	on_entry = lazy_print("Hello State B!"),
+	on_update = lazy_print("Running State B..."),
+	on_exit = lazy_print("Goodbye State B!")
+})
+
+local root = hfsm.state.new({
+	name = "Root",
+}):add_child(stateA):add_child(stateB)
+
+root:run():run()
 
 return hfsm
