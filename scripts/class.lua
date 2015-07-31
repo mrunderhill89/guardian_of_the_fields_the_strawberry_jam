@@ -16,10 +16,13 @@ local Class = {
 			set = {}, --setter functions
 			get = {}, --getter functions
 			defaults = {}, --default values
-			initialize = function(params) --returns basic properties
+			requires = {}, --required values
+			--returns basic properties
+			initialize = function(params) 
 				return _.defaults(params or {}, _.map(proto.defaults, deep_clone))
 			end,
-			constructor = function(inst, ...) --constructs the object from given table
+			--constructs the object from given table
+			constructor = function(inst, ...) 
 				inst.props = _.map(
 						proto.initialize(...),
 						function(key, value)
@@ -30,10 +33,15 @@ local Class = {
 							end
 						end
 				)
-				inst.set = function(index, value) --helper function that allows chaining
+				--helper function that allows chaining
+				inst.set = function(index, value) 
 					inst[index] = value
 					return inst
 				end
+				--check to make sure required properties are initialized.
+				_.each(proto.requires, function(key,prop)
+					assert(inst[prop] ~= nil,"Missing required property:"..prop)
+				end)
 				setmetatable(inst,proto)
 				return inst
 			end,
@@ -62,12 +70,12 @@ local Class = {
 		setmetatable(proto,Class)
 		return proto
 	end,
-	assert_type = function(t,data)
-		assert(type(data) == t, "Type Error: Expected "..t..", got "..type(data).." instead.")
+	assert_type = function(t,data, allow_nil)
+		assert((type(data) == t) or (allow_nil and data == nil), "Type Error: Expected "..t..", got "..type(data).." instead.")
 	end,
-	force_type = function(this, t)
+	force_type = function(this, t, allow_nil)
 		return function(that,value)
-			this.assert_type(t,value)
+			this.assert_type(t,value, allow_nil)
 			return value
 		end
 	end,
