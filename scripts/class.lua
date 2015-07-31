@@ -1,64 +1,78 @@
-function deep_clone(value)
+local _ = require("moses_min")
+
+function deep_clone(name, value)
 	if (type(value) == "table") then
-		local copy = {}
-		for key,value in pairs(value) do
-			copy[key] = deep_clone(value[key])
-		end
-		return copy
+		return _.map(value, function(key,sub)
+			return deep_clone(key, sub)
+		end)
 	end
 	return value
 end
 local Class = {
 	define = function(proto) 
-		local proto = proto or {}
-		proto.set = proto.set or {}
-		proto.get = proto.get or {}
-		proto.defaults = proto.defaults or {}
-		if (proto.init == nil) then
-			proto.init = function(params)
-				local params = params or {}
-				local inst = {props = {}}
-				for key,value in pairs(proto.defaults) do
-					if (not params[key]) then
-						params[key] = deep_clone(value)
-					end
+		--Set up our object prototype.
+		local proto = _.extend(_.defaults(proto or {}, 
+		{
+			set = {}, --setter functions
+			get = {}, --getter functions
+			defaults = {}, --default values
+			initialize = function(params) --returns basic properties
+				return _.defaults(params or {}, _.map(proto.defaults, deep_clone))
+			end,
+			constructor = function(inst, ...) --constructs the object from given table
+				inst.props = _.map(
+						proto.initialize(...),
+						function(key, value)
+							if (proto.set[key]) then
+								return proto.set[key](inst, value)
+							else
+								return value
+							end
+						end
+				)
+				inst.set = function(index, value) --helper function that allows chaining
+					inst[index] = value
+					return inst
 				end
-				for key,value in pairs(params) do
-					if (proto.set[key]) then
-						inst.props[key] = proto.set[key](value)
-					else
-						inst.props[key] = value
-					end
-				end
+				setmetatable(inst,proto)
 				return inst
+			end,
+			new = function(...) --simply constructs with empty object
+				local inst = proto.constructor({}, ...)
+				return inst
+			end,
+		}),{
+			__index = function(this, index)
+				if (proto.get[index] ~= nil) then --we have a getter function
+					return proto.get[index](this, this.props[index])
+				end
+				if (this.props[index] ~= nil) then --we only have the property
+					return this.props[index]
+				end
+				return proto[index] --this is a static property
+			end,
+			__newindex = function(this, index, value)
+				if (proto.set[index] ~= nil) then --we have a setter function
+					rawset( this, index, proto.set[index](this, value, this[index]) )
+				else --no setter function, just set it directly
+					rawset( this, index, value )
+				end
 			end
-		end
+		})
 		setmetatable(proto,Class)
-		proto.new = function(...)
-			local inst = proto.init(...)
-			setmetatable(inst,proto)
-			return inst
-		end
-		proto.__index = function(this, index)
-			if (proto.get[index] ~= nil) then
-				return proto.get[index](this, this.props[index])
-			end
-			if (this.props[index] ~= nil) then
-				return this.props[index]
-			end
-			return proto[index]
-		end
-		proto.__newindex = function(this, index, value)
-			if (proto.set[index] ~= nil) then
-				rawset( this, index, proto.set[index](this, value) )
-			else
-				rawset( this, index, value )
-			end
-		end
 		return proto
 	end,
-	assert_type = function(data, t)
-		assert(type(data) == t, "Expected type "..t..", got "..type(data).." instead.")
+	assert_type = function(t,data)
+		assert(type(data) == t, "Type Error: Expected "..t..", got "..type(data).." instead.")
+	end,
+	force_type = function(this, t)
+		return function(that,value)
+			this.assert_type(t,value)
+			return value
+		end
+	end,
+	force_private = function(value, index)
+		error("Unauthorized access to property "..index)
 	end
 }
 

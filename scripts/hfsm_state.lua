@@ -1,12 +1,9 @@
 local class = require("class")
+local _ = require("moses_min")
 local Result = require("hfsm_result")
 function assert_child(this, state)
 	if (state == nil) then return nil end
-	for i,child in ipairs(this.children) do
-		if (child == state) then
-			return state
-		end
-	end
+	if (state.parent == this) then return state end
 	error("State must be a child of this HFSM or nil.")
 end
 return class.define(
@@ -19,23 +16,53 @@ return class.define(
 		},
 		set = {
 			current = assert_child,
-			initial = assert_child
+			initial = assert_child,
+			level = class:force_type("number"),
+			parent = function(this,new,old)
+				if (old ~= new) then
+					if (old and old.children[this] == this) then
+						old:remove_child(this)
+					end
+					if (new and not new.children[this]) then
+						new:add_child(this)
+					end
+					this.level = new.level+1
+				end
+				return new
+			end
 		},
-		is_empty = function(this)
-			return #this.children == 0
+		size = function(this)
+			return _.size(this.children)
 		end,
 		add_child = function(this,state)
-			table.insert(this.children, state)
+			this.children[state] = state
+			state.parent = this
 			if (this.initial == nil) then
 				this.initial = state
 			end
+			return this
+		end,
+		remove_child = function(this,state)
+			this.children[state] = nil
+			state.parent = nil
+			if (this.initial == state) then
+				this.initial = nil
+			end
+			if (this.current == state) then
+				this.current = this.initial
+			end
+			return this
+		end,
+		add_transition = function(this,trans)
+			this.transitions[trans] = trans
+			trans.level = this.level - trans.to.level
 			return this
 		end,
 		update = function(this, result)
 			local result = result or Result.new()
 			--If we're starting from scratch, enter the initial state.
 			if (this.current == nil) then
-				if (this:is_empty()) then
+				if (this:size() == 0) then
 					--This is a leaf state and has no children, so just return its own update action.
 					result:add_action(this.on_update)
 				elseif (this.initial ~= nil) then
@@ -46,7 +73,7 @@ return class.define(
 				--Try to find a transition in the current state.
 				local triggered = nil
 				for ti, trans in pairs(this.current.transitions) do
-					if (trans.test()) then
+					if (trans:test()) then
 						triggered = trans
 						break
 					end
@@ -54,7 +81,7 @@ return class.define(
 				--If we've found one, load it into the result struct.
 				if (triggered ~= nil) then
 					result.trans = triggered
-					result.level = triggered:getLevel()
+					result.level = triggered.level
 				else
 				--Otherwise, recurse downwards for a result
 					result = this.current:update(result)
@@ -66,7 +93,7 @@ return class.define(
 						--Transition destined for higher level.
 						result:add_action(this.current.on_exit)
 						--Reset the state if the transition calls for it.
-						if (not result.trans.remember_state()) then
+						if (not result.trans.remember_state) then
 							this.current = nil
 						end
 						result.level = result.level -1
@@ -77,13 +104,13 @@ return class.define(
 						--Transition is on the same level.
 							result:add_action(this.current.on_exit)
 							result:add_action(result.trans.action)
-							result:add_action(target.on_exit)
+							result:add_action(target.on_entry)
 							this.current = target
-							result:add_action(target.onUpdate)
+							result:add_action(target.on_update)
 						else
 						--Transition is on lower level.
 							result:add_action(result.trans.action)
-							result:add_acions(target.parent:update_down(target, result.level, {}))
+							result:add_actions(target.parent:update_down(target, result.level, {}))
 						end
 						result.trans = nil;
 					end
