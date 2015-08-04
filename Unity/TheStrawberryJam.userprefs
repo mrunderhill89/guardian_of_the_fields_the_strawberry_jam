@@ -1,0 +1,14 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/InputController.cs">
+    <Files>
+      <File FileName="../../../../../../../../.PlayOnLinux/wineprefix/Unity3D/drive_c/users/Public/Documents/Unity Projects/TheStrawberryJam/Assets/GameStateManager.cs" Line="16" Column="17" />
+      <File FileName="../../../../../../../../.PlayOnLinux/wineprefix/Unity3D/drive_c/users/Public/Documents/Unity Projects/TheStrawberryJam/Assets/HFSM.cs" Line="245" Column="22" />
+      <File FileName="Assets/InputController.cs" Line="12" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
