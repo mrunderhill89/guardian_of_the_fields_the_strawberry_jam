@@ -69,6 +69,7 @@ return class.define(
 					this.current = this.initial
 					result:add_action(this.current.on_entry)
 				end
+				return result
 			else
 				--Try to find a transition in the current state.
 				local triggered = nil
@@ -87,39 +88,41 @@ return class.define(
 					result = this.current:update(result)
 				end
 				--Check if the result contains a transition.
-				if (result.trans ~= nil) then
-					--Act based on its level
-					if (result.level > 0) then
-						--Transition destined for higher level.
-						result:add_action(this.current.on_exit)
-						--Reset the state if the transition calls for it.
-						if (not result.trans.remember_state) then
-							this.current = nil
+				return this.current:handle_transition(result) 
+			end
+		end,
+		lazy_set_current = function(this, child)
+			return function()
+				if (this.current ~= child) then
+					if (this.current ~= nil) then
+						this.current.on_exit()
 						end
-						result.level = result.level -1
-					else
-						--Both same- and lower-level transitions share some code.
-						local target = result.trans.to
-						if (result.level == 0) then
-						--Transition is on the same level.
-							result:add_action(this.current.on_exit)
-							result:add_action(result.trans.action)
-							result:add_action(target.on_entry)
-							this.current = target
-							result:add_action(target.on_update)
-						else
-						--Transition is on lower level.
-							result:add_action(result.trans.action)
-							result:add_actions(target.parent:update_down(target, result.level, {}))
-						end
-						result.trans = nil;
-					end
+					this.current = child
+					child.on_entry()
 				end
 			end
-			return result
 		end,
-		update_down = function(this, target, level, actions)
-			return actions;
+		_handle_transition = function(f,t,fa,ta)
+			assert(f ~= nil and t ~= nil,"No common ancestor.")
+			if (f == t) then return fa, ta end
+			--Act based on its level
+			if (f.level >= t.level) then
+				fp = f.parent
+				_.push(fa, fp:lazy_set_current(nil))
+				return fp:_handle_transition(d, fa, ta)
+			else
+				tp = t.parent
+				_.addTop(ta, tp:lazy_set_current(t))
+				return f:_handle_transition(tp, fa, ta)
+			end
+		end,
+		handle_transition = function(this,result)
+			if (result.trans ~= nil) then
+				local fa,ta = this:_handle_transition(target,{},{})
+				result.add_actions(fa).add_actions(ta)
+				result.trans = nil
+			end
+			return result
 		end,
 		run = function(this)
 			this:update():run()
