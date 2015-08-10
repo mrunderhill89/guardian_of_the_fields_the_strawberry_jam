@@ -6,6 +6,7 @@ public class GameStateManager : MonoBehaviour {
 	public HFSM_State root;
 	public InputController input;
 	public CameraController camera_control;
+	public CartController cart_control;
 	Action lazy_log(string message){
 		return () => {
 			Debug.Log (message);
@@ -27,14 +28,17 @@ public class GameStateManager : MonoBehaviour {
 			.add_child(look_forward)
 			.add_child(look_left)
 			.add_child(look_right)
-			.on_entry(lazy_log("Looking"));
+			.on_entry(lazy_log("Looking"))
+			.on_update(()=>{
+					cart_control.move();
+			});
 		look.initial = look_forward;
 
 		//Pick
 		HFSM_State pick_left = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_left));
+			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_left, 20, 20));
 		HFSM_State pick_right = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_right));
+			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_right, 20, 20));
 		HFSM_State pick = new HFSM_State ()
 			.add_child(pick_left)
 			.add_child(pick_right)

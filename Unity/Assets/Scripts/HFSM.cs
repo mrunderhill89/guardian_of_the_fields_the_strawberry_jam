@@ -91,22 +91,28 @@ public class HFSM_Transition{
 	}
 }
 
+public class HFSM : MonoBehaviour {
+	protected HFSM_State _state;
+	public HFSM_State state{
+		get{return _state;}
+		set{ _state = value;}
+	}
+	public HFSM parent;
+	void Start(){
+		state = new HFSM_State();
+		state.parent = this.parent.state;
+	}
+	void Update(){
+		state.run();
+	}
+}
+
 public class HFSM_State {
 	//Constructor
 	public HFSM_State (){
-		this.children = new HashSet<HFSM_State> ();
 		this.transitions = new List<HFSM_Transition> ();
 	}
 
-	//Children
-	protected HashSet<HFSM_State> _children;
-	public HashSet<HFSM_State> children {
-		get{ return _children; }
-		private set{ _children = value; }
-	}
-	public int size{
-		get{ return this.children.Count;}
-	}
 	//Transitions
 	protected List<HFSM_Transition> _transitions;
 	public List<HFSM_Transition> transitions {
@@ -124,20 +130,19 @@ public class HFSM_State {
 	public HFSM_State parent {
 		get{ return _parent;}
 		set{
-			HFSM_State prev = this.parent;
-			HFSM_State next = value;
-			if (prev != next) {
-				if (prev != null && prev.has_child (this)) {
-					prev.remove_child (this);
+			if (_parent != value){
+				if (_parent != null){
+					if (_parent.initial == this) _parent.initial = null;
+					if (_parent.current == this) _parent.current = null;
 				}
-				this._parent = next;
-				if (next != null) {
-					this.level = next.level + 1;
-					if (!next.has_child (this)) {
-						next.add_child (this);
+				_parent = value;
+				if (value != null){
+					if (value.initial == null) {
+						value.initial = this;
 					}
+					level = value.level+1;
 				} else {
-					this.level = 1;
+					level = 1;
 				}
 			}
 		}
@@ -197,18 +202,13 @@ public class HFSM_State {
 	}
 	//Add/Check/Remove Children
 	public HFSM_State add_child(HFSM_State that){
-		this.children.Add(that);
-		if (this.initial == null) {
-			this.initial = that;
-		}
 		that.parent = this;
 		return this;
 	}
 	public bool has_child(HFSM_State that){
-		return this.children.Contains(that);
+		return that.parent == this;
 	}
 	public HFSM_State remove_child(HFSM_State child){
-		this.children.Remove(child);
 		child.parent = null;
 		return this;
 	}
@@ -227,11 +227,11 @@ public class HFSM_State {
 	//Update
 	protected HFSM_Result _update(HFSM_Result result){
 		if (this.current == null) {
-			if (this.size == 0) {
-				result.add_action (this.on_update ());
-			} else if (this.initial != null){
+			if (this.initial != null){
 				this.current = this.initial;
 				result.add_action (this.current.on_entry ());
+			} else {
+				result.add_action (this.on_update ());
 			}
 		} else {
 			HFSM_Transition trig = null;

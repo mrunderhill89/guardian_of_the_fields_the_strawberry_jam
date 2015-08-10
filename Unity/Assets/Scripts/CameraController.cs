@@ -5,6 +5,7 @@ using System;
 public class CameraController : MonoBehaviour {
 	public Transform target;
 	public int default_frames = 60;
+	public int default_delay = 0;
 	//Link these to the appropriate view objects
 	public Transform c_look_forward = null,c_look_left = null,c_look_right = null;
 	public Transform c_pick_left = null,c_pick_right = null,c_pack = null;
@@ -29,22 +30,22 @@ public class CameraController : MonoBehaviour {
 		);
 	}
 	public Action lazy_set_target(Transform t){
-		return this.lazy_set_target (t, this.default_frames);
+		return this.lazy_set_target (t, this.default_frames, this.default_delay);
 	}
-	public Action lazy_set_target(Transform t, int in_frames){
+	public Action lazy_set_target(Transform t, int in_frames, int delay){
 		return () => {
-			this.StartCoroutine(this.drift_to_target(t,in_frames));
+			this.StartCoroutine(this.drift_to_target(t,in_frames, delay));
 		};
 	}
 
-	public IEnumerator drift_to_target(Transform t, int in_frames){
+	public IEnumerator drift_to_target(Transform t, int in_frames, int delay_frames = 0){
 		float percent, inv_percent;
 		Vector3 p_0 = this.transform.position;
 		Vector3 p_f = t.position;
 		Vector3 r_0 = WrapAngles(this.transform.rotation.eulerAngles, 180.0f, 360.0f);
 		Vector3 r_f = WrapAngles(t.rotation.eulerAngles, 180.0f, 360.0f);
-		for (int frame = 0; frame <= in_frames; frame++) {
-			percent = Math.Min(((float)frame) / ((float)in_frames), 1.0f);
+		for (int frame = -delay_frames; frame <= in_frames; frame++) {
+			percent = Math.Max(Math.Min(((float)frame) / ((float)in_frames), 1.0f),0.0f);
 			inv_percent = 1.0f - percent;
 			this.transform.position = (p_f * percent) + (p_0 * inv_percent);
 			this.transform.rotation = Quaternion.Euler(r_f * percent + r_0 * inv_percent);
