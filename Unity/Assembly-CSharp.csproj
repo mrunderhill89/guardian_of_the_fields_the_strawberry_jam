@@ -46,13 +46,15 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CartController.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\HFSM.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
+     <Compile Include="Assets\Scripts\RandomUtils.cs" />
+     <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
+     <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
      <Compile Include="Assets\Scripts\RowModel.cs" />
      <Compile Include="Assets\Scripts\StrawberryComponent.cs" />
      <Compile Include="Assets\Scripts\StrawberryModel.cs" />
