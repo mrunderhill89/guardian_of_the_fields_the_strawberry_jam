@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -9,11 +10,16 @@ public class SortByZ : IComparer<float>{
 	}
 }
 
+[System.Serializable]
+public class GenerationEvent : UnityEvent<GameObject, GameObject>{}
+
+
 public class GameObjectPool : MonoBehaviour {
 	public GameObject prefab;
 	public int total_instances;
 	public Vector3 min_position = new Vector3(0,0,0);
 	public Vector3 max_position = new Vector3(0,0,0);
+	public bool optimize = true;
 
 	protected SortedList<float,GameObject> instances;
 	protected List<float> search_list;
@@ -26,13 +32,26 @@ public class GameObjectPool : MonoBehaviour {
 		float oz = origin.position.z;
 		return (z >= (oz - range) && z <= (oz + range));
 	}
+	[SerializeField]
+	GenerationEvent on_generate;
+
+	Func<Vector3, Vector3, Vector3> generation_strategy = (Vector3 min, Vector3 max) => {
+		return new Vector3 (
+			RandomUtils.random_float (min.x, max.x),
+			RandomUtils.random_float (min.y, max.y),
+			RandomUtils.random_float (min.z, max.z)
+		);
+	};
 
 	Vector3 getNextPosition(){
-		return this.transform.position + new Vector3 (
-			RandomUtils.random_float (min_position.x, max_position.x),
-			RandomUtils.random_float (min_position.y, max_position.y),
-			RandomUtils.random_float (min_position.z, max_position.z)
-		);
+		return this.transform.position + this.generation_strategy(min_position,max_position);
+	}
+
+	public void generate_strawberry(GameObject berry, GameObject container){
+		StrawberryComponent component = berry.GetComponent<StrawberryComponent> ();
+		if (component != null) {
+			component.container = container;
+		}
 	}
 
 	// Use this for initialization
@@ -50,11 +69,14 @@ public class GameObjectPool : MonoBehaviour {
 			} catch(ArgumentException err){
 				Debug.Log("Hmm... C# says that adding "+instance.ToString()+" didn't work...");
 			}
-			instance.SetActive(isVisible(nextPosition.z));
+			if (on_generate != null) on_generate.Invoke (instance, this.transform.gameObject);
+			if (optimize) instance.SetActive (isVisible (nextPosition.z));
 		}
 		search_list = new List<float>(instances.Keys);
 		object_list = new List<GameObject>(instances.Values);
-		StartCoroutine(visibility_routine());
+		if (optimize) {
+			StartCoroutine (visibility_routine ());
+		}
 	}
 	IEnumerator visibility_routine(){
 		float oz = 0.0f,head,tail;
