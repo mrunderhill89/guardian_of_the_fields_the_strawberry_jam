@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HFSM_Result{
 	protected List<Action> actions;
-	public HFSM_Transition trans = null;
+	public I_HFSM_Transition trans = null;
 	public int level = 0;
 	public HFSM_Result(){
 		actions = new List <Action> ();
@@ -30,7 +30,15 @@ public class HFSM_Result{
 	}
 }
 
-public class HFSM_Transition{
+public interface I_HFSM_Transition{
+	bool test ();
+	Action action();
+	HFSM_State from_state{ get;}
+	HFSM_State to_state{ get;}
+	int level{get;}
+}
+
+public class HFSM_Transition : I_HFSM_Transition{
 	//Remember previous state?
 	protected bool _memory = false;
 	public bool memory(){
@@ -110,12 +118,12 @@ public class HFSM : MonoBehaviour {
 public class HFSM_State {
 	//Constructor
 	public HFSM_State (){
-		this.transitions = new List<HFSM_Transition> ();
+		this.transitions = new List<I_HFSM_Transition> ();
 	}
 
 	//Transitions
-	protected List<HFSM_Transition> _transitions;
-	public List<HFSM_Transition> transitions {
+	protected List<I_HFSM_Transition> _transitions;
+	public List<I_HFSM_Transition> transitions {
 		get{ return _transitions; }
 		private set{ _transitions = value; }
 	}
@@ -213,14 +221,14 @@ public class HFSM_State {
 		return this;
 	}
 	//Add/Check/Remove Transitions
-	public HFSM_State add_transition(HFSM_Transition trans){
+	public HFSM_State add_transition(I_HFSM_Transition trans){
 		this.transitions.Add(trans);
 		return this;
 	}
-	public bool has_transition(HFSM_Transition trans){
+	public bool has_transition(I_HFSM_Transition trans){
 		return this.transitions.Contains(trans);
 	}
-	public HFSM_State remove_transition(HFSM_Transition trans){
+	public HFSM_State remove_transition(I_HFSM_Transition trans){
 		this.transitions.Remove (trans);
 		return this;
 	}
@@ -234,7 +242,7 @@ public class HFSM_State {
 				result.add_action (this.on_update ());
 			}
 		} else {
-			HFSM_Transition trig = null;
+			I_HFSM_Transition trig = null;
 			trig = this.current.transitions.Find ((t) => {
 				return t.test();
 			});
