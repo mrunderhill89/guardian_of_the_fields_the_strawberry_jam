@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CartController.cs" />
+     <Compile Include="Assets\Scripts\DependencyManager.cs" />
      <Compile Include="Assets\Scripts\EventTransition.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />

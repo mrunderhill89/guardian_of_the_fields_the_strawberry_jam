@@ -160,6 +160,7 @@ public class Reactive_Transition: MonoBehaviour {
 		}
 	}
 	public void run(){
+		Debug.Log ("Initial Run");
 		beat.OnNext(0);
 	}
 	IEnumerator coroutine(){

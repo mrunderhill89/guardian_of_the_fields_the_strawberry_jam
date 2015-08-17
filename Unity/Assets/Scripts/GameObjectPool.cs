@@ -67,7 +67,7 @@ public class GameObjectPool : MonoBehaviour {
 					instance
 	            );
 			} catch(ArgumentException err){
-				Debug.Log("Hmm... C# says that adding "+instance.ToString()+" didn't work...");
+				Debug.Log (err.Message);
 			}
 			if (on_generate != null) on_generate.Invoke (instance, this.transform.gameObject);
 			if (optimize) instance.SetActive (isVisible (nextPosition.z));
