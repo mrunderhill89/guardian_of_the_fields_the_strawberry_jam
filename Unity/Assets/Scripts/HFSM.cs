@@ -35,6 +35,7 @@ public interface I_HFSM_Transition{
 	Action action();
 	HFSM_State from_state{ get;}
 	HFSM_State to_state{ get;}
+	HFSM_Result trigger(HFSM_Result r);
 	int level{get;}
 }
 
@@ -62,7 +63,7 @@ public class HFSM_Transition : I_HFSM_Transition{
 			bool result = this._condition ();
 			return result;
 		}
-		return false;
+		return true;
 	}
 	//Action
 	protected Action _action = null;
@@ -91,27 +92,54 @@ public class HFSM_Transition : I_HFSM_Transition{
 			return from_state.level - to_state.level;
 		}
 	}
+	//Trigger
+	public HFSM_Result trigger(HFSM_Result result = null){
+		if (result == null) {
+			result = new HFSM_Result ();
+		}
+		if (test () && from_state.is_active()) {
+			result.trans = this;
+			//Find common ancestor between both states and the paths between them.
+			List<HFSM_State> up_path = new List<HFSM_State> ();
+			List<HFSM_State> down_path = new List<HFSM_State> ();
+			HFSM_State up = from_state;
+			HFSM_State down = to_state;
+			down_path.Add (down);
+			while (up != down) {
+				if (up.level > down.level || down == null) {
+					up = up.parent;
+					up_path.Add (up);
+				} else {
+					down = down.parent;
+					down_path.Add (down);
+				}
+			}
+			for (int u = 0; u < up_path.Count - 1; u++) {
+				up = up_path [u];
+				if (up.current != null) {
+					result.add_action (up.current.on_exit ());
+					up.current = null;
+				}
+			}
+			result.add_action(action());
+			for (int d = down_path.Count - 1; d > 0; d--) {
+				down = down_path [d];
+				if (down.current != down_path [d - 1]) {
+					if (down.current != null) {
+						result.add_action (down.current.on_exit ());
+					}
+					down.current = down_path [d - 1];
+					result.add_action (down_path [d - 1].on_entry ());
+				}
+			}
+		}
+		return result;
+	}
 	//Constructor
 	public HFSM_Transition(HFSM_State _from, HFSM_State _to, Func<bool> _c = null){
 		this.to_state = _to;
 		this.from_state = _from;
 		this.condition(_c);
-	}
-}
-
-public class HFSM : MonoBehaviour {
-	protected HFSM_State _state;
-	public HFSM_State state{
-		get{return _state;}
-		set{ _state = value;}
-	}
-	public HFSM parent;
-	void Start(){
-		state = new HFSM_State();
-		state.parent = this.parent.state;
-	}
-	void Update(){
-		state.run();
 	}
 }
 
@@ -232,6 +260,16 @@ public class HFSM_State {
 		this.transitions.Remove (trans);
 		return this;
 	}
+	//Check Activity
+	public bool is_active(){
+		if (parent != null) {
+			if (parent.current != this) {
+				return false;
+			}
+			return parent.is_active();
+		}
+		return true;
+	}
 	//Update
 	protected HFSM_Result _update(HFSM_Result result){
 		if (this.current == null) {
@@ -244,51 +282,14 @@ public class HFSM_State {
 		} else {
 			I_HFSM_Transition trig = null;
 			trig = this.current.transitions.Find ((t) => {
-				return t.test();
+				result = t.trigger(result);
+				return result.trans != null;
 			});
-			if (trig != null) {
-				result.trans = trig;
-				result.level = trig.level;
-			} else {
+			if (result.trans == null) {
 				result.add_action(this.on_update ());
 				result = this.current._update (result);
 			}
-			if (result.trans != null) {
-				HFSM_State target = result.trans.to_state;
-				//Find common ancestor between both states and the paths between them.
-				List<HFSM_State> up_path = new List<HFSM_State>();
-				List<HFSM_State> down_path = new List<HFSM_State>();
-				HFSM_State up = current;
-				HFSM_State down = target;
-				down_path.Add(down);
-				while (up != down) {
-					if (up.level > down.level || down == null) {
-						up = up.parent;
-						up_path.Add(up);
-					} else {
-						down = down.parent;
-						down_path.Add(down);
-					}
-				};
-				for (int u = 0; u < up_path.Count-1; u++) {
-					up = up_path [u];
-					if (up.current != null) {
-						result.add_action(up.current.on_exit());
-						up.current = null;
-					}
-				};
-				for (int d = down_path.Count-1; d > 0; d--){
-					down = down_path [d];
-					if (down.current != down_path [d - 1]) {
-						if (down.current != null) {
-							result.add_action (down.current.on_exit ());
-						}
-						down.current = down_path [d - 1];
-						result.add_action(down_path[d-1].on_entry());
-					}
-				};
-				result.trans = null;
-			}
+			result.trans = null;
 		}
 		return result;
 	}

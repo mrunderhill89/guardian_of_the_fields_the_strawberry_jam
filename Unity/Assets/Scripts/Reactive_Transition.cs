@@ -44,6 +44,23 @@ public class Reactive_Transition: MonoBehaviour {
 
 	public UnityEvent on_transfer = null;
 	void Start(){
+		if (i_from == null) {
+			if (i_to == null) {
+				initialize ();
+			} else {
+				Reactive_HFSM.deps.register_dep (i_to, initialize);
+			}
+		} else {
+			Reactive_HFSM.deps.register_dep (i_from, ()=>{
+				if (i_to == null) {
+					initialize ();
+				} else {
+					Reactive_HFSM.deps.register_dep (i_to, initialize);
+				}
+			});
+		}
+	}
+	void initialize(){
 		beat = new Subject<int>();
 		from = new Subject<Reactive_HFSM>();
 		to = new Subject<Reactive_HFSM>();
@@ -51,7 +68,7 @@ public class Reactive_Transition: MonoBehaviour {
 		active = from.SelectMany ((Reactive_HFSM f) => {
 			if (f == null)
 				//Without a from state, all transitions are inactive.
-				return Observable.Return(false);
+				return Observable.Constant(false);
 			return f.active;
 		});
 		path = from.SelectMany ((Reactive_HFSM f) => {
@@ -160,7 +177,6 @@ public class Reactive_Transition: MonoBehaviour {
 		}
 	}
 	public void run(){
-		Debug.Log ("Initial Run");
 		beat.OnNext(0);
 	}
 	IEnumerator coroutine(){

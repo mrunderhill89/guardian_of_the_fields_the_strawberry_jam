@@ -444,5 +444,27 @@ namespace UniRx
                 return subject.AsObservable();
             };
         }
+
+		/// <summary>
+		/// Return single sequence on DefaultSchedulers.ConstantTimeOperations.
+		/// </summary>
+		public static IObservable<T> Constant<T>(T value)
+		{
+			return Constant<T>(value, Scheduler.DefaultSchedulers.ConstantTimeOperations);
+		}
+
+		/// <summary>
+		/// Return single sequence on specified scheduler.
+		/// </summary>
+		public static IObservable<T> Constant<T>(T value, IScheduler scheduler)
+		{
+			return Observable.Create<T>(observer =>
+				{
+					return scheduler.Schedule(() =>
+						{
+							observer.OnNext(value);
+						});
+				});
+		}
     }
 }

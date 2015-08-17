@@ -65,9 +65,10 @@ public class Reactive_HFSM : MonoBehaviour {
 		if (p != null){
 			return p.parents.Select<Reactive_HFSM[],Reactive_HFSM[]>(extend_chain);
 		}
-		return Observable.Return<Reactive_HFSM[]>(new Reactive_HFSM [] {this});
+		return Observable.Constant<Reactive_HFSM[]>(new Reactive_HFSM [] {this});
 	}
 	Reactive_HFSM[] extend_chain(Reactive_HFSM[] p_pars){
+		Debug.Log ("Get parents from parent:"+p_pars.Length);
 		Reactive_HFSM[] result = new Reactive_HFSM[p_pars.Length+1];
 		//[root, child1, child2, ..., this]
 		p_pars.CopyTo(result, 0);
@@ -78,19 +79,23 @@ public class Reactive_HFSM : MonoBehaviour {
 		return parent_chain.Length;
 	}
 	IObservable<bool> get_active(Reactive_HFSM p){
-		if (p != null && p.active != null) {
+		if (p != null) {
+			Debug.Log ("Get activity from parent.");
 			return p.active.CombineLatest(
 				p.current.Select((Reactive_HFSM c)=>{
 					return c == this;
 				}),
 				//Is the parent state active, and is this state the parent's current?
 				(bool p_active, bool is_current)=>{
+					Debug.Log(name+" parent active:"+p_active);
+					Debug.Log(name+" is current:"+is_current);
 					return p_active && is_current;
 				}
 			);
 		}
+		Debug.Log ("Root is always active.");
 		//States with no parent are active by default.
-		return Observable.Return(true);
+		return Observable.Constant(true);
 	}
 	List<Action> build_actions(Reactive_HFSM c, Reactive_HFSM i){
 		var acts = new List<Action>();
@@ -104,6 +109,7 @@ public class Reactive_HFSM : MonoBehaviour {
 			}
 			acts.Add(c.run);
 		}
+		Debug.Log (name + " built actions:"+acts.Count);
 		return acts;
 	}
 	// Use this for initialization
@@ -120,7 +126,7 @@ public class Reactive_HFSM : MonoBehaviour {
 		current = new Subject<Reactive_HFSM>();
 		beat = new Subject<int>();
 		// Select = Map, SelectMany = FlatMap, CombineLatest = Combine
-		parents = parent.SelectMany(get_parent_chain as Func<Reactive_HFSM, IObservable<Reactive_HFSM[]>>) as IObservable<Reactive_HFSM[]>;
+		parents = parent.SelectMany(get_parent_chain as Func<Reactive_HFSM, IObservable<Reactive_HFSM[]>>);
 		level = parents.Select<Reactive_HFSM[], int>(get_level);
 		level.Subscribe((int lv)=>{Debug.Log(name+" Level:"+lv.ToString());});
 		//True if root or parent is active and this is current.
@@ -144,27 +150,40 @@ public class Reactive_HFSM : MonoBehaviour {
 		actions = current.CombineLatest<Reactive_HFSM,Reactive_HFSM,List<Action>>(initial, build_actions);
 		//Main update channel
 		beat.CombineLatest<int,bool,bool> (active, (int frame, bool is_active) => {
+			Debug.Log(name+" Beat Combine");
 			return is_active;
 		}).Where ((bool is_active) => {
+			Debug.Log(name+" Activity Check:"+is_active);
 			return is_active;
 		}).CombineLatest<bool, List<Action>, List<Action>> (actions, (bool is_active, List<Action> acts) => {
-			Debug.Log(name+" Beat");
+			Debug.Log(name+" Actions:"+acts.Count);
 			return acts;
 		}).Where((List<Action> acts)=>{
+			Debug.Log(name+" Actions Check");
 			return acts.Count > 0;
 		}).Subscribe((List<Action> acts)=>{
+			Debug.Log(name+" Actions Start");
 			StartCoroutine(run_actions(acts));
 		});
+		//Debug Logs
+		current.Subscribe((child)=>{
+			if (child != null){
+				Debug.Log(name+": "+child.name);
+			} else {
+				Debug.Log(name+": null");
+			}
+		});
+		beat.Subscribe ((frame) => {
+			Debug.Log(name+" Beat Received:"+frame);
+		});
 		//Set initial parent and initial state from the editor.
-		if (initial_parent != null) {
-			parent.OnNext (initial_parent);
-		}
-		if (initial_initial != null) {
-			initial.OnNext (initial_initial);
-		}
 		if (auto_run) {
+			Debug.Log(name+" Auto-Run Start");
 			StartCoroutine (this.coroutine ());
 		}
+		parent.OnNext (initial_parent);
+		initial.OnNext (initial_initial);
+		current.OnNext (null);
 		deps.load (this);
 	}
 	public Action lazy_set_current(Reactive_HFSM next_current){
@@ -179,11 +198,13 @@ public class Reactive_HFSM : MonoBehaviour {
 		}
 	}
 	public void run(){
-		beat.OnNext(0);
+		Debug.Log(name+" Beat Call");
+		beat.OnNext(1);
 	}
 	IEnumerator coroutine(){
-		while (true) {
-			this.run ();
+		for (int frame = 0; true; frame++){
+			Debug.Log(name+" Auto-Run Coroutine");
+			this.run();
 			yield return null;
 		}
 	}

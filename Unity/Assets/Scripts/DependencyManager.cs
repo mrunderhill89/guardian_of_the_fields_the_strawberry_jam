@@ -36,6 +36,7 @@ public class DependencyManager <T>
 			ActionList actions = new ActionList();
 			foreach(T key in d.Keys){
 				if (l.Contains(key)){
+					Debug.Log("Dependency Found");
 					actions.AddRange(d[key]);
 					d[key].Clear();
 				}
@@ -43,6 +44,7 @@ public class DependencyManager <T>
 			return actions;
 		}).Where(actions=>{return actions.Count > 0;}).Subscribe(actions=>{
 			actions.ForEach(action=>{
+				Debug.Log("Running Dependant Actions");
 				action();
 			});
 		});
