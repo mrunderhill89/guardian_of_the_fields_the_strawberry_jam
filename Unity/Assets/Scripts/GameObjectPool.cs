@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+using UniRx;
 public class SortByZ : IComparer<float>{
 	public int Compare(float a, float b){
 		return 0;
@@ -47,11 +47,13 @@ public class GameObjectPool : MonoBehaviour {
 		return this.transform.position + this.generation_strategy(min_position,max_position);
 	}
 
-	public void generate_strawberry(GameObject berry, GameObject container){
+	public void generate_strawberry(GameObject berry, GameObjectPool container){
 		StrawberryComponent component = berry.GetComponent<StrawberryComponent> ();
-		if (component != null) {
-			component.container = container;
-		}
+		IDisposable sub = null;
+		sub = component.is_picked.Where((picked)=>{return picked;}).Subscribe((picked)=>{
+			container.object_list.Remove(berry);
+			sub.Dispose();
+		});
 	}
 
 	// Use this for initialization

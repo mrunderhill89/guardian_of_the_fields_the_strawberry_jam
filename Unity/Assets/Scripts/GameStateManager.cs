@@ -13,7 +13,7 @@ public class GameStateManager : MonoBehaviour {
 		};
 	}
 	void Start () {
-		input = new InputController();
+		input = InputController.get_instance ();
 		Func<bool> hands_full = () => {
 			return false;
 		};
@@ -42,7 +42,11 @@ public class GameStateManager : MonoBehaviour {
 		HFSM_State pick = new HFSM_State ()
 			.add_child(pick_left)
 			.add_child(pick_right)
-			.on_entry(lazy_log("Picking"));
+				.on_entry(()=>{
+					StrawberryComponent.allow_selection = true;
+				}).on_exit(()=>{
+					StrawberryComponent.allow_selection = false;
+				});
 
 		//Pack
 		HFSM_State pack = new HFSM_State ()

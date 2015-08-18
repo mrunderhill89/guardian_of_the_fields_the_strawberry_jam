@@ -280,8 +280,7 @@ public class HFSM_State {
 				result.add_action (this.on_update ());
 			}
 		} else {
-			I_HFSM_Transition trig = null;
-			trig = this.current.transitions.Find ((t) => {
+			this.current.transitions.Find ((t) => {
 				result = t.trigger(result);
 				return result.trans != null;
 			});
