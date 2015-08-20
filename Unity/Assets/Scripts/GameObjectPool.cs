@@ -52,6 +52,7 @@ public class GameObjectPool : MonoBehaviour {
 		IDisposable sub = null;
 		sub = component.is_picked.Where((picked)=>{return picked;}).Subscribe((picked)=>{
 			container.object_list.Remove(berry);
+			Debug.Log("Strawberry "+berry.ToString()+" is no longer tracked.");
 			sub.Dispose();
 		});
 	}

@@ -46,7 +46,7 @@ public class InputController
 		on_right = on_dir ("Horizontal", "right", true);
 		on_up = on_dir ("Vertical", "up", true);
 		on_down = on_dir ("Vertical", "down", false);
-		mouse_pos = Observable.IntervalFrame(1).Select<long, Vector3>((frame)=>{
+		mouse_pos = Observable.IntervalFrame(0).Select<long, Vector3>((frame)=>{
 			return Input.mousePosition;
 		});
 		mouse_delta_pos = mouse_pos.Scan (new Vector3[]{Vector3.zero, Vector3.zero}, (pa,p) => {

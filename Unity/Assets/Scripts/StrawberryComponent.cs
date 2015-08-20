@@ -11,13 +11,13 @@ public class StrawberryComponent : MonoBehaviour {
 		selected = new Subject<StrawberryComponent> ();
 		currently_held = selected.Scan<StrawberryComponent, StrawberryComponent>(null, (orig, next) => {
 			if (next == null){
-				if (orig != null){orig.drag.allow_dragging=false;}
+				//if (orig != null){orig.drag.allow_dragging=false;}
 				return null;
 			}
 			if (orig != null || !allow_selection) {
 				return orig;
 			}
-			next.drag.allow_dragging=true;
+			//next.drag.allow_dragging=true;
 			return next;}
 		);
 		currently_held.Subscribe ((component) => {
@@ -33,12 +33,10 @@ public class StrawberryComponent : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		drag = gameObject.GetComponent<Draggable> ();
 		//Disable dragging until we determine whether we can pick up berries yet.
-		drag.allow_dragging = false;
 		quality = RandomUtils.random_double(0.5, 1.25);
 		set_picked = new Subject<bool>();
-		set_picked.OnNext (false);
+		set_picked.OnNext(false);
 		is_picked = set_picked.AsObservable ();
 	}
 

@@ -7,12 +7,14 @@ public class GameStateManager : MonoBehaviour {
 	public InputController input;
 	public CameraController camera_control;
 	public CartController cart_control;
+	public Vector3 gravity;
 	Action lazy_log(string message){
 		return () => {
 			Debug.Log (message);
 		};
 	}
 	void Start () {
+		Physics.gravity = gravity;
 		input = InputController.get_instance ();
 		Func<bool> hands_full = () => {
 			return false;
