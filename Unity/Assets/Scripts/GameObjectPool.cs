@@ -131,6 +131,11 @@ public class GameObjectPool : MonoBehaviour {
 		GameObject closest;
 		shouldBeVisible = isVisible(search_list[index]);
 		closest = object_list[index];
+		if (closest.transform.position.z != search_list [index]) {
+			//The object has been moved. Keep it active.
+			closest.SetActive(true);
+			return false;
+		}
 		visible = closest.activeSelf;
 		closest.SetActive(shouldBeVisible);
 		return (visible == shouldBeVisible);

@@ -52,7 +52,12 @@ public class GameStateManager : MonoBehaviour {
 
 		//Pack
 		HFSM_State pack = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_pack));;
+			.on_entry(()=>{
+				camera_control.lazy_set_target(camera_control.c_pack)();
+				Draggable.calculate_delta = Draggable.xz_plane;
+			}).on_exit(()=>{
+				Draggable.calculate_delta = Draggable.xy_plane;
+			});
 
 		//Transitions
 		//Look Forward -> Look Left, Look Right, Pack
