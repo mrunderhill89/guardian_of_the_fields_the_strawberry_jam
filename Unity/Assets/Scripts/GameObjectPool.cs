@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ public class SortByZ : IComparer<float>{
 public class GenerationEvent : UnityEvent<GameObject, GameObject>{}
 
 
-public class GameObjectPool : MonoBehaviour {
+public class GameObjectPool : BetterBehaviour {
 	public GameObject prefab;
 	public int total_instances;
 	public Vector3 min_position = new Vector3(0,0,0);
@@ -32,6 +33,7 @@ public class GameObjectPool : MonoBehaviour {
 		float oz = origin.position.z;
 		return (z >= (oz - range) && z <= (oz + range));
 	}
+
 	[SerializeField]
 	GenerationEvent on_generate;
 
@@ -50,7 +52,7 @@ public class GameObjectPool : MonoBehaviour {
 	public void generate_strawberry(GameObject berry, GameObjectPool container){
 		StrawberryComponent component = berry.GetComponent<StrawberryComponent> ();
 		IDisposable sub = null;
-		sub = component.is_picked.Where((picked)=>{return picked;}).Subscribe((picked)=>{
+		sub = component.picked.Where((picked)=>{return picked;}).Subscribe((picked)=>{
 			container.object_list.Remove(berry);
 			Debug.Log("Strawberry "+berry.ToString()+" is no longer tracked.");
 			sub.Dispose();

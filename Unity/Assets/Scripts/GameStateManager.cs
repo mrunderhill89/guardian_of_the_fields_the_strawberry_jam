@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using System.Collections;
 using System;
 
-public class GameStateManager : MonoBehaviour {
+public class GameStateManager : BetterBehaviour {
+	[NonSerialized]
 	public HFSM_State root;
+	[NonSerialized]
 	public InputController input;
 	public CameraController camera_control;
 	public CartController cart_control;
@@ -45,18 +48,18 @@ public class GameStateManager : MonoBehaviour {
 			.add_child(pick_left)
 			.add_child(pick_right)
 				.on_entry(()=>{
-					StrawberryComponent.allow_selection = true;
+				StrawberryComponent.allow_picking_unpicked = true;
 				}).on_exit(()=>{
-					StrawberryComponent.allow_selection = false;
+					StrawberryComponent.allow_picking_unpicked = false;
 				});
 
 		//Pack
 		HFSM_State pack = new HFSM_State ()
 			.on_entry(()=>{
 				camera_control.lazy_set_target(camera_control.c_pack)();
-				Draggable.calculate_delta = Draggable.xz_plane;
+				//Draggable.calculate_delta = Draggable.xz_plane;
 			}).on_exit(()=>{
-				Draggable.calculate_delta = Draggable.xy_plane;
+				//Draggable.calculate_delta = Draggable.xy_plane;
 			});
 
 		//Transitions

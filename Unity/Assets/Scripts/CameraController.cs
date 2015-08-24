@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using System.Collections;
 using System;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : BetterBehaviour {
 	public Transform target;
 	public int default_frames = 60;
 	public int default_delay = 0;

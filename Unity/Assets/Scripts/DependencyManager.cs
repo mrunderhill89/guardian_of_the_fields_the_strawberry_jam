@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using UniRx;
 using System;
 using System.Collections;

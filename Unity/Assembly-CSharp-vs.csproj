@@ -182,7 +182,67 @@
      <Compile Include="Assets\UniRx\Scripts\UnityEngineBridge\UnityUIComponentExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\UnityWinRTBridge\Thread.cs" />
      <Compile Include="Assets\UniRx\Scripts\UnityWinRTBridge\ThreadPoolScheduler_UnityWinRT.cs" />
+     <Compile Include="Assets\VFW Examples\FastSave Examples\GO\GameObjectTest.cs" />
+     <Compile Include="Assets\VFW Examples\FastSave Examples\Hierarchy\HierarchyTest.cs" />
+     <Compile Include="Assets\VFW Examples\FastSave Examples\Marked\MarkedTest.cs" />
+     <Compile Include="Assets\VFW Examples\FastSave Examples\SomeData.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\AnimVarExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\AssignableExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\BetterVectorExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ButtonExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\CategoriesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\CollectionElementExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ComplexDrawingExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ConstraintsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\DecorationsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\DefaultValueExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\DisplayExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\DraggableExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\DrawnByUnityLayoutExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\EnumsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\FiltersExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\InlineExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\OnChangedExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ParagraphExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\PathExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\PopupsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\RandomsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ResourcePathExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\SelectionsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\SequencesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ShowExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\ShowTypeExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\SlidersExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\UsingExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Attributes\VisibleWhenExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\CustomDrawnObjectsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Delegates\DelegatesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Other\CustomDisplayOptionsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Other\GOInliner.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Other\SceneTransition.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\ScriptableObjects\BSOExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\ScriptableObjects\BetterPrefsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\AbstractsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\GenericsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\InterfacesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\NullablesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\PropertiesExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\ReadonlyFieldsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\Rules.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\SerializableDictExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\StaticsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\StructsExample.cs" />
+     <Compile Include="Assets\VFW Examples\Scripts\Serialization\UnityTypesExample.cs" />
+     <Compile Include="Assets\VFW Misc\CachedBehaviour.cs" />
+     <Compile Include="Assets\VFW Misc\Examples\MessageExample.cs" />
+     <Compile Include="Assets\VFW Misc\Examples\RequirementsExample.cs" />
+     <Compile Include="Assets\VFW Misc\Message.cs" />
+     <Compile Include="Assets\VFW Misc\Requirements.cs" />
+     <None Include="Assets\Plugins\Editor\Vexe\LICENSE.txt" />
+     <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
+     <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
      <None Include="Assets\UniRx\ReadMe.txt" />
+     <None Include="Assets\Plugins\Vexe\Runtime\FastSave\README.txt" />
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
@@ -192,9 +252,16 @@
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
+ <Reference Include="BasicSerializer">
+ <HintPath>Z:/home/kevin/workspace/guardian_of_the_fields_the_strawberry_jam/Unity/Assets/Plugins/Vexe/Runtime/FastSave/Serializer/BasicSerializer.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{2662B409-6332-1E56-D797-C9025C53BDD6}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

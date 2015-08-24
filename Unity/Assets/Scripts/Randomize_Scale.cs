@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using System.Collections;
 
-public class Randomize_Scale : MonoBehaviour {
+public class Randomize_Scale : BetterBehaviour {
 	public Vector3 min = new Vector3(1,1,1);
 	public Vector3 max = new Vector3(1,1,1);
 	// Use this for initialization

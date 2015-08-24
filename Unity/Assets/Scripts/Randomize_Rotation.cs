@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using System.Collections;
 
-public class Randomize_Rotation : MonoBehaviour {
+public class Randomize_Rotation : BetterBehaviour {
 	public Vector3 min = new Vector3(0,0,0);
 	public Vector3 max = new Vector3(0,0,0);
 	// Use this for initialization

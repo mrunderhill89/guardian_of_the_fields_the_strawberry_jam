@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 using System;
@@ -6,53 +7,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 
-[CustomEditor(typeof(Reactive_HFSM))]
-public class HFSM_Editor : Editor {
-	public Reactive_HFSM _target;
-	void OnEnable()    
-	{
-		_target = (Reactive_HFSM)target;
-	}
-
-	public override void OnInspectorGUI () 
-	{
-		// Update the serializedProperty - always do this in the beginning of OnInspectorGUI.
-		serializedObject.Update ();
-		bool allowSceneObjects = !EditorUtility.IsPersistent (target);
-		_target.auto_run = EditorGUILayout.Toggle("Auto Run", _target.auto_run);
-		_target.name = EditorGUILayout.TextField ("Name", _target.name);
-		string parent_name = _target.initial_parent == null?"none":_target.initial_parent.name;
-		string initial_name = _target.initial_initial == null?"none":_target.initial_initial.name;
-		_target.initial_parent = (Reactive_HFSM)EditorGUILayout.ObjectField ("Parent ("+parent_name+")", _target.initial_parent, typeof(Reactive_HFSM), allowSceneObjects);
-		if (GUI.changed && _target.initial_parent != null && _target.initial_parent.initial_initial == null) {
-			_target.initial_parent.initial_initial = _target;
-		}
-		_target.initial_initial = (Reactive_HFSM)EditorGUILayout.ObjectField ("Initial ("+initial_name+")", _target.initial_initial, typeof(Reactive_HFSM), allowSceneObjects);
-		if (GUI.changed && _target.initial_initial != null && _target.initial_initial.initial_parent != _target) {
-			_target.initial_initial = null;
-		}
-		//_target.on_entry = (UnityEvent)EditorGUILayout.ObjectField ("On Entry", _target.on_entry, typeof(UnityEvent), allowSceneObjects);
-	}
-
-}
-
-
-public class Reactive_HFSM : MonoBehaviour {
+public class Reactive_HFSM : BetterBehaviour {
+	[DontSerialize]
 	public static DependencyManager<Reactive_HFSM> deps;
 	static Reactive_HFSM(){
 		deps = new DependencyManager<Reactive_HFSM>();
 	}
 	public new string name = "HFSM";
-	public Reactive_HFSM initial_parent = null;
-	public Reactive_HFSM initial_initial = null;
-	public Subject<Reactive_HFSM> parent;
-	public Subject<Reactive_HFSM> initial;
-	public Subject<Reactive_HFSM> current;
+	public ReactiveProperty<Reactive_HFSM> parent { get; private set;}
+	public ReactiveProperty<Reactive_HFSM>  initial { get; private set;}
+	public ReactiveProperty<Reactive_HFSM>  current { get; private set;}
+	[DontSerialize]
 	public IObservable<Reactive_HFSM[]> parents;
+	[DontSerialize]
 	public IObservable<int> level;
+	[DontSerialize]
 	public IObservable<bool> active;
+	[DontSerialize]
 	public Subject<int> beat;
+	[DontSerialize]
 	public IObservable<bool[]> activity_change;
+	[DontSerialize]
 	public IObservable<List<Action>> actions;
 
 	public UnityEvent on_entry;
@@ -67,6 +42,7 @@ public class Reactive_HFSM : MonoBehaviour {
 		}
 		return Observable.Constant<Reactive_HFSM[]>(new Reactive_HFSM [] {this});
 	}
+
 	Reactive_HFSM[] extend_chain(Reactive_HFSM[] p_pars){
 		Debug.Log ("Get parents from parent:"+p_pars.Length);
 		Reactive_HFSM[] result = new Reactive_HFSM[p_pars.Length+1];
@@ -114,16 +90,12 @@ public class Reactive_HFSM : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start(){
-		if (initial_parent == null) {
-			initialize ();
-		} else {
-			deps.register_dep(initial_parent, initialize);
-		}
+		//parent = new ReactiveProperty<Reactive_HFSM> ();
+		//initial = new ReactiveProperty<Reactive_HFSM> ();
+		current = new ReactiveProperty<Reactive_HFSM> ();
+		initialize ();
 	}
 	void initialize () {
-		parent = new Subject<Reactive_HFSM>();
-		initial = new Subject<Reactive_HFSM>();
-		current = new Subject<Reactive_HFSM>();
 		beat = new Subject<int>();
 		// Select = Map, SelectMany = FlatMap, CombineLatest = Combine
 		parents = parent.SelectMany(get_parent_chain as Func<Reactive_HFSM, IObservable<Reactive_HFSM[]>>);
@@ -150,19 +122,19 @@ public class Reactive_HFSM : MonoBehaviour {
 		actions = current.CombineLatest<Reactive_HFSM,Reactive_HFSM,List<Action>>(initial, build_actions);
 		//Main update channel
 		beat.CombineLatest<int,bool,bool> (active, (int frame, bool is_active) => {
-			Debug.Log(name+" Beat Combine");
+			//Debug.Log(name+" Beat Combine");
 			return is_active;
 		}).Where ((bool is_active) => {
-			Debug.Log(name+" Activity Check:"+is_active);
+			//Debug.Log(name+" Activity Check:"+is_active);
 			return is_active;
 		}).CombineLatest<bool, List<Action>, List<Action>> (actions, (bool is_active, List<Action> acts) => {
-			Debug.Log(name+" Actions:"+acts.Count);
+			//Debug.Log(name+" Actions:"+acts.Count);
 			return acts;
 		}).Where((List<Action> acts)=>{
-			Debug.Log(name+" Actions Check");
+			//Debug.Log(name+" Actions Check");
 			return acts.Count > 0;
 		}).Subscribe((List<Action> acts)=>{
-			Debug.Log(name+" Actions Start");
+			//Debug.Log(name+" Actions Start");
 			StartCoroutine(run_actions(acts));
 		});
 		//Debug Logs
@@ -173,22 +145,16 @@ public class Reactive_HFSM : MonoBehaviour {
 				Debug.Log(name+": null");
 			}
 		});
-		beat.Subscribe ((frame) => {
-			Debug.Log(name+" Beat Received:"+frame);
-		});
 		//Set initial parent and initial state from the editor.
 		if (auto_run) {
 			Debug.Log(name+" Auto-Run Start");
 			StartCoroutine (this.coroutine ());
 		}
-		parent.OnNext (initial_parent);
-		initial.OnNext (initial_initial);
-		current.OnNext (null);
 		deps.load (this);
 	}
 	public Action lazy_set_current(Reactive_HFSM next_current){
 		return () => {
-			current.OnNext(next_current);
+			current.Value = next_current;
 		};
 	}
 	IEnumerator run_actions(List<Action> acts){
@@ -198,12 +164,10 @@ public class Reactive_HFSM : MonoBehaviour {
 		}
 	}
 	public void run(){
-		Debug.Log(name+" Beat Call");
 		beat.OnNext(1);
 	}
 	IEnumerator coroutine(){
 		for (int frame = 0; true; frame++){
-			Debug.Log(name+" Auto-Run Coroutine");
 			this.run();
 			yield return null;
 		}

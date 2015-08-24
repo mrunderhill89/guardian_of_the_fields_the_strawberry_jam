@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 using System;
@@ -6,34 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 
-[CustomEditor(typeof(Reactive_Transition))]
-[CanEditMultipleObjects]
-public class Transition_Editor : Editor {
-	
-	public Reactive_Transition _target;
-
-	void OnEnable()    
-	{
-		_target = (Reactive_Transition)target;
-	}
-
-	public override void OnInspectorGUI () 
-	{
-		// Update the serializedProperty - always do this in the beginning of OnInspectorGUI.
-		serializedObject.Update ();
-		bool allowSceneObjects = !EditorUtility.IsPersistent (target);
-		string from_name = _target.i_from == null?"none":_target.i_from.name;
-		string to_name = _target.i_to == null?"none":_target.i_to.name;
-		_target.auto_run = EditorGUILayout.Toggle("Auto Run", _target.auto_run);
-		_target.i_from = (Reactive_HFSM)EditorGUILayout.ObjectField ("From ("+from_name+")", _target.i_from, typeof(Reactive_HFSM), allowSceneObjects);
-		_target.i_to = (Reactive_HFSM)EditorGUILayout.ObjectField ("To ("+to_name+")", _target.i_to, typeof(Reactive_HFSM), allowSceneObjects);
-	}
-
-}
-public class Reactive_Transition: MonoBehaviour {
-	public Reactive_HFSM i_from = null, i_to = null;
-	public Subject<Reactive_HFSM> from;
-	public Subject<Reactive_HFSM> to;
+public class Reactive_Transition: BetterBehaviour {
+	public ReactiveProperty<Reactive_HFSM> from;
+	public ReactiveProperty<Reactive_HFSM> to;
 	public IObservable<Reactive_HFSM[][]> path;
 	public IObservable<bool> active;
 	public IObservable<List<Action>> actions;
@@ -43,27 +19,12 @@ public class Reactive_Transition: MonoBehaviour {
 	public bool auto_run = false;
 
 	public UnityEvent on_transfer = null;
+
 	void Start(){
-		if (i_from == null) {
-			if (i_to == null) {
-				initialize ();
-			} else {
-				Reactive_HFSM.deps.register_dep (i_to, initialize);
-			}
-		} else {
-			Reactive_HFSM.deps.register_dep (i_from, ()=>{
-				if (i_to == null) {
-					initialize ();
-				} else {
-					Reactive_HFSM.deps.register_dep (i_to, initialize);
-				}
-			});
-		}
+		initialize ();
 	}
 	void initialize(){
 		beat = new Subject<int>();
-		from = new Subject<Reactive_HFSM>();
-		to = new Subject<Reactive_HFSM>();
 		tests = new List<Func<bool>> ();
 		active = from.SelectMany ((Reactive_HFSM f) => {
 			if (f == null)
@@ -162,12 +123,6 @@ public class Reactive_Transition: MonoBehaviour {
 		});
 		if (auto_run) {
 			StartCoroutine (this.coroutine ());
-		}
-		if (this.i_from != null) {
-			from.OnNext(i_from);
-		}
-		if (this.i_to != null) {
-			to.OnNext(i_to);
 		}
 	}
 	IEnumerator run_actions(List<Action> acts){

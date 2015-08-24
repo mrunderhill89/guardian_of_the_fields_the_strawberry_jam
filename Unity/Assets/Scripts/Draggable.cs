@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System;
 using UniRx;
-public class Draggable : MonoBehaviour {
+public class Draggable : BetterBehaviour {
+	public static float pitch = 0.0f;
 	public float min_reach = 0.1f;
 	public float max_reach = 1.0f;
 	public float min_drop = 0.1f;
@@ -10,54 +13,69 @@ public class Draggable : MonoBehaviour {
 	public Rigidbody body = null;
 	public bool gravity_on_drop = true;
 	public bool kinematic_on_pickup = false;
-	private Vector3 screenPoint;
-	private Vector3 offset;
-	private Vector3 hold_at;
-
-	public static Func<Vector3, Vector3, Vector3> calculate_delta = xy_plane;
-	public static Vector3 xy_plane(Vector3 hold_at, Vector3 current){
-		Vector3 hold_viewport = Camera.main.ScreenToViewportPoint (hold_at);
-		Vector3 delta = Camera.main.ScreenToViewportPoint (current) - hold_viewport;
-		Vector3 result = delta + hold_viewport;
-		//result.z = Mathf.Clamp(result.z, min_drop, max_drop);
-		return result;
+	protected Vector3 screen_pos;
+	protected Vector3 prev_mouse;
+	public float distance{
+		get{return screen_pos.z;}
 	}
-
-	public static Vector3 xz_plane(Vector3 hold_at, Vector3 current){
-		Vector3 hold_viewport = Camera.main.ScreenToViewportPoint (hold_at);
-		Vector3 delta = Camera.main.ScreenToViewportPoint (current) - hold_viewport;
-		delta.z = -delta.y;
-		delta.y = 0.0f;
-		Vector3 result = delta + hold_viewport;
-		//result.z = Mathf.Clamp(result.z, min_drop, max_drop);
-		return result;
-	}
-
+	protected bool is_dragging;
 	void Start(){
 		body = gameObject.GetComponent<Rigidbody> ();
 	}
-	
+
+	public UnityEvent on_pickup;
+	public UnityEvent on_drag;
+	public UnityEvent on_drop;
+
+	public Func<Vector3, bool> can_grab = always;
+	public static bool always(Vector3 screen_pos){
+		return true;
+	}
+	public bool in_reach(Vector3 screen_pos){
+		return (screen_pos.z < max_reach && screen_pos.z > min_reach);
+	}
 	void OnMouseDown()
 	{
-		screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);		
-		hold_at = new Vector3(Input.mousePosition.x, Input.mousePosition.y, (min_drop+max_drop)/2.0f);
-		offset = screenPoint - hold_at;
-		if (body != null) {
-			body.useGravity = false;
-			body.isKinematic = kinematic_on_pickup;
+		//Get distance from the camera to the object
+		screen_pos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+		if (can_grab(screen_pos)){
+			//Set the object's position to be relative to the camera.
+			gameObject.transform.SetParent(Camera.main.transform,true);
+			if (body != null) {
+				body.useGravity = false;
+				body.isKinematic = kinematic_on_pickup;
+			}
+			prev_mouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
+			is_dragging = true;
+			on_pickup.Invoke();
 		}
 	}
 	
 	void OnMouseDrag()
 	{
-		Vector3 current_cursor = new Vector3(Input.mousePosition.x, Input.mousePosition.y, hold_at.z);
-		Vector3 curPosition = calculate_delta(hold_at, current_cursor + offset);
-		transform.position = Camera.main.ViewportToWorldPoint(curPosition);
+		if (is_dragging) {
+			Vector3 cur_mouse = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, distance);
+			Vector3 delta_mouse = Camera.main.ScreenToViewportPoint (cur_mouse) - Camera.main.ScreenToViewportPoint (prev_mouse);
+			float pitch_rad = pitch * Mathf.Deg2Rad;
+			Vector3 delta_position = new Vector3 (
+				                        delta_mouse.x,
+										delta_mouse.y * Mathf.Cos (pitch_rad),
+										delta_mouse.y * Mathf.Sin (pitch_rad)
+			                        );
+			gameObject.transform.localPosition += delta_position;
+			prev_mouse = cur_mouse;
+			on_drag.Invoke();
+		}
 	}
 
 	void OnMouseUp(){
-		if (body != null) {
-			body.useGravity = gravity_on_drop;
+		if (is_dragging) {
+			gameObject.transform.SetParent (null, true);
+			if (body != null) {
+				body.useGravity = gravity_on_drop;
+			}
+			on_drop.Invoke();
 		}
+		is_dragging = false;
 	}
 }
