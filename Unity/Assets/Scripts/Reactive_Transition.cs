@@ -3,17 +3,29 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using StateChain = System.Collections.Generic.List<Reactive_HFSM>;
 
 public class Reactive_Transition: BetterBehaviour {
+	public class StatePath{
+		public StateChain up;
+		public StateChain down;
+		public Reactive_HFSM root;
+		public StatePath(){
+			up = new StateChain();
+			down = new StateChain();
+			root = null;
+		}
+	}
 	public ReactiveProperty<Reactive_HFSM> from;
 	public ReactiveProperty<Reactive_HFSM> to;
-	//public IObservable<Reactive_HFSM[][]> path;
 	public IObservable<StateChain> upswing;
 	public IObservable<StateChain> downswing;
+	[DontSerialize]
+	public IObservable<StatePath> path;
 	public IObservable<bool> active;
 	public IObservable<List<Action>> actions;
 	[DontSerialize]
@@ -43,17 +55,44 @@ public class Reactive_Transition: BetterBehaviour {
 				return Observable.Never<StateChain>();
 			return t.parents as IObservable<StateChain>;
 		});
-		actions = upswing.CombineLatest<StateChain,StateChain,List<Action>>(downswing, (up, down) => {
-			var output = new List<Action>();
-			foreach(Reactive_HFSM us in up){
-				output.Add(us.lazy_set_current(null));
+		path = upswing.CombineLatest<StateChain,StateChain,StatePath>(downswing, (StateChain up, StateChain down) => {
+			var _path = new StatePath();
+			if (up.Count > 0 && down.Count > 0){
+				int ui = up.Count-1, di = down.Count-1;
+				Reactive_HFSM us = up[ui], ds = down[di];
+				while (_path.root == null && (ui >= 0 && di >= 0)){
+					if (us == ds){
+						_path.root = us;
+						_path.down.Add(us);
+					} else if (ui > di || di == 0){
+						ui--;
+						_path.up.Add(us);
+						us = up[ui];
+					} else {
+						di--;
+						_path.down.Add(ds);
+						ds = down[di];
+					}
+				}
 			}
-			if (on_transfer != null){
-				output.Add(on_transfer.Invoke);
-			}
-			foreach(Reactive_HFSM ds in down){
-			}
-			return output;
+			return _path;
+		}).Where((_path)=>{
+			//Only return complete paths
+			return _path.root != null;
+		});
+		actions = path.Select((StatePath _path) => {
+			var _actions = new List<Action>();
+			_actions.AddRange(_path.up.AsEnumerable().Reverse().Select((Reactive_HFSM us)=>{
+				return us.lazy_set_current(null);
+			}));
+			_actions.Add(this.on_transfer.Invoke);
+			_path.down.Aggregate(null, (Reactive_HFSM first, Reactive_HFSM next)=>{
+				if (first != null){
+					_actions.Add(first.lazy_set_current(next));
+				}
+				return next;
+			});
+			return _actions;
 		});
 		beat.CombineLatest<int, bool, bool> (active, (int frame, bool is_active) => {
 			if (is_active){
