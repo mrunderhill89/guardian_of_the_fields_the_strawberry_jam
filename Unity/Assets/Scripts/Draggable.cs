@@ -34,6 +34,7 @@ public class Draggable : BetterBehaviour {
 	public bool in_reach(Vector3 screen_pos){
 		return (screen_pos.z < max_reach && screen_pos.z > min_reach);
 	}
+
 	void OnMouseDown()
 	{
 		//Get distance from the camera to the object
@@ -63,6 +64,9 @@ public class Draggable : BetterBehaviour {
 										delta_mouse.y * Mathf.Sin (pitch_rad)
 			                        );
 			gameObject.transform.localPosition += delta_position;
+			if (body != null) {
+				
+			}
 			prev_mouse = cur_mouse;
 			on_drag.Invoke();
 		}

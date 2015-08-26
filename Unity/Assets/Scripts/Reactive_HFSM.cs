@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using StateChain = System.Collections.Generic.List<Reactive_HFSM>;
 
 public class Reactive_HFSM : BetterBehaviour {
 	[DontSerialize]
@@ -18,10 +19,8 @@ public class Reactive_HFSM : BetterBehaviour {
 	public ReactiveProperty<Reactive_HFSM>  initial { get; private set;}
 	public ReactiveProperty<Reactive_HFSM>  current { get; private set;}
 	[DontSerialize]
-	public IObservable<Reactive_HFSM[]> parents;
-	[DontSerialize]
+	public IObservable<StateChain> parents;
 	public IObservable<int> level;
-	[DontSerialize]
 	public IObservable<bool> active;
 	[DontSerialize]
 	public Subject<int> beat;
@@ -36,23 +35,24 @@ public class Reactive_HFSM : BetterBehaviour {
 
 	public bool auto_run = false;
 
-	IObservable<Reactive_HFSM[]> get_parent_chain(Reactive_HFSM p){
+	IObservable<StateChain> get_parent_chain(Reactive_HFSM p){
 		if (p != null){
-			return p.parents.Select<Reactive_HFSM[],Reactive_HFSM[]>(extend_chain);
+			return p.parents.Select<StateChain,StateChain>(extend_chain);
 		}
-		return Observable.Constant<Reactive_HFSM[]>(new Reactive_HFSM [] {this});
+		StateChain new_chain = new StateChain ();
+		new_chain.Add (this);
+		return Observable.Constant<StateChain>(new_chain);
 	}
 
-	Reactive_HFSM[] extend_chain(Reactive_HFSM[] p_pars){
-		Debug.Log ("Get parents from parent:"+p_pars.Length);
-		Reactive_HFSM[] result = new Reactive_HFSM[p_pars.Length+1];
+	StateChain extend_chain(StateChain p_pars){
+		Debug.Log ("Get parents from parent:"+p_pars.Count);
+		StateChain result = new StateChain(p_pars);
 		//[root, child1, child2, ..., this]
-		p_pars.CopyTo(result, 0);
-		result[p_pars.Length] = this;
+		result.Add(this);
 		return result;
 	}
-	int get_level(Reactive_HFSM[] parent_chain){
-		return parent_chain.Length;
+	int get_level(StateChain parent_chain){
+		return parent_chain.Count;
 	}
 	IObservable<bool> get_active(Reactive_HFSM p){
 		if (p != null) {
@@ -98,8 +98,8 @@ public class Reactive_HFSM : BetterBehaviour {
 	void initialize () {
 		beat = new Subject<int>();
 		// Select = Map, SelectMany = FlatMap, CombineLatest = Combine
-		parents = parent.SelectMany(get_parent_chain as Func<Reactive_HFSM, IObservable<Reactive_HFSM[]>>);
-		level = parents.Select<Reactive_HFSM[], int>(get_level);
+		parents = parent.SelectMany(get_parent_chain as Func<Reactive_HFSM, IObservable<StateChain>>);
+		level = parents.Select<StateChain, int>(get_level);
 		level.Subscribe((int lv)=>{Debug.Log(name+" Level:"+lv.ToString());});
 		//True if root or parent is active and this is current.
 		active = parent.SelectMany(get_active as Func<Reactive_HFSM, IObservable<bool>>);
