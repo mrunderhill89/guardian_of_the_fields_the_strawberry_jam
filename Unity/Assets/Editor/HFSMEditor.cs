@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using Vexe.Editor;
 using Vexe.Editor.Drawers;
 using Vexe.Editor.Types;
@@ -14,97 +16,96 @@ public static class CustomMapper
 	static CustomMapper()
 	{
 		MemberDrawersHandler.Mapper
-			.Insert<ReactiveProperty<Reactive_HFSM>, StateReferenceDrawer> ()
-			.Insert<IObservable<bool>, ObservableDrawer<Boolean>> ()
-			.Insert<ReactiveProperty<bool>, ReactivePropertyDrawer<Boolean>> ()
-			.Insert<IObservable<int>, ObservableDrawer<int>> ()
-			.Insert<ReactiveProperty<int>, ReactivePropertyDrawer<int>> ()
-			.Insert<IObservable<string>, ObservableDrawer<String>> ()
-			.Insert<ReactiveProperty<string>, ReactivePropertyDrawer<String>> ()
-			.Insert<IObservable<List<Action>>, ObservableListDrawer<List<System.Action>,Action>> ()
-			.Insert<IObservable<List<Reactive_HFSM>>, ObservableListDrawer<List<Reactive_HFSM>,Reactive_HFSM>> ()
-			;
+			.Insert<StateComponent, MultiComponentDrawer<StateComponent>>()
+			.Insert<
+				ReactiveProperty<StateComponent>, 
+				ReactivePropertyDrawer<StateComponent, MultiComponentDrawer<StateComponent>>
+			>().Insert<
+				ReactiveProperty<List<StateComponent>>, 
+				ListPropertyDrawer<StateComponent>
+			>().Insert<
+				ReactiveProperty<List<ActionWrapper>>, 
+				ListPropertyDrawer<ActionWrapper>
+			>().Insert<
+				ReactiveProperty<bool>, 
+				ReactivePropertyDrawer<bool, BoolDrawer>				
+			>()
+			.Insert<
+				ReactiveProperty<int>, 
+				ReactivePropertyDrawer<int, IntDrawer>
+			>();
 	}
 }
 
-public class ObservableDrawer<T> : ObjectDrawer<IObservable<T>>{
-	T displayValue = default(T);
-	public override void OnGUI()
-	{
-		if (memberValue != null) {
-			memberValue.Subscribe ((value) => {
-				displayValue = value;
-			});
-			if (!displayValue.Equals(default(T))) {
-				gui.Label (displayText + ":" + displayValue.ToString ());
-			} else {
-				gui.Label (displayText + ":" + default(T).ToString ());
-			}
-		} else {
-			gui.Label(displayText+": observable not set.");
-		}
-	}
+public class ListPropertyDrawer<T>: ReactivePropertyDrawer<List<T>, ListDrawer<T>>{
 }
 
-public class ObservableListDrawer<T,L> : ObjectDrawer<IObservable<T>> where T:IList<L>{
-	T displayList = default(T);
-	public override void OnGUI()
-	{
-		if (memberValue != null) {
-			memberValue.Subscribe ((value) => {
-				displayList = value;
-			});
-			if (displayList != null) {
-				gui.Label (displayText + ": count = " + displayList.Count);
-			} else {
-				gui.Label (displayText + ": null");
-			}
-		} else {
-			gui.Label(displayText+": observable not set.");
-		}
-	}
-}
-
-public class ReactivePropertyDrawer<T> : ObjectDrawer<ReactiveProperty<T>> {
-	public override void OnGUI()
-	{
-		if (memberValue == null)
+public class ReactivePropertyDrawer<T, D>: ObjectDrawer<ReactiveProperty<T>> where D:ObjectDrawer<T>, new(){
+	public D sub_draw;
+	public EditorMember sub_member;
+	public override void OnGUI(){
+		if (memberValue == null){
 			memberValue = new ReactiveProperty<T>();
-
-		string text = gui.Text(displayText, memberValue.Value.ToString());
-		var converter = TypeDescriptor.GetConverter(typeof(T));
-		if(converter != null)
-		{
-			//Cast ConvertFromString(string text) : object to (T)
-			memberValue.Value = (T)converter.ConvertFromString(text);
 		}
-	}
-}
-	
-public class ObjectReactivePropertyDrawer<T> : ObjectDrawer<ReactiveProperty<T>> where T:UnityEngine.Object{
-	public override void OnGUI()
-	{
-		if (memberValue == null)
-			memberValue = new ReactiveProperty<T>();
-
-		memberValue.Value = (T)gui.DraggableObject<T>(displayText, "Reactive Value", memberValue.Value);
-	}
-}
-
-public class StateReferenceDrawer : ObjectDrawer<ReactiveProperty<Reactive_HFSM>>
-{
-	public string state_name;
-	public override void OnGUI()
-	{
-		if (memberValue == null)
-			memberValue = new ReactiveProperty<Reactive_HFSM>();
-
-		ReactiveProperty<Reactive_HFSM> prop = memberValue;
-		if (prop.Value == null) {
-			state_name = "null";
+		if (sub_member == null){
+			sub_member =  EditorMember.WrapGetSet(
+				()=>{return memberValue.Value;}, 
+				(value)=>{memberValue.Value = (T)value;}, 
+				member.RawTarget, member.UnityTarget, typeof(T), member.Name, member.Id, member.Attributes);
+		}
+		if (sub_draw == null){
+			sub_draw = new D();
+			sub_draw.Initialize(sub_member, attributes, gui);
 		} else {
-			state_name = prop.Value.name;
+			sub_draw.OnGUI();
 		}
-		prop.Value = (Reactive_HFSM)gui.DraggableObject<Reactive_HFSM>(displayText+" (name:"+state_name+")", "Select a reactive HFSM.", prop.Value);
+	}
+}
+
+public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
+	protected UnityEngine.Object game_object;
+	protected Dictionary<string,T> components;
+	protected List<string> options;
+	protected int selection;
+	protected string instance_name;
+	protected bool fold = false;
+	public override void OnGUI(){
+		if (memberValue != null){
+			if (game_object == null) game_object = memberValue.gameObject;
+			if (instance_name == null) instance_name = memberValue.instance_name;
+		}
+		string foldout_label = displayText+" "+(memberValue==null?"(null)":"("+memberValue.instance_name+")");
+		fold = gui.Foldout(foldout_label, fold);
+		if (fold){
+			game_object = gui.Object("Game Object", "Select host game object.", game_object);
+			components = new Dictionary<string,T>();
+			if (game_object != null){
+				if (game_object.GetType() == typeof(T)){
+					memberValue = (T)game_object;
+					instance_name = memberValue.instance_name;
+					game_object = memberValue.gameObject;
+				}
+				foreach (T component in (game_object as GameObject).GetComponents<T>()){
+					components[component.instance_name] = component;
+				}
+			}
+			options = new List<String>();
+			options.Add("None");
+			options.AddRange(components.Keys.ToArray());
+			selection = Mathf.Clamp(selection, 0, options.Count-1);
+			selection = gui.Popup("Available:", selection, options.ToArray());
+			instance_name = gui.Text("Write In:", instance_name);
+			//Prioritize write-in names, then selections.
+			if (instance_name != null && components.ContainsKey(instance_name)){
+				memberValue = components[instance_name];
+			} else {
+				string selected_name = options[selection];
+				if (selection > 0 && components.ContainsKey(selected_name)){
+					memberValue = components[selected_name];
+				} else {
+					memberValue = null;
+				}
+			}
+		}
 	}
 }

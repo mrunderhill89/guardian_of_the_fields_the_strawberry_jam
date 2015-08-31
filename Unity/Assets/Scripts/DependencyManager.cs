@@ -14,9 +14,9 @@ public class DependencyManager <T>
 		public ActionList actions;
 	}
 	protected Subject<T> pass_in;
-	protected IObservable<HashSet<T>> loaded;
+	protected ReactiveProperty<HashSet<T>> loaded;
 	protected Subject<dep> dependency;
-	protected IObservable<Dictionary<T, ActionList>> dependencies;
+	protected ReactiveProperty<Dictionary<T, ActionList>> dependencies;
 	public DependencyManager ()
 	{
 		pass_in = new Subject<T> ();
@@ -24,7 +24,7 @@ public class DependencyManager <T>
 		loaded = pass_in.Scan (new HashSet<T> (), (objs, obj) => {
 			objs.Add(obj);
 			return objs;
-		});
+		}).ToReactiveProperty();
 		dependencies = dependency.Scan (new Dictionary<T,ActionList> (), (Dictionary<T,ActionList> deps, dep n_dep) => {
 			T key = n_dep.waiting_for;
 			if (!deps.ContainsKey(key)){
@@ -32,12 +32,11 @@ public class DependencyManager <T>
 			}
 			deps[key].AddRange(n_dep.actions);
 			return deps;
-		});
+		}).ToReactiveProperty();
 		loaded.CombineLatest<HashSet<T>, Dictionary<T,ActionList>, ActionList> (dependencies, (l, d) => {
 			ActionList actions = new ActionList();
 			foreach(T key in d.Keys){
 				if (l.Contains(key)){
-					Debug.Log("Dependency Found");
 					actions.AddRange(d[key]);
 					d[key].Clear();
 				}
@@ -45,7 +44,6 @@ public class DependencyManager <T>
 			return actions;
 		}).Where(actions=>{return actions.Count > 0;}).Subscribe(actions=>{
 			actions.ForEach(action=>{
-				Debug.Log("Running Dependant Actions");
 				action();
 			});
 		});
@@ -53,11 +51,39 @@ public class DependencyManager <T>
 	public void load(T obj){
 		pass_in.OnNext (obj);
 	}
+	public bool is_loaded(T obj){
+		if (obj == null) return true;
+		if (loaded == null || loaded.Value == null) return false;
+		return loaded.Value.Contains(obj);
+	}
+	
+	public IObservable<T> when_loaded(IObservable<T> source){
+		return Observable.Create<T>(obs=>{
+			source.Subscribe((dep)=>{
+				if (EqualityComparer<T>.Default.Equals(dep, default(T))){
+					//You can't really "load" a null, so just pass it through.
+					obs.OnNext(default(T));
+				} else {
+					register_dep(dep, ()=>{
+						obs.OnNext(dep);
+					});
+				}
+			});
+			return Disposable.Create(()=>{});
+		});
+	}
+	
 	public void register_dep(T obj, ActionList actions){
-		dep n_dep = new dep ();
-		n_dep.waiting_for = obj;
-		n_dep.actions = actions;
-		dependency.OnNext (n_dep);
+		if (EqualityComparer<T>.Default.Equals(obj, default(T))){
+			actions.ForEach(action=>{
+				action();
+			});
+		} else {
+			dep n_dep = new dep ();
+			n_dep.waiting_for = obj;
+			n_dep.actions = actions;
+			dependency.OnNext (n_dep);
+		}
 	}
 	public void register_dep(T obj, Action action){
 		ActionList actions = new ActionList ();

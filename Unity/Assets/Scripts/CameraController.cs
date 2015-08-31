@@ -1,16 +1,14 @@
 ﻿using Vexe.Runtime.Types;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class CameraController : BetterBehaviour {
 	public Transform target;
 	public int default_frames = 60;
 	public int default_delay = 0;
-	//Link these to the appropriate view objects
-	public Transform c_look_forward = null,c_look_left = null,c_look_right = null;
-	public Transform c_pick_left = null,c_pick_right = null,c_pack = null;
-
+	public Dictionary<string,Transform> targets;
 	// Use this for initialization
 	void Start () {
 	}
@@ -30,6 +28,12 @@ public class CameraController : BetterBehaviour {
 			Wrap(ang.z,-bounds, bounds, inc, inc)
 		);
 	}
+	public Action lazy_set_target(string target_name){
+		return this.lazy_set_target (targets [target_name], this.default_frames, this.default_delay);
+	}
+	public Action lazy_set_target(string target_name, int in_frames, int delay){
+		return this.lazy_set_target (targets [target_name], in_frames, delay);
+	}
 	public Action lazy_set_target(Transform t){
 		return this.lazy_set_target (t, this.default_frames, this.default_delay);
 	}
@@ -39,6 +43,10 @@ public class CameraController : BetterBehaviour {
 		};
 	}
 
+	public void SetCameraTarget(string target_name){
+		this.StartCoroutine(this.drift_to_target(targets[target_name],this.default_frames, this.default_delay));
+	}
+		
 	public IEnumerator drift_to_target(Transform t, int in_frames, int delay_frames = 0){
 		float percent, inv_percent;
 		Vector3 p_0 = this.transform.position;

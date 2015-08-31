@@ -60,5 +60,27 @@ namespace UniRx
                 }, observer.OnError, observer.OnCompleted);
             });
         }
+		
+		public static IObservable<T> SkipDuplicates<T>(this IObservable<T> source, bool allow_null = false) {
+			return Observable.Create<T>(observer =>
+			{
+				T prev = default(T);
+                return source.Subscribe(x =>
+                {
+                    try
+                    {
+						if (!System.Object.Equals(prev,x) || (allow_null && x == null)){
+							observer.OnNext(x);
+						}
+                        prev = x;
+                    }
+                    catch (Exception ex)
+                    {
+                        observer.OnError(ex);
+                        return;
+                    }
+                }, observer.OnError, observer.OnCompleted);
+			});
+		}
     }
 }

@@ -24,11 +24,11 @@ public class GameStateManager : BetterBehaviour {
 		};
 		//Look
 		HFSM_State look_forward = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_look_forward));
+			.on_entry(camera_control.lazy_set_target("look_forward"));
 		HFSM_State look_left = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_look_left));
+			.on_entry(camera_control.lazy_set_target("look_left"));
 		HFSM_State look_right = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_look_right));
+			.on_entry(camera_control.lazy_set_target("look_right"));
 		HFSM_State look = new HFSM_State ()
 			.add_child(look_forward)
 			.add_child(look_left)
@@ -41,9 +41,9 @@ public class GameStateManager : BetterBehaviour {
 
 		//Pick
 		HFSM_State pick_left = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_left, 20, 20));
+			.on_entry(camera_control.lazy_set_target("pick_left", 20, 20));
 		HFSM_State pick_right = new HFSM_State ()
-			.on_entry(camera_control.lazy_set_target(camera_control.c_pick_right, 20, 20));
+			.on_entry(camera_control.lazy_set_target("pick_right", 20, 20));
 		HFSM_State pick = new HFSM_State ()
 			.add_child(pick_left)
 			.add_child(pick_right)
@@ -56,7 +56,7 @@ public class GameStateManager : BetterBehaviour {
 		//Pack
 		HFSM_State pack = new HFSM_State ()
 			.on_entry(()=>{
-				camera_control.lazy_set_target(camera_control.c_pack)();
+				camera_control.lazy_set_target("pack")();
 				//Draggable.calculate_delta = Draggable.xz_plane;
 			}).on_exit(()=>{
 				//Draggable.calculate_delta = Draggable.xy_plane;

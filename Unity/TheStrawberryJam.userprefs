@@ -1,17 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Grounded.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Editor/HFSMEditor.cs">
     <Files>
-      <File FileName="Assets/Scripts/StrawberryComponent.cs" Line="25" Column="25" />
-      <File FileName="Assets/Scripts/Reactive_HFSM.cs" Line="9" Column="1" />
-      <File FileName="Assets/Editor/HFSMEditor.cs" Line="58" Column="41" />
+      <File FileName="Assets/Scripts/StrawberryComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Reactive_HFSM.cs" Line="1" Column="1" />
+      <File FileName="Assets/Editor/HFSMEditor.cs" Line="108" Column="35" />
       <File FileName="Assets/Plugins/Editor/Vexe/GUIs/BaseGUI/BaseGUI.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/Editor/Vexe/GUIs/BaseGUI/Controls/Objects.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Reactive_Transition.cs" Line="55" Column="1" />
-      <File FileName="Assets/Scripts/Draggable.cs" Line="67" Column="5" />
+      <File FileName="Assets/Scripts/Reactive_Transition.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Draggable.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/GameObjectPool.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameStateManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Grounded.cs" Line="17" Column="72" />
+      <File FileName="Assets/Scripts/GameStateManager.cs" Line="26" Column="22" />
+      <File FileName="Assets/Scripts/CameraController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Randomize_Scale.cs" Line="1" Column="1" />
+      <File FileName="Assets/StrawberryScale.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HFSM.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

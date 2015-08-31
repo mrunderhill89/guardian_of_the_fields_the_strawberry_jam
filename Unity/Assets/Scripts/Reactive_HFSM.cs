@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using UniRx;
 using StateChain = System.Collections.Generic.List<Reactive_HFSM>;
 
-public class Reactive_HFSM : BetterBehaviour {
+public class Reactive_HFSM : NamedBehavior {
 	[DontSerialize]
 	public static DependencyManager<Reactive_HFSM> deps;
 	static Reactive_HFSM(){
 		deps = new DependencyManager<Reactive_HFSM>();
 	}
-	public new string name = "HFSM";
+	
 	public ReactiveProperty<Reactive_HFSM> parent { get; private set;}
 	public ReactiveProperty<Reactive_HFSM>  initial { get; private set;}
 	public ReactiveProperty<Reactive_HFSM>  current { get; private set;}
