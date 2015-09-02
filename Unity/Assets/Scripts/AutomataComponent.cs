@@ -6,39 +6,54 @@ using UnityEngine;
 using UnityEngine.Events;
 using UniRx;
 using StateMove = Vexe.Runtime.Types.Tuple<StateComponent,StateComponent>;
-
 public class AutomataComponent : BetterBehaviour {
-	public ReactiveProperty<StateComponent> current;
-	[DontSerialize]
-	public IObservable<StateMove> on_move;
-	[DontSerialize]
-	public IObservable<StateComponent> on_enter;
-	[DontSerialize]
-	public IObservable<StateComponent> on_exit;
-	[DontSerialize]
-	public ReadOnlyReactiveProperty<List<StateComponent>> parents;
-	// Use this for initialization
-	void Start () {
-		on_move = current.Scan (new StateMove(null,null), (StateMove last_move, StateComponent next) => {
-			return new StateMove(last_move.Item2,next);
-		}).Where((tuple)=>{ return tuple.Item1 != tuple.Item2;});
-		on_exit = on_move.Select ((tuple) => {
-			return tuple.Item1;
-		}).Where((state)=>{
-			return state != null;
-		});
-		on_enter = on_move.Select ((tuple) => {
-			return tuple.Item2;
-		}).Where((state)=>{
-			return state != null;
-		});
-		/*
-		parents = current.SelectMany ((state) => {
-
-		});*/
+	public StateComponent current;
+	protected List<StateComponent> stack;
+	
+	void Start(){
+		stack = new List<StateComponent>();
+		if (current != null){
+			stack.Add(current);
+		}
 	}
-
-	// Update is called once per frame
+	public void move_direct(StateComponent to){
+		if (to.parent == current || current.parent == to){
+			if (to.parent == current){
+				//Parent->Child
+				stack.Add(to);
+				to.enter_automata(this);
+			} else { //(current.parent == to)
+				//Child->Parent
+				stack.RemoveAt(stack.Count -1);
+				current.exit_automata(this);
+			}
+			current = to;
+		} else if (current != to){
+			Debug.LogError("Attempted to move directly between non-connected states.");
+		}
+	}
+	public void move_transition(TransitionComponent trans){
+		// transition.on_start(this);
+		foreach(StateComponent up in trans.upswing){
+			move_direct(up);
+		}
+		// transition.on_transfer(this);
+		foreach(StateComponent down in trans.downswing){
+			move_direct(down);
+		}
+		// transition.on_finish(this);
+	}
 	void Update () {
+		if (current != null){
+			while(current.child != null){
+				move_direct(current.child);
+			}
+			foreach(StateComponent state in stack){
+				//state.update.OnNext(this);
+				on_state(state);
+			}
+		}
+	}
+	public void on_state(StateComponent state){
 	}
 }
