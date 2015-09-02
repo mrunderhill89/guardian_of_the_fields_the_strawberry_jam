@@ -36,4 +36,26 @@ public class StateComponent : NamedBehavior {
 			a.move_transition(trans);
 		}
 	}
+	public StateComponent add_child(StateComponent child, bool set_initial = false){
+		child.parent = this;
+		if (set_initial) {
+			this.child = child;
+		}
+		return this;
+	}
+	public StateComponent add_transition(string name, StateComponent to, Func<bool> test = null, bool autorun = true){
+		TransitionComponent trans = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject, name);
+		trans.name = name;
+		trans.auto_run = autorun;
+		trans.from_state = this;
+		trans.to_state = to;
+		if (test != null) {
+			//To-do: update this to take multiple events.
+			trans.tests.Add(test);
+		}
+		return this;
+	}
+	public StateComponent on_entry(Action act){return this;}
+	public StateComponent on_update(Action act){return this;}
+	public StateComponent on_exit(Action act){return this;}
 }

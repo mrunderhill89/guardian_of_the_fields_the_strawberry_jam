@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UniRx;
 
-public class TransitionComponent : BetterBehaviour {
+public class TransitionComponent : NamedBehavior {
 	public StateComponent from_state;
 	public StateComponent to_state;
 	public List<Func<bool>> tests;

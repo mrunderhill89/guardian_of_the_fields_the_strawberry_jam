@@ -85,9 +85,7 @@ public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
 					instance_name = memberValue.instance_name;
 					game_object = memberValue.gameObject;
 				}
-				foreach (T component in (game_object as GameObject).GetComponents<T>()){
-					components[component.instance_name] = component;
-				}
+				components = NamedBehavior.GetComponentsByName<T>((GameObject)game_object);
 			}
 			options = new List<String>();
 			options.Add("None");
