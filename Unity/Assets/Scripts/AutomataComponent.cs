@@ -10,10 +10,13 @@ public class AutomataComponent : BetterBehaviour {
 	public StateComponent current;
 	protected List<StateComponent> stack;
 	
-	void Start(){
+	void Awake(){
 		stack = new List<StateComponent>();
+	}
+	void Start(){
 		if (current != null){
 			stack.Add(current);
+			current.enter_automata(this);
 		}
 	}
 	public void move_direct(StateComponent to){
@@ -24,7 +27,7 @@ public class AutomataComponent : BetterBehaviour {
 				to.enter_automata(this);
 			} else { //(current.parent == to)
 				//Child->Parent
-				stack.RemoveAt(stack.Count -1);
+				stack.Remove(current);
 				current.exit_automata(this);
 			}
 			current = to;
@@ -45,12 +48,13 @@ public class AutomataComponent : BetterBehaviour {
 	}
 	void Update () {
 		if (current != null){
-			while(current.child != null){
+			if(current.child != null){
 				move_direct(current.child);
-			}
-			foreach(StateComponent state in stack){
-				//state.update.OnNext(this);
-				on_state(state);
+			} else {
+				foreach(StateComponent state in stack){
+					//state.update.OnNext(this);
+					on_state(state);
+				}
 			}
 		}
 	}

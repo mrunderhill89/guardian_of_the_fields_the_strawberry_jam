@@ -6,8 +6,6 @@ using System;
 
 public class GameStateManager : BetterBehaviour {
 	[NonSerialized]
-	public StateComponent root;
-	[NonSerialized]
 	public InputController input;
 	public CameraController camera_control;
 	public CartController cart_control;
@@ -21,14 +19,14 @@ public class GameStateManager : BetterBehaviour {
 		Physics.gravity = gravity;
 		input = InputController.get_instance ();
 		//Look
-		StateComponent look_forward = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "look_forward")
-			.on_entry(camera_control.lazy_set_target("look_forward"));
-		StateComponent look_left = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "look_left")
-			.on_entry(camera_control.lazy_set_target("look_left"));
-		StateComponent look_right = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "look_right")
-			.on_entry(camera_control.lazy_set_target("look_right"));
-		StateComponent look = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "look")
-			.add_child(look_forward, true)
+		StateComponent look_forward = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_forward");
+			look_forward.on_entry(camera_control.lazy_set_target("look_forward"));
+		StateComponent look_left = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_left");
+			look_left.on_entry(camera_control.lazy_set_target("look_left"));
+		StateComponent look_right = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_right");
+			look_right.on_entry(camera_control.lazy_set_target("look_right"));
+		StateComponent look = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look");
+			look.add_child(look_forward, true)
 			.add_child(look_left)
 			.add_child(look_right)
 			.on_entry(lazy_log("Looking"))
@@ -37,12 +35,12 @@ public class GameStateManager : BetterBehaviour {
 			});
 
 		//Pick
-		StateComponent pick_left = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "pick_left")
-			.on_entry(camera_control.lazy_set_target("pick_left", 20, 20));
-		StateComponent pick_right = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "pick_right")
-			.on_entry(camera_control.lazy_set_target("pick_right", 20, 20));
-		StateComponent pick = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "pick")
-			.add_child(pick_left)
+		StateComponent pick_left = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick_left");
+			pick_left.on_entry(camera_control.lazy_set_target("pick_left", 20, 20));
+		StateComponent pick_right = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick_right");
+			pick_right.on_entry(camera_control.lazy_set_target("pick_right", 20, 20));
+		StateComponent pick = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick");
+			pick.add_child(pick_left)
 			.add_child(pick_right)
 				.on_entry(()=>{
 				StrawberryComponent.allow_picking_unpicked = true;
@@ -51,8 +49,8 @@ public class GameStateManager : BetterBehaviour {
 				});
 
 		//Pack
-		StateComponent pack = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "pack")
-			.on_entry(()=>{
+		StateComponent pack = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pack");
+			pack.on_entry(()=>{
 				camera_control.lazy_set_target("pack")();
 				//Draggable.calculate_delta = Draggable.xz_plane;
 			}).on_exit(()=>{
@@ -80,6 +78,7 @@ public class GameStateManager : BetterBehaviour {
 		pack.add_transition ("pack=>look_forward", look_forward, input.on_up);
 
 		//Main State
+		StateComponent root = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "root");
 		root.add_child(look, true).add_child(pick).add_child(pack);
 
 	}

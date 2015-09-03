@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UniRx;
 
 public class ActionWrapper{
@@ -16,6 +17,15 @@ public class ActionWrapper{
 	}
 	public IEnumerator run(){
 		act();
+		yield return null;
+	}
+}
+
+public class MultiAction{
+	public static IEnumerator run_list(MonoBehaviour runner, IEnumerable<ActionWrapper> actions){
+		foreach (ActionWrapper aw in actions) {
+			yield return runner.StartCoroutine(aw.run());
+		}
 		yield return null;
 	}
 }

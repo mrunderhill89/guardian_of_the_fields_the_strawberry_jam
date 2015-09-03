@@ -64,8 +64,6 @@
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
-     <Compile Include="Assets\Scripts\Reactive_HFSM.cs" />
-     <Compile Include="Assets\Scripts\Reactive_Transition.cs" />
      <Compile Include="Assets\Scripts\StateComponent.cs" />
      <Compile Include="Assets\Scripts\StrawberryComponent.cs" />
      <Compile Include="Assets\Scripts\TransitionComponent.cs" />

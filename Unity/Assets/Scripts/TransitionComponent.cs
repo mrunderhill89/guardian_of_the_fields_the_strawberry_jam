@@ -15,10 +15,13 @@ public class TransitionComponent : NamedBehavior {
 	protected StateComponent pivot;
 	public List<StateComponent> downswing;
 
+	void Awake(){
+		tests = new List<Func<bool>> ();
+		upswing = new List<StateComponent> ();
+		downswing = new List<StateComponent> ();
+	}
+
 	void Start(){
-		tests = new List<Func<bool>>();
-		upswing = new List<StateComponent>();
-		downswing = new List<StateComponent>();
 		generate_path();
 	}
 	
@@ -44,7 +47,7 @@ public class TransitionComponent : NamedBehavior {
 		}
 		downswing.Reverse();
 		if (pivot == null){
-			Debug.LogError("Unable to complete path.");
+			//Debug.LogError("Unable to complete path.");
 			upswing.Clear();
 			downswing.Clear();
 		}
@@ -54,11 +57,16 @@ public class TransitionComponent : NamedBehavior {
 		foreach(Func<bool> test in tests){
 			if (!test()){return false;}
 		}
-		from_state.handle_transition(this);
+		if (this.pivot != null) {
+			from_state.handle_transition (this);
+		}
 		return true;
 	}
 	
 	void Update(){
+		if (this.pivot != null) {
+			generate_path();
+		}
 		if (auto_run){
 			trigger();
 		}
