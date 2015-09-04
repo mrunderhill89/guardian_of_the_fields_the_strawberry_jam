@@ -29,15 +29,42 @@ public static class CustomMapper
 			>().Insert<
 				ReactiveProperty<bool>, 
 				ReactivePropertyDrawer<bool, BoolDrawer>				
-			>()
-			.Insert<
+			>().Insert<
 				ReactiveProperty<int>, 
 				ReactivePropertyDrawer<int, IntDrawer>
+			>().Insert<
+				HashSet<AutomataComponent>,
+				HashSetDrawer<AutomataComponent,ListDrawer<AutomataComponent>>
 			>();
 	}
 }
 
 public class ListPropertyDrawer<T>: ReactivePropertyDrawer<List<T>, ListDrawer<T>>{
+}
+
+public class HashSetDrawer<T, D>: ObjectDrawer<HashSet<T>> where D:ListDrawer<T>, new(){
+	public D sub_draw;
+	public EditorMember sub_member;
+	public override void OnGUI(){
+		if (sub_member == null) {
+			sub_member = EditorMember.WrapGetSet (
+				() => {
+				if (memberValue == null)
+					return new List<T> ();
+				return memberValue.ToList ();
+			}, 
+				(value) => {
+				}, 
+				member.RawTarget, member.UnityTarget, typeof(List<T>), member.Name, member.Id, member.Attributes
+			);
+		}
+		if (sub_draw == null){
+			sub_draw = new D();
+			sub_draw.Initialize(sub_member, attributes, gui);
+		} else {
+			sub_draw.OnGUI();
+		}
+	}
 }
 
 public class ReactivePropertyDrawer<T, D>: ObjectDrawer<ReactiveProperty<T>> where D:ObjectDrawer<T>, new(){
@@ -71,8 +98,8 @@ public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
 	protected bool fold = false;
 	public override void OnGUI(){
 		if (memberValue != null){
-			if (game_object == null) game_object = memberValue.gameObject;
-			if (instance_name == null) instance_name = memberValue.instance_name;
+			game_object = memberValue.gameObject;
+			instance_name = memberValue.instance_name;
 		}
 		string foldout_label = displayText+" "+(memberValue==null?"(null)":"("+memberValue.instance_name+")");
 		fold = gui.Foldout(foldout_label, fold);
@@ -86,6 +113,8 @@ public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
 					game_object = memberValue.gameObject;
 				}
 				components = NamedBehavior.GetComponentsByName<T>((GameObject)game_object);
+			} else {
+				memberValue = null;
 			}
 			options = new List<String>();
 			options.Add("None");

@@ -24,6 +24,7 @@ public class ActionWrapper{
 public class MultiAction{
 	public static IEnumerator run_list(MonoBehaviour runner, IEnumerable<ActionWrapper> actions){
 		foreach (ActionWrapper aw in actions) {
+			Debug.Log("Running Coroutine");
 			yield return runner.StartCoroutine(aw.run());
 		}
 		yield return null;

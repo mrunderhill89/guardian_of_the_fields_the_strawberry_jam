@@ -36,9 +36,14 @@ public class AutomataComponent : BetterBehaviour {
 		}
 	}
 	public void move_transition(TransitionComponent trans){
+		// if the from_state is above ours, we need to get there first
 		// transition.on_start(this);
-		foreach(StateComponent up in trans.upswing){
-			move_direct(up);
+		while (current != trans.pivot) {
+			if (current == null){
+				Debug.LogError("Automata not on transition path.");
+				return;
+			}
+			move_direct (current.parent);
 		}
 		// transition.on_transfer(this);
 		foreach(StateComponent down in trans.downswing){
@@ -59,5 +64,6 @@ public class AutomataComponent : BetterBehaviour {
 		}
 	}
 	public void on_state(StateComponent state){
+		state.update_automata (this);
 	}
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System;
 
 public class GameStateManager : BetterBehaviour {
-	[NonSerialized]
 	public InputController input;
 	public CameraController camera_control;
 	public CartController cart_control;
@@ -17,7 +16,6 @@ public class GameStateManager : BetterBehaviour {
 	}
 	void Start () {
 		Physics.gravity = gravity;
-		input = InputController.get_instance ();
 		//Look
 		StateComponent look_forward = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_forward");
 			look_forward.on_entry(camera_control.lazy_set_target("look_forward"));
@@ -59,23 +57,23 @@ public class GameStateManager : BetterBehaviour {
 
 		//Transitions
 		//Look Forward -> Look Left, Look Right, Pack
-		look_forward.add_transition ("look_forward=>left", look_left, input.on_left)
-			.add_transition ("look_forward=>right", look_right, input.on_right)
-			.add_transition ("look_forward=>pack", pack, input.on_down);
+		look_forward.add_transition ("look_forward=>left", look_left, input.on_dir("left"))
+			.add_transition ("look_forward=>right", look_right, input.on_dir("right"))
+			.add_transition ("look_forward=>pack", pack, input.on_dir("down"));
 		//Look Left -> Look Forward, Pick Left
-		look_left.add_transition ("look_left=>forward", look_forward, input.on_right)
-			.add_transition ("look_left=>pick", pick_left, input.on_down);
+		look_left.add_transition ("look_left=>forward", look_forward, input.on_dir("right"))
+			.add_transition ("look_left=>pick", pick_left, input.on_dir("down"));
 		//Look Right -> Look Forward, Pick Right
-		look_right.add_transition ("look_right=>forward", look_forward, input.on_left)
-		.add_transition ("look_right=>pick", pick_right, input.on_down);
+		look_right.add_transition ("look_right=>forward", look_forward, input.on_dir("left"))
+		.add_transition ("look_right=>pick", pick_right, input.on_dir("down"));
 		//Pick Left -> Look Left, Pack
-		pick_left.add_transition("pick_left=>look", look_left, input.on_up)
-		.add_transition("pick_left=>pack", pack, input.on_right);
+		pick_left.add_transition("pick_left=>look", look_left, input.on_dir("up"))
+		.add_transition("pick_left=>pack", pack, input.on_dir("right"));
 		//Pick Right -> Look Left, Pack
-		pick_right.add_transition("pick_right=>look", look_right, input.on_up)
-		.add_transition("pick_right=>pack", pack, input.on_left);
+		pick_right.add_transition("pick_right=>look", look_right, input.on_dir("up"))
+		.add_transition("pick_right=>pack", pack, input.on_dir("left"));
 		// Pack -> Look Forward
-		pack.add_transition ("pack=>look_forward", look_forward, input.on_up);
+		pack.add_transition ("pack=>look_forward", look_forward, input.on_dir("up"));
 
 		//Main State
 		StateComponent root = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "root");

@@ -34,26 +34,25 @@ public class StateComponent : NamedBehavior {
 	}
 	
 	public void enter_automata(AutomataComponent a){
-		StartCoroutine(MultiAction.run_list(this, entry_actions.Select<StateEvent,ActionWrapper>((StateEvent evn) => {
-			return new ActionWrapper (() => {evn(this,a);});
-		})));
 		visitors.Add(a);
-		Debug.Log (instance_name + " visitor count +:" + visitors.Count);
+		foreach (StateEvent e in entry_actions) {
+			e(this,a);
+		}
 	}
 	public void update_automata(AutomataComponent a){
-		StartCoroutine(MultiAction.run_list (this, update_actions.Select ((StateEvent evn) => {
-			return new ActionWrapper (() => {evn(this,a);});
-		})));
+		foreach (StateEvent e in update_actions) {
+			e(this,a);
+		}
 	}
 	public void exit_automata(AutomataComponent a){
-		StartCoroutine(MultiAction.run_list (this, exit_actions.Select ((StateEvent evn) => {
-			return new ActionWrapper (() => {evn(this,a);});
-		})));
 		visitors.Remove(a);
-		Debug.Log (instance_name + " visitor count -:" + visitors.Count);
+		foreach (StateEvent e in exit_actions) {
+			e(this,a);
+		}
 	}
 	public void handle_transition(TransitionComponent trans){
-		foreach(AutomataComponent a in visitors.ToList<AutomataComponent>()){
+		var list = visitors.ToList<AutomataComponent> ();
+		foreach(AutomataComponent a in list){
 			a.move_transition(trans);
 		}
 	}
@@ -74,6 +73,15 @@ public class StateComponent : NamedBehavior {
 			//To-do: update this to take multiple events.
 			trans.tests.Add(test);
 		}
+		return this;
+	}
+	public StateComponent add_transition(string name, StateComponent to, UnityEvent run_on, bool autorun = false){
+		TransitionComponent trans = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject, name);
+		trans.instance_name = name;
+		trans.auto_run = autorun;
+		trans.from_state = this;
+		trans.to_state = to;
+		run_on.AddListener(()=>{trans.trigger ();});
 		return this;
 	}
 	public StateComponent on_entry(Action act){
