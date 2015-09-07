@@ -11,8 +11,7 @@ public class TransitionComponent : NamedBehavior {
 	public StateComponent to_state;
 	public List<Func<bool>> tests;
 	public bool auto_run = false;
-	public StateComponent _pivot;
-	public StateComponent pivot { get; private set;}
+	public StateComponent pivot;
 	public List<StateComponent> downswing;
 
 	void Awake(){
