@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class GameStateManager : BetterBehaviour {
+public class GameStateManager : SingletonBehavior {
 	public InputController input;
 	public CameraController camera_control;
 	public CartController cart_control;

@@ -24,15 +24,17 @@ public class AutomataComponent : BetterBehaviour {
 			if (to.parent == current){
 				//Parent->Child
 				stack.Add(to);
+				current = to;
 				to.enter_automata(this);
 			} else { //(current.parent == to)
 				//Child->Parent
 				stack.Remove(current);
 				current.exit_automata(this);
+				current = to;
 			}
-			current = to;
 		} else if (current != to){
-			Debug.LogError("Attempted to move directly between non-connected states.");
+			Debug.LogError("Attempted to move directly between non-connected states:\n"+
+			               current.instance_name+"=>"+to.instance_name);
 		}
 	}
 	public void move_transition(TransitionComponent trans){
@@ -51,12 +53,21 @@ public class AutomataComponent : BetterBehaviour {
 		}
 		// transition.on_finish(this);
 	}
+	public void move_warp(StateComponent to){
+		if (current != null) {
+			current.exit_automata(this);
+		}
+		current = to;
+		if (to != null) {
+			current.enter_automata (this);
+		}
+	}
 	void Update () {
 		if (current != null){
 			if(current.child != null){
 				move_direct(current.child);
 			} else {
-				foreach(StateComponent state in stack){
+				foreach(StateComponent state in stack.ToArray()){
 					//state.update.OnNext(this);
 					on_state(state);
 				}

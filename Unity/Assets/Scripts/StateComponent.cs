@@ -50,12 +50,6 @@ public class StateComponent : NamedBehavior {
 			e(this,a);
 		}
 	}
-	public void handle_transition(TransitionComponent trans){
-		var list = visitors.ToList<AutomataComponent> ();
-		foreach(AutomataComponent a in list){
-			a.move_transition(trans);
-		}
-	}
 	public StateComponent add_child(StateComponent child, bool set_initial = false){
 		child.parent = this;
 		if (set_initial) {
@@ -71,7 +65,7 @@ public class StateComponent : NamedBehavior {
 		trans.to_state = to;
 		if (test != null) {
 			//To-do: update this to take multiple events.
-			trans.tests.Add(test);
+			trans.test(test);
 		}
 		return this;
 	}

@@ -14,8 +14,10 @@ public class StrawberryComponent : BetterBehaviour {
 	public Draggable drag = null;
 	public Behaviour glow = null;
 	public BoolReactiveProperty picked;
+	public StrawberryStateMachine state_machine;
 	// Use this for initialization
 	void Start () {
+		state_machine = SingletonBehavior.getInstance<StrawberryStateMachine> ();
 		picked = new BoolReactiveProperty (false);
 		//Disable dragging until we determine whether we can pick up berries yet.
 		quality = RandomUtils.random_double(0.5, 1.25);
@@ -41,6 +43,9 @@ public class StrawberryComponent : BetterBehaviour {
 		glow.enabled = false;
 	}
 
+	void OnMouseDown(){
+		state_machine.transitions ["field_drag"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
+	}
 	// Update is called once per frame
 	void Update () {
 	}

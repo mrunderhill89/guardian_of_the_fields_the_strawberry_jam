@@ -17,6 +17,8 @@ public static class CustomMapper
 	{
 		MemberDrawersHandler.Mapper
 			.Insert<StateComponent, MultiComponentDrawer<StateComponent>>()
+			.Insert<StrawberryRowState, MultiComponentDrawer<StrawberryRowState>>()
+			.Insert<TransitionComponent, MultiComponentDrawer<TransitionComponent>>()
 			.Insert<
 				ReactiveProperty<StateComponent>, 
 				ReactivePropertyDrawer<StateComponent, MultiComponentDrawer<StateComponent>>
@@ -107,7 +109,7 @@ public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
 			game_object = gui.Object("Game Object", "Select host game object.", game_object);
 			components = new Dictionary<string,T>();
 			if (game_object != null){
-				if (game_object.GetType() == typeof(T)){
+				if (game_object.GetType().IsSubclassOf(typeof(T))){
 					memberValue = (T)game_object;
 					instance_name = memberValue.instance_name;
 					game_object = memberValue.gameObject;
