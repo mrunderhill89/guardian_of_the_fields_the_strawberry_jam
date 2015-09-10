@@ -7,7 +7,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 	public Dictionary<string,StateComponent> states;
 	public Dictionary<string,TransitionComponent> transitions;
 	public int field_strawberries = 100;
-	void Awake () {
+	new void Awake () {
 		base.Awake();
 		states = new Dictionary<string,StateComponent> ();
 		transitions = new Dictionary<string,TransitionComponent> ();
@@ -36,6 +36,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 		transitions["recycle"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"recycle");
 		transitions["recycle"].from_state = states["field"];
 		transitions["recycle"].to_state = states["init"];
+		transitions["recycle"].generate_path();
 		transitions["recycle"].auto_run = false;
 	}
 	void init_enter(StateComponent state, AutomataComponent automata){
@@ -48,22 +49,28 @@ public class StrawberryStateMachine : SingletonBehavior {
 		//Select a random field object and distribute to it.
 		int num_rows = StrawberryRowState.rows.Count;
 		if (num_rows > 0) {
-			int random_row = RandomUtils.random_int (0, num_rows);
-			StrawberryRowState row = StrawberryRowState.rows [random_row];
-			row.parent = states ["field"];
-			automata.move_direct (row);
+			int random_row = RandomUtils.random_int(0, num_rows);
+			StrawberryRowState row = StrawberryRowState.rows[random_row];
+			if (row != null){
+				row.parent = states["field"];
+				automata.move_direct(row);
+			} else {
+				Debug.LogError("Row number "+random_row+" doesn't exist. Current row count is "+num_rows);
+			}
 		} else {
 			//Move the strawberry back to the init state.
+			Debug.Log("Rows not initialized. Moving back to init.");
 			transitions["recycle"].trigger_single(automata);
 		}
 	}
 	void Update () {
+		GameObject berry;
 		for (int u = states["init"].visitors.Count + states["field"].visitors.Count;
 		     u < field_strawberries;
 		     u++
 		){
-			Debug.Log("New Strawberry Generated");
-			GameObject.Instantiate(Resources.Load ("Strawberry"));
+			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
+			berry.GetComponent<AutomataComponent>().move_direct(states["init"]);
 		}
 	}
 }

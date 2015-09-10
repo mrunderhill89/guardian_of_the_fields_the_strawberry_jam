@@ -17,7 +17,7 @@ public abstract class SingletonBehavior: BetterBehaviour
 			Debug.LogError("Already an instance of singleton behavior:"+this_type.Name);
 		}
 	}
-	public static T getInstance<T>() where T:SingletonBehavior{
+	public static T get_instance<T>() where T:SingletonBehavior{
 		return instances[typeof(T)] as T;
 	}
 }

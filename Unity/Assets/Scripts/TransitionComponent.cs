@@ -28,7 +28,7 @@ public class TransitionComponent : NamedBehavior {
 		generate_path();
 	}
 	
-	void generate_path(){
+	public void generate_path(){
 		downswing.Clear();
 		StateComponent up = from_state;
 		StateComponent down = to_state;
@@ -73,7 +73,7 @@ public class TransitionComponent : NamedBehavior {
 				trigger_single(a);
 			}
 		} else {
-			Debug.LogError("Attempting to trigger an incomplete transition.");
+			Debug.LogError("Attempting to trigger an incomplete transition:"+instance_name);
 		}
 	}
 	public bool trigger_single(AutomataComponent a){
