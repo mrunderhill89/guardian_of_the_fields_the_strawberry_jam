@@ -2,14 +2,35 @@
 using System.Collections;
 
 public class HandContainer : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+	public StateComponent slot;
+	public TransitionComponent take;
+	public Behaviour glow = null;
+	public Color deselected;
+	public Color selected;
+	void Awake () {
+		slot = NamedBehavior.GetOrCreateComponentByName<StateComponent>(gameObject, "slot");
+		take = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject, "take");
+		glow = (gameObject.GetComponent("Halo") as Behaviour);
+		glow.enabled = false;
+		take.auto_run = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	void Start(){
+		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+		slot.parent = state_machine.states["hold"];
+		take.from_state = state_machine.states["drag"];
+		take.to_state = slot;
+		take.generate_path();
+	}
+	void Update(){
+	}
+	void OnMouseEnter(){
+		glow.enabled = true;
+	}
+	void OnMouseExit(){
+		glow.enabled = false;
+	}
+	void OnMouseUp() {
+		Debug.Log("Mouse Released on Hand Slot");
+		take.trigger();
 	}
 }

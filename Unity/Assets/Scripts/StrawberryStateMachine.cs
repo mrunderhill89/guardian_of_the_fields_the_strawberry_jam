@@ -18,8 +18,6 @@ public class StrawberryStateMachine : SingletonBehavior {
 		states ["hold"] = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "hold");
 		states ["fall"] = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "fall");
 		states ["basket"] = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "basket");
-	}
-	void Start(){
 		states["root"]
 			.add_child(states["init"], true)
 			.add_child(states["field"])
@@ -27,6 +25,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.add_child(states["hold"])
 			.add_child(states["fall"])
 			.add_child(states["basket"]);
+	}
+	void Start(){
+
 		states["init"]
 			.on_entry(init_enter)
 			.on_exit(init_exit);

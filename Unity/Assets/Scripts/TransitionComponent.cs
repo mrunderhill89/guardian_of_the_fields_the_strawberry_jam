@@ -38,7 +38,7 @@ public class TransitionComponent : NamedBehavior {
 			if (up == down){
 				pivot = up;
 			} else {
-				if (up.get_level() > down.get_level()){
+				if (up.get_level() > down.get_level() || down.parent == null){
 					up = up.parent;
 				} else {
 					down = down.parent;
@@ -48,7 +48,14 @@ public class TransitionComponent : NamedBehavior {
 		}
 		downswing.Reverse();
 		if (pivot == null){
-			//Debug.LogError("Unable to complete path.");
+			Debug.LogError("Unable to complete path.");
+			foreach(StateComponent state in downswing){
+				if (state != null){
+					Debug.LogWarning(state.instance_name);
+				} else {
+					Debug.LogWarning("null");
+				}
+			}
 			downswing.Clear();
 		}
 	}
