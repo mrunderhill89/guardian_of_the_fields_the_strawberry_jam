@@ -70,6 +70,9 @@ public class AutomataComponent : BetterBehaviour {
 		}
 		return this;
 	}
+	public bool visiting(StateComponent state){
+		return stack.Contains(state);
+	}
 	void Update () {
 		if (current != null){
 			if(current.child != null){

@@ -56,11 +56,9 @@
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\Grounded.cs" />
-     <Compile Include="Assets\Scripts\HFSM.cs" />
      <Compile Include="Assets\Scripts\HandContainer.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
      <Compile Include="Assets\Scripts\NamedBehavior.cs" />
-     <Compile Include="Assets\Scripts\ObjectGenerator.cs" />
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
@@ -71,6 +69,7 @@
      <Compile Include="Assets\Scripts\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\StrawberryStateMachine.cs" />
      <Compile Include="Assets\Scripts\TransitionComponent.cs" />
+     <Compile Include="Assets\Scripts\TransitionSorter.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />

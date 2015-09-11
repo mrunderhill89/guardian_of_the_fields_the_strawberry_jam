@@ -27,18 +27,41 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.add_child(states["basket"]);
 	}
 	void Start(){
-
 		states["init"]
 			.on_entry(init_enter)
 			.on_exit(init_exit);
 		states["field"]
 			.on_entry(distribute);
-		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"field_drag");
-		transitions["recycle"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"recycle");
-		transitions["recycle"].from_state = states["field"];
-		transitions["recycle"].to_state = states["init"];
-		transitions["recycle"].generate_path();
-		transitions["recycle"].auto_run = false;
+		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"field_drag")
+			.set_from_state(states["field"])
+			.set_to_state(states["drag"])
+			.set_auto_run(false)
+			.generate_path();
+		transitions["hold_drag"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"hold_drag")
+			.set_from_state(states["hold"])
+			.set_to_state(states["drag"])
+			.set_auto_run(false)
+			.generate_path();
+		transitions["fall_drag"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"fall_drag")
+			.set_from_state(states["fall"])
+			.set_to_state(states["drag"])
+			.set_auto_run(false)
+			.generate_path();
+		transitions["drag_fall"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"drag_fall")
+			.set_from_state(states["drag"])
+			.set_to_state(states["fall"])
+			.set_auto_run(false)
+			.generate_path();
+		transitions["basket_drag"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"basket_drag")
+			.set_from_state(states["basket"])
+			.set_to_state(states["drag"])
+			.set_auto_run(false)
+			.generate_path();
+		transitions["recycle"] = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"recycle")
+			.set_to_state(states["init"])
+			.set_from_state(states["field"])
+			.set_auto_run(false)
+			.generate_path();
 	}
 	void init_enter(StateComponent state, AutomataComponent automata){
 		//Turn off any renderable elements of the strawberry

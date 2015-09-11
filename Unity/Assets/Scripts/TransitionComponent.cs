@@ -11,24 +11,41 @@ using TestEventA = System.Func<AutomataComponent, bool>;
 using TestEventNeutral = System.Func<bool>;
 public class TransitionComponent : NamedBehavior {
 	public StateComponent from_state;
-	public StateComponent to_state;
-	public List<TestEventFull> tests;
-	public bool auto_run = false;
-	public StateComponent pivot;
-	public List<StateComponent> downswing;
-
-	void Awake(){
-		if (tests == null) {
-			tests = new List<TestEventFull> ();
-		}
-		downswing = new List<StateComponent> ();
+	public TransitionComponent set_from_state(StateComponent state){
+		from_state = state;
+		return this;
 	}
-
-	void Start(){
-		generate_path();
+	public StateComponent to_state;
+	public TransitionComponent set_to_state(StateComponent state){
+		to_state = state;
+		return this;
 	}
 	
-	public void generate_path(){
+	public List<TestEventFull> tests;
+	public TransitionComponent test(TestEventFull t){
+		tests.Add (t);
+		return this;
+	}
+	public TransitionComponent test(TestEventA t){
+		return test ((AutomataComponent a, StateComponent from, StateComponent to) => {
+			return t(a);
+		});
+	}
+	public TransitionComponent test(TestEventNeutral t){
+		return test ((AutomataComponent a, StateComponent from, StateComponent to) => {
+			return t();
+		});
+	}
+	
+	public bool auto_run = false;
+	public TransitionComponent set_auto_run(bool value){
+		this.auto_run = value;
+		return this;
+	}
+	
+	public StateComponent pivot;
+	public List<StateComponent> downswing;
+	public TransitionComponent generate_path(){
 		downswing.Clear();
 		StateComponent up = from_state;
 		StateComponent down = to_state;
@@ -58,21 +75,9 @@ public class TransitionComponent : NamedBehavior {
 			}
 			downswing.Clear();
 		}
-	}
-	public TransitionComponent test(TestEventFull t){
-		tests.Add (t);
 		return this;
 	}
-	public TransitionComponent test(TestEventA t){
-		return test ((AutomataComponent a, StateComponent from, StateComponent to) => {
-			return t(a);
-		});
-	}
-	public TransitionComponent test(TestEventNeutral t){
-		return test ((AutomataComponent a, StateComponent from, StateComponent to) => {
-			return t();
-		});
-	}
+
 	public void trigger(){
 		if (this.pivot != null) {
 			List<AutomataComponent> list = from_state.visitors.ToList<AutomataComponent>();
@@ -84,7 +89,7 @@ public class TransitionComponent : NamedBehavior {
 		}
 	}
 	public bool trigger_single(AutomataComponent a){
-		if (a.current == from_state){return _trigger_single(a);}
+		if (a.visiting(from_state)){return _trigger_single(a);}
 		return false;
 	}
 	protected bool _trigger_single(AutomataComponent a){
@@ -94,6 +99,18 @@ public class TransitionComponent : NamedBehavior {
 		a.move_transition(this);
 		return true;
 	}
+
+	void Awake(){
+		if (tests == null) {
+			tests = new List<TestEventFull> ();
+		}
+		downswing = new List<StateComponent> ();
+	}
+
+	void Start(){
+		generate_path();
+	}
+
 	void Update(){
 		if (this.pivot != null) {
 			generate_path();

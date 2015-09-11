@@ -30,7 +30,6 @@ public class HandContainer : MonoBehaviour {
 		glow.enabled = false;
 	}
 	void OnMouseUp() {
-		Debug.Log("Mouse Released on Hand Slot");
 		take.trigger();
 	}
 }
