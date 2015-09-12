@@ -18,6 +18,10 @@ public abstract class SingletonBehavior: BetterBehaviour
 		}
 	}
 	public static T get_instance<T>() where T:SingletonBehavior{
-		return instances[typeof(T)] as T;
+		T instance = instances[typeof(T)] as T;
+		if (instance == default(T)){
+			Debug.LogError("Singleton instance not defined:"+typeof(T).Name);
+		}
+		return instance;
 	}
 }

@@ -17,68 +17,109 @@ public class GameStateManager : SingletonBehavior {
 	void Start () {
 		Physics.gravity = gravity;
 		//Look
-		StateComponent look_forward = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_forward");
-			look_forward.on_entry(camera_control.lazy_set_target("look_forward"));
-		StateComponent look_left = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_left");
-			look_left.on_entry(camera_control.lazy_set_target("look_left"));
-		StateComponent look_right = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look_right");
-			look_right.on_entry(camera_control.lazy_set_target("look_right"));
-		StateComponent look = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "look");
+		State look_forward = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "look_forward");
+			look_forward.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward")));
+		State look_left = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "look_left");
+			look_left.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")));
+		State look_right = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "look_right");
+			look_right.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")));
+		State look = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "look");
 			look.add_child(look_forward, true)
 			.add_child(look_left)
 			.add_child(look_right)
-			.on_entry(lazy_log("Looking"))
-			.on_update(()=>{
+			.on_entry(new StateEvent(lazy_log("Looking")))
+			.on_update(new StateEvent(()=>{
 					cart_control.move();
-			});
+			}));
 
 		//Pick
-		StateComponent pick_left = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick_left");
-			pick_left.on_entry(camera_control.lazy_set_target("pick_left", 20, 20));
-		StateComponent pick_right = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick_right");
-			pick_right.on_entry(camera_control.lazy_set_target("pick_right", 20, 20));
-		StateComponent pick = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pick");
+		State pick_left = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick_left");
+			pick_left.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left", 20, 20)));
+		State pick_right = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick_right");
+			pick_right.on_entry(new StateEvent(camera_control.lazy_set_target("pick_right", 20, 20)));
+		State pick = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick");
 			pick.add_child(pick_left)
 			.add_child(pick_right)
-				.on_entry(()=>{
+				.on_entry(new StateEvent(()=>{
 				StrawberryComponent.allow_picking_unpicked = true;
-				}).on_exit(()=>{
+				})).on_exit(new StateEvent(()=>{
 					StrawberryComponent.allow_picking_unpicked = false;
-				});
+				}));
 
 		//Pack
-		StateComponent pack = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "pack");
-			pack.on_entry(()=>{
+		State pack = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pack");
+			pack.on_entry(new StateEvent(()=>{
 				camera_control.lazy_set_target("pack")();
 				//Draggable.calculate_delta = Draggable.xz_plane;
-			}).on_exit(()=>{
+			})).on_exit(new StateEvent(()=>{
 				//Draggable.calculate_delta = Draggable.xy_plane;
-			});
-
-		//Transitions
-		//Look Forward -> Look Left, Look Right, Pack
-		look_forward.add_transition ("look_forward=>left", look_left, input.on_dir("left"))
-			.add_transition ("look_forward=>right", look_right, input.on_dir("right"))
-			.add_transition ("look_forward=>pack", pack, input.on_dir("down"));
-		//Look Left -> Look Forward, Pick Left
-		look_left.add_transition ("look_left=>forward", look_forward, input.on_dir("right"))
-			.add_transition ("look_left=>pick", pick_left, input.on_dir("down"));
-		//Look Right -> Look Forward, Pick Right
-		look_right.add_transition ("look_right=>forward", look_forward, input.on_dir("left"))
-		.add_transition ("look_right=>pick", pick_right, input.on_dir("down"));
-		//Pick Left -> Look Left, Pack
-		pick_left.add_transition("pick_left=>look", look_left, input.on_dir("up"))
-		.add_transition("pick_left=>pack", pack, input.on_dir("right"));
-		//Pick Right -> Look Left, Pack
-		pick_right.add_transition("pick_right=>look", look_right, input.on_dir("up"))
-		.add_transition("pick_right=>pack", pack, input.on_dir("left"));
-		// Pack -> Look Forward
-		pack.add_transition ("pack=>look_forward", look_forward, input.on_dir("up"));
+			}));
 
 		//Main State
-		StateComponent root = NamedBehavior.GetOrCreateComponentByName<StateComponent> (gameObject, "root");
+		State root = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "root");
 		root.add_child(look, true).add_child(pick).add_child(pack);
 
+		//Transitions
+		look_forward
+			.add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>left")
+				.to(look_left)
+				.register_event(input.on_dir("left"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>right")
+				.to(look_right)
+				.register_event(input.on_dir("right"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>pack")
+				.to(pack)
+				.register_event(input.on_dir("down"))
+			);
+		//Look Left -> Look Forward, Pick Left
+		look_left.add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_left=>forward")
+				.to(look_forward)
+				.register_event(input.on_dir("right"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_left=>pick")
+				.to(pick_left)
+				.register_event(input.on_dir("down"))
+			);
+		//Look Right -> Look Forward, Pick Right
+		look_right.add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_right=>forward")
+				.to(look_forward)
+				.register_event(input.on_dir("left"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_right=>pick")
+				.to(pick_right)
+				.register_event(input.on_dir("down"))
+			);
+		//Pick Left -> Look Left, Pack
+		pick_left.add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>look")
+				.to(look_left)
+				.register_event(input.on_dir("up"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>pack")
+				.to(pack)
+				.register_event(input.on_dir("right"))
+			);
+		//Pick Right -> Look Right, Pack
+		pick_right.add_transition (
+			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_right=>look")
+				.to(look_right)
+				.register_event(input.on_dir("up"))
+			).add_transition (
+				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_right=>pack")
+				.to(pack)
+				.register_event(input.on_dir("left"))
+			);
+		// Pack -> Look Forward
+		pack.add_transition (
+			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>look_forward")
+			.to(look_forward)
+			.register_event(input.on_dir("up"))
+		);
 	}
 	
 	// Update is called once per frame

@@ -46,7 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AutomataComponent.cs" />
+     <Compile Include="Assets\Scripts\Automata.cs" />
      <Compile Include="Assets\Scripts\BasketComponent.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CartController.cs" />
@@ -63,13 +63,15 @@
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
      <Compile Include="Assets\Scripts\SingletonBehavior.cs" />
-     <Compile Include="Assets\Scripts\StateComponent.cs" />
+     <Compile Include="Assets\Scripts\State.cs" />
+     <Compile Include="Assets\Scripts\StateEvent.cs" />
      <Compile Include="Assets\Scripts\StrawberryComponent.cs" />
      <Compile Include="Assets\Scripts\StrawberryRowState.cs" />
      <Compile Include="Assets\Scripts\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\StrawberryStateMachine.cs" />
-     <Compile Include="Assets\Scripts\TransitionComponent.cs" />
-     <Compile Include="Assets\Scripts\TransitionSorter.cs" />
+     <Compile Include="Assets\Scripts\Transition.cs" />
+     <Compile Include="Assets\Scripts\TransitionEvent.cs" />
+     <Compile Include="Assets\Scripts\TransitionTest.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />

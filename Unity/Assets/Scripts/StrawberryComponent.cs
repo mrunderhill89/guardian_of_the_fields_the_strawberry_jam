@@ -44,14 +44,14 @@ public class StrawberryComponent : BetterBehaviour {
 	}
 
 	void OnMouseDown(){
-		state_machine.transitions["field_drag"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
-		state_machine.transitions["fall_drag"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
-		state_machine.transitions["hold_drag"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
-		state_machine.transitions["basket_drag"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
+		state_machine.transitions["field_drag"].trigger_single (gameObject.GetComponent<Automata> ());
+		state_machine.transitions["fall_drag"].trigger_single (gameObject.GetComponent<Automata> ());
+		state_machine.transitions["hold_drag"].trigger_single (gameObject.GetComponent<Automata> ());
+		state_machine.transitions["basket_drag"].trigger_single (gameObject.GetComponent<Automata> ());
 	}
 	
 	void OnMouseUp(){
-		state_machine.transitions["drag_fall"].trigger_single (gameObject.GetComponent<AutomataComponent> ());
+		state_machine.transitions["drag_fall"].trigger_single (gameObject.GetComponent<Automata> ());
 	}
 	// Update is called once per frame
 	void Update () {

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-public class StrawberryRowState : StateComponent {
+public class StrawberryRowState : State {
 	[DontSerialize]
 	public static List<StrawberryRowState> rows;
 	static StrawberryRowState(){
@@ -11,23 +11,22 @@ public class StrawberryRowState : StateComponent {
 	}
 	// Use this for initialization
 	void Start (){
-		Debug.Log("Adding "+this.ToString()+" to rows list.");
 		rows.Add(this);
 		parent = SingletonBehavior.get_instance<StrawberryStateMachine>().states["field"];
-		recycle = NamedBehavior.GetOrCreateComponentByName<TransitionComponent>(gameObject,"recycle");
-		recycle.from_state = this;
-		recycle.test(optimize);
-		on_entry (distribute);
+		recycle = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"recycle")
+			.from(this)
+			.add_test(new TransitionTest(optimize));
+		on_entry (new StateEvent(distribute));
 	}
 
 	public Vector3 min_position = new Vector3(0,0,0);
 	public Vector3 max_position = new Vector3(0,0,0);
-	public TransitionComponent recycle;
-	public Func<AutomataComponent, bool> optimize = (AutomataComponent a)=>{
+	public Transition recycle;
+	public Func<Automata,bool> optimize = (Automata a)=>{
 		return false; //Don't optimize yet.
 	};
 
-	void distribute(StateComponent state, AutomataComponent a){
+	void distribute(Automata a){
 		Transform t = a.gameObject.transform;
 		t.position = getNextPosition ();
 	}

@@ -16,27 +16,27 @@ public static class CustomMapper
 	static CustomMapper()
 	{
 		MemberDrawersHandler.Mapper
-			.Insert<StateComponent, MultiComponentDrawer<StateComponent>>()
+			.Insert<State, MultiComponentDrawer<State>>()
 			.Insert<StrawberryRowState, MultiComponentDrawer<StrawberryRowState>>()
-			.Insert<TransitionComponent, MultiComponentDrawer<TransitionComponent>>()
+			.Insert<Transition, MultiComponentDrawer<Transition>>()
 			.Insert<
-				ReactiveProperty<StateComponent>, 
-				ReactivePropertyDrawer<StateComponent, MultiComponentDrawer<StateComponent>>
+				ReactiveProperty<State>, 
+				ReactivePropertyDrawer<State, MultiComponentDrawer<State>>
 			>().Insert<
-				ReactiveProperty<List<StateComponent>>, 
-				ListPropertyDrawer<StateComponent>
+				ReactiveProperty<List<State>>, 
+				ListPropertyDrawer<State>
 			>().Insert<
 				ReactiveProperty<List<ActionWrapper>>, 
 				ListPropertyDrawer<ActionWrapper>
 			>().Insert<
 				ReactiveProperty<bool>, 
-				ReactivePropertyDrawer<bool, BoolDrawer>				
+				ReactivePropertyDrawer<bool, BoolDrawer>
 			>().Insert<
 				ReactiveProperty<int>, 
 				ReactivePropertyDrawer<int, IntDrawer>
 			>().Insert<
-				HashSet<AutomataComponent>,
-				HashSetDrawer<AutomataComponent,ListDrawer<AutomataComponent>>
+				HashSet<Automata>,
+				HashSetDrawer<Automata,ListDrawer<Automata>>
 			>();
 	}
 }
@@ -109,7 +109,7 @@ public class MultiComponentDrawer<T> : ObjectDrawer<T> where T:NamedBehavior{
 			game_object = gui.Object("Game Object", "Select host game object.", game_object);
 			components = new Dictionary<string,T>();
 			if (game_object != null){
-				if (game_object.GetType().IsSubclassOf(typeof(T))){
+				if (game_object.GetType() == typeof(T) ||game_object.GetType().IsSubclassOf(typeof(T))){
 					memberValue = (T)game_object;
 					instance_name = memberValue.instance_name;
 					game_object = memberValue.gameObject;

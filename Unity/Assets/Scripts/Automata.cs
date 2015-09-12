@@ -2,24 +2,70 @@ using Vexe.Runtime.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UniRx;
-using StateMove = Vexe.Runtime.Types.Tuple<StateComponent,StateComponent>;
-public class AutomataComponent : BetterBehaviour {
-	public StateComponent current;
-	protected List<StateComponent> stack;
-	
-	void Awake(){
-		stack = new List<StateComponent>();
+
+public class Automata : BetterBehaviour
+{
+
+	#region Attributes
+
+	public State _current;
+	public State current{
+		get{return _current;}
+		protected set{_current = value;}
 	}
+	public List<State> stack;
+	public HashSet<Transition> transitions;
+
+	#endregion
+
+	#region Unity Behavior Methods
+
+	void Awake(){
+		stack = new List<State>();
+		transitions = new HashSet<Transition>();
+	}
+
 	void Start(){
 		if (current != null){
 			stack.Add(current);
 			current.enter_automata(this);
 		}
 	}
-	public AutomataComponent move_direct(StateComponent to){
+
+	void Update(){
+		if (current != null){
+			if (transitions.Count > 0){
+				Debug.Log("Firing Transitions:"+transitions.Count);
+				List<Transition> sorted = transitions.ToList<Transition>();
+				sorted.Sort();
+				foreach(Transition trans in sorted){
+					if (current == trans.from() && trans.test_single(this)){
+						move_transition(trans);
+					}
+				}
+				transitions.Clear();
+			} else {
+				if(current.initial != null){
+					move_direct(current.initial);
+				} else {
+					foreach(State state in stack.ToArray()){
+						state.update_automata(this);
+					}
+				}
+			}
+		}
+	}
+
+	#endregion
+
+	#region Public methods
+
+	public Automata move_direct(State to)
+	{
 		if (to != null){
 			if (current == null || to.parent == current || current.parent == to){
 				if (current == null || to.parent == current){
@@ -43,7 +89,9 @@ public class AutomataComponent : BetterBehaviour {
 		}
 		return this;
 	}
-	public AutomataComponent move_transition(TransitionComponent trans){
+
+	protected Automata move_transition(Transition trans)
+	{
 		// if the from_state is above ours, we need to get there first
 		// transition.on_start(this);
 		while (current != trans.pivot) {
@@ -54,38 +102,25 @@ public class AutomataComponent : BetterBehaviour {
 			move_direct (current.parent);
 		}
 		// transition.on_transfer(this);
-		foreach(StateComponent down in trans.downswing){
+		foreach(State down in trans.downswing){
 			move_direct(down);
 		}
 		// transition.on_finish(this);
 		return this;
 	}
-	public AutomataComponent move_warp(StateComponent to){
-		if (current != null) {
-			current.exit_automata(this);
-		}
-		current = to;
-		if (to != null) {
-			current.enter_automata (this);
-		}
+
+	public Automata add_transition(Transition trans)
+	{
+		transitions.Add(trans);
 		return this;
 	}
-	public bool visiting(StateComponent state){
+
+	public bool visiting(State state)
+	{
 		return stack.Contains(state);
 	}
-	void Update () {
-		if (current != null){
-			if(current.child != null){
-				move_direct(current.child);
-			} else {
-				foreach(StateComponent state in stack.ToArray()){
-					//state.update.OnNext(this);
-					on_state(state);
-				}
-			}
-		}
-	}
-	public void on_state(StateComponent state){
-		state.update_automata (this);
-	}
+
+	#endregion
+
 }
+
