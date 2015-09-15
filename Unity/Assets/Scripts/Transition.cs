@@ -97,11 +97,11 @@ public class Transition : NamedBehavior, IComparable<Transition>
 			if (up == down){
 				pivot = up;
 			} else {
-				if (up.get_level() > down.get_level() || down.parent == null){
-					up = up.parent;
+				if (up.get_level() > down.get_level() || down.parent() == null){
+					up = up.parent();
 					upswing.Add(up);
 				} else {
-					down = down.parent;
+					down = down.parent();
 					downswing.Add(down);
 				}
 			}
@@ -148,6 +148,42 @@ public class Transition : NamedBehavior, IComparable<Transition>
 
 	public Transition register_event(UnityEvent ue){
 		ue.AddListener(trigger);
+		return this;
+	}
+
+	public Transition on_entry(TransitionEvent evn){
+		entry_actions.Add(evn);
+		return this;
+	}
+
+	public Transition on_transfer(TransitionEvent evn){
+		entry_actions.Add(evn);
+		return this;
+	}
+
+	public Transition on_exit(TransitionEvent evn){
+		entry_actions.Add(evn);
+		return this;
+	}
+
+	public Transition invoke_entry(Automata a){
+		foreach (TransitionEvent evn in entry_actions){
+			evn.run(a,this);
+		}
+		return this;
+	}
+
+	public Transition invoke_transfer(Automata a){
+		foreach (TransitionEvent evn in transfer_actions){
+			evn.run(a,this);
+		}
+		return this;
+	}
+
+	public Transition invoke_exit(Automata a){
+		foreach (TransitionEvent evn in exit_actions){
+			evn.run(a,this);
+		}
 		return this;
 	}
 

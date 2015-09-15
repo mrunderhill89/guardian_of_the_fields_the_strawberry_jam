@@ -17,24 +17,8 @@ public static class CustomMapper
 	{
 		MemberDrawersHandler.Mapper
 			.Insert<State, MultiComponentDrawer<State>>()
-			.Insert<StrawberryRowState, MultiComponentDrawer<StrawberryRowState>>()
 			.Insert<Transition, MultiComponentDrawer<Transition>>()
 			.Insert<
-				ReactiveProperty<State>, 
-				ReactivePropertyDrawer<State, MultiComponentDrawer<State>>
-			>().Insert<
-				ReactiveProperty<List<State>>, 
-				ListPropertyDrawer<State>
-			>().Insert<
-				ReactiveProperty<List<ActionWrapper>>, 
-				ListPropertyDrawer<ActionWrapper>
-			>().Insert<
-				ReactiveProperty<bool>, 
-				ReactivePropertyDrawer<bool, BoolDrawer>
-			>().Insert<
-				ReactiveProperty<int>, 
-				ReactivePropertyDrawer<int, IntDrawer>
-			>().Insert<
 				HashSet<Automata>,
 				HashSetDrawer<Automata,ListDrawer<Automata>>
 			>();

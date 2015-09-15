@@ -114,11 +114,19 @@ public class GameStateManager : SingletonBehavior {
 				.to(pack)
 				.register_event(input.on_dir("left"))
 			);
-		// Pack -> Look Forward
+		// Pack -> Look Forward, Pick Left, Pick Right
 		pack.add_transition (
 			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>look_forward")
 			.to(look_forward)
 			.register_event(input.on_dir("up"))
+		).add_transition (
+			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>pick_left")
+			.to(pick_left)
+			.register_event(input.on_dir("left"))
+		).add_transition (
+			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>pick_right")
+			.to(pick_right)
+			.register_event(input.on_dir("right"))
 		);
 	}
 	

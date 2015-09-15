@@ -40,6 +40,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"field_drag")
 			.from(states["field"])
 			.to(states["drag"])
+			.on_exit(new TransitionEvent((a)=>{
+				Debug.Log("Field->Drag:"+a.name);
+			}))
 			.auto_run(false)
 			.generate_path();
 		transitions["hold_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"hold_drag")
@@ -55,6 +58,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 		transitions["drag_fall"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"drag_fall")
 			.from(states["drag"])
 			.to(states["fall"])
+			.on_exit(new TransitionEvent((a)=>{
+				Debug.Log("Drag->Fall:"+a.name);
+			}))
 			.auto_run(false)
 			.generate_path();
 		transitions["basket_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"basket_drag")
@@ -67,6 +73,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.to(states["field"])
 			.auto_run(false)
 			.generate_path();
+		GenerateStrawberries(field_strawberries);
 	}
 	void init_enter(Automata automata,State state){
 		//Turn off any renderable elements of the strawberry
@@ -81,8 +88,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 			int random_row = RandomUtils.random_int(0, num_rows);
 			StrawberryRowState row = StrawberryRowState.rows[random_row];
 			if (row != null){
-				row.parent = states["field"];
-				automata.move_direct(row);
+				automata.move_direct(row.state);
 			} else {
 				Debug.LogError("Row number "+random_row+" doesn't exist. Current row count is "+num_rows);
 			}
@@ -93,11 +99,10 @@ public class StrawberryStateMachine : SingletonBehavior {
 		}
 	}
 	void Update () {
+	}
+	void GenerateStrawberries(int num){
 		GameObject berry;
-		for (int u = states["init"].visitors.Count + states["field"].visitors.Count;
-		     u < field_strawberries;
-		     u++
-		){
+		for (int u = 0; u < num; u++){
 			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
 			berry.GetComponent<Automata>().move_direct(states["root"]);
 		}

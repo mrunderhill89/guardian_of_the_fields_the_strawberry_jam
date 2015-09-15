@@ -15,9 +15,11 @@ public class StrawberryComponent : BetterBehaviour {
 	public Behaviour glow = null;
 	public BoolReactiveProperty picked;
 	public StrawberryStateMachine state_machine;
+	public Automata automata;
 	// Use this for initialization
 	void Start () {
 		state_machine = SingletonBehavior.get_instance<StrawberryStateMachine> ();
+		automata = gameObject.GetComponent<Automata> ();
 		picked = new BoolReactiveProperty (false);
 		//Disable dragging until we determine whether we can pick up berries yet.
 		quality = RandomUtils.random_double(0.5, 1.25);
@@ -44,10 +46,10 @@ public class StrawberryComponent : BetterBehaviour {
 	}
 
 	void OnMouseDown(){
-		state_machine.transitions["field_drag"].trigger_single (gameObject.GetComponent<Automata> ());
-		state_machine.transitions["fall_drag"].trigger_single (gameObject.GetComponent<Automata> ());
-		state_machine.transitions["hold_drag"].trigger_single (gameObject.GetComponent<Automata> ());
-		state_machine.transitions["basket_drag"].trigger_single (gameObject.GetComponent<Automata> ());
+		state_machine.transitions["field_drag"].trigger_single (automata);
+		state_machine.transitions["fall_drag"].trigger_single (automata);
+		state_machine.transitions["hold_drag"].trigger_single (automata);
+		state_machine.transitions["basket_drag"].trigger_single (automata);
 	}
 	
 	void OnMouseUp(){

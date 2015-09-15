@@ -16,7 +16,7 @@ public class HandContainer : MonoBehaviour {
 	}
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		slot.parent = state_machine.states["hold"];
+		slot.parent(state_machine.states["hold"]);
 		take.from(state_machine.states["drag"])
 			.priority(2)
 			.to(slot)

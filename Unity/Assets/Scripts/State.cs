@@ -13,18 +13,18 @@ public class State : NamedBehavior
 	#region Attributes
 
 	public State _parent;
-	public State parent{
-		get{return _parent;}
-		set{_parent = value;}
+	public State parent(){return _parent;}
+	public State parent(State p){
+		_parent = p;
+		return this;
 	}
 	public State _initial;
-	public State initial{
-		get{return _initial;}
-		set{
-			if (value == null || value.parent == this){
-				_initial = value;
-			}
+	public State initial(){return _initial;}
+	public State initial(State i){
+		if (i == null || i._parent == this){
+			_initial = i;
 		}
+		return this;
 	}
 	public List<StateEvent> entry_actions;
 	public List<StateEvent> update_actions;
@@ -48,8 +48,8 @@ public class State : NamedBehavior
 
 	public int get_level(int tail = 1)
 	{
-		if (parent != null){
-			return parent.get_level(tail+1);
+		if (parent() != null){
+			return parent().get_level(tail+1);
 		}
 		return tail;
 	}
@@ -75,9 +75,9 @@ public class State : NamedBehavior
 	}
 
 	public State add_child(State child, bool set_initial = false){
-		child.parent = this;
+		child.parent(this);
 		if (set_initial) {
-			this.initial = child;
+			this.initial(child);
 		}
 		return this;
 	}

@@ -39,18 +39,24 @@ public class Automata : BetterBehaviour
 	void Update(){
 		if (current != null){
 			if (transitions.Count > 0){
-				Debug.Log("Firing Transitions:"+transitions.Count);
 				List<Transition> sorted = transitions.ToList<Transition>();
 				sorted.Sort();
 				foreach(Transition trans in sorted){
-					if (current == trans.from() && trans.test_single(this)){
+					if (visiting(trans.to())){
+						//Debug.LogWarning(name+" is already in destination state for transition:"+trans.instance_name);
+					} else if(!visiting(trans.from())){
+						/*Debug.LogWarning(name+" is not in starting state for transition:"+trans.instance_name
+						+"\n Current:"+current.instance_name+" Needs:"+trans.from().instance_name);*/
+					} else if (!trans.test_single(this)){
+						//Debug.LogWarning(name+" failed tests for transition:"+trans.instance_name);
+					} else {
 						move_transition(trans);
 					}
 				}
 				transitions.Clear();
 			} else {
-				if(current.initial != null){
-					move_direct(current.initial);
+				if(current.initial() != null){
+					move_direct(current.initial());
 				} else {
 					foreach(State state in stack.ToArray()){
 						state.update_automata(this);
@@ -67,8 +73,8 @@ public class Automata : BetterBehaviour
 	public Automata move_direct(State to)
 	{
 		if (to != null){
-			if (current == null || to.parent == current || current.parent == to){
-				if (current == null || to.parent == current){
+			if (current == null || to.parent() == current || current.parent() == to){
+				if (current == null || to.parent() == current){
 					//Parent->Child
 					stack.Add(to);
 					current = to;
@@ -93,19 +99,19 @@ public class Automata : BetterBehaviour
 	protected Automata move_transition(Transition trans)
 	{
 		// if the from_state is above ours, we need to get there first
-		// transition.on_start(this);
+		trans.invoke_entry(this);
 		while (current != trans.pivot) {
 			if (current == null){
 				Debug.LogError("Automata not on transition path.");
 				return this;
 			}
-			move_direct (current.parent);
+			move_direct (current.parent());
 		}
-		// transition.on_transfer(this);
+		trans.invoke_transfer(this);
 		foreach(State down in trans.downswing){
 			move_direct(down);
 		}
-		// transition.on_finish(this);
+		trans.invoke_exit(this);
 		return this;
 	}
 
