@@ -1,12 +1,19 @@
-﻿using UnityEngine;
+﻿using Vexe.Runtime.Types;
+using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
+using System;
+using UniRx;
 
-public class BasketComponent : MonoBehaviour {
+public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
+	public Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
 		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "drop");
+		valid_positions = new Dictionary<GameObject, Vector3>();
 	}
 
 	void Start(){
@@ -17,27 +24,34 @@ public class BasketComponent : MonoBehaviour {
 			.to(slot)
 			.add_test(new TransitionTest((Automata a)=>{
 				if (a.gameObject.GetComponent<StrawberryComponent>() == null){
-					Debug.LogWarning("Colliding with non-strawberry object:"+a.name);
 					return false;
 				}
-				Debug.Log("Colliding with strawberry:"+a.name);
 				return true;
-			}))
-			.on_entry(new TransitionEvent(()=>{
-				Debug.Log("Depositing Strawberry in:"+name);
 			}))
 			.generate_path();
 	}
 
 	void OnTriggerStay(Collider that) {
-		Automata a = that.gameObject.GetComponent<Automata>();
+		GameObject obj = that.gameObject;
+		Automata a = obj.GetComponent<Automata>();
 		if (a != null){
 			drop.trigger_single(a);
-		} else {
-			Debug.LogWarning("Colliding with non-automata-equipped collider:"+that.name);
+			valid_positions[obj] = obj.transform.position;
 		}
 	}
 
+	void OnTriggerExit(Collider that){
+		GameObject obj = that.gameObject;
+		Automata a = obj.GetComponent<Automata>();
+		if (a != null && a.current == slot){
+			Debug.Log("Object falling out of basket:"+obj.name);
+			obj.transform.position = valid_positions[obj];
+			Rigidbody body = obj.GetComponent<Rigidbody>();
+			body.velocity = Vector3.zero;
+		} else {
+			valid_positions.Remove(obj);
+		}
+	}
 	void Update () {
 	
 	}

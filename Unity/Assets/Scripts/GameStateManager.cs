@@ -72,6 +72,7 @@ public class GameStateManager : SingletonBehavior {
 			).add_transition (
 				NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>pack")
 				.to(pack)
+				.register_event(input.on_dir("up"))
 				.register_event(input.on_dir("down"))
 			);
 		//Look Left -> Look Forward, Pick Left
@@ -119,6 +120,7 @@ public class GameStateManager : SingletonBehavior {
 			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>look_forward")
 			.to(look_forward)
 			.register_event(input.on_dir("up"))
+			.register_event(input.on_dir("down"))
 		).add_transition (
 			NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>pick_left")
 			.to(pick_left)

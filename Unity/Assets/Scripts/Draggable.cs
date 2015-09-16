@@ -57,13 +57,16 @@ public class Draggable : BetterBehaviour {
 		if (is_dragging) {
 			Vector3 cur_mouse = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, distance);
 			Vector3 delta_mouse = Camera.main.ScreenToViewportPoint (cur_mouse) - Camera.main.ScreenToViewportPoint (prev_mouse);
+			Vector3 towards_camera = transform.localPosition * Input.GetAxis("Mouse ScrollWheel");
 			float pitch_rad = pitch * Mathf.Deg2Rad;
 			Vector3 delta_position = new Vector3 (
-				                        delta_mouse.x,
-										delta_mouse.y * Mathf.Cos (pitch_rad),
+				                        delta_mouse.x + towards_camera.x,
+										delta_mouse.y * Mathf.Cos (pitch_rad)
+										+ towards_camera.y,
 										delta_mouse.y * Mathf.Sin (pitch_rad)
+										+ towards_camera.z
 			                        );
-			gameObject.transform.localPosition += delta_position;
+			transform.localPosition += delta_position;
 			if (body != null) {
 				
 			}
