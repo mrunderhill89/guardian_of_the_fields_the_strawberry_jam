@@ -74,6 +74,10 @@ public class State : NamedBehavior
 		}
 	}
 
+	public int count(){
+		return visitors.Count;
+	}
+
 	public State add_child(State child, bool set_initial = false){
 		child.parent(this);
 		if (set_initial) {

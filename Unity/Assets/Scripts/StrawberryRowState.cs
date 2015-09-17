@@ -36,7 +36,9 @@ public class StrawberryRowState : BetterBehaviour{
 	}
 
 	Vector3 getNextPosition(){
-		return this.transform.position + this.generation_strategy(min_position,max_position);
+		return this.transform.position 
+		+Camera.main.transform.position
+		+this.generation_strategy(min_position,max_position);
 	}
 
 	Func<Vector3, Vector3, Vector3> generation_strategy = (Vector3 min, Vector3 max) => {

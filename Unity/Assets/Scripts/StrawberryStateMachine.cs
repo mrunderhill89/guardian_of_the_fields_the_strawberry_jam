@@ -99,6 +99,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 		}
 	}
 	void Update () {
+		GenerateStrawberries(field_strawberries - states["init"].count() - states["field"].count());
 	}
 	void GenerateStrawberries(int num){
 		GameObject berry;
