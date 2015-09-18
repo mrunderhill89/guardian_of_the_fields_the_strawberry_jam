@@ -12,7 +12,7 @@ public class BasketComponent : BetterBehaviour {
 	public Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
-		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "drop");
+		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");
 		valid_positions = new Dictionary<GameObject, Vector3>();
 	}
 

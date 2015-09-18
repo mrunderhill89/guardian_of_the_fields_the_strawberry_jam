@@ -18,8 +18,8 @@ public class HandContainer : MonoBehaviour {
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		slot.parent(state_machine.states["hold"]);
 		take.from(state_machine.states["drag"])
-			.priority(2)
 			.to(slot)
+			.priority(2)
 			.generate_path();
 	}
 	void Update(){
@@ -31,6 +31,7 @@ public class HandContainer : MonoBehaviour {
 		glow.enabled = false;
 	}
 	void OnMouseUp() {
+		Debug.Log("MouseUp on hand container slot.");
 		take.trigger();
 	}
 }

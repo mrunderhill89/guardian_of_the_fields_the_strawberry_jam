@@ -25,7 +25,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		get{return _downswing;}
 		protected set{_downswing = value;}
 	}
-	protected int _priority;
+	protected int _priority = 1;
 	public List<TransitionTest> tests;
 	public List<TransitionEvent> entry_actions;
 	public List<TransitionEvent> transfer_actions;
@@ -137,7 +137,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 
 	public int CompareTo(Transition that){
 		//The values are in reverse so that a default Sort() puts high priority first.
-		return that._priority.CompareTo(this._priority);
+		return this._priority.CompareTo(that._priority);
 	}
 
 	public Transition add_test(TransitionTest test)

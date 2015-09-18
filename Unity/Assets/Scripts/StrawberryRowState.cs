@@ -36,8 +36,13 @@ public class StrawberryRowState : BetterBehaviour{
 	}
 
 	Vector3 getNextPosition(){
+		Vector3 cameraZonly = new Vector3(
+			0.0f,
+			0.0f,
+			Camera.main.transform.position.z
+		);
 		return this.transform.position 
-		+Camera.main.transform.position
+		+cameraZonly
 		+this.generation_strategy(min_position,max_position);
 	}
 
