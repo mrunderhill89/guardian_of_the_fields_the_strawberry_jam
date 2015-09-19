@@ -1,8 +1,10 @@
 ﻿Shader "Custom/StrawberrySkin" {
 	Properties {
-		_Unripe ("Unripe Color", Color) = (1,1,1,1)
+		_Green ("Green Color", Color) = (1,1,1,1)
+		_Pink ("Pink Color", Color) = (1,1,1,1)
 		_Ripe ("Ripe Color", Color) = (1,1,1,1)
 		_Overripe ("Overripe Color", Color) = (1,1,1,1)
+		_Mold ("Mold Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
@@ -28,15 +30,28 @@
 		half _Glossiness;
 		half _Metallic;
 		half _Quality;
-		fixed4 _Unripe;
+		fixed4 _Green;
+		fixed4 _Pink;
 		fixed4 _Ripe;
 		fixed4 _Overripe;
+		fixed4 _Mold;
+
+		float gradient(float vertex, float value, float range){
+			return max(min((1.0 - abs(value - vertex)/range),1.0),0.0);
+		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			float ur_amount = max(min((1.0 - _Quality),1.0),0.0);
-			float r_amount =  max(min((1.0 - abs(1.0 - _Quality)),1.0),0.0);
-			float or_amount = max(min(_Quality - 1.0,1.0),0.0);
-			fixed4 spot_color = (_Unripe * ur_amount)+(_Ripe * r_amount)+(_Overripe * or_amount);
+			float green = gradient(0.0, _Quality, 0.4);
+			float pink = gradient(0.4, _Quality, 0.3);
+			float ripe = gradient(0.8, _Quality, 1.0);
+			float over = gradient(1.2, _Quality, 0.5);
+			float mold = gradient(2.0, _Quality, 0.5);
+			fixed4 spot_color = 
+				(green * _Green)
+				+(pink * _Pink)
+				+(ripe * _Ripe)
+				+(over * _Overripe)
+				+(mold * _Mold);
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * spot_color;
 			o.Albedo = c.rgb;

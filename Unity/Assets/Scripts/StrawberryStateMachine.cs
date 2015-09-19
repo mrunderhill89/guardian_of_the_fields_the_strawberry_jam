@@ -11,14 +11,13 @@ public class StrawberryStateMachine : SingletonBehavior {
 		base.Awake();
 		states = new Dictionary<string,State> ();
 		transitions = new Dictionary<string,Transition> ();
-		states ["root"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "root");
 		states ["init"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "init");
 		states ["field"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "field");
 		states ["drag"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "drag");
 		states ["hold"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "hold");
 		states ["fall"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "fall");
 		states ["basket"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "basket");
-		states["root"]
+		states["root"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "root")
 			.add_child(states["init"], true)
 			.add_child(states["field"])
 			.add_child(states["drag"])

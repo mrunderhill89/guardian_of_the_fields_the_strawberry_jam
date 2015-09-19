@@ -6,6 +6,7 @@ using System;
 public class StrawberryRowState : BetterBehaviour{
 	[DontSerialize]
 	public static List<StrawberryRowState> rows;
+	public static float recycle_dist = 5.0f;
 	static StrawberryRowState(){
 		rows = new List<StrawberryRowState>();
 	}
@@ -19,14 +20,24 @@ public class StrawberryRowState : BetterBehaviour{
 		rows.Add(this);
 		state = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "state")
 			.parent(globalSM.states["field"])
-			.on_entry (new StateEvent(distribute));
+			.on_entry (new StateEvent(distribute))
+			.on_update (new StateEvent((Automata a)=>{
+				if (optimize(a)) {
+					Debug.Log("Optimizing...");
+				}
+			}));
 		recycle = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"recycle")
 			.from(state)
 			.to(globalSM.states["init"])
-			.add_test(new TransitionTest(optimize));
+			.auto_run(true)
+			.add_test(new TransitionTest(optimize))
+			.generate_path();
 	}
 
 	public Func<Automata,bool> optimize = (Automata a)=>{
+		if (a.transform.position.z < Camera.main.transform.position.z-recycle_dist){
+			return true;
+		}
 		return false; //Don't optimize yet.
 	};
 

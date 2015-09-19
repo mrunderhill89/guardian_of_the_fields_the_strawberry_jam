@@ -54,6 +54,7 @@ public class Automata : BetterBehaviour
 							Debug.Log("Priority "+trans.priority()+" transition:"+trans.instance_name);
 						}
 						move_transition(trans);
+						break;
 					}
 				}
 				transitions.Clear();
@@ -101,7 +102,7 @@ public class Automata : BetterBehaviour
 
 	protected Automata move_transition(Transition trans)
 	{
-		// if the from_state is above ours, we need to get there first
+		// if the from_state is above ours, we need to get to the pivot first
 		trans.invoke_entry(this);
 		while (current != trans.pivot) {
 			if (current == null){
