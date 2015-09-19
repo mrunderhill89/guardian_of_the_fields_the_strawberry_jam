@@ -16,13 +16,19 @@ public class StrawberryComponent : BetterBehaviour {
 	public BoolReactiveProperty picked;
 	public StrawberryStateMachine state_machine;
 	public Automata automata;
+	public Transform skin;
+	public Material material;
 	// Use this for initialization
 	void Start () {
 		state_machine = SingletonBehavior.get_instance<StrawberryStateMachine> ();
 		automata = gameObject.GetComponent<Automata> ();
 		picked = new BoolReactiveProperty (false);
+		quality = RandomUtils.random_double(0.0, 2.0);
+		skin = transform.Find("Strawberry_Mesh/Cube");
+		material = skin.GetComponent<Renderer>().material;
+		material.SetFloat("_Quality",(float)quality);
+		Debug.Log(material.GetFloat("_Quality"));
 		//Disable dragging until we determine whether we can pick up berries yet.
-		quality = RandomUtils.random_double(0.5, 1.25);
 		drag = gameObject.GetComponent<Draggable>();
 		glow = (gameObject.GetComponent("Halo") as Behaviour);
 		glow.enabled = false;
@@ -32,6 +38,7 @@ public class StrawberryComponent : BetterBehaviour {
 				picked.Value = true;
 			});
 		}
+		
 	}
 	public bool can_pick(Vector3 screen_pos){
 		return picked.Value || allow_picking_unpicked;

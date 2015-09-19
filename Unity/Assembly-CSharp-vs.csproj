@@ -253,6 +253,7 @@
      <None Include="Assets\Plugins\Editor\Vexe\LICENSE.txt" />
      <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
      <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
+     <None Include="Assets\Resources\Materials\StrawberrySkin.shader" />
      <None Include="Assets\UniRx\ReadMe.txt" />
      <None Include="Assets\Plugins\Vexe\Runtime\FastSave\README.txt" />
  <Reference Include="UnityEngine.Analytics">
