@@ -34,6 +34,9 @@ public class State : NamedBehavior
 		get{return _visitors;}
 		protected set{_visitors = value;}
 	}
+	public bool is_visited(){
+		return visitors.Count > 0;
+	}
 
 	#endregion
 

@@ -7,6 +7,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 	public Dictionary<string,State> states;
 	public Dictionary<string,Transition> transitions;
 	public int field_strawberries = 100;
+	public GameStateManager player_state;
 	new void Awake () {
 		base.Awake();
 		states = new Dictionary<string,State> ();
@@ -26,6 +27,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.add_child(states["basket"]);
 	}
 	void Start(){
+		player_state = SingletonBehavior.get_instance<GameStateManager> ();
 		states["init"]
 			.on_entry(new StateEvent(init_enter))
 			.on_exit(new StateEvent(init_exit));
@@ -73,6 +75,10 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.auto_run(false)
 			.generate_path();
 		GenerateStrawberries(field_strawberries);
+	}
+	bool can_pick(Automata a){
+		return true;
+		//return !a.visiting(states["field"]) || player_state.states["pick"].is_visited();
 	}
 	void init_enter(Automata automata,State state){
 		//Turn off any renderable elements of the strawberry

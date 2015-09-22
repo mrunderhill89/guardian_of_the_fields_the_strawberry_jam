@@ -49,16 +49,6 @@ public class GameObjectPool : BetterBehaviour {
 		return this.transform.position + this.generation_strategy(min_position,max_position);
 	}
 
-	public void generate_strawberry(GameObject berry, GameObjectPool container){
-		StrawberryComponent component = berry.GetComponent<StrawberryComponent> ();
-		IDisposable sub = null;
-		sub = component.picked.Where((picked)=>{return picked;}).Subscribe((picked)=>{
-			container.object_list.Remove(berry);
-			Debug.Log("Strawberry "+berry.ToString()+" is no longer tracked.");
-			sub.Dispose();
-		});
-	}
-
 	// Use this for initialization
 	void Start () {
 		instances = new SortedList<float,GameObject>();

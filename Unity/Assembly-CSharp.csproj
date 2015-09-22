@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\CartController.cs" />
      <Compile Include="Assets\Scripts\CoroutineUtils.cs" />
      <Compile Include="Assets\Scripts\DependencyManager.cs" />
+     <Compile Include="Assets\Scripts\DragState.cs" />
      <Compile Include="Assets\Scripts\Draggable.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />

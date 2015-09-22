@@ -26,20 +26,21 @@ public class Draggable : BetterBehaviour {
 	public UnityEvent on_pickup;
 	public UnityEvent on_drag;
 	public UnityEvent on_drop;
-
-	public Func<Vector3, bool> can_grab = always;
-	public static bool always(Vector3 screen_pos){
-		return true;
-	}
-	public bool in_reach(Vector3 screen_pos){
-		return (screen_pos.z < max_reach && screen_pos.z > min_reach);
-	}
+	
+	public bool is_grabbable = true;
+	public Func<bool> check_grabbable;
+	public bool can_grab{get{
+		if (check_grabbable != null){
+			return check_grabbable();
+		}
+		return is_grabbable;
+	}}
 
 	void OnMouseDown()
 	{
 		//Get distance from the camera to the object
 		screen_pos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-		if (can_grab(screen_pos)){
+		if (can_grab){
 			//Set the object's position to be relative to the camera.
 			gameObject.transform.SetParent(Camera.main.transform,true);
 			if (body != null) {
