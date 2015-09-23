@@ -58,6 +58,9 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	public Transition from(State state)
 	{
 		_from = state;
+		if (_to != null){
+			return this.generate_path();
+		}
 		return this;
 	}
 
@@ -69,6 +72,9 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	public Transition to(State state)
 	{
 		_to = state;
+		if (_from != null){
+			return this.generate_path();
+		}
 		return this;
 	}
 
