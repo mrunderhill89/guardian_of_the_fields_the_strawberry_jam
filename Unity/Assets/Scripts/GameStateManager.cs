@@ -41,9 +41,9 @@ public class GameStateManager : SingletonBehavior {
 
 		//Pick
 		states["pick_left"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick_left")
-			.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left", 20, 20)));
+			.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left")));
 		states["pick_right"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick_right")
-			.on_entry(new StateEvent(camera_control.lazy_set_target("pick_right", 20, 20)));
+			.on_entry(new StateEvent(camera_control.lazy_set_target("pick_right")));
 		states["pick"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pick")
 			.add_child(states["pick_left"])
 			.add_child(states["pick_right"]);
@@ -95,11 +95,11 @@ public class GameStateManager : SingletonBehavior {
 			.to(states["pick_right"])
 			.register_event(input.on_dir("down"));
 		//Pick Left -> Look Left, Pack
-		transitions["pick_left=>look"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>forward")
+		transitions["pick_left=>look"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>look")
 			.from(states["pick_left"])
 			.to(states["look_left"])
 			.register_event(input.on_dir("up"));
-		transitions["pick_left=>pack"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>forward")
+		transitions["pick_left=>pack"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>pack")
 			.from(states["pick_left"])
 			.to(states["pack"])
 			.register_event(input.on_dir("right"));

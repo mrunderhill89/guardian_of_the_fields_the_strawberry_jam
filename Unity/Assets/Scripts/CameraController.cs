@@ -6,12 +6,8 @@ using System;
 
 public class CameraController : BetterBehaviour {
 	public Transform target;
-	public int default_frames = 60;
-	public int default_delay = 0;
+	public int steps = 0;
 	public Dictionary<string,Transform> targets;
-	// Use this for initialization
-	void Start () {
-	}
 
 	public static float Wrap(float val, float min, float max, float min_inc, float max_inc){
 		if (val < min) {
@@ -28,41 +24,34 @@ public class CameraController : BetterBehaviour {
 			Wrap(ang.z,-bounds, bounds, inc, inc)
 		);
 	}
+	public CameraController set_target(string target_name, int in_frames = 20){
+		target = targets [target_name];
+		steps = in_frames;
+		return this;
+	}
+
 	public Action lazy_set_target(string target_name){
-		return this.lazy_set_target (targets [target_name], this.default_frames, this.default_delay);
-	}
-	public Action lazy_set_target(string target_name, int in_frames, int delay){
-		return this.lazy_set_target (targets [target_name], in_frames, delay);
-	}
-	public Action lazy_set_target(Transform t){
-		return this.lazy_set_target (t, this.default_frames, this.default_delay);
-	}
-	public Action lazy_set_target(Transform t, int in_frames, int delay){
 		return () => {
-			this.StartCoroutine(this.drift_to_target(t,in_frames, delay));
+			set_target(target_name);
 		};
 	}
 
-	public void SetCameraTarget(string target_name){
-		this.StartCoroutine(this.drift_to_target(targets[target_name],this.default_frames, this.default_delay));
-	}
-		
-	public IEnumerator drift_to_target(Transform t, int in_frames, int delay_frames = 0){
-		float percent, inv_percent;
-		Vector3 p_0 = this.transform.position;
-		Vector3 p_f = t.position;
-		Vector3 r_0 = WrapAngles(this.transform.rotation.eulerAngles, 180.0f, 360.0f);
-		Vector3 r_f = WrapAngles(t.rotation.eulerAngles, 180.0f, 360.0f);
-		for (int frame = -delay_frames; frame <= in_frames; frame++) {
-			percent = Math.Max(Math.Min(((float)frame) / ((float)in_frames), 1.0f),0.0f);
-			inv_percent = 1.0f - percent;
-			this.transform.position = (p_f * percent) + (p_0 * inv_percent);
-			this.transform.rotation = Quaternion.Euler(r_f * percent + r_0 * inv_percent);
-			yield return null;
-		}
-	}
 	// Update is called once per frame
 	void Update () {
+		if (target != null) {
+			if (steps > 0) {
+				Vector3 pos_step = (target.transform.position - transform.position) / steps;
+				Vector3 euler_rotation = transform.rotation.eulerAngles;
+				Vector3 rot_step = WrapAngles(target.transform.rotation.eulerAngles - euler_rotation, 180.0f, 360.0f) / steps;
+				transform.position += pos_step;
+				transform.rotation = Quaternion.Euler(WrapAngles(euler_rotation+rot_step, 180.0f, 360.0f));
+				steps--;
+			} else {
+				//Fallback code. If tweening takes too long, just set pos/rot directly.
+				//transform.position = target.transform.position;
+				//transform.rotation = target.transform.rotation;
+			}
+		}
 	}
 
 }
