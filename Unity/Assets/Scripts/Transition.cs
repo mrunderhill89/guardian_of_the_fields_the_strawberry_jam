@@ -152,7 +152,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return this;
 	}
 
-	public Transition register_event(UnityEvent ue){
+	public Transition add_trigger(UnityEvent ue){
 		ue.AddListener(trigger);
 		return this;
 	}
@@ -210,6 +210,10 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	public void trigger_single(Automata a)
 	{
 		a.add_transition(this);
+	}
+
+	public bool is_visited(){
+		return _from.is_visited();
 	}
 
 	#endregion

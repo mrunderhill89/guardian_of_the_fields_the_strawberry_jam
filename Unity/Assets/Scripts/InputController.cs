@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 
-public class InputController: BetterBehaviour{
+public class InputController: SingletonBehavior{
 	protected Dictionary<string, bool> went;
 	public Dictionary<string, UnityEvent> direction_events;
+	public Dictionary<string, List<Transition>> direction_transitions;
+
 	protected void read_dir(string axis_name, string dir_name, bool gt){
 		if (!went.ContainsKey (dir_name)) {
 			went[dir_name] = false;
@@ -33,9 +35,27 @@ public class InputController: BetterBehaviour{
 		return direction_events [name];
 	}
 
-	void Awake(){
+	public Transition register_transition(GameObject parent, string instance_name, string[] directions){
+		Transition t = NamedBehavior.GetOrCreateComponentByName<Transition> (parent, instance_name);
+		foreach(string dir_name in directions){
+			if (!direction_transitions.ContainsKey (dir_name)) {
+				direction_transitions[dir_name] = new List<Transition>();
+			}
+			t.add_trigger(on_dir(dir_name));
+			direction_transitions [dir_name].Add (t);
+		}
+		return t;
+	}
+	public Transition register_transition(GameObject parent, string instance_name, string direction){
+		return register_transition(parent,instance_name,new string[]{direction});
+	}
+	new void Awake(){
+		base.Awake ();
 		if (direction_events == null) {
 			direction_events = new Dictionary<string, UnityEvent> ();
+		}
+		if (direction_transitions == null) {
+			direction_transitions = new Dictionary<string, List<Transition>> ();
 		}
 		if (went == null) {
 			went = new Dictionary<string, bool> ();

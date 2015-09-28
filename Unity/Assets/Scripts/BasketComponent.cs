@@ -18,7 +18,10 @@ public class BasketComponent : BetterBehaviour {
 
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		slot.parent(state_machine.states["basket"]);
+		slot.parent (state_machine.states ["basket"])
+			.on_entry (new StateEvent(ParentToBasket))
+			.on_exit (new StateEvent(UnparentToBasket))
+			.on_update(new StateEvent(UpdatePhysics));
 		drop.from(state_machine.states["fall"])
 			.priority(2)
 			.to(slot)
@@ -29,6 +32,25 @@ public class BasketComponent : BetterBehaviour {
 				return true;
 			}))
 			.generate_path();
+	}
+
+	void ParentToBasket(Automata a){
+		a.gameObject.transform.SetParent(transform, true);
+	}
+
+	void UnparentToBasket(Automata a){
+		//a.gameObject.transform.SetParent(null, true);
+	}
+
+	static void UpdatePhysics(Automata a){
+		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
+		if (body != null) {
+			if (!SingletonBehavior.get_instance<GameStateManager>().states["pack"].is_visited()){
+				body.isKinematic = true;
+			} else {
+				body.isKinematic = false;
+			}
+		}
 	}
 
 	void OnTriggerStay(Collider that) {

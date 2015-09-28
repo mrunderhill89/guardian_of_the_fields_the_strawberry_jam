@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\BasketComponent.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CartController.cs" />
+     <Compile Include="Assets\Scripts\CompassArrow.cs" />
      <Compile Include="Assets\Scripts\CoroutineUtils.cs" />
      <Compile Include="Assets\Scripts\DependencyManager.cs" />
      <Compile Include="Assets\Scripts\Draggable.cs" />

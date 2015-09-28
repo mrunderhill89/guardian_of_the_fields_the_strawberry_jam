@@ -63,68 +63,53 @@ public class GameStateManager : SingletonBehavior {
 
 		//Transitions
 		//Look Forward -> Look Left, Look Right, Pack
-		transitions["look_forward=>left"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>left")
+		transitions["look_forward=>left"] = input.register_transition(gameObject, "look_forward=>left", "left")
 			.from(states["look_forward"])
-			.to(states["look_left"])
-			.register_event(input.on_dir("left"));
-		transitions["look_forward=>right"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>right")
+			.to(states["look_left"]);
+		transitions["look_forward=>right"] = input.register_transition(gameObject, "look_forward=>right", "right")
 			.from(states["look_forward"])
-			.to(states["look_right"])
-			.register_event(input.on_dir("right"));
-		transitions["look_forward=>pack"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_forward=>pack")
+			.to(states["look_right"]);
+		transitions["look_forward=>pack"] = input.register_transition(gameObject, "look_forward=>pack", 
+		                                                              new string[]{"up","down"})
 			.from(states["look_forward"])
-			.to(states["pack"])
-			.register_event(input.on_dir("up"))
-			.register_event(input.on_dir("down"));
+			.to(states["pack"]);
 		//Look Left -> Look Forward, Pick Left
-		transitions["look_left=>forward"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_left=>forward")
+		transitions["look_left=>forward"] = input.register_transition(gameObject, "look_left=>forward", "right")
 			.from(states["look_left"])
-			.to(states["look_forward"])
-			.register_event(input.on_dir("right"));
-		transitions["look_left=>pick"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_left=>pick")
+			.to(states["look_forward"]);
+		transitions["look_left=>pick"] = input.register_transition(gameObject, "look_left=>pick", "down")
 			.from(states["look_left"])
-			.to(states["pick_left"])
-			.register_event(input.on_dir("down"));
+			.to(states["pick_left"]);
 		//Look Right -> Look Forward, Pick Right
-		transitions["look_right=>forward"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_right=>forward")
+		transitions["look_right=>forward"] = input.register_transition(gameObject, "look_right=>forward", "left")
 			.from(states["look_right"])
-			.to(states["look_forward"])
-			.register_event(input.on_dir("left"));
-		transitions["look_right=>pick"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "look_right=>pick")
+			.to(states["look_forward"]);
+		transitions["look_right=>pick"] = input.register_transition(gameObject, "look_right=>pick", "down")
 			.from(states["look_right"])
-			.to(states["pick_right"])
-			.register_event(input.on_dir("down"));
+			.to(states["pick_right"]);
 		//Pick Left -> Look Left, Pack
-		transitions["pick_left=>look"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>look")
+		transitions["pick_left=>look"] = input.register_transition(gameObject, "pick_left=>look", "up")
 			.from(states["pick_left"])
-			.to(states["look_left"])
-			.register_event(input.on_dir("up"));
-		transitions["pick_left=>pack"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_left=>pack")
+			.to(states["look_left"]);
+		transitions["pick_left=>pack"] = input.register_transition(gameObject, "pick_left=>pack", "right")
 			.from(states["pick_left"])
-			.to(states["pack"])
-			.register_event(input.on_dir("right"));
+			.to(states["pack"]);
 		//Pick Right -> Look Right, Pack
-		transitions["pick_right=>look"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_right=>look")
+		transitions["pick_right=>look"] = input.register_transition(gameObject, "pick_right=>look", "up")
 			.from(states["pick_right"])
-			.to(states["look_right"])
-			.register_event(input.on_dir("up"));
-		transitions["pick_right=>pack"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pick_right=>pack")
+			.to(states["look_right"]);
+		transitions["pick_right=>pack"] = input.register_transition(gameObject, "pick_right=>pack", "left")
 			.from(states["pick_right"])
-			.to(states["pack"])
-			.register_event(input.on_dir("left"));
+			.to(states["pack"]);
 		// Pack -> Look Forward, Pick Left, Pick Right
-		transitions["pack=>look_forward"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>look_forward")
+		transitions["pack=>look_forward"] = input.register_transition(gameObject, "pack=>look_forward", new string[] {"up","down"})
 			.from(states["pack"])
-			.to(states["look_forward"])
-			.register_event(input.on_dir("up"))
-			.register_event(input.on_dir("down"));
-		transitions["pack=>pick_left"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>pick_left")
+			.to(states["look_forward"]);
+		transitions ["pack=>pick_left"] = input.register_transition(gameObject, "pack=>pick_left", "left")
+			.from (states ["pack"])
+			.to (states ["pick_left"]);
+		transitions["pack=>pick_right"] = input.register_transition(gameObject, "pack=>pick_right", "right")
 			.from(states["pack"])
-			.to(states["pick_left"])
-			.register_event(input.on_dir("left"));
-		transitions["pack=>pick_right"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "pack=>pick_right")
-			.from(states["pack"])
-			.to(states["pick_right"])
-			.register_event(input.on_dir("right"));
+			.to(states["pick_right"]);
 	}
 }
