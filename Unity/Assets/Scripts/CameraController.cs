@@ -6,7 +6,7 @@ using System;
 
 public class CameraController : BetterBehaviour {
 	public Transform target;
-	public int steps = 0;
+	public float drift_time = 0.0f;
 	public Dictionary<string,Transform> targets;
 
 	public static float Wrap(float val, float min, float max, float min_inc, float max_inc){
@@ -24,9 +24,9 @@ public class CameraController : BetterBehaviour {
 			Wrap(ang.z,-bounds, bounds, inc, inc)
 		);
 	}
-	public CameraController set_target(string target_name, int in_frames = 20){
+	public CameraController set_target(string target_name, float in_time = 0.4f){
 		target = targets [target_name];
-		steps = in_frames;
+		drift_time = in_time;
 		return this;
 	}
 
@@ -39,17 +39,19 @@ public class CameraController : BetterBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (target != null) {
-			if (steps > 0) {
-				Vector3 pos_step = (target.transform.position - transform.position) / steps;
+			if (drift_time > 0.0001f) {
+				float elapsed = Time.deltaTime / drift_time;
+				Vector3 pos_step = (target.transform.position - transform.position) * elapsed;
 				Vector3 euler_rotation = transform.rotation.eulerAngles;
-				Vector3 rot_step = WrapAngles(target.transform.rotation.eulerAngles - euler_rotation, 180.0f, 360.0f) / steps;
-				transform.position += pos_step;
-				transform.rotation = Quaternion.Euler(WrapAngles(euler_rotation+rot_step, 180.0f, 360.0f));
-				steps--;
-			} else {
-				//Fallback code. If tweening takes too long, just set pos/rot directly.
-				//transform.position = target.transform.position;
-				//transform.rotation = target.transform.rotation;
+				Vector3 rot_step = WrapAngles(target.transform.rotation.eulerAngles - euler_rotation, 180.0f, 360.0f) * elapsed;
+				drift_time -= Time.deltaTime;
+				if (drift_time > 0.0000f){
+					transform.position += pos_step;
+					transform.rotation = Quaternion.Euler(WrapAngles(euler_rotation+rot_step, 180.0f, 360.0f));
+				} else {
+					transform.position = target.transform.position;
+					transform.rotation = target.transform.rotation;
+				}
 			}
 		}
 	}
