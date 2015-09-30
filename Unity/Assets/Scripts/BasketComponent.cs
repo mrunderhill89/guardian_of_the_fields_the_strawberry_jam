@@ -9,7 +9,7 @@ using UniRx;
 public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
-	public Dictionary<GameObject, Vector3> valid_positions;
+	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
 		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");

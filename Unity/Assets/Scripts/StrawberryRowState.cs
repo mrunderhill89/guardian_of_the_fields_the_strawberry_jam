@@ -19,7 +19,7 @@ public class StrawberryRowState : BetterBehaviour{
 		StrawberryStateMachine globalSM = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		rows.Add(this);
 		state = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "state")
-			.parent(globalSM.states["field"])
+			.parent(globalSM.states["unpicked"])
 			.on_entry (new StateEvent(distribute))
 			.on_update (new StateEvent((Automata a)=>{
 				if (optimize(a)) {

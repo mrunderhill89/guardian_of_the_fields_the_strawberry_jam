@@ -10,6 +10,6 @@ public class CartController : BetterBehaviour {
 	}
 
 	public void move(){
-		this.transform.Translate(cart_speed);
+		this.transform.Translate(cart_speed * Time.deltaTime);
 	}
 }
