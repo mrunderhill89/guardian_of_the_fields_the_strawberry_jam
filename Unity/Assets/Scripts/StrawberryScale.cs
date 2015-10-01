@@ -9,6 +9,10 @@ public class StrawberryScale : MonoBehaviour {
 	public Vector3 row3 = new Vector4 (0, 0, 1);
 	// Use this for initialization
 	public void Start () {
+		Initialize();
+	}
+
+	public void Initialize(){
 		Vector3 random = new Vector3 (
 			RandomUtils.random_float (min.x, max.x),
 			RandomUtils.random_float (min.y, max.y),
@@ -20,7 +24,6 @@ public class StrawberryScale : MonoBehaviour {
 			Vector3.Dot(random, row3)
         );
 	}
-
 	// Update is called once per frame
 	void Update () {
 

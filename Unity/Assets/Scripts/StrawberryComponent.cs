@@ -30,6 +30,10 @@ public class StrawberryComponent : BetterBehaviour {
 	public void Initialize(){
 		quality = RandomUtils.random_float(0.0f, 2.0f);
 		material.SetFloat("_Quality",quality);
+		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
+		if (scale != null){
+			scale.Initialize();
+		}
 	}
 
 	void OnMouseEnter(){

@@ -52,9 +52,6 @@ public class GameStateManager : SingletonBehavior {
 		states["pack"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "pack")
 			.on_entry(new StateEvent(()=>{
 				camera_control.lazy_set_target("pack")();
-				//Draggable.calculate_delta = Draggable.xz_plane;
-			})).on_exit(new StateEvent(()=>{
-				//Draggable.calculate_delta = Draggable.xy_plane;
 			}));
 
 		//Main State

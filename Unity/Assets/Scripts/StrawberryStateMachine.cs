@@ -13,7 +13,11 @@ public class StrawberryStateMachine : SingletonBehavior {
 		states = new Dictionary<string,State> ();
 		transitions = new Dictionary<string,Transition> ();
 		states ["init"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "init");
-		states ["field"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "field");
+		states ["unpicked"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "unpicked");
+		states ["ground"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "ground");
+		states ["field"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "field")
+			.add_child(states["unpicked"], true)
+			.add_child(states["ground"]);
 		states ["drag"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "drag");
 		states ["hold"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "hold");
 		states ["fall"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "fall");
@@ -31,57 +35,61 @@ public class StrawberryStateMachine : SingletonBehavior {
 		states["init"]
 			.on_entry(new StateEvent(init_enter))
 			.on_exit(new StateEvent(init_exit));
-		states["field"]
+		states["unpicked"]
 			.on_entry(new StateEvent(distribute));
 		transitions["init_field"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"init_field")
 			.from(states["init"])
 			.to(states["field"])
-			.auto_run(true)
-			.generate_path();
+			.auto_run(true);
 		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"field_drag")
 			.from(states["field"])
 			.to(states["drag"])
-			.on_exit(new TransitionEvent((a)=>{
-				Debug.Log("Field->Drag:"+a.name);
-			}))
 			.auto_run(false)
 			.generate_path();
 		transitions["hold_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"hold_drag")
 			.from(states["hold"])
 			.to(states["drag"])
-			.auto_run(false)
-			.generate_path();
+			.auto_run(false);
 		transitions["fall_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"fall_drag")
 			.from(states["fall"])
 			.to(states["drag"])
-			.auto_run(false)
-			.generate_path();
+			.auto_run(false);
+		transitions["fall_ground"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"fall_ground")
+			.from(states["fall"])
+			.to(states["ground"])
+			.add_test(new TransitionTest((a)=>{
+				if (a.transform.position.y <= 0.0f){
+					return true;
+				}
+				return false;
+			}))
+			.auto_run(false);
 		transitions["drag_fall"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"drag_fall")
 			.from(states["drag"])
 			.to(states["fall"])
 			.on_exit(new TransitionEvent((a)=>{
 				Debug.Log("Drag->Fall:"+a.name);
 			}))
-			.auto_run(false)
-			.generate_path();
+			.auto_run(false);
 		transitions["basket_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"basket_drag")
 			.from(states["basket"])
 			.to(states["drag"])
-			.auto_run(false)
-			.generate_path();
+			.auto_run(false);
 		transitions["recycle"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"recycle")
 			.from(states["init"])
 			.to(states["field"])
-			.auto_run(false)
-			.generate_path();
+			.auto_run(false);
 		GenerateStrawberries(field_strawberries);
 	}
 	bool can_pick(Automata a){
 		return true;
 		//return !a.visiting(states["field"]) || player_state.states["pick"].is_visited();
 	}
-	void init_enter(Automata automata,State state){
-		//Turn off any renderable elements of the strawberry
+	void init_enter(Automata a,State state){
+		StrawberryComponent berry = a.gameObject.GetComponent<StrawberryComponent>();
+		if (berry != null){
+			berry.Initialize();
+		}
 	}
 	void init_exit(Automata automata,State state){
 		//Turn on any renderable elements of the strawberry
