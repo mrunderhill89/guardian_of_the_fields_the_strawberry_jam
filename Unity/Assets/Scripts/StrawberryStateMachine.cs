@@ -44,8 +44,8 @@ public class StrawberryStateMachine : SingletonBehavior {
 		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"field_drag")
 			.from(states["field"])
 			.to(states["drag"])
-			.auto_run(false)
-			.generate_path();
+			.add_test(new TransitionTest(this.can_pick))
+			.auto_run(false);
 		transitions["hold_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"hold_drag")
 			.from(states["hold"])
 			.to(states["drag"])
@@ -75,15 +75,17 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.from(states["basket"])
 			.to(states["drag"])
 			.auto_run(false);
-		transitions["recycle"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"recycle")
+		transitions["placement_fail"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"placement_fail")
 			.from(states["init"])
 			.to(states["field"])
 			.auto_run(false);
 		GenerateStrawberries(field_strawberries);
 	}
 	bool can_pick(Automata a){
-		return true;
-		//return !a.visiting(states["field"]) || player_state.states["pick"].is_visited();
+		return !a.visiting(states["field"]) || player_state.states["pick"].is_visited();
+	}
+	public bool finished_loading(){
+		return states ["field"].is_visited () && !states ["init"].is_visited ();
 	}
 	void init_enter(Automata a,State state){
 		StrawberryComponent berry = a.gameObject.GetComponent<StrawberryComponent>();
@@ -91,7 +93,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 			berry.Initialize();
 		}
 	}
-	void init_exit(Automata automata,State state){
+	void init_exit(Automata a,State state){
 		//Turn on any renderable elements of the strawberry
 	}
 	void distribute(Automata automata,State state){
@@ -105,10 +107,14 @@ public class StrawberryStateMachine : SingletonBehavior {
 			} else {
 				Debug.LogError("Row number "+random_row+" doesn't exist. Current row count is "+num_rows);
 			}
+			StrawberryComponent berry = automata.gameObject.GetComponent<StrawberryComponent>();
+			if (berry != null){
+				berry.hidden(false);
+			}
 		} else {
 			//Move the strawberry back to the init state.
 			Debug.Log("Rows not initialized. Moving back to init.");
-			transitions["recycle"].trigger_single(automata);
+			transitions["placement_fail"].trigger_single(automata);
 		}
 	}
 	void Update () {

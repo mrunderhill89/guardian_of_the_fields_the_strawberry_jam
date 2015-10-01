@@ -23,6 +23,9 @@ public class GameStateManager : SingletonBehavior {
 	}
 	void Start () {
 		Physics.gravity = gravity;
+		//Loading
+		states["loading"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "loading");
+
 		//Look
 		states["look_forward"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "look_forward")
 			.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward")));
@@ -56,9 +59,22 @@ public class GameStateManager : SingletonBehavior {
 
 		//Main State
 		states["root"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "root")
-			.add_child(states["look"], true).add_child(states["pick"]).add_child(states["pack"]);
+			.add_child (states["loading"], true)
+			.add_child(states["look"]).add_child(states["pick"]).add_child(states["pack"]);
 
 		//Transitions
+		//Loading -> Look
+		transitions ["loading=>look"] = NamedBehavior.GetOrCreateComponentByName<Transition> (gameObject, "loading=>look")
+			.from (states ["loading"])
+			.to (states["look"])
+			.auto_run(true)
+			.add_test(new TransitionTest(()=>{
+					StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+					if (sb_machine != null){
+						return sb_machine.finished_loading();
+					}
+					return false;
+			}));
 		//Look Forward -> Look Left, Look Right, Pack
 		transitions["look_forward=>left"] = input.register_transition(gameObject, "look_forward=>left", "left")
 			.from(states["look_forward"])

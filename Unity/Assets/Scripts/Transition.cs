@@ -40,11 +40,8 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		transfer_actions = new List<TransitionEvent>();
 		exit_actions = new List<TransitionEvent>();
 	}
-	void Start(){
-		//generate_path();
-	}
 	void Update(){
-		if (auto_run()){
+		if (auto_run() && is_visited()){
 			trigger();
 		}
 	}
