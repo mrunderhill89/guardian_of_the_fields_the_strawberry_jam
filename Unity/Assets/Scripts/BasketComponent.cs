@@ -18,11 +18,11 @@ public class BasketComponent : BetterBehaviour {
 
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		slot.parent (state_machine.states ["basket"])
+		slot.parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))
 			.on_update(new StateEvent(UpdatePhysics));
-		drop.from(state_machine.states["fall"])
+		drop.from(state_machine.fsm.state("fall"))
 			.priority(2)
 			.to(slot)
 			.add_test(new TransitionTest((Automata a)=>{
@@ -45,7 +45,7 @@ public class BasketComponent : BetterBehaviour {
 	static void UpdatePhysics(Automata a){
 		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
 		if (body != null) {
-			if (!SingletonBehavior.get_instance<GameStateManager>().states["pack"].is_visited()){
+			if (!SingletonBehavior.get_instance<GameStateManager>().basket_physics_enabled()){
 				body.isKinematic = true;
 			} else {
 				body.isKinematic = false;
@@ -73,8 +73,5 @@ public class BasketComponent : BetterBehaviour {
 		} else {
 			valid_positions.Remove(obj);
 		}
-	}
-	void Update () {
-	
 	}
 }

@@ -18,14 +18,35 @@ public class State : NamedBehavior
 		_parent = p;
 		return this;
 	}
-	public State _initial;
-	public State initial(){return _initial;}
+	protected Func<Automata, State> _initial;
+	public State initial(Automata a){
+		if (_initial == null)
+			return null;
+		State i = _initial(a);
+		if (i.parent () != this) {
+			Debug.LogError("'Initial' state "+i.instance_name+" is not a child of "+instance_name+".");
+			return null;
+		}
+		return i;
+	}
 	public State initial(State i){
-		if (i == null || i._parent == this){
-			_initial = i;
+		if (i != null && i._parent == this){
+			_initial = (Automata a)=>{return i;};
+		}
+		if (i == null){
+			_initial = null;
 		}
 		return this;
 	}
+	public State initial(Func<State> find_i){
+		_initial = (Automata a)=>{return find_i();};
+		return this;
+	}
+	public State initial(Func<Automata,State> find_i){
+		_initial = find_i;
+		return this;
+	}
+
 	public List<StateEvent> entry_actions;
 	public List<StateEvent> update_actions;
 	public List<StateEvent> exit_actions;

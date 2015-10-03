@@ -10,6 +10,14 @@ public class StrawberryRowState : BetterBehaviour{
 	static StrawberryRowState(){
 		rows = new List<StrawberryRowState>();
 	}
+	public static State random_row(){
+		if (rows.Count > 0){
+			State state = rows[RandomUtils.random_int(0,rows.Count)].state;
+			Debug.Log(state);
+			return state;
+		}
+		return null;
+	}
 	public Vector3 min_position = new Vector3(0,0,0);
 	public Vector3 max_position = new Vector3(0,0,0);
 	public Transition recycle;
@@ -19,19 +27,13 @@ public class StrawberryRowState : BetterBehaviour{
 		StrawberryStateMachine globalSM = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		rows.Add(this);
 		state = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "state")
-			.parent(globalSM.states["unpicked"])
+			.parent(globalSM.fsm.state("field"))
 			.on_entry (new StateEvent(distribute))
 			.on_update (new StateEvent((Automata a)=>{
 				if (optimize(a)) {
 					Debug.Log("Optimizing...");
 				}
 			}));
-		recycle = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"recycle")
-			.from(state)
-			.to(globalSM.states["init"])
-			.auto_run(true)
-			.add_test(new TransitionTest(optimize))
-			.generate_path();
 	}
 
 	public Func<Automata,bool> optimize = (Automata a)=>{
@@ -44,6 +46,10 @@ public class StrawberryRowState : BetterBehaviour{
 	void distribute(Automata a){
 		Transform t = a.gameObject.transform;
 		t.position = getNextPosition ();
+		StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent> ();
+		if (sb != null) {
+			sb.hidden(false);
+		}
 	}
 
 	Vector3 getNextPosition(){

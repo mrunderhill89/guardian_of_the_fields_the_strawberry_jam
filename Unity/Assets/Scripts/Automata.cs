@@ -59,8 +59,9 @@ public class Automata : BetterBehaviour
 				}
 				transitions.Clear();
 			} else {
-				if(current.initial() != null){
-					move_direct(current.initial());
+				State initial = current.initial(this);
+				if(initial != null){
+					move_direct(initial);
 				} else {
 					foreach(State state in stack.ToArray()){
 						state.update_automata(this);

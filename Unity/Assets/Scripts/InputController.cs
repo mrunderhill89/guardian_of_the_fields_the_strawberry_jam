@@ -34,9 +34,10 @@ public class InputController: SingletonBehavior{
 		}
 		return direction_events [name];
 	}
-
-	public Transition register_transition(GameObject parent, string instance_name, string[] directions){
-		Transition t = NamedBehavior.GetOrCreateComponentByName<Transition> (parent, instance_name);
+	public Transition register_transition(Transition t, string direction){
+		return register_transition (t, new string[]{direction});
+	}
+	public Transition register_transition(Transition t, string[] directions){
 		foreach(string dir_name in directions){
 			if (!direction_transitions.ContainsKey (dir_name)) {
 				direction_transitions[dir_name] = new List<Transition>();
@@ -46,9 +47,7 @@ public class InputController: SingletonBehavior{
 		}
 		return t;
 	}
-	public Transition register_transition(GameObject parent, string instance_name, string direction){
-		return register_transition(parent,instance_name,new string[]{direction});
-	}
+
 	new void Awake(){
 		base.Awake ();
 		if (direction_events == null) {

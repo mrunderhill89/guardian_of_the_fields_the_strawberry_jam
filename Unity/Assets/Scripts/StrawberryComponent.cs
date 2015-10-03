@@ -8,7 +8,7 @@ using UniRx;
 public class StrawberryComponent : BetterBehaviour {
 	public float quality = 1.00f;
 
-	public Draggable drag = null;
+	public DragHandle drag = null;
 	public Behaviour glow = null;
 	public StrawberryStateMachine berry_state;
 	public Automata automata;
@@ -21,8 +21,8 @@ public class StrawberryComponent : BetterBehaviour {
 		renderer = transform.Find("Strawberry_Mesh/Cube").GetComponent<Renderer>();
 		material = renderer.material;
 		Initialize();
-		//Disable dragging until we determine whether we can pick up berries yet.
-		drag = gameObject.GetComponent<Draggable>();
+		drag = gameObject.GetComponent<DragHandle>();
+		berry_state.register_drag_handle(drag);
 		glow = (gameObject.GetComponent("Halo") as Behaviour);
 		glow.enabled = false;
 	}
@@ -52,19 +52,5 @@ public class StrawberryComponent : BetterBehaviour {
 
 	void OnMouseExit(){
 		glow.enabled = false;
-	}
-
-	void OnMouseDown(){
-		berry_state.transitions["field_drag"].trigger_single (automata);
-		berry_state.transitions["fall_drag"].trigger_single (automata);
-		berry_state.transitions["hold_drag"].trigger_single (automata);
-		berry_state.transitions["basket_drag"].trigger_single (automata);
-	}
-	
-	void OnMouseUp(){
-		berry_state.transitions["drag_fall"].trigger_single (gameObject.GetComponent<Automata> ());
-	}
-	// Update is called once per frame
-	void Update () {
 	}
 }

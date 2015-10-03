@@ -4,118 +4,93 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StrawberryStateMachine : SingletonBehavior {
-	public Dictionary<string,State> states;
-	public Dictionary<string,Transition> transitions;
+	public StateMachine fsm;
 	public int field_strawberries = 100;
 	public GameStateManager player_state;
 	new void Awake () {
 		base.Awake();
-		states = new Dictionary<string,State> ();
-		transitions = new Dictionary<string,Transition> ();
-		states ["init"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "init");
-		states ["unpicked"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "unpicked");
-		states ["ground"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "ground");
-		states ["field"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "field")
-			.add_child(states["unpicked"], true)
-			.add_child(states["ground"]);
-		states ["drag"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "drag");
-		states ["hold"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "hold");
-		states ["fall"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "fall");
-		states ["basket"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "basket");
-		states["root"] = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "root")
-			.add_child(states["init"], true)
-			.add_child(states["field"])
-			.add_child(states["drag"])
-			.add_child(states["hold"])
-			.add_child(states["fall"])
-			.add_child(states["basket"]);
+		fsm = gameObject.AddComponent<StateMachine>();
+		fsm.state ("root")
+			.add_child (
+				fsm.state ("field")
+				.on_entry(new StateEvent((Automata a)=>{
+					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
+					sb.Initialize();
+				}))
+				.initial(()=>{
+					return StrawberryRowState.random_row();
+				}), true
+			).add_child (
+				fsm.state ("drag")
+			).add_child (
+				fsm.state ("fall")
+				.on_entry(new StateEvent((Automata a)=>{
+					Rigidbody body = a.GetComponent<Rigidbody>();
+					if (body != null){
+						body.useGravity = true;
+						body.isKinematic = false;
+					}
+				}))
+			).add_child (
+				fsm.state ("hand")
+				.on_entry(new StateEvent((Automata a)=>{
+					Rigidbody body = a.GetComponent<Rigidbody>();
+					if (body != null){
+						body.useGravity = false;
+						body.isKinematic = true;
+					}
+				}))
+			).add_child (
+				fsm.state ("basket")
+			);
+		fsm.new_transition("field_drag", (t)=>{
+			t.from(fsm.state("field"))
+			.to (fsm.state("drag"))
+			.auto_run(false)
+			;
+		}).new_transition("fall_drag", (t)=>{
+			t.from(fsm.state("field"))
+				.to (fsm.state("drag"))
+					.auto_run(false)
+					;
+		}).new_transition("hand_drag", (t)=>{
+			t.from(fsm.state("hand"))
+				.to (fsm.state("drag"))
+					.auto_run(false)
+					;
+		}).new_transition("basket_drag", (t)=>{
+			t.from(fsm.state("basket"))
+				.to (fsm.state("drag"))
+					.auto_run(false)
+					;
+		}).new_transition("drag_fall", (t)=>{
+			t.from(fsm.state("drag"))
+				.to (fsm.state("fall"))
+					.auto_run(false)
+					;
+		});
+
 	}
 	void Start(){
 		player_state = SingletonBehavior.get_instance<GameStateManager> ();
-		states["init"]
-			.on_entry(new StateEvent(init_enter))
-			.on_exit(new StateEvent(init_exit));
-		states["unpicked"]
-			.on_entry(new StateEvent(distribute));
-		transitions["init_field"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"init_field")
-			.from(states["init"])
-			.to(states["field"])
-			.auto_run(true);
-		transitions["field_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"field_drag")
-			.from(states["field"])
-			.to(states["drag"])
-			.add_test(new TransitionTest(this.can_pick))
-			.auto_run(false);
-		transitions["hold_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"hold_drag")
-			.from(states["hold"])
-			.to(states["drag"])
-			.auto_run(false);
-		transitions["fall_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"fall_drag")
-			.from(states["fall"])
-			.to(states["drag"])
-			.auto_run(false);
-		transitions["fall_ground"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"fall_ground")
-			.from(states["fall"])
-			.to(states["ground"])
-			.add_test(new TransitionTest((a)=>{
-				if (a.transform.position.y <= 0.0f){
-					return true;
-				}
-				return false;
-			}))
-			.auto_run(false);
-		transitions["drag_fall"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"drag_fall")
-			.from(states["drag"])
-			.to(states["fall"])
-			.on_exit(new TransitionEvent((a)=>{
-				Debug.Log("Drag->Fall:"+a.name);
-			}))
-			.auto_run(false);
-		transitions["basket_drag"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"basket_drag")
-			.from(states["basket"])
-			.to(states["drag"])
-			.auto_run(false);
-		transitions["placement_fail"] = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,"placement_fail")
-			.from(states["init"])
-			.to(states["field"])
-			.auto_run(false);
 		GenerateStrawberries(field_strawberries);
 	}
-	bool can_pick(Automata a){
-		return !a.visiting(states["field"]) || player_state.states["pick"].is_visited();
-	}
 	public bool finished_loading(){
-		return states ["field"].is_visited () && !states ["init"].is_visited ();
+		return true;
+		/*
+		int total = fsm.state ("field").count ();
+		int visible = fsm.state ("visible").count ();
+		return visible > 0 && visible == total;
+		*/
 	}
-	void init_enter(Automata a,State state){
-		StrawberryComponent berry = a.gameObject.GetComponent<StrawberryComponent>();
-		if (berry != null){
-			berry.Initialize();
-		}
-	}
-	void init_exit(Automata a,State state){
-		//Turn on any renderable elements of the strawberry
-	}
-	void distribute(Automata automata,State state){
-		//Select a random field object and distribute to it.
-		int num_rows = StrawberryRowState.rows.Count;
-		if (num_rows > 0) {
-			int random_row = RandomUtils.random_int(0, num_rows);
-			StrawberryRowState row = StrawberryRowState.rows[random_row];
-			if (row != null){
-				automata.move_direct(row.state);
-			} else {
-				Debug.LogError("Row number "+random_row+" doesn't exist. Current row count is "+num_rows);
-			}
-			StrawberryComponent berry = automata.gameObject.GetComponent<StrawberryComponent>();
-			if (berry != null){
-				berry.hidden(false);
-			}
-		} else {
-			//Move the strawberry back to the init state.
-			Debug.Log("Rows not initialized. Moving back to init.");
-			transitions["placement_fail"].trigger_single(automata);
-		}
+	public DragHandle register_drag_handle(DragHandle drag){
+		drag.register_incoming (fsm.transition("field_drag"))
+			.register_incoming (fsm.transition("fall_drag"))
+			.register_incoming (fsm.transition("hand_drag"))
+			.register_incoming (fsm.transition("basket_drag"))
+			.register_state (fsm.state("drag"))
+			.register_outgoing(fsm.transition("drag_fall"));
+		return drag;
 	}
 	void Update () {
 		//GenerateStrawberries(field_strawberries - states["init"].count() - states["field"].count());
@@ -124,7 +99,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 		GameObject berry;
 		for (int u = 0; u < num; u++){
 			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
-			berry.GetComponent<Automata>().move_direct(states["root"]);
+			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
+			fsm.automata(berry_name, berry.GetComponent<Automata>())
+				.move_direct(fsm.state("root"));
 		}
 	}
 }
