@@ -17,7 +17,12 @@ public class DragHandle : BetterBehaviour
 	List<Transition> outgoing;
 	List<State> states;
 	float distance;
+	float target_distance;
+	float min_distance = 0.1f;
+	float max_distance = 1.0f;
+	float drift_time;
 	public float scroll_speed = 1.0f;
+	public float initial_drift_time = 0.5f;
 	Vector3 offset;
 	Automata a;
 
@@ -56,13 +61,32 @@ public class DragHandle : BetterBehaviour
 		}
 		Vector3 screen_pos = Camera.main.WorldToScreenPoint(gameObject.transform.position);			
 		distance = screen_pos.z;
+		target_distance = Mathf.Max(
+			Mathf.Min(
+				distance,
+				max_distance
+			),min_distance
+		);
 		offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance));
+		drift_time = initial_drift_time;
 	}
 
 	void Update()
 	{
 		if (is_dragging()){
-			distance += scroll_speed * Input.GetAxis("Mouse ScrollWheel");
+			target_distance = Mathf.Max(
+				Mathf.Min(
+					target_distance + (scroll_speed * Input.GetAxis("Mouse ScrollWheel")),
+					max_distance
+				),min_distance
+			);
+			if (drift_time > 0.0001f) {
+				float elapsed = Time.deltaTime / drift_time;
+				distance += (target_distance - distance) * elapsed;
+				drift_time -= Time.deltaTime;
+			} else {
+				distance = target_distance;
+			}
 			Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
 			Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
 			transform.position = curPosition;

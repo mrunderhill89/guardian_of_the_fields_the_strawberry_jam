@@ -32,7 +32,7 @@ public class Automata : BetterBehaviour
 	void Start(){
 		if (current != null){
 			stack.Add(current);
-			current.enter_automata(this);
+			current.invoke_entry(this);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class Automata : BetterBehaviour
 					move_direct(initial);
 				} else {
 					foreach(State state in stack.ToArray()){
-						state.update_automata(this);
+						state.invoke_update(this);
 					}
 				}
 			}
@@ -82,12 +82,13 @@ public class Automata : BetterBehaviour
 				if (current == null || to.parent() == current){
 					//Parent->Child
 					stack.Add(to);
+					if (current != null) current.invoke_descent(this);
 					current = to;
-					to.enter_automata(this);
+					to.invoke_entry(this);
 				} else { //(current.parent == to)
 					//Child->Parent
 					stack.Remove(current);
-					current.exit_automata(this);
+					current.invoke_exit(this);
 					current = to;
 				}
 			} else if (current != to){
@@ -97,6 +98,17 @@ public class Automata : BetterBehaviour
 		} else {
 			Debug.LogError("Automata should never be moved out of the state system once placed. Currently in "+
 				current.instance_name+".");
+		}
+		return this;
+	}
+
+	public Automata eject(int steps = 1){
+		while (steps > 0 && _current.parent() != null){
+			move_direct(_current.parent());
+			steps--;
+		}
+		if (steps > 0){
+			Debug.LogWarning("Automata.Eject: Could not eject completely. Steps remaining:"+steps);
 		}
 		return this;
 	}
@@ -131,6 +143,14 @@ public class Automata : BetterBehaviour
 		return stack.Contains(state);
 	}
 
+	public bool visiting_own(State state)
+	{
+		return current == state;
+	}
+	
+	public bool is_travelling(){
+		return current.initial(this) != null;
+	}
 	#endregion
 
 }

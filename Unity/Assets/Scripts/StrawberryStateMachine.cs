@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 public class StrawberryStateMachine : SingletonBehavior {
 	public StateMachine fsm;
 	public int field_strawberries = 100;
@@ -13,12 +13,16 @@ public class StrawberryStateMachine : SingletonBehavior {
 		fsm.state ("root")
 			.add_child (
 				fsm.state ("field")
-				.on_entry(new StateEvent((Automata a)=>{
+				.on_descent(new StateEvent((Automata a)=>{
 					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
 					sb.Initialize();
 				}))
+				.on_exit(new StateEvent(()=>{
+					GenerateStrawberries(1);
+				}))
 				.initial(()=>{
-					return StrawberryRowState.random_row();
+					State state = StrawberryRowState.random_row();
+					return state.parent(fsm.state("field"));
 				}), true
 			).add_child (
 				fsm.state ("drag")
@@ -76,12 +80,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 		GenerateStrawberries(field_strawberries);
 	}
 	public bool finished_loading(){
-		return true;
-		/*
-		int total = fsm.state ("field").count ();
-		int visible = fsm.state ("visible").count ();
-		return visible > 0 && visible == total;
-		*/
+		return fsm.state("field").is_visited() && fsm.state("field").visitors.ToList().Find((Automata a)=>{
+			return a.is_travelling();
+		}) == null;
 	}
 	public DragHandle register_drag_handle(DragHandle drag){
 		drag.register_incoming (fsm.transition("field_drag"))
@@ -91,9 +92,6 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.register_state (fsm.state("drag"))
 			.register_outgoing(fsm.transition("drag_fall"));
 		return drag;
-	}
-	void Update () {
-		//GenerateStrawberries(field_strawberries - states["init"].count() - states["field"].count());
 	}
 	void GenerateStrawberries(int num){
 		GameObject berry;

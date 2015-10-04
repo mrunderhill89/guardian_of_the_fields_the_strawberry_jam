@@ -49,6 +49,7 @@ public class State : NamedBehavior
 
 	public List<StateEvent> entry_actions;
 	public List<StateEvent> update_actions;
+	public List<StateEvent> descent_actions;
 	public List<StateEvent> exit_actions;
 	public HashSet<Automata> _visitors;
 	public HashSet<Automata> visitors{
@@ -65,6 +66,7 @@ public class State : NamedBehavior
 		visitors = new HashSet<Automata>();
 		entry_actions = new List<StateEvent> ();
 		update_actions = new List<StateEvent> ();
+		descent_actions = new List<StateEvent> ();
 		exit_actions = new List<StateEvent> ();
 	}
 
@@ -78,20 +80,26 @@ public class State : NamedBehavior
 		return tail;
 	}
 
-	public void enter_automata(Automata a){
+	public void invoke_entry(Automata a){
 		visitors.Add(a);
 		foreach (StateEvent e in entry_actions) {
 			e.run(a,this);
 		}
 	}
 
-	public void update_automata(Automata a){
+	public void invoke_update(Automata a){
 		foreach (StateEvent e in update_actions) {
 			e.run(a,this);
 		}
 	}
 
-	public void exit_automata(Automata a){
+	public void invoke_descent(Automata a){
+		foreach (StateEvent e in descent_actions) {
+			e.run(a,this);
+		}
+	}
+	
+	public void invoke_exit(Automata a){
 		visitors.Remove(a);
 		foreach (StateEvent e in exit_actions) {
 			e.run(a,this);
@@ -102,10 +110,22 @@ public class State : NamedBehavior
 		return visitors.Count;
 	}
 
+	public IEnumerable<Automata> own_visitors(){
+		return visitors.Where((Automata a)=>{
+			return a.visiting_own(this);
+		});
+	}
+
+	public int count_own(){
+		return visitors.Count((Automata a)=>{
+			return a.visiting_own(this);
+		});
+	}
+
 	public State add_child(State child, bool set_initial = false){
 		child.parent(this);
 		if (set_initial) {
-			this.initial(child);
+			initial(child);
 		}
 		return this;
 	}
@@ -126,6 +146,12 @@ public class State : NamedBehavior
 	public State on_update(StateEvent evn)
 	{
 		update_actions.Add(evn);
+		return this;
+	}
+
+	public State on_descent(StateEvent evn)
+	{
+		descent_actions.Add(evn);
 		return this;
 	}
 
