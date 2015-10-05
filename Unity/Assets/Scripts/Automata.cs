@@ -63,6 +63,7 @@ public class Automata : BetterBehaviour
 				if(initial != null){
 					move_direct(initial);
 				} else {
+					_current.invoke_update_own(this);
 					foreach(State state in stack.ToArray()){
 						state.invoke_update(this);
 					}
@@ -82,7 +83,6 @@ public class Automata : BetterBehaviour
 				if (current == null || to.parent() == current){
 					//Parent->Child
 					stack.Add(to);
-					if (current != null) current.invoke_descent(this);
 					current = to;
 					to.invoke_entry(this);
 				} else { //(current.parent == to)

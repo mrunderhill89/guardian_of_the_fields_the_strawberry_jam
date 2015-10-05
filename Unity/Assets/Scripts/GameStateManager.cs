@@ -131,7 +131,7 @@ public class GameStateManager : SingletonBehavior {
 		return fsm.state("loading").is_visited();
 	}
 	public bool can_pick_anywhere(){
-		return fsm.state ("pick").is_visited ();
+		return fsm.state ("pick").is_visited();
 	}
 	public bool basket_physics_enabled(){
 		return fsm.state("pack").is_visited();

@@ -13,17 +13,14 @@ public class StrawberryStateMachine : SingletonBehavior {
 		fsm.state ("root")
 			.add_child (
 				fsm.state ("field")
-				.on_descent(new StateEvent((Automata a)=>{
+				.initial((Automata a)=>{
 					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
 					sb.Initialize();
-				}))
+					return StrawberryRowState.random_row();
+				})
 				.on_exit(new StateEvent(()=>{
 					GenerateStrawberries(1);
-				}))
-				.initial(()=>{
-					State state = StrawberryRowState.random_row();
-					return state.parent(fsm.state("field"));
-				}), true
+				})), true
 			).add_child (
 				fsm.state ("drag")
 			).add_child (
@@ -50,10 +47,13 @@ public class StrawberryStateMachine : SingletonBehavior {
 		fsm.new_transition("field_drag", (t)=>{
 			t.from(fsm.state("field"))
 			.to (fsm.state("drag"))
+			.add_test(new TransitionTest(()=>{
+				return player_state.can_pick_anywhere();
+			}))
 			.auto_run(false)
 			;
 		}).new_transition("fall_drag", (t)=>{
-			t.from(fsm.state("field"))
+			t.from(fsm.state("fall"))
 				.to (fsm.state("drag"))
 					.auto_run(false)
 					;
@@ -80,9 +80,8 @@ public class StrawberryStateMachine : SingletonBehavior {
 		GenerateStrawberries(field_strawberries);
 	}
 	public bool finished_loading(){
-		return fsm.state("field").is_visited() && fsm.state("field").visitors.ToList().Find((Automata a)=>{
-			return a.is_travelling();
-		}) == null;
+		State field = fsm.state("field");
+		return field.is_visited() && !field.has_travellers();
 	}
 	public DragHandle register_drag_handle(DragHandle drag){
 		drag.register_incoming (fsm.transition("field_drag"))

@@ -18,38 +18,29 @@ public class State : NamedBehavior
 		_parent = p;
 		return this;
 	}
-	protected Func<Automata, State> _initial;
+	public State _initial;
+	protected Func<Automata,State> _f_initial;
 	public State initial(Automata a){
-		if (_initial == null)
-			return null;
-		State i = _initial(a);
-		if (i.parent () != this) {
-			Debug.LogError("'Initial' state "+i.instance_name+" is not a child of "+instance_name+".");
-			return null;
-		}
-		return i;
+		if (_initial != null) return _initial;
+		if (_f_initial != null) return _f_initial(a);
+		return null;
 	}
 	public State initial(State i){
-		if (i != null && i._parent == this){
-			_initial = (Automata a)=>{return i;};
-		}
-		if (i == null){
-			_initial = null;
-		}
+		_initial = i;
 		return this;
 	}
-	public State initial(Func<State> find_i){
-		_initial = (Automata a)=>{return find_i();};
+	public State initial(Func<Automata,State> f){
+		_f_initial = f;
 		return this;
 	}
-	public State initial(Func<Automata,State> find_i){
-		_initial = find_i;
+	public State initial(Func<State> f){
+		_f_initial = (Automata a)=>{return f();};
 		return this;
 	}
 
 	public List<StateEvent> entry_actions;
 	public List<StateEvent> update_actions;
-	public List<StateEvent> descent_actions;
+	public List<StateEvent> update_own_actions;
 	public List<StateEvent> exit_actions;
 	public HashSet<Automata> _visitors;
 	public HashSet<Automata> visitors{
@@ -66,7 +57,7 @@ public class State : NamedBehavior
 		visitors = new HashSet<Automata>();
 		entry_actions = new List<StateEvent> ();
 		update_actions = new List<StateEvent> ();
-		descent_actions = new List<StateEvent> ();
+		update_own_actions = new List<StateEvent> ();
 		exit_actions = new List<StateEvent> ();
 	}
 
@@ -93,8 +84,8 @@ public class State : NamedBehavior
 		}
 	}
 
-	public void invoke_descent(Automata a){
-		foreach (StateEvent e in descent_actions) {
+	public void invoke_update_own(Automata a){
+		foreach (StateEvent e in update_own_actions) {
 			e.run(a,this);
 		}
 	}
@@ -120,6 +111,23 @@ public class State : NamedBehavior
 		return visitors.Count((Automata a)=>{
 			return a.visiting_own(this);
 		});
+	}
+	public bool is_own_visited(){
+		return visitors.ToList().Find((Automata a)=>{
+			return a.visiting_own(this);
+		}) != null;
+	}
+
+	public int count_travellers(){
+		return visitors.Count((Automata a)=>{
+			return a.is_travelling();
+		});
+	}
+
+	public bool has_travellers(){
+		return visitors.ToList().Find((Automata a)=>{
+			return a.is_travelling();
+		}) != null;
 	}
 
 	public State add_child(State child, bool set_initial = false){
@@ -149,9 +157,9 @@ public class State : NamedBehavior
 		return this;
 	}
 
-	public State on_descent(StateEvent evn)
+	public State on_update_own(StateEvent evn)
 	{
-		descent_actions.Add(evn);
+		update_own_actions.Add(evn);
 		return this;
 	}
 

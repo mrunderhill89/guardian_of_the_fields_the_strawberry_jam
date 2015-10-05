@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Grounded.cs" />
      <Compile Include="Assets\Scripts\HandContainer.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
+     <Compile Include="Assets\Scripts\LeafGenerator.cs" />
      <Compile Include="Assets\Scripts\NamedBehavior.cs" />
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
@@ -68,8 +69,8 @@
      <Compile Include="Assets\Scripts\State.cs" />
      <Compile Include="Assets\Scripts\StateEvent.cs" />
      <Compile Include="Assets\Scripts\StateMachine.cs" />
-     <Compile Include="Assets\Scripts\StrawberryBush.cs" />
      <Compile Include="Assets\Scripts\StrawberryComponent.cs" />
+     <Compile Include="Assets\Scripts\StrawberryGenerator.cs" />
      <Compile Include="Assets\Scripts\StrawberryRowState.cs" />
      <Compile Include="Assets\Scripts\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\StrawberryStateMachine.cs" />
