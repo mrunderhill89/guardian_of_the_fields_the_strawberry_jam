@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
+     <Compile Include="Assets\Scripts\RowHandler.cs" />
      <Compile Include="Assets\Scripts\SingletonBehavior.cs" />
      <Compile Include="Assets\Scripts\State.cs" />
      <Compile Include="Assets\Scripts\StateEvent.cs" />
