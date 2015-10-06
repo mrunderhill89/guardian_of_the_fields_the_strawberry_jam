@@ -6,8 +6,10 @@ using System;
 
 public class CameraController : BetterBehaviour {
 	public Transform target;
-	public float drift_time = 0.0f;
+	public float drift_duration = 0.5f;
+	float drift_point = 0.0f;
 	public Dictionary<string,Transform> targets;
+	public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
 
 	public static float Wrap(float val, float min, float max, float min_inc, float max_inc){
 		if (val < min) {
@@ -24,9 +26,9 @@ public class CameraController : BetterBehaviour {
 			Wrap(ang.z,-bounds, bounds, inc, inc)
 		);
 	}
-	public CameraController set_target(string target_name, float in_time = 0.4f){
+	public CameraController set_target(string target_name){
 		target = targets [target_name];
-		drift_time = in_time;
+		drift_point = 1.0f;
 		return this;
 	}
 
@@ -39,15 +41,23 @@ public class CameraController : BetterBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (target != null) {
-			if (drift_time > 0.0001f) {
-				float elapsed = Time.deltaTime / drift_time;
-				Vector3 pos_step = (target.transform.position - transform.position) * elapsed;
-				Vector3 euler_rotation = transform.rotation.eulerAngles;
-				Vector3 rot_step = WrapAngles(target.transform.rotation.eulerAngles - euler_rotation, 180.0f, 360.0f) * elapsed;
-				drift_time -= Time.deltaTime;
-				if (drift_time > 0.0000f){
-					transform.position += pos_step;
-					transform.rotation = Quaternion.Euler(WrapAngles(euler_rotation+rot_step, 180.0f, 360.0f));
+			if (drift_point > 0.0001f) {
+				float elapsed = Time.deltaTime / drift_duration;
+				drift_point -= elapsed;
+				if (drift_point > 0.0000f){
+					float multiplier = curve.Evaluate(1.0f - drift_point);
+					Vector3 velocity = (target.position - transform.position);
+					Vector3 ang_velocity = WrapAngles(
+			           target.rotation.eulerAngles - transform.rotation.eulerAngles,
+						180.0f,
+						360.0f
+					);
+					transform.position += multiplier * velocity;
+					transform.rotation = Quaternion.Euler (WrapAngles(
+						transform.rotation.eulerAngles + (multiplier * ang_velocity),
+						180.0f,
+						360.0f
+					));
 				} else {
 					transform.position = target.transform.position;
 					transform.rotation = target.transform.rotation;

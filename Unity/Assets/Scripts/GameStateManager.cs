@@ -27,7 +27,9 @@ public class GameStateManager : SingletonBehavior {
 			fsm.state("loading"),true
 		).add_child (
 			fsm.state ("look")
-				.on_update(new StateEvent(cart_control.move))
+				.on_update(new StateEvent(()=>{
+						cart_control.move();
+				}))
 				.add_child(fsm.state("look_forward")
 		           .on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
 		        ).add_child(fsm.state("look_left")
@@ -53,11 +55,11 @@ public class GameStateManager : SingletonBehavior {
 			.to (fsm.state("look"))
 	  		.auto_run(true)
 			.add_test(new TransitionTest(()=>{
-						StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-						if (sb_machine != null){
-							return sb_machine.finished_loading();
-						}
-						return false;
+				StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+				if (sb_machine != null){
+					return sb_machine.finished_loading();
+				}
+				return false;
 			}));
 		//Look Forward -> Look Left, Look Right, Pack
 		}).new_transition("look_forward=>left", (t)=>{

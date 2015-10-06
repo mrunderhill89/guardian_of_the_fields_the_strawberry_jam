@@ -18,13 +18,14 @@ public class DragHandle : BetterBehaviour
 	List<State> states;
 	float distance;
 	float target_distance;
-	float min_distance = 0.1f;
-	float max_distance = 1.0f;
 	float drift_time;
-	public float scroll_speed = 1.0f;
-	public float initial_drift_time = 0.5f;
 	Vector3 offset;
 	Automata a;
+
+	public float min_distance = 0.1f;
+	public float max_distance = 1.0f;
+	public float scroll_speed = 1.0f;
+	public float initial_drift_time = 0.5f;
 
 	void Awake(){
 		incoming = new List<Transition> ();
