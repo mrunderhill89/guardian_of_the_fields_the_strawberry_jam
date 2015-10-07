@@ -23,6 +23,7 @@ public class BasketComponent : BetterBehaviour {
 			.on_exit (new StateEvent(UnparentToBasket))
 			.on_update(new StateEvent(UpdatePhysics));
 		drop.from(state_machine.fsm.state("fall"))
+			.auto_run(false)
 			.priority(2)
 			.to(slot)
 			.add_test(new TransitionTest((Automata a)=>{
@@ -30,8 +31,7 @@ public class BasketComponent : BetterBehaviour {
 					return false;
 				}
 				return true;
-			}))
-			.generate_path();
+			}));
 	}
 
 	void ParentToBasket(Automata a){

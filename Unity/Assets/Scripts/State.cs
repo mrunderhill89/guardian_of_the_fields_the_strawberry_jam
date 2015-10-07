@@ -21,9 +21,8 @@ public class State : NamedBehavior
 	public State _initial;
 	protected Func<Automata,State> _f_initial;
 	public State initial(Automata a){
-		if (_initial != null) return _initial;
-		if (_f_initial != null) return _f_initial(a);
-		return null;
+		if (_f_initial != null) _initial = _f_initial(a);
+		return _initial;
 	}
 	public State initial(State i){
 		_initial = i;

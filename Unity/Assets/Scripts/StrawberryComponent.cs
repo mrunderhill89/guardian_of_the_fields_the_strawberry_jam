@@ -43,6 +43,7 @@ public class StrawberryComponent : BetterBehaviour {
 	}
 	public StrawberryComponent hidden(bool is_hidden){
 		this.renderer.enabled = !is_hidden;
+		
 		transform.Find("Strawberry_Mesh/Circle").GetComponent<Renderer>().enabled = !is_hidden;
 		return this;
 	}

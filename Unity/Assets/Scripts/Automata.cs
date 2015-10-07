@@ -50,9 +50,6 @@ public class Automata : BetterBehaviour
 					} else if (!trans.test_single(this)){
 						//Debug.LogWarning(name+" failed tests for transition:"+trans.instance_name);
 					} else {
-						if (trans.priority() > 1){
-							Debug.Log("Priority "+trans.priority()+" transition:"+trans.instance_name);
-						}
 						move_transition(trans);
 						break;
 					}

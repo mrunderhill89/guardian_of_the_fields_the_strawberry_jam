@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 public class StrawberryStateMachine : SingletonBehavior {
+	public static Vector3 nowhere = new Vector3(-100.0f,-100.0f,-100.0f);
 	public StateMachine fsm;
 	public int field_strawberries = 100;
 	public GameStateManager player_state;
@@ -96,6 +97,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 		GameObject berry;
 		for (int u = 0; u < num; u++){
 			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
+			berry.transform.position = nowhere;
 			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
 			fsm.automata(berry_name, berry.GetComponent<Automata>())
 				.move_direct(fsm.state("root"));
