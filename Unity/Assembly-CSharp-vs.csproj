@@ -70,6 +70,7 @@
      <Compile Include="Assets\Scripts\State.cs" />
      <Compile Include="Assets\Scripts\StateEvent.cs" />
      <Compile Include="Assets\Scripts\StateMachine.cs" />
+     <Compile Include="Assets\Scripts\StrawberryColor.cs" />
      <Compile Include="Assets\Scripts\StrawberryComponent.cs" />
      <Compile Include="Assets\Scripts\StrawberryGenerator.cs" />
      <Compile Include="Assets\Scripts\StrawberryRowState.cs" />

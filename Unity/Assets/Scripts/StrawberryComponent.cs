@@ -14,6 +14,7 @@ public class StrawberryComponent : BetterBehaviour {
 	public Automata automata;
 	new protected Renderer renderer;
 	public Material material;
+
 	// Use this for initialization
 	void Start () {
 		berry_state = SingletonBehavior.get_instance<StrawberryStateMachine> ();
@@ -26,11 +27,11 @@ public class StrawberryComponent : BetterBehaviour {
 		glow = (gameObject.GetComponent("Halo") as Behaviour);
 		glow.enabled = false;
 	}
-	
+
 	public void Initialize(){
 		hidden(true);
 		quality = RandomUtils.random_float(0.0f, 2.0f);
-		material.SetFloat("_Quality",quality);
+		//material.SetFloat("_Quality",quality);
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();
