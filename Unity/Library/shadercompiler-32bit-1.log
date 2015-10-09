@@ -1,5 +1,7 @@
 Base path: C:/Program Files/Unity/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-9
+Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-6024
 Cmd: getPlatforms
-Cmd: preprocess
-  insize=1796 outsize=1504 ok=1
+Unhandled exception: Readfile from pipe failed. GLE=The pipe has been ended.
+
+
+Quitting shader compiler process
