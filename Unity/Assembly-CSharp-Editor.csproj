@@ -72,7 +72,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="BasicSerializer">
- <HintPath>C:/Users/admin/Google Drive/GameOver_Summer2015/guardian_of_the_fields_the_strawberry_jam/Unity/Assets/Plugins/Vexe/Runtime/FastSave/Serializer/BasicSerializer.dll</HintPath>
+ <HintPath>C:/Users/admin/Documents/workspace/guardian_of_the_fields_the_strawberry_jam/Unity/Assets/Plugins/Vexe/Runtime/FastSave/Serializer/BasicSerializer.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
