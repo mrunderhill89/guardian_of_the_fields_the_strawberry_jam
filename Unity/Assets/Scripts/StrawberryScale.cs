@@ -2,27 +2,32 @@
 using System.Collections;
 
 public class StrawberryScale : MonoBehaviour {
-	public Vector3 min = new Vector3(1,1,1);
-	public Vector3 max = new Vector3(1,1,1);
-	public Vector3 row1 = new Vector4 (1, 0, 0);
-	public Vector3 row2 = new Vector4 (0, 1, 0);
-	public Vector3 row3 = new Vector4 (0, 0, 1);
+	public StrawberryComponent data;
+	//Normalized vector containing the relative X,Y, and Z scale coordinates.
+	public Matrix4x4 shape_matrix = Matrix4x4.identity;
+	public Vector3 shape;
+	public float min_scale = 1.0f;
+	public float random_scale = 1.0f;
+	public float quality_scale = 1.0f;
+	public Gradient quality_effect = new Gradient();
+	protected float final_scale;
 	// Use this for initialization
 	public void Start () {
+		if (data == null)
+			data = GetComponent<StrawberryComponent> ();
 		Initialize();
 	}
-
+	float get_quality_scale(){
+		Color rgb = quality_effect.Evaluate (data.quality/StrawberryComponent.quality_range.y);
+		return rgb.r;
+	}
 	public void Initialize(){
-		Vector3 random = new Vector3 (
-			RandomUtils.random_float (min.x, max.x),
-			RandomUtils.random_float (min.y, max.y),
-			RandomUtils.random_float (min.z, max.z)
-		);
-		gameObject.transform.localScale = new Vector3 (
-			Vector3.Dot(random, row1),
-			Vector3.Dot(random, row2),
-			Vector3.Dot(random, row3)
-        );
+		shape = shape_matrix.MultiplyVector(RandomUtils.random_vec3 (1.0f,2.0f));
+		shape.Normalize();
+		final_scale = min_scale 
+			+ (random_scale * RandomUtils.random_float (0.0f, 1.0f))
+			+ (quality_scale * get_quality_scale());
+		transform.localScale = shape * final_scale;
 	}
 	// Update is called once per frame
 	void Update () {

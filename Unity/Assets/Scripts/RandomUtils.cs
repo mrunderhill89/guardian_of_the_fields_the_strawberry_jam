@@ -26,4 +26,17 @@ public class RandomUtils
 			random_float(min.z, max.z)
 		);
 	}
+	public static Vector3 random_vec3(float min, float max){
+		//We'll assume the floats refer to all three coordinates.
+		return new Vector3(
+			random_float(min, max),
+			random_float(min, max),
+			random_float(min, max)
+		);
+	}
+	public static Vector3 random_direction(){
+		Vector3 vec = random_vec3 (0.1f, 1.0f);
+		vec.Normalize ();
+		return vec;
+	}
 }

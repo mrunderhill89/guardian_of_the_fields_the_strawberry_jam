@@ -6,32 +6,27 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 public class StrawberryComponent : BetterBehaviour {
+	public static Vector2 quality_range = new Vector2(0.0f,2.0f);
 	public float quality = 1.00f;
 
 	public DragHandle drag = null;
-	public Behaviour glow = null;
 	public StrawberryStateMachine berry_state;
 	public Automata automata;
 	new protected Renderer renderer;
-	public Material material;
 
 	// Use this for initialization
 	void Start () {
 		berry_state = SingletonBehavior.get_instance<StrawberryStateMachine> ();
 		automata = gameObject.GetComponent<Automata> ();
 		renderer = transform.Find("Strawberry_Mesh/Cube").GetComponent<Renderer>();
-		material = renderer.material;
 		Initialize();
 		drag = gameObject.GetComponent<DragHandle>();
 		berry_state.register_drag_handle(drag);
-		glow = (gameObject.GetComponent("Halo") as Behaviour);
-		glow.enabled = false;
 	}
 
 	public void Initialize(){
 		hidden(true);
-		quality = RandomUtils.random_float(0.0f, 2.0f);
-		//material.SetFloat("_Quality",quality);
+		quality = RandomUtils.random_float(quality_range);
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();
@@ -46,13 +41,5 @@ public class StrawberryComponent : BetterBehaviour {
 		
 		transform.Find("Strawberry_Mesh/Circle").GetComponent<Renderer>().enabled = !is_hidden;
 		return this;
-	}
-
-	void OnMouseEnter(){
-		glow.enabled = true;
-	}
-
-	void OnMouseExit(){
-		glow.enabled = false;
 	}
 }
