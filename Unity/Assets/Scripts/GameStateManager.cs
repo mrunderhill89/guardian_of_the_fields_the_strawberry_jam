@@ -27,15 +27,19 @@ public class GameStateManager : SingletonBehavior {
 			fsm.state("loading"),true
 		).add_child (
 			fsm.state ("look")
-				.on_update(new StateEvent(()=>{
+				.add_child(
+					fsm.state("look_and_move")
+						.on_update(new StateEvent(()=>{
 						cart_control.move();
-				}))
-				.add_child(fsm.state("look_forward")
-		           .on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
-		        ).add_child(fsm.state("look_left")
-		            .on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
-		        ).add_child(fsm.state("look_right")
-					.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
+					})).add_child(fsm.state("look_forward")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
+					).add_child(fsm.state("look_left")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
+					).add_child(fsm.state("look_right")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
+					),true
+				).add_child(fsm.state("look_behind")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
 			    )
 		).add_child (
 			fsm.state ("pick")
@@ -43,6 +47,8 @@ public class GameStateManager : SingletonBehavior {
 	    		.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left")))
 	        ).add_child(fsm.state("pick_right")
 		        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_right")))
+	        ).add_child(fsm.state("pick_behind")
+		        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_behind")))
 	        )
 		).add_child (
 			fsm.state ("pack")
@@ -74,7 +80,7 @@ public class GameStateManager : SingletonBehavior {
 			input.register_transition(t,new string[]{"up","down"})
 				.from(fsm.state("look_forward"))
 					.to(fsm.state("pack"));
-		//Look Left -> Look Forward, Pick Left
+		//Look Left -> Look Forward, Look Behind, Pick Left
 		}).new_transition("look_left=>pick", (t)=>{
 			input.register_transition(t,"down")
 				.from(fsm.state("look_left"))
@@ -83,7 +89,11 @@ public class GameStateManager : SingletonBehavior {
 			input.register_transition(t,"right")
 				.from(fsm.state("look_left"))
 					.to(fsm.state("look_forward"));
-		//Look Right -> Look Forward, Pick Right
+		}).new_transition("look_left=>behind", (t)=>{
+			input.register_transition(t,"left")
+				.from(fsm.state("look_left"))
+					.to(fsm.state("look_behind"));
+		//Look Right -> Look Forward, Look Behind, Pick Right
 		}).new_transition("look_right=>pick", (t)=>{
 			input.register_transition(t,"down")
 				.from(fsm.state("look_right"))
@@ -91,25 +101,63 @@ public class GameStateManager : SingletonBehavior {
 		}).new_transition("look_right=>forward", (t)=>{
 			input.register_transition(t,"left")
 				.from(fsm.state("look_right"))
-					.to(fsm.state("look_forward"));	
-		//Pick Left -> Look Left, Pack
+					.to(fsm.state("look_forward"));
+		}).new_transition("look_right=>behind", (t)=>{
+			input.register_transition(t,"right")
+				.from(fsm.state("look_right"))
+					.to(fsm.state("look_behind"));
+		//Look Behind -> Look Left, Look Right, Pick Behind
+		}).new_transition("look_behind=>left", (t)=>{
+			input.register_transition(t,"right")
+				.from(fsm.state("look_behind"))
+					.to(fsm.state("look_left"));
+		}).new_transition("look_behind=>right", (t)=>{
+			input.register_transition(t,"left")
+				.from(fsm.state("look_behind"))
+					.to(fsm.state("look_right"));
+		}).new_transition("look_behind=>pick", (t)=>{
+			input.register_transition(t,"down")
+				.from(fsm.state("look_behind"))
+					.to(fsm.state("pick_behind"));
+		//Pick Left -> Look Left, Pick Behind, Pack
 		}).new_transition("pick_left=>look_left", (t)=>{
 			input.register_transition(t,"up")
 				.from(fsm.state("pick_left"))
 					.to(fsm.state("look_left"));
+		}).new_transition("pick_left=>behind", (t)=>{
+			input.register_transition(t,"left")
+				.from(fsm.state("pick_left"))
+					.to(fsm.state("pick_behind"));
 		}).new_transition("pick_left=>pack", (t)=>{
 			input.register_transition(t,"right")
 				.from(fsm.state("pick_left"))
 					.to(fsm.state("pack"));
-		//Pick Right -> Look Right, Pack
+		//Pick Right -> Look Right, Pick Behind, Pack
 		}).new_transition("pick_right=>look_right", (t)=>{
 			input.register_transition(t,"up")
 				.from(fsm.state("pick_right"))
 					.to(fsm.state("look_right"));
+		}).new_transition("pick_right=>behind", (t)=>{
+			input.register_transition(t,"right")
+				.from(fsm.state("pick_right"))
+					.to(fsm.state("pick_behind"));
 		}).new_transition("pick_right=>pack", (t)=>{
 			input.register_transition(t,"left")
 				.from(fsm.state("pick_right"))
 					.to(fsm.state("pack"));
+		//Pick Behind -> Look Behind, Pick Left, Pick Right
+		}).new_transition("pick_behind=>look", (t)=>{
+			input.register_transition(t,"up")
+				.from(fsm.state("pick_behind"))
+					.to(fsm.state("look_behind"));
+		}).new_transition("pick_behind=>right", (t)=>{
+			input.register_transition(t,"left")
+				.from(fsm.state("pick_behind"))
+					.to(fsm.state("pick_right"));
+		}).new_transition("pick_behind=>left", (t)=>{
+			input.register_transition(t,"right")
+				.from(fsm.state("pick_behind"))
+					.to(fsm.state("pick_left"));
 		// Pack -> Look Forward, Pick Left, Pick Right
 		}).new_transition("pack=>look_forward", (t)=>{
 			input.register_transition(t,new string[]{"up","down"})
