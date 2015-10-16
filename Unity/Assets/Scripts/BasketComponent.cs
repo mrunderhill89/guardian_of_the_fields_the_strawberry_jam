@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 using UniRx;
 
 public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
+
 	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
@@ -39,7 +41,22 @@ public class BasketComponent : BetterBehaviour {
 	}
 
 	void UnparentToBasket(Automata a){
-		//a.gameObject.transform.SetParent(null, true);
+		a.gameObject.transform.SetParent(null, true);
+	}
+
+	public float get_berry_weight(){
+		return slot.visitors.Select((Automata a) => {
+			StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
+			if (sb == null) return 0.0f;
+			return sb.weight;
+		}).Aggregate<float,float>(0.0f, (total, next) => {
+			return total + next;
+		});
+	}
+
+	[Show]
+	public float total_weight{
+		get{return this.get_berry_weight();}
 	}
 
 	static void UpdatePhysics(Automata a){
