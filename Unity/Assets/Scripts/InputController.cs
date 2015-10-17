@@ -28,12 +28,19 @@ public class InputController: SingletonBehavior{
 		};
 	}
 
+	public InputController invoke_dir(string name){
+		UnityEvent evn = direction_events[name];
+		if (evn != null){ evn.Invoke(); }
+		return this;
+	}
+
 	public UnityEvent on_dir(string name){
 		if (!direction_events.ContainsKey (name)) {
 			direction_events[name] = new UnityEvent();
 		}
 		return direction_events [name];
 	}
+
 	public Transition register_transition(Transition t, string direction){
 		return register_transition (t, new string[]{direction});
 	}
