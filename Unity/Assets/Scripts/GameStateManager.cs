@@ -7,7 +7,7 @@ using System;
 public class GameStateManager : SingletonBehavior {
 	public InputController input;
 	public CameraController camera_control;
-	public CartController cart_control;
+	public PaceManager cart_control;
 	public Vector3 gravity;
 	public StateMachine fsm;
 	Action lazy_log(string message){
@@ -27,17 +27,12 @@ public class GameStateManager : SingletonBehavior {
 			fsm.state("loading"),true
 		).add_child (
 			fsm.state ("look")
-				.add_child(
-					fsm.state("look_and_move")
-						.on_update(new StateEvent(()=>{
-						cart_control.move();
-					})).add_child(fsm.state("look_forward")
-						.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
-					).add_child(fsm.state("look_left")
-						.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
-					).add_child(fsm.state("look_right")
-						.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
-					),true
+				.add_child(fsm.state("look_forward")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
+				).add_child(fsm.state("look_left")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
+				).add_child(fsm.state("look_right")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
 				).add_child(fsm.state("look_behind")
 					.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
 			    )
@@ -176,6 +171,9 @@ public class GameStateManager : SingletonBehavior {
 		fsm.new_automata ("player", (a) => {
 			a.move_direct(fsm.state("root"));
 		});
+	}
+	public State state(string name){
+		return fsm.state(name);
 	}
 	public bool is_loading(){
 		return fsm.state("loading").is_visited();

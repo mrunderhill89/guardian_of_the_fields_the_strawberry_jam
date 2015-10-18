@@ -45,6 +45,8 @@ public class BasketComponent : BetterBehaviour {
 	}
 
 	public float get_berry_weight(){
+		if (slot == null)
+			return 0.0f;
 		return slot.visitors.Select((Automata a) => {
 			StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
 			if (sb == null) return 0.0f;
