@@ -26,6 +26,13 @@ public class PaceManager : BetterBehaviour {
 		_curve_point = 1.0f;
 		return this;
 	}
+	[Show]
+	public float time_in_current_pace{
+		get{
+			if (current_pace == null) return 0.0f;
+			return current_pace.time_spent;
+		}
+	}
 	// Use this for initialization
 	void Start () {
 		GameStateManager game_state = SingletonBehavior.get_instance<GameStateManager> ();
@@ -55,6 +62,7 @@ public class PaceManager : BetterBehaviour {
 	}
 
 	void Update(){
+		current_pace.add_time(Time.deltaTime);
 		if (_curve_point > 0.0f) {
 			float percent = anim_curve.Evaluate (_curve_point);
 			_speed = (percent *_speed) + ((1.0f - percent) * _target_speed);

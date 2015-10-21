@@ -5,6 +5,14 @@ using System.Collections.Generic;
 
 public class PaceData : BetterScriptableObject{
 	PaceManager _manager;
+	float _time_spent = 0.0f;
+	public float time_spent{
+		get{ return _time_spent; }
+	}
+	public PaceData add_time(float dt){
+		_time_spent += dt;
+		return this;
+	}
 	public PaceManager manager(){
 		return _manager;
 	}
