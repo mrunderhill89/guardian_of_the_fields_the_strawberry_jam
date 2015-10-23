@@ -63,7 +63,10 @@ public class StateMachine : BetterBehaviour {
 	}
 	public StateMachine add_transition(string name, Transition t){
 		t.instance_name = name;
-		transition(name, t);
+		return add_transition(t);
+	}
+	public StateMachine add_transition(Transition t){
+		transition(t.instance_name, t);
 		return this;
 	}
 	//Automata
@@ -89,5 +92,13 @@ public class StateMachine : BetterBehaviour {
 	public int count_automata(){
 		return automatum.Count;
 	}
-
+	public T match<T>(Dictionary<string,T> cases, T def = default(T)){
+		foreach(KeyValuePair<string, T> c in cases)
+		{
+			if (state(c.Key).is_visited()){
+				return c.Value;
+			}
+		}
+		return def;
+	}
 }

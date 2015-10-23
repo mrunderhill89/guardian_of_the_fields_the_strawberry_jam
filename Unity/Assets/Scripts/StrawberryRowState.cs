@@ -21,6 +21,7 @@ public class StrawberryRowState : BetterBehaviour{
 	public State state;
 	public RowHandler row;
 	public int num_receiving = 1;
+	public int start_break = 4;
 	[DontSerialize]
 	public GameStateManager player;
 	[DontSerialize]
@@ -47,7 +48,7 @@ public class StrawberryRowState : BetterBehaviour{
 	State distribute(Automata a){
 		//If the game is just starting, we can place into any cell we want.
 		int front_index = player.is_loading()?
-			row.Count/2:Math.Max(row.Count - num_receiving,0);
+			start_break:Math.Max(row.Count - num_receiving,0);
 		if (row.Count > 0){
 			GameObject cell = row.cell(RandomUtils.random_int(front_index,row.Count));
 			return cell.GetComponent<StrawberryGenerator>().state;

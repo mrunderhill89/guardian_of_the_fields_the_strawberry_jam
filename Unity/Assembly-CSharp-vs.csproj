@@ -63,7 +63,6 @@
      <Compile Include="Assets\Scripts\LeafGenerator.cs" />
      <Compile Include="Assets\Scripts\NamedBehavior.cs" />
      <Compile Include="Assets\Scripts\OverflowDetector.cs" />
-     <Compile Include="Assets\Scripts\PaceData.cs" />
      <Compile Include="Assets\Scripts\PaceManager.cs" />
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />

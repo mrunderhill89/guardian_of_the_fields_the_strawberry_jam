@@ -32,10 +32,10 @@ public class RowHandler : BetterBehaviour{
 	}
 
 	public float cell_to_z(int cell_num){
-		return (cell_distance * cell_num) + transform.localPosition.z;
+		return (cell_distance * cell_num) + transform.position.z;
 	}
 	public int z_to_cell(float z){
-		return Mathf.FloorToInt((z - transform.localPosition.z)/cell_distance);
+		return Mathf.FloorToInt((z - transform.position.z)/cell_distance);
 	}
 	public bool cell_valid(int cell_num){
 		if (cell_num % break_at < break_length) return false;

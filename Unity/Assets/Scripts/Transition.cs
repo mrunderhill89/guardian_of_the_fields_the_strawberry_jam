@@ -199,8 +199,10 @@ public class Transition : NamedBehavior, IComparable<Transition>
 
 	public void trigger()
 	{
-		foreach(Automata a in from().visitors){
-			a.add_transition(this);
+		if (_from != null){
+			foreach(Automata a in _from.visitors){
+				a.add_transition(this);
+			}
 		}
 	}
 
