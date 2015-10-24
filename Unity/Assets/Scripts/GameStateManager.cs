@@ -72,7 +72,7 @@ public class GameStateManager : SingletonBehavior {
 				.from(fsm.state("look_forward"))
 					.to(fsm.state("look_right"));
 		}).new_transition("look_forward=>pack", (t)=>{
-			input.register_transition(t,"up")
+			input.register_transition(t,new string[]{"up","down"})
 				.from(fsm.state("look_forward"))
 					.to(fsm.state("pack"));
 		//Look Left -> Look Forward, Look Behind, Pick Left
@@ -155,7 +155,7 @@ public class GameStateManager : SingletonBehavior {
 					.to(fsm.state("pick_left"));
 		// Pack -> Look Forward, Pick Left, Pick Right
 		}).new_transition("pack=>look_forward", (t)=>{
-			input.register_transition(t,"down")
+			input.register_transition(t,new string[]{"up","down"})
 				.from(fsm.state("pack"))
 					.to(fsm.state("look_forward"));
 		}).new_transition("pack=>pick_left", (t)=>{

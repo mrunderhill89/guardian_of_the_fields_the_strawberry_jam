@@ -59,11 +59,13 @@ public class PaceManager : BetterBehaviour {
 				}));
 	}
 	
-	protected Transition new_pace_transition(string from, string to){
-		return fsm.transition(from+"=>"+to)
+	protected Transition new_pace_transition(string from, string to, string _prefix = ""){
+		string prefix = _prefix.Length > 0? _prefix+":":"";
+		string t_name = prefix+from+"=>"+to;
+		return fsm.transition(t_name)
 			.from(fsm.state(from)).to(fsm.state(to))
 			.on_transfer(new TransitionEvent(()=>{
-				record_pace_change(from+"=>"+to);
+				record_pace_change(t_name);
 			})).auto_run(false);
 	}
 	// Use this for initialization
@@ -104,22 +106,19 @@ public class PaceManager : BetterBehaviour {
 				{"look_right", -0.2f}
 			})
 		);
-		
-		fsm.add_transition(new_pace_transition("root", "slow"))
-		.add_transition(new_pace_transition("root", "medium"))
-		.add_transition(new_pace_transition("root", "fast"))
-		.add_transition(new_pace_transition("root", "reverse"));
-		/*
-		fsm.new_transition("root=>slow", (t)=>{
-			t.from(fsm.state("root")).to(fsm.state("slow")).auto_run(false);
-		}).new_transition("root=>medium", (t)=>{
-			t.from(fsm.state("root")).to(fsm.state("medium")).auto_run(false);
-		}).new_transition("root=>fast", (t)=>{
-			t.from(fsm.state("root")).to(fsm.state("fast")).auto_run(false);
-		}).new_transition("root=>reverse", (t)=>{
-			t.from(fsm.state("root")).to(fsm.state("reverse")).auto_run(false);
-		});*/
-		
+		//Direct Transitions
+		fsm.add_transition(new_pace_transition("root", "slow", "direct"))
+		.add_transition(new_pace_transition("root", "medium", "direct"))
+		.add_transition(new_pace_transition("root", "fast", "direct"))
+		.add_transition(new_pace_transition("root", "reverse", "direct"));
+		//Speed Up
+		fsm.add_transition(new_pace_transition("reverse", "slow", "accel"))
+		.add_transition(new_pace_transition("slow", "medium", "accel"))
+		.add_transition(new_pace_transition("medium", "fast", "accel"));
+		//Slow Down
+		fsm.add_transition(new_pace_transition("slow", "reverse", "decel"))
+		.add_transition(new_pace_transition("medium", "slow", "decel"))
+		.add_transition(new_pace_transition("fast", "medium", "decel"));
 		fsm.new_automata ("current_pace", (a) => {
 			a.move_direct(fsm.state("root"));
 		});
@@ -137,6 +136,30 @@ public class PaceManager : BetterBehaviour {
 	}
 	[Show]
 	public void set_pace(string name){
-		fsm.transition("root=>"+name).trigger();
+		fsm.transition("direct:root=>"+name).trigger();
+	}
+	[Show]
+	public PaceManager speed_up(){
+		foreach(KeyValuePair<string,Transition> pair in fsm.transitions){
+			if (pair.Key.StartsWith("accel:")){
+				if(pair.Value.test_any()){
+					pair.Value.trigger();
+					break;
+				}
+			}
+		}
+		return this;
+	}
+	[Show]
+	public PaceManager slow_down(){
+		foreach(KeyValuePair<string,Transition> pair in fsm.transitions){
+			if (pair.Key.StartsWith("decel:")){
+				if(pair.Value.test_any()){
+					pair.Value.trigger();
+					break;
+				}
+			}
+		}
+		return this;
 	}
 }

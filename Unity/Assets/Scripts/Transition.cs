@@ -197,6 +197,25 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return true;
 	}
 
+	public bool test_any(){
+		if (_from != null){
+			foreach(Automata a in _from.visitors){
+				if (test_single(a)) return true;
+			}
+		}
+		return false;
+	}
+
+	public bool test_all(){
+		if (_from != null && _from.is_visited()){
+			foreach(Automata a in _from.visitors){
+				if (!test_single(a)) return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public void trigger()
 	{
 		if (_from != null){
