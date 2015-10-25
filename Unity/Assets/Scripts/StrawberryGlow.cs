@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class StrawberryGlow : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+using Vexe.Runtime.Types;
+[ExecuteInEditMode]
+public class StrawberryGlow : BetterBehaviour {
+	ObjectVisibility visibility;
+	DragHandle drag;
+	void Start (){
+		visibility = GetComponent<ObjectVisibility> ();
+		drag = GetComponentInParent<DragHandle> ();
 	}
-	
 	// Update is called once per frame
 	void Update () {
-	
+		visibility.visible = drag.can_drag || drag.is_dragging();
+		transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward,
+		                 Camera.main.transform.rotation * Vector3.up);
 	}
 }

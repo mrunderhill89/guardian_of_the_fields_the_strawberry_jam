@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="256"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="Strawberry Glow.svg"
+   inkscape:export-filename="C:\Users\admin\Documents\workspace\guardian_of_the_fields_the_strawberry_jam\Unity\Assets\Resources\Strawberry Glow.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3812">
+      <stop
+         style="stop-color:#ff00ff;stop-opacity:0;"
+         offset="0"
+         id="stop3814" />
+      <stop
+         id="stop3820"
+         offset="0.33333334"
+         style="stop-color:#ff00ff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ff00ff;stop-opacity:1;"
+         offset="1"
+         id="stop3816" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3798">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:0;"
+         offset="0"
+         id="stop3800" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="1"
+         id="stop3802" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       id="filter3794">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="8.7601871"
+         id="feGaussianBlur3796" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3798"
+       id="radialGradient3804"
+       cx="128"
+       cy="924.49072"
+       fx="128"
+       fy="924.49072"
+       r="140.02096"
+       gradientTransform="matrix(1,0,0,1.3342049,-6.1623134e-7,-308.9693)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter3808"
+       x="-0.12"
+       width="1.24"
+       y="-0.12"
+       height="1.24">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="9.6"
+         id="feGaussianBlur3810" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3812"
+       id="radialGradient3818"
+       cx="128"
+       cy="128"
+       fx="128"
+       fy="128"
+       r="129.04"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="116.5763"
+     inkscape:cy="124.11625"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1280"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2987"
+       empspacing="4"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="16px"
+       spacingy="16px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-796.36217)">
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.50000000000000000;fill:url(#radialGradient3818);fill-opacity:1;stroke:#ff00ff;stroke-width:20;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter3808)"
+       id="path3806"
+       sodipodi:cx="128"
+       sodipodi:cy="128"
+       sodipodi:rx="96"
+       sodipodi:ry="96"
+       d="m 224,128 a 96,96 0 1 1 -192,0 96,96 0 1 1 192,0 z"
+       transform="translate(0,796.36217)"
+       inkscape:export-xdpi="256.01001"
+       inkscape:export-ydpi="256.01001" />
+  </g>
+</svg>

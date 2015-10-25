@@ -191,6 +191,8 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	}
 
 	public bool test_single(Automata a){
+		if (!a.visiting (_from))
+			return false;
 		foreach(TransitionTest test in tests){
 			if (!test.run(a,this)) return false;
 		}

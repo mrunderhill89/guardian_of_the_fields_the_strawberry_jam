@@ -1,18 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PaceManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Materials\UI-Unlit-Transparent-Ignore-ZTest.shader">
     <Files>
-      <File FileName="Assets\Scripts\PaceData.cs" Line="28" Column="35" />
-      <File FileName="Assets\GameTimer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\StrawberryComponent.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\StrawberryScale.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Automata.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\BasketComponent.cs" Line="49" Column="16" />
-      <File FileName="Assets\Scripts\StrawberryColor.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\RandomUtils.cs" Line="1" Column="1" />
-      <File FileName="Assets\TimeToText.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameStateManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PaceManager.cs" Line="22" Column="14" />
+      <File FileName="Assets\Resources\Materials\UI-Unlit-Transparent-Ignore-ZTest.shader" Line="33" Column="1" />
+      <File FileName="Assets\Resources\Materials\DrawOnTop.shader" Line="23" Column="27" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

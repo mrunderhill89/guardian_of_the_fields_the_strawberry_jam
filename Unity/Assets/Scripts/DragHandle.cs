@@ -13,9 +13,9 @@ using UnityEngine;
 using Vexe.Runtime.Types;
 public class DragHandle : BetterBehaviour
 {
-	List<Transition> incoming;
-	List<Transition> outgoing;
-	List<State> states;
+	List<Transition> incoming = new List<Transition> ();
+	List<Transition> outgoing = new List<Transition> ();
+	List<State> states = new List<State> ();
 	float distance;
 	float target_distance;
 	float drift_time;
@@ -28,20 +28,33 @@ public class DragHandle : BetterBehaviour
 	public float initial_drift_time = 0.5f;
 
 	void Awake(){
-		incoming = new List<Transition> ();
-		outgoing = new List<Transition> ();
-		states = new List<State> ();
 		if (a == null) {
 			a = gameObject.GetComponent<Automata>();
 		}
 	}
 
+	protected bool _can_drag = false;
+	[Show]
+	public bool can_drag{
+		get{ return _can_drag;}
+		private set{ _can_drag = value;}
+	}
+	protected bool _can_release = false;
+	[Show]
+	public bool can_release{
+		get{ return _can_drag;}
+		private set{ _can_drag = value;}
+	}
+
 	public bool is_dragging(){
+		if (a == null)
+			return false;
 		foreach (State s in states) {
 			if (a.visiting (s)) return true;
 		}
 		return false;
 	}
+
 	public DragHandle register_incoming(Transition t){
 		incoming.Add(t);
 		return this;
@@ -53,6 +66,18 @@ public class DragHandle : BetterBehaviour
 	public DragHandle register_state(State s){
 		states.Add (s);
 		return this;
+	}
+
+	void OnMouseEnter(){
+		foreach (Transition pickup in incoming) {
+			if (pickup.test_single(a)){
+				can_drag = true;
+				break;
+			}
+		}
+	}
+	void OnMouseExit(){
+		can_drag = false;
 	}
 
 	void OnMouseDown()
