@@ -12,7 +12,5 @@ public class StrawberryGlow : BetterBehaviour {
 	// Update is called once per frame
 	void Update () {
 		visibility.visible = drag.can_drag || drag.is_dragging();
-		transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward,
-		                 Camera.main.transform.rotation * Vector3.up);
 	}
 }

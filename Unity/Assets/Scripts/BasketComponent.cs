@@ -85,7 +85,7 @@ public class BasketComponent : BetterBehaviour {
 		GameObject obj = that.gameObject;
 		Automata a = obj.GetComponent<Automata>();
 		if (a != null && a.current == slot){
-			Debug.Log("Object falling out of basket:"+obj.name);
+			GameMessages.Log("Uh-oh, a strawberry fell out of your basket!");
 			obj.transform.position = valid_positions[obj];
 			Rigidbody body = obj.GetComponent<Rigidbody>();
 			body.velocity = Vector3.zero;

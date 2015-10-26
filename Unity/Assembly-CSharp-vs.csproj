@@ -46,10 +46,14 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\BeeSting.cs" />
+     <Compile Include="Assets\GameMessageView.cs" />
+     <Compile Include="Assets\GameMessages.cs" />
      <Compile Include="Assets\Scripts\Automata.cs" />
      <Compile Include="Assets\Scripts\BasketComponent.cs" />
      <Compile Include="Assets\Scripts\BreakButton.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\CameraFacingBillboard.cs" />
      <Compile Include="Assets\Scripts\CompassArrow.cs" />
      <Compile Include="Assets\Scripts\CoroutineUtils.cs" />
      <Compile Include="Assets\Scripts\DependencyManager.cs" />
