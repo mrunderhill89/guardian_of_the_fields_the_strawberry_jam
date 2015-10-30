@@ -12,47 +12,60 @@ public class Transition : NamedBehavior, IComparable<Transition>
 
 	#region Attributes
 
-	public State _from;
-	public State _to;
-	public bool _auto_run;
-	public State _pivot;
+	protected State _from;
+	[Show]
+	public State from{
+		get{return _from;}
+		protected set{ chain_from(value); }
+	}
+
+	protected State _to;
+	[Show]
+	public State to{
+		get{return _to;}
+		protected set{ chain_to(value); }
+	}
+	protected bool _auto_run;
+	[Show]
+	public bool auto_run{
+		get{return _auto_run;}
+		protected set{ chain_auto_run(value); }
+	}
+	protected State _pivot;
+	[Show]
 	public State pivot{
 		get{return _pivot;}
 		protected set{_pivot = value;}
 	}
-	public List<State> _downswing;
+
+	protected List<State> _downswing = new List<State>();
+	[Show]
 	public List<State> downswing{
 		get{return _downswing;}
 		protected set{_downswing = value;}
 	}
 	protected int _priority = 1;
-	public List<TransitionTest> tests;
-	public List<TransitionEvent> entry_actions;
-	public List<TransitionEvent> transfer_actions;
-	public List<TransitionEvent> exit_actions;
+	[Show]
+	public int priority{
+		get{return _priority;}
+		protected set{ chain_priority(value); }
+	}
+	
+	protected List<TransitionTest> tests = new List<TransitionTest>();
+	protected List<TransitionEvent> entry_actions = new List<TransitionEvent>();
+	protected List<TransitionEvent> transfer_actions = new List<TransitionEvent>();
+	protected List<TransitionEvent> exit_actions = new List<TransitionEvent>();
 
 	#endregion
 
-	void Awake(){
-		_downswing = new List<State>();
-		tests = new List<TransitionTest>();
-		entry_actions = new List<TransitionEvent>();
-		transfer_actions = new List<TransitionEvent>();
-		exit_actions = new List<TransitionEvent>();
-	}
 	void Update(){
-		if (auto_run() && is_visited()){
+		if (auto_run && is_visited()){
 			trigger();
 		}
 	}
 	#region Public methods
 
-	public State from()
-	{
-		return _from;
-	}
-
-	public Transition from(State state)
+	public Transition chain_from(State state)
 	{
 		_from = state;
 		if (_to != null){
@@ -60,13 +73,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		}
 		return this;
 	}
-
-	public State to()
-	{
-		return _to;
-	}
-
-	public Transition to(State state)
+	public Transition chain_to(State state)
 	{
 		_to = state;
 		if (_from != null){
@@ -75,12 +82,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return this;
 	}
 
-	public bool auto_run()
-	{
-		return _auto_run;
-	}
-
-	public Transition auto_run(bool value)
+	public Transition chain_auto_run(bool value)
 	{
 		_auto_run = value;
 		return this;
@@ -89,8 +91,8 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	public Transition generate_path()
 	{
 		
-		State up = from();
-		State down = to();
+		State up = from;
+		State down = to;
 		pivot = null;
 		List<State> upswing = new List<State>();
 		downswing.Clear();
@@ -100,11 +102,11 @@ public class Transition : NamedBehavior, IComparable<Transition>
 			if (up == down){
 				pivot = up;
 			} else {
-				if (up.get_level() > down.get_level() || down.parent() == null){
-					up = up.parent();
+				if (up.get_level() > down.get_level() || down.parent == null){
+					up = up.parent;
 					upswing.Add(up);
 				} else {
-					down = down.parent();
+					down = down.parent;
 					downswing.Add(down);
 				}
 			}
@@ -129,11 +131,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return this;
 	}
 
-	public int priority(){
-		return _priority;
-	}
-
-	public Transition priority(int value){
+	public Transition chain_priority(int value){
 		_priority = value;
 		return this;
 	}

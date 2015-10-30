@@ -12,15 +12,14 @@ public class HandContainer : MonoBehaviour {
 		take = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "take");
 		glow = (gameObject.GetComponent("Halo") as Behaviour);
 		glow.enabled = false;
-		take.auto_run(false);
 	}
 	void Start(){
 		StrawberryStateMachine berry_state = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		slot.parent(berry_state.fsm.state("hold"));
-		take.from(berry_state.fsm.state("drag"))
-			.to(slot)
-			.priority(2)
-			.generate_path();
+		slot.chain_parent(berry_state.fsm.state("hold"));
+		take.chain_from(berry_state.fsm.state("drag"))
+			.chain_to(slot)
+			.chain_priority(2)
+			.chain_auto_run(false);
 	}
 	void Update(){
 	}

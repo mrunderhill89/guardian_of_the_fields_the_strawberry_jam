@@ -12,22 +12,29 @@ public class Automata : BetterBehaviour
 
 	#region Attributes
 
-	public State _current;
+	protected State _current;
+	[Show]
 	public State current{
 		get{return _current;}
 		protected set{_current = value;}
 	}
-	public List<State> stack;
-	public HashSet<Transition> transitions;
-
+	
+	protected List<State> _stack = new List<State>();
+	[Show]
+	public List<State> stack{
+		get{return _stack;}
+		private set{ _stack = value;}
+	}
+	
+	protected HashSet<Transition> _transitions = new HashSet<Transition>();
+	[Show]
+	public HashSet<Transition> transitions{
+		get{return _transitions;}
+		private set{ _transitions = value;}
+	}
 	#endregion
 
 	#region Unity Behavior Methods
-
-	void Awake(){
-		stack = new List<State>();
-		transitions = new HashSet<Transition>();
-	}
 
 	void Start(){
 		if (current != null){
@@ -42,9 +49,9 @@ public class Automata : BetterBehaviour
 				List<Transition> sorted = transitions.ToList<Transition>();
 				sorted.Sort();
 				foreach(Transition trans in sorted){
-					if (visiting(trans.to())){
+					if (visiting(trans.to)){
 						//Debug.LogWarning(name+" is already in destination state for transition:"+trans.instance_name);
-					} else if(!visiting(trans.from())){
+					} else if(!visiting(trans.from)){
 						/*Debug.LogWarning(name+" is not in starting state for transition:"+trans.instance_name
 						+"\n Current:"+current.instance_name+" Needs:"+trans.from().instance_name);*/
 					} else if (!trans.test_single(this)){
@@ -56,7 +63,7 @@ public class Automata : BetterBehaviour
 				}
 				transitions.Clear();
 			} else {
-				State initial = current.initial(this);
+				State initial = current.initial;
 				if(initial != null){
 					move_direct(initial);
 				} else {
@@ -76,8 +83,8 @@ public class Automata : BetterBehaviour
 	public Automata move_direct(State to)
 	{
 		if (to != null){
-			if (current == null || to.parent() == current || current.parent() == to){
-				if (current == null || to.parent() == current){
+			if (current == null || to.parent == current || current.parent == to){
+				if (current == null || to.parent == current){
 					//Parent->Child
 					stack.Add(to);
 					current = to;
@@ -100,8 +107,8 @@ public class Automata : BetterBehaviour
 	}
 
 	public Automata eject(int steps = 1){
-		while (steps > 0 && _current.parent() != null){
-			move_direct(_current.parent());
+		while (steps > 0 && _current.parent != null){
+			move_direct(_current.parent);
 			steps--;
 		}
 		if (steps > 0){
@@ -119,7 +126,7 @@ public class Automata : BetterBehaviour
 				Debug.LogError("Automata not on transition path.");
 				return this;
 			}
-			move_direct (current.parent());
+			move_direct(current.parent);
 		}
 		trans.invoke_transfer(this);
 		foreach(State down in trans.downswing){
@@ -146,7 +153,7 @@ public class Automata : BetterBehaviour
 	}
 	
 	public bool is_travelling(){
-		return current.initial(this) != null;
+		return current.initial != null;
 	}
 	#endregion
 

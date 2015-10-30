@@ -5,15 +5,23 @@ using System.Collections.Generic;
 using Vexe.Runtime.Types;
 
 public class StateMachine : BetterBehaviour {
-	public Dictionary<string, State> states;
-	public Dictionary<string, Transition> transitions;
-	public Dictionary<string, Automata> automatum;
-
-	void Awake(){
-		if (states == null) states = new Dictionary<string, State>();
-		if (transitions == null) transitions = new Dictionary<string, Transition>();
-		if (automatum == null) automatum = new Dictionary<string, Automata>();
+	protected Dictionary<string, State> _states = new Dictionary<string, State>();
+	[Show]
+	public Dictionary<string,State> states{
+		get{return _states;}
+		private set{_states=value;}
 	}
+	protected Dictionary<string, Transition> _transitions = new Dictionary<string, Transition>();
+	public Dictionary<string,Transition> transitions{
+		get{return _transitions;}
+		private set{_transitions=value;}
+	}
+	protected Dictionary<string, Automata> _automatum  = new Dictionary<string, Automata>();
+	public Dictionary<string,Automata> automatum{
+		get{return _automatum;}
+		private set{_automatum=value;}
+	}
+
 	//States
 	public State state(string name){
 		if (!states.ContainsKey (name)) {

@@ -20,14 +20,14 @@ public class BasketComponent : BetterBehaviour {
 
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		slot.parent (state_machine.fsm.state("basket"))
+		slot.chain_parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))
 			.on_update(new StateEvent(UpdatePhysics));
-		drop.from(state_machine.fsm.state("fall"))
-			.auto_run(false)
-			.priority(2)
-			.to(slot)
+		drop.chain_from(state_machine.fsm.state("fall"))
+			.chain_auto_run(false)
+			.chain_priority(2)
+			.chain_to(slot)
 			.add_test(new TransitionTest((Automata a)=>{
 				if (a.gameObject.GetComponent<StrawberryComponent>() == null){
 					return false;

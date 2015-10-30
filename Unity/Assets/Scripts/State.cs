@@ -12,36 +12,42 @@ public class State : NamedBehavior
 
 	#region Attributes
 
-	public State _parent;
-	public State parent(){return _parent;}
-	public State parent(State p){
+	[Show]
+	protected State _parent;
+	public State parent{
+		get{return _parent;}
+		private set{ chain_parent(value); }
+	}
+	public State chain_parent(State p){
 		_parent = p;
 		return this;
 	}
-	public State _initial;
-	protected Func<Automata,State> _f_initial;
-	public State initial(Automata a){
-		if (_f_initial != null) _initial = _f_initial(a);
-		return _initial;
+	[Show]
+	protected State _initial;
+	protected Func<State> _initial_f;
+	public State initial{
+		get{
+			if (_initial == null && _initial_f != null)
+				return _initial_f();
+			return _initial;
+		}
+		set{ chain_initial(value);}
 	}
-	public State initial(State i){
+	public State chain_initial(State i){
 		_initial = i;
 		return this;
 	}
-	public State initial(Func<Automata,State> f){
-		_f_initial = f;
-		return this;
-	}
-	public State initial(Func<State> f){
-		_f_initial = (Automata a)=>{return f();};
+	public State initial_function(Func<State> f){
+		_initial_f = f;
 		return this;
 	}
 
-	public List<StateEvent> entry_actions;
-	public List<StateEvent> update_actions;
-	public List<StateEvent> update_own_actions;
-	public List<StateEvent> exit_actions;
-	public HashSet<Automata> _visitors;
+	protected List<StateEvent> entry_actions = new List<StateEvent>();
+	protected List<StateEvent> update_actions = new List<StateEvent>();
+	protected List<StateEvent> update_own_actions = new List<StateEvent>();
+	protected List<StateEvent> exit_actions = new List<StateEvent>();
+	protected HashSet<Automata> _visitors = new HashSet<Automata>();
+	[Show]
 	public HashSet<Automata> visitors{
 		get{return _visitors;}
 		protected set{_visitors = value;}
@@ -52,20 +58,12 @@ public class State : NamedBehavior
 
 	#endregion
 
-	void Awake(){
-		visitors = new HashSet<Automata>();
-		entry_actions = new List<StateEvent> ();
-		update_actions = new List<StateEvent> ();
-		update_own_actions = new List<StateEvent> ();
-		exit_actions = new List<StateEvent> ();
-	}
-
 	#region Public methods
 
 	public int get_level(int tail = 1)
 	{
-		if (parent() != null){
-			return parent().get_level(tail+1);
+		if (parent != null){
+			return parent.get_level(tail+1);
 		}
 		return tail;
 	}
@@ -130,17 +128,16 @@ public class State : NamedBehavior
 	}
 
 	public State add_child(State child, bool set_initial = false){
-		child.parent(this);
+		child.chain_parent(this);
 		if (set_initial) {
-			initial(child);
+			chain_initial(child);
 		}
 		return this;
 	}
 
 	public State add_transition(Transition trans)
 	{
-		trans.from(this);
-		if (trans.to() != null) trans.generate_path();
+		trans.chain_from(this);
 		return this;
 	}
 

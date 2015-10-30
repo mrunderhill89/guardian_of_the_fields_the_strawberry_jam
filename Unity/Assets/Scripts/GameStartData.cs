@@ -2,7 +2,11 @@
 using System.Collections;
 using Vexe.Runtime.Types;
 public class GameStartData : BetterBehaviour {
-	public static int rng_seed = Random.seed;
+	public static int rng_seed;
+
+	void Awake(){
+		rng_seed = Random.seed;
+	}
 
 	//Strawberry Settings
 	public static int max_berries_in_field = 40;

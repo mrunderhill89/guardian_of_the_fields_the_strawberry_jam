@@ -63,10 +63,10 @@ public class PaceManager : BetterBehaviour {
 		string prefix = _prefix.Length > 0? _prefix+":":"";
 		string t_name = prefix+from+"=>"+to;
 		return fsm.transition(t_name)
-			.from(fsm.state(from)).to(fsm.state(to))
+			.chain_from(fsm.state(from)).chain_to(fsm.state(to))
 			.on_transfer(new TransitionEvent(()=>{
 				record_pace_change(t_name);
-			})).auto_run(false);
+			})).chain_auto_run(false);
 	}
 	// Use this for initialization
 	void Start () {

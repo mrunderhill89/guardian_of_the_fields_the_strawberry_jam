@@ -29,24 +29,24 @@ public class StrawberryRowState : BetterBehaviour{
 	void Awake(){
 		rows.Add(this);
 		state = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "row")
-			.initial(distribute);
+			.initial_function(distribute);
 	}
 	void Start(){
 		if (row == null) row = GetComponent<RowHandler> ();
 		row.break_at = GameStartData.break_distance;
 		if (berry_state == null) berry_state = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		if (player == null) player = SingletonBehavior.get_instance<GameStateManager>();
-		state.parent(berry_state.fsm.state("field"));
+		state.chain_parent(berry_state.fsm.state("field"));
 		row.on_create((GameObject cell) => {
 			StrawberryGenerator generator = cell.GetComponent<StrawberryGenerator>();
-			generator.state.parent(state);
+			generator.state.chain_parent(state);
 		}).on_destroy((GameObject cell) => {
 			StrawberryGenerator generator = cell.GetComponent<StrawberryGenerator>();
 			generator.PreDestroy();
 		});
 	}
 
-	State distribute(Automata a){
+	State distribute(){
 		//If the game is just starting, we can place into any cell we want.
 		int front_index = player.is_loading()?
 			start_break:Math.Max(row.Count - num_receiving,0);

@@ -14,11 +14,13 @@ public class StrawberryStateMachine : SingletonBehavior {
 		fsm.state ("root")
 			.add_child (
 				fsm.state ("field")
-				.initial((Automata a)=>{
-					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
-					sb.Initialize();
+				.initial_function(()=>{
 					return StrawberryRowState.random_row();
 				})
+				.on_entry(new StateEvent((Automata a)=>{
+					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
+					sb.Initialize();
+				}))
 				.on_exit(new StateEvent(()=>{
 					GenerateStrawberries(1);
 				})), true
@@ -46,32 +48,32 @@ public class StrawberryStateMachine : SingletonBehavior {
 				fsm.state ("basket")
 			);
 		fsm.new_transition("field_drag", (t)=>{
-			t.from(fsm.state("field"))
-			.to (fsm.state("drag"))
+			t.chain_from(fsm.state("field"))
+			.chain_to (fsm.state("drag"))
 			.add_test(new TransitionTest(()=>{
 				return player_state.can_pick_anywhere();
 			}))
-			.auto_run(false)
+			.chain_auto_run(false)
 			;
 		}).new_transition("fall_drag", (t)=>{
-			t.from(fsm.state("fall"))
-				.to (fsm.state("drag"))
-					.auto_run(false)
+			t.chain_from(fsm.state("fall"))
+				.chain_to (fsm.state("drag"))
+					.chain_auto_run(false)
 					;
 		}).new_transition("hand_drag", (t)=>{
-			t.from(fsm.state("hand"))
-				.to (fsm.state("drag"))
-					.auto_run(false)
+			t.chain_from(fsm.state("hand"))
+				.chain_to (fsm.state("drag"))
+					.chain_auto_run(false)
 					;
 		}).new_transition("basket_drag", (t)=>{
-			t.from(fsm.state("basket"))
-				.to (fsm.state("drag"))
-					.auto_run(false)
+			t.chain_from(fsm.state("basket"))
+				.chain_to (fsm.state("drag"))
+					.chain_auto_run(false)
 					;
 		}).new_transition("drag_fall", (t)=>{
-			t.from(fsm.state("drag"))
-				.to (fsm.state("fall"))
-					.auto_run(false)
+			t.chain_from(fsm.state("drag"))
+				.chain_to (fsm.state("fall"))
+					.chain_auto_run(false)
 					;
 		});
 
