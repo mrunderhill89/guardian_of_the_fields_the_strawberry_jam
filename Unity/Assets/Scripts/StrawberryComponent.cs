@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 public class StrawberryComponent : BetterBehaviour {
-	public static Vector2 quality_range = new Vector2(0.0f,2.0f);
 	public static float density = 1.00f;
 	public float quality = 1.00f;
 	public float weight = 0.0f;
@@ -28,7 +27,7 @@ public class StrawberryComponent : BetterBehaviour {
 
 	public void Initialize(){
 		hidden(true);
-		quality = RandomUtils.random_float(quality_range);
+		quality = RandomUtils.random_float(GameStartData.min_ripeness, GameStartData.max_ripeness);
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();

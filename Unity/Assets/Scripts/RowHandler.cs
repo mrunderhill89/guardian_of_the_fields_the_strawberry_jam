@@ -9,7 +9,7 @@ public class RowHandler : BetterBehaviour{
 	public int cells_forward = 20;
 	public int cells_backward = 20;
 	public float cell_distance = 1.0f;
-	public int break_at = 100;
+	public int break_at = GameStartData.break_distance;
 	public int break_length = 5;
 	
 	public string prefab = "GroundCell";

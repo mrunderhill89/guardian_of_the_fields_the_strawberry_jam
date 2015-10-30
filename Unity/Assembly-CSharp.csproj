@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\DragHandle.cs" />
      <Compile Include="Assets\Scripts\Draggable.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
+     <Compile Include="Assets\Scripts\GameStartData.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
      <Compile Include="Assets\Scripts\GameTimer.cs" />
      <Compile Include="Assets\Scripts\Grounded.cs" />

@@ -33,6 +33,7 @@ public class StrawberryRowState : BetterBehaviour{
 	}
 	void Start(){
 		if (row == null) row = GetComponent<RowHandler> ();
+		row.break_at = GameStartData.break_distance;
 		if (berry_state == null) berry_state = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		if (player == null) player = SingletonBehavior.get_instance<GameStateManager>();
 		state.parent(berry_state.fsm.state("field"));

@@ -8,7 +8,6 @@ public class StrawberryScale : MonoBehaviour {
 	public Vector3 shape; //Make this protected once we know it works!
 	public AnimationCurve quality_to_min = new AnimationCurve ();
 	public AnimationCurve quality_to_max = new AnimationCurve ();
-	public Vector2 scale_range = new Vector2(0.04f,0.10f);
 	protected float final_scale;
 	// Use this for initialization
 	public void Start () {
@@ -19,10 +18,10 @@ public class StrawberryScale : MonoBehaviour {
 	public void Initialize(){
 		shape = shape_matrix.MultiplyVector(RandomUtils.random_vec3 (1.0f,2.0f));
 		shape.Normalize();
-		float quality_percent = data.quality / StrawberryComponent.quality_range.y;
-		final_scale = scale_range.x + RandomUtils.random_float (
-			quality_to_min.Evaluate (quality_percent) * scale_range.y,
-			quality_to_max.Evaluate (quality_percent) * scale_range.y
+		float quality_percent = data.quality / GameStartData.max_ripeness;
+		final_scale = GameStartData.min_size + RandomUtils.random_float (
+			quality_to_min.Evaluate (quality_percent) * GameStartData.max_size,
+			quality_to_max.Evaluate (quality_percent) * GameStartData.max_size
 		);
 		transform.localScale = shape * final_scale;
 	}
