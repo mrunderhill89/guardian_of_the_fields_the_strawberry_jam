@@ -19,10 +19,10 @@ public class GameStartData : BetterBehaviour {
 	public static int break_distance = 100;
 	//Break data goes here
 	
-	//Time of Day Effects
-	public float morning_length = 0.0f;
-	public float noon_length = 2400.0f;
-	public float evening_length = 0.0f;
+	//Time of Day & Game Length
+	public static float game_length = 2400.0f; //In Seconds
+	public static float start_hour = 6.0f;//In Hours
+	public static float end_hour = 18.0f; //In Hours
 	
 	//Hazard Data goes here
 }

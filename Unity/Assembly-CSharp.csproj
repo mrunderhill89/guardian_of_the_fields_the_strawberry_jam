@@ -93,6 +93,7 @@
      <Compile Include="Assets\Scripts\TransitionTest.cs" />
      <Compile Include="Assets\Scripts\UI_Visibility.cs" />
      <Compile Include="Assets\StartGame.cs" />
+     <Compile Include="Assets\SunStateSystem.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />
