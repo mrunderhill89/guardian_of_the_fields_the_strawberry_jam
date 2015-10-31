@@ -19,7 +19,7 @@ public class State : NamedBehavior
 		private set{ chain_parent(value); }
 	}
 	public State chain_parent(State p){
-		_parent = p;
+		if (p != this)	_parent = p;
 		return this;
 	}
 	[Show]

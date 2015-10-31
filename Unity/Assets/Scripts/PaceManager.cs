@@ -10,9 +10,11 @@ public class PaceManager : BetterBehaviour {
 	protected float _curve_point = 0.0f;
 	public float acceleration = 1.0f;
 	public AnimationCurve anim_curve = new AnimationCurve();
+	public ObjectVisibility ui_visibility;
 
 	protected Dictionary<string, float> _time_in_pace = new Dictionary<string,float>();
 	protected Dictionary<string, int> _pace_changes = new Dictionary<string,int>();
+	protected List<string> _enable_in_states = new List<string>();
 	[Show]
 	public Dictionary<string, float> time_in_pace{
 		get{return _time_in_pace;}
@@ -21,6 +23,12 @@ public class PaceManager : BetterBehaviour {
 	public Dictionary<string, int> pace_changes{
 		get{return _pace_changes;}
 	}
+	[Show]
+	public List<string> enable_in_states {
+		get{return _enable_in_states;}
+		private set{_enable_in_states = value;}
+	}
+
 	public PaceManager record_pace_time(string name, float dt=0.0f){
 		if (!time_in_pace.ContainsKey(name)){
 			time_in_pace[name] = 0.0f;
@@ -75,6 +83,17 @@ public class PaceManager : BetterBehaviour {
 			fsm = GetComponent<StateMachine>();
 			if (fsm == null){
 				fsm = gameObject.AddComponent<StateMachine>();
+			}
+		}
+		if (ui_visibility == null){
+			foreach(string state_name in enable_in_states){
+				fsm.state(state_name)
+					.on_entry(new StateEvent(()=>{
+						ui_visibility.visible = true;
+					}))
+					.on_exit(new StateEvent(()=>{
+						ui_visibility.visible = false;
+					}));
 			}
 		}
 		fsm.state ("root")

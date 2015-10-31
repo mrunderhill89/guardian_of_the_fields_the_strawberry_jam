@@ -46,12 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BeeSting.cs" />
-     <Compile Include="Assets\GameMessageView.cs" />
-     <Compile Include="Assets\GameMessages.cs" />
-     <Compile Include="Assets\QuitGame.cs" />
      <Compile Include="Assets\Scripts\Automata.cs" />
      <Compile Include="Assets\Scripts\BasketComponent.cs" />
+     <Compile Include="Assets\Scripts\BeeSting.cs" />
      <Compile Include="Assets\Scripts\BreakButton.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\CameraFacingBillboard.cs" />
@@ -60,6 +57,8 @@
      <Compile Include="Assets\Scripts\DependencyManager.cs" />
      <Compile Include="Assets\Scripts\DragHandle.cs" />
      <Compile Include="Assets\Scripts\Draggable.cs" />
+     <Compile Include="Assets\Scripts\GameMessageView.cs" />
+     <Compile Include="Assets\Scripts\GameMessages.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
      <Compile Include="Assets\Scripts\GameStartData.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />
@@ -68,15 +67,18 @@
      <Compile Include="Assets\Scripts\HandContainer.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
      <Compile Include="Assets\Scripts\LeafGenerator.cs" />
+     <Compile Include="Assets\Scripts\MultiObjectLOD.cs" />
      <Compile Include="Assets\Scripts\NamedBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectVisibility.cs" />
      <Compile Include="Assets\Scripts\OverflowDetector.cs" />
      <Compile Include="Assets\Scripts\PaceManager.cs" />
+     <Compile Include="Assets\Scripts\QuitGame.cs" />
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Randomize_Scale.cs" />
      <Compile Include="Assets\Scripts\RowHandler.cs" />
      <Compile Include="Assets\Scripts\SingletonBehavior.cs" />
+     <Compile Include="Assets\Scripts\StartGame.cs" />
      <Compile Include="Assets\Scripts\State.cs" />
      <Compile Include="Assets\Scripts\StateEvent.cs" />
      <Compile Include="Assets\Scripts\StateMachine.cs" />
@@ -87,13 +89,11 @@
      <Compile Include="Assets\Scripts\StrawberryRowState.cs" />
      <Compile Include="Assets\Scripts\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\StrawberryStateMachine.cs" />
+     <Compile Include="Assets\Scripts\SunStateSystem.cs" />
      <Compile Include="Assets\Scripts\TimeToText.cs" />
      <Compile Include="Assets\Scripts\Transition.cs" />
      <Compile Include="Assets\Scripts\TransitionEvent.cs" />
      <Compile Include="Assets\Scripts\TransitionTest.cs" />
-     <Compile Include="Assets\Scripts\UI_Visibility.cs" />
-     <Compile Include="Assets\StartGame.cs" />
-     <Compile Include="Assets\SunStateSystem.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />
@@ -276,11 +276,15 @@
      <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
      <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
      <None Include="Assets\Resources\Materials\StrawberrySkin.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Emissive Diffuse.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump Cutout.shader" />
      <None Include="Assets\Resources\Materials\DrawOnTop.shader" />
      <None Include="Assets\UniRx\ReadMe.txt" />
      <None Include="Assets\Resources\Materials\DoubleSided.shader" />
      <None Include="Assets\Resources\Materials\UI-Unlit-Transparent-Ignore-ZTest.shader" />
      <None Include="Assets\Plugins\Vexe\Runtime\FastSave\README.txt" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Standard Diffuse Bump.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>

@@ -48,6 +48,18 @@ public class GameStateManager : SingletonBehavior {
 		).add_child (
 			fsm.state ("pack")
 				.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
+		).add_child (
+			fsm.state ("game_end")
+				.add_child(
+					fsm.state("remove_ineligible_berries")
+					,true
+				).add_child(
+					fsm.state("weigh_baskets")
+				).add_child(
+					fsm.state("second_chance")
+				).add_child(
+					fsm.state("final_tally")
+				)
 		);
 		//Set up Transitions
 		//Loading -> Look
@@ -166,6 +178,10 @@ public class GameStateManager : SingletonBehavior {
 			input.register_transition(t,"right")
 				.chain_from(fsm.state("pack"))
 					.chain_to(fsm.state("pick_right"));
+		//Endgame Transitions
+		}).new_transition("time_up", (t)=>{
+			t.chain_from(fsm.state("root"))
+			.chain_to(fsm.state("game_end"));
 		});
 		//Now add a player automata.
 		fsm.new_automata ("player", (a) => {

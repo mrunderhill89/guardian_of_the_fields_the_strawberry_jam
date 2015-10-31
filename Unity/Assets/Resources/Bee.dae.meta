@@ -6,10 +6,75 @@ ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Abdomen
+    100004: Camera
+    100006: Empty
+    100008: Final
+    100010: Head
+    100012: Lamp
+    100014: Leg_FL
+    100016: Leg_FR
+    100018: Leg_ML
+    100020: Leg_MR
+    100022: Leg_RL
+    100024: Leg_RR
+    100026: Plane
+    100028: Thorax
+    100030: Wing_L
+    100032: Wing_R
     400000: //RootNode
+    400002: Abdomen
+    400004: Camera
+    400006: Empty
+    400008: Final
+    400010: Head
+    400012: Lamp
+    400014: Leg_FL
+    400016: Leg_FR
+    400018: Leg_ML
+    400020: Leg_MR
+    400022: Leg_RL
+    400024: Leg_RR
+    400026: Plane
+    400028: Thorax
+    400030: Wing_L
+    400032: Wing_R
     2300000: //RootNode
+    2300002: Abdomen
+    2300004: Final
+    2300006: Head
+    2300008: Leg_FL
+    2300010: Leg_FR
+    2300012: Leg_ML
+    2300014: Leg_MR
+    2300016: Leg_RL
+    2300018: Leg_RR
+    2300020: Plane
+    2300022: Thorax
+    2300024: Wing_L
+    2300026: Wing_R
     3300000: //RootNode
+    3300002: Abdomen
+    3300004: Final
+    3300006: Head
+    3300008: Leg_FL
+    3300010: Leg_FR
+    3300012: Leg_ML
+    3300014: Leg_MR
+    3300016: Leg_RL
+    3300018: Leg_RR
+    3300020: Plane
+    3300022: Thorax
+    3300024: Wing_L
+    3300026: Wing_R
     4300000: Final
+    4300002: Abdomen
+    4300004: Thorax
+    4300006: Wing_L
+    4300008: Head
+    4300010: Leg_FL
+    4300012: Leg_ML
+    4300014: Plane
     9500000: //RootNode
   materials:
     importMaterials: 1

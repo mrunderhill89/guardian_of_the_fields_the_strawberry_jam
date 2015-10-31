@@ -3,18 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class BreakButton : MonoBehaviour {
-	UI_Visibility visibility;
+	ObjectVisibility visibility;
 	// Use this for initialization
 	void Start () {
 		if (visibility == null){
-			visibility = GetComponent<UI_Visibility>();
-			if (visibility == null){
-				visibility = gameObject.AddComponent<UI_Visibility>();
-			}
+			visibility = GetComponent<ObjectVisibility>();
 		}
-		visibility.add_element(GetComponent<Image>())
-		.add_element(GetComponent<Button>())
-		.add_element(GetComponentsInChildren<Text>());
 	}
 	
 	public bool should_be_visible(){

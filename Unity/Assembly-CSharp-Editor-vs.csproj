@@ -53,11 +53,15 @@
      <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
      <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
      <None Include="Assets\Resources\Materials\StrawberrySkin.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Emissive Diffuse.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump Cutout.shader" />
      <None Include="Assets\Resources\Materials\DrawOnTop.shader" />
      <None Include="Assets\UniRx\ReadMe.txt" />
      <None Include="Assets\Resources\Materials\DoubleSided.shader" />
      <None Include="Assets\Resources\Materials\UI-Unlit-Transparent-Ignore-ZTest.shader" />
      <None Include="Assets\Plugins\Vexe\Runtime\FastSave\README.txt" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Standard Diffuse Bump.shader" />
+     <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>

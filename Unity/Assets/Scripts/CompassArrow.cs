@@ -7,17 +7,12 @@ using Vexe.Runtime.Types;
 public class CompassArrow : BetterBehaviour {
 	public string direction;
 	InputController input;
-	UI_Visibility visibility;
+	ObjectVisibility visibility;
 	void Start(){
 		input = SingletonBehavior.get_instance<InputController> ();
 		if (visibility == null){
-			visibility = GetComponent<UI_Visibility>();
-			if (visibility == null){
-				visibility = gameObject.AddComponent<UI_Visibility>();
-			}
+			visibility = GetComponent<ObjectVisibility>();
 		}
-		visibility.add_element(GetComponent<Image>())
-		.add_element(GetComponent<Button>());
 		GetComponent<Button>().onClick.AddListener(()=>{
 			if (visibility.visible){
 				input.invoke_dir(direction);
@@ -40,6 +35,6 @@ public class CompassArrow : BetterBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		visibility.set_visibility(should_be_visible());
+		visibility.visible = should_be_visible();
 	}
 }
