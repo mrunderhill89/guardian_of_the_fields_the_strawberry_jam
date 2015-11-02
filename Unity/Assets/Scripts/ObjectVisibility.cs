@@ -28,6 +28,7 @@ public class ObjectVisibility : BetterBehaviour {
 		FollowParent,
 		NeverVisible
 	}
+	[Serialize][Hide]
 	protected VisibilityStatus _status = VisibilityStatus.FollowParent;
 	[Show]
 	public VisibilityStatus status{

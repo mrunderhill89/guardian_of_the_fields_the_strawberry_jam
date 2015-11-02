@@ -48,6 +48,10 @@ public class StateMachine : BetterBehaviour {
 		state(name, s);
 		return this;
 	}
+	
+	public bool is_state_visited(string name){
+		return state(name).is_visited();
+	}
 	//Transitions
 	public Transition transition(string name){
 		if (!transitions.ContainsKey (name)) {

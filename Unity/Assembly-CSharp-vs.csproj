@@ -66,12 +66,15 @@
      <Compile Include="Assets\Scripts\Grounded.cs" />
      <Compile Include="Assets\Scripts\HandContainer.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
+     <Compile Include="Assets\Scripts\KeyboardSpeedControls.cs" />
      <Compile Include="Assets\Scripts\LeafGenerator.cs" />
      <Compile Include="Assets\Scripts\MultiObjectLOD.cs" />
      <Compile Include="Assets\Scripts\NamedBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectVisibility.cs" />
      <Compile Include="Assets\Scripts\OverflowDetector.cs" />
      <Compile Include="Assets\Scripts\PaceManager.cs" />
+     <Compile Include="Assets\Scripts\PaceStateManager.cs" />
+     <Compile Include="Assets\Scripts\PlaceOnSliderUI.cs" />
      <Compile Include="Assets\Scripts\QuitGame.cs" />
      <Compile Include="Assets\Scripts\RandomUtils.cs" />
      <Compile Include="Assets\Scripts\Randomize_Rotation.cs" />

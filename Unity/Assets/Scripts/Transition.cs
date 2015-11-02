@@ -216,6 +216,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return false;
 	}
 
+	[Show]
 	public void trigger()
 	{
 		if (_from != null){
