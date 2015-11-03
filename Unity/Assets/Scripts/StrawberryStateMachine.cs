@@ -51,30 +51,44 @@ public class StrawberryStateMachine : SingletonBehavior {
 			t.chain_from(fsm.state("field"))
 			.chain_to (fsm.state("drag"))
 			.add_test(new TransitionTest(()=>{
-				return player_state.can_pick_anywhere();
+				return player_state.can_pick();
 			}))
 			.chain_auto_run(false)
 			;
 		}).new_transition("fall_drag", (t)=>{
 			t.chain_from(fsm.state("fall"))
-				.chain_to (fsm.state("drag"))
-					.chain_auto_run(false)
+			.chain_to (fsm.state("drag"))
+			.chain_auto_run(false)
+			.add_test(new TransitionTest(()=>{
+				return player_state.can_drag();
+			}))
 					;
 		}).new_transition("hand_drag", (t)=>{
 			t.chain_from(fsm.state("hand"))
-				.chain_to (fsm.state("drag"))
-					.chain_auto_run(false)
-					;
+			.chain_to (fsm.state("drag"))
+			.chain_auto_run(false)
+			.add_test(new TransitionTest(()=>{
+				return player_state.can_drag();
+			}))
+			;
 		}).new_transition("basket_drag", (t)=>{
 			t.chain_from(fsm.state("basket"))
-				.chain_to (fsm.state("drag"))
-					.chain_auto_run(false)
-					;
+			.chain_to (fsm.state("drag"))
+			.chain_auto_run(false)
+			.add_test(new TransitionTest(()=>{
+				return player_state.can_drag();
+			}))
+			;
+		}).new_transition("basket_fall", (t)=>{
+			t.chain_from(fsm.state("basket"))
+			.chain_to (fsm.state("fall"))
+			.chain_auto_run(false)
+			;
 		}).new_transition("drag_fall", (t)=>{
 			t.chain_from(fsm.state("drag"))
-				.chain_to (fsm.state("fall"))
-					.chain_auto_run(false)
-					;
+			.chain_to (fsm.state("fall"))
+			.chain_auto_run(false)
+			;
 		});
 
 	}
@@ -103,6 +117,13 @@ public class StrawberryStateMachine : SingletonBehavior {
 			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
 			fsm.automata(berry_name, berry.GetComponent<Automata>())
 				.move_direct(fsm.state("root"));
+		}
+	}
+	public IEnumerable<StrawberryComponent> get_strawberries(string state_name){
+		StrawberryComponent next_component;
+		foreach(Automata a in fsm.state(state_name).visitors){
+			next_component = a.GetComponent<StrawberryComponent>();
+			if (next_component != null) yield return next_component;
 		}
 	}
 }

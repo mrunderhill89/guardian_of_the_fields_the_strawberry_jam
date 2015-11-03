@@ -25,7 +25,7 @@ public class StateMachine : BetterBehaviour {
 	//States
 	public State state(string name){
 		if (!states.ContainsKey (name)) {
-			State s = gameObject.AddComponent<State>();
+			State s = NamedBehavior.GetOrCreateComponentByName<State>(gameObject,name);
 			s.instance_name = name;
 			return state(name,s);
 		}
@@ -36,8 +36,7 @@ public class StateMachine : BetterBehaviour {
 		return s;
 	}
 	public StateMachine new_state(string name, Action<State> apply = null){
-		State s = gameObject.AddComponent<State> ();
-		add_state(name, s);
+		State s = state(name);
 		if (apply != null) {
 			apply(s);
 		}
@@ -55,8 +54,7 @@ public class StateMachine : BetterBehaviour {
 	//Transitions
 	public Transition transition(string name){
 		if (!transitions.ContainsKey (name)) {
-			Transition t = gameObject.AddComponent<Transition>();
-			t.instance_name = name;
+			Transition t = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,name);
 			return transition(name,t);
 		}
 		return transitions[name];
@@ -66,8 +64,7 @@ public class StateMachine : BetterBehaviour {
 		return t;
 	}
 	public StateMachine new_transition(string name, Action<Transition> apply = null){
-		Transition t = gameObject.AddComponent<Transition> ();
-		add_transition(name, t);
+		Transition t = transition(name);
 		if (apply != null) {
 			apply(t);
 		}
@@ -109,6 +106,22 @@ public class StateMachine : BetterBehaviour {
 		{
 			if (state(c.Key).is_visited()){
 				return c.Value;
+			}
+		}
+		return def;
+	}
+	public T match<T>(IEnumerable<string> states, Func<State, T> value, T def = default(T)){
+		foreach(string name in states){
+			if (state(name).is_visited()){
+				return value(state(name));
+			}
+		}
+		return def;
+	}
+	public T match<T>(IEnumerable<string> states, T value, T def = default(T)){
+		foreach(string name in states){
+			if (state(name).is_visited()){
+				return value;
 			}
 		}
 		return def;

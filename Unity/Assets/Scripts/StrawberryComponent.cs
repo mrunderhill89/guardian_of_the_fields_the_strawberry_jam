@@ -8,7 +8,13 @@ using UniRx;
 public class StrawberryComponent : BetterBehaviour {
 	public static float density = 1.00f;
 	public float quality = 1.00f;
-	public float weight = 0.0f;
+	[Show]
+	public float weight{
+		get{return density * transform.localScale.x
+			*transform.localScale.y
+			*transform.localScale.z
+			;}
+	}
 
 	public DragHandle drag = null;
 	public StrawberryStateMachine berry_state;
@@ -31,7 +37,6 @@ public class StrawberryComponent : BetterBehaviour {
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();
-			weight = density * transform.localScale.x * transform.localScale.y * transform.localScale.z;
 		}
 	}
 

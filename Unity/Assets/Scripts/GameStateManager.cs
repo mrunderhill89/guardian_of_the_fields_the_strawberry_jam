@@ -10,6 +10,7 @@ public class GameStateManager : SingletonBehavior {
 	public PaceManager cart_control;
 	public Vector3 gravity;
 	public StateMachine fsm;
+	public List<string> drag_states = new List<string>();
 	Action lazy_log(string message){
 		return () => {
 			Debug.Log (message);
@@ -52,6 +53,35 @@ public class GameStateManager : SingletonBehavior {
 			fsm.state ("game_end")
 				.add_child(
 					fsm.state("remove_ineligible_berries")
+					.on_entry(new StateEvent(()=>{
+						camera_control.set_target("pack");
+						int under_ripe = 0, over_ripe = 0, under_size = 0;
+						bool ineligible;
+						foreach (StrawberryComponent berry in BasketComponent.get_all_strawberries()){
+							ineligible = false;
+							//Underripe
+							if (berry.quality < GameStartData.min_accepted_ripeness){
+								under_ripe++;
+								ineligible = true;
+							}
+							//Overripe
+							if (berry.quality > GameStartData.max_accepted_ripeness){
+								over_ripe++;
+								ineligible = true;
+							}
+							//Undersize
+							if (berry.weight < GameStartData.min_berry_weight){
+								under_size++;
+								ineligible = true;
+							}
+							if (ineligible){
+								berry.gameObject.SetActive(false);
+							}
+						}
+						GameMessages.Log("Underripe Berries:"+under_ripe);
+						GameMessages.Log("Overripe Berries:"+over_ripe);
+						GameMessages.Log("Undersized Berries:"+under_size);
+					}))
 					,true
 				).add_child(
 					fsm.state("weigh_baskets")
@@ -194,8 +224,11 @@ public class GameStateManager : SingletonBehavior {
 	public bool is_loading(){
 		return fsm.state("loading").is_visited();
 	}
-	public bool can_pick_anywhere(){
+	public bool can_pick(){
 		return fsm.state ("pick").is_visited();
+	}
+	public bool can_drag(){
+		return fsm.match(drag_states, true, false);
 	}
 	public bool basket_physics_enabled(){
 		return fsm.state("pack").is_visited();

@@ -24,5 +24,12 @@ public class GameStartData : BetterBehaviour {
 	public static float start_hour = 6.0f;//In Hours
 	public static float end_hour = 18.0f; //In Hours
 	
+	//Win Condition Settings
+	public static float min_accepted_ripeness = 0.5f;
+	public static float max_accepted_ripeness = 1.25f;
+	public static float min_berry_weight = 0.00f;
+	public static float min_basket_weight = 15.00f;
+	public static float max_basket_weight = 17.00f;
+
 	//Hazard Data goes here
 }

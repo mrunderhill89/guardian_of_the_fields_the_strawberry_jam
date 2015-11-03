@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\GameMessageView.cs" />
      <Compile Include="Assets\Scripts\GameMessages.cs" />
      <Compile Include="Assets\Scripts\GameObjectPool.cs" />
+     <Compile Include="Assets\Scripts\GamePlayData.cs" />
      <Compile Include="Assets\Scripts\GameStartData.cs" />
      <Compile Include="Assets\Scripts\GameStateLabel.cs" />
      <Compile Include="Assets\Scripts\GameStateManager.cs" />

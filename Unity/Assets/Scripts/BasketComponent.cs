@@ -10,9 +10,11 @@ using UniRx;
 public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
-
+	public static List<BasketComponent> baskets = new List<BasketComponent>();
+	
 	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
+		baskets.Add(this);
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
 		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");
 		valid_positions = new Dictionary<GameObject, Vector3>();
@@ -36,6 +38,10 @@ public class BasketComponent : BetterBehaviour {
 			}));
 	}
 
+	void Destroy(){
+		baskets.Remove(this);
+	}
+
 	void ParentToBasket(Automata a){
 		a.gameObject.transform.SetParent(transform, true);
 	}
@@ -44,21 +50,19 @@ public class BasketComponent : BetterBehaviour {
 		a.gameObject.transform.SetParent(null, true);
 	}
 
-	public float get_berry_weight(){
-		if (slot == null)
-			return 0.0f;
-		return slot.visitors.Select((Automata a) => {
-			StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
-			if (sb == null) return 0.0f;
-			return sb.weight;
-		}).Aggregate<float,float>(0.0f, (total, next) => {
-			return total + next;
-		});
-	}
-
 	[Show]
 	public float total_weight{
-		get{return this.get_berry_weight();}
+		get{
+			if (slot == null)
+				return 0.0f;
+			return slot.visitors.Select((Automata a) => {
+				StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
+				if (sb == null) return 0.0f;
+				return sb.weight;
+			}).Aggregate<float,float>(0.0f, (total, next) => {
+				return total + next;
+			});
+		}
 	}
 
 	static void UpdatePhysics(Automata a){
@@ -85,12 +89,30 @@ public class BasketComponent : BetterBehaviour {
 		GameObject obj = that.gameObject;
 		Automata a = obj.GetComponent<Automata>();
 		if (a != null && a.current == slot){
-			GameMessages.Log("Uh-oh, a strawberry fell out of your basket!");
+			//GameMessages.Log("Uh-oh, a strawberry fell out of your basket!");
+			StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+			state_machine.fsm.transition("basket_fall").trigger_single(a);
 			obj.transform.position = valid_positions[obj];
 			Rigidbody body = obj.GetComponent<Rigidbody>();
 			body.velocity = Vector3.zero;
 		} else {
 			valid_positions.Remove(obj);
+		}
+	}
+	
+	public IEnumerable<StrawberryComponent> get_gathered_strawberries(){
+		StrawberryComponent next_component;
+		foreach(Automata a in slot.visitors){
+			next_component = a.GetComponent<StrawberryComponent>();
+			if (next_component != null) yield return next_component;
+		}
+	}
+	
+	public static IEnumerable<StrawberryComponent> get_all_strawberries(){
+		foreach(BasketComponent basket in baskets){
+			foreach(StrawberryComponent berry in basket.get_gathered_strawberries()){
+				yield return berry;
+			}
 		}
 	}
 }
