@@ -11,7 +11,8 @@ public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
 	public static List<BasketComponent> baskets = new List<BasketComponent>();
-	
+	public BasketWeightIndicator weight_text;
+
 	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		baskets.Add(this);
@@ -38,16 +39,24 @@ public class BasketComponent : BetterBehaviour {
 			}));
 	}
 
+	void update_text(){
+		if (weight_text != null){
+			weight_text.update(total_weight);
+		}
+	}
+
 	void Destroy(){
 		baskets.Remove(this);
 	}
 
 	void ParentToBasket(Automata a){
 		a.gameObject.transform.SetParent(transform, true);
+		update_text();
 	}
 
 	void UnparentToBasket(Automata a){
 		a.gameObject.transform.SetParent(null, true);
+		update_text();
 	}
 
 	[Show]

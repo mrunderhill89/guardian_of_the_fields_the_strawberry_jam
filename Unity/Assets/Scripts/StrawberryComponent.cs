@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 public class StrawberryComponent : BetterBehaviour {
-	public static float density = 1.00f;
 	public float quality = 1.00f;
 	[Show]
 	public float weight{
-		get{return density * transform.localScale.x
+		get{return GameStartData.berry_density * (transform.localScale.x
 			*transform.localScale.y
-			*transform.localScale.z
+			*transform.localScale.z)
 			;}
 	}
 

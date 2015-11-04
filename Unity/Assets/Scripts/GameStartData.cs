@@ -14,6 +14,7 @@ public class GameStartData : BetterBehaviour {
 	public static float max_ripeness = 2.0f;
 	public static float min_size = 0.06f;
 	public static float max_size = 0.06f;
+	public static float berry_density = 1.00f;
 
 	//Rows and Breaks
 	public static int break_distance = 100;
