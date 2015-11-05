@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+using System.Linq;
 public class GameStateManager : SingletonBehavior {
 	public InputController input;
 	public CameraController camera_control;
@@ -57,7 +57,7 @@ public class GameStateManager : SingletonBehavior {
 						camera_control.set_target("pack");
 						int under_ripe = 0, over_ripe = 0, under_size = 0;
 						bool ineligible;
-						foreach (StrawberryComponent berry in BasketComponent.get_all_strawberries()){
+						foreach (StrawberryComponent berry in BasketComponent.get_all_strawberries().ToList()){
 							ineligible = false;
 							//Underripe
 							if (berry.quality < GameStartData.min_accepted_ripeness){
@@ -75,7 +75,7 @@ public class GameStateManager : SingletonBehavior {
 								ineligible = true;
 							}
 							if (ineligible){
-								berry.gameObject.SetActive(false);
+								Destroy(berry.gameObject);
 							}
 						}
 						GameMessages.Log("Underripe Berries:"+under_ripe);
