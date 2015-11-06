@@ -55,8 +55,18 @@ public class GameStateManager : SingletonBehavior {
 					fsm.state("remove_ineligible_berries")
 					.on_entry(new StateEvent(()=>{
 						camera_control.set_target("pack");
-						int under_ripe = 0, over_ripe = 0, under_size = 0;
+						int dropped = 0, under_ripe = 0, over_ripe = 0, under_size = 0;
 						bool ineligible;
+						//Clear all remaining strawberries in the field.
+						StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+						foreach (StrawberryComponent berry in sb_machine.get_strawberries("field")){
+							Destroy (berry.gameObject);
+						}
+						foreach (StrawberryComponent berry in sb_machine.get_strawberries("fall")){
+							dropped++;
+							Destroy (berry.gameObject);
+						}
+						//Check strawberries that the player has gathered
 						foreach (StrawberryComponent berry in BasketComponent.get_all_strawberries().ToList()){
 							ineligible = false;
 							//Underripe
@@ -75,9 +85,10 @@ public class GameStateManager : SingletonBehavior {
 								ineligible = true;
 							}
 							if (ineligible){
-								Destroy(berry.gameObject);
+								DestroyObject(berry.gameObject);
 							}
 						}
+						GameMessages.Log("Dropped Berries:"+dropped);
 						GameMessages.Log("Underripe Berries:"+under_ripe);
 						GameMessages.Log("Overripe Berries:"+over_ripe);
 						GameMessages.Log("Undersized Berries:"+under_size);
@@ -85,10 +96,24 @@ public class GameStateManager : SingletonBehavior {
 					,true
 				).add_child(
 					fsm.state("weigh_baskets")
+						.on_entry(new StateEvent(()=>{
+							foreach (BasketComponent basket in BasketComponent.baskets){
+								if (basket.total_weight >= GameStartData.min_basket_weight 
+					    			&& basket.total_weight <= GameStartData.max_basket_weight){
+									basket.locked = true;
+								} else {
+									basket.second_chance = true;
+								}
+							}
+						}))
 				).add_child(
 					fsm.state("second_chance")
 				).add_child(
-					fsm.state("final_tally")
+				fsm.state("final_tally").on_entry(new StateEvent(()=>{
+						foreach (BasketComponent basket in BasketComponent.baskets){
+							basket.locked = true;
+						}
+					}))
 				)
 		);
 		//Set up Transitions
@@ -212,6 +237,15 @@ public class GameStateManager : SingletonBehavior {
 		}).new_transition("time_up", (t)=>{
 			t.chain_from(fsm.state("root"))
 			.chain_to(fsm.state("game_end"));
+		}).new_transition("berry=>basket", (t)=>{
+			t.chain_from(fsm.state("remove_ineligible_berries"))
+				.chain_to(fsm.state ("weigh_baskets"));
+		}).new_transition("basket=>2nd chance", (t)=>{
+			t.chain_from(fsm.state("weigh_baskets"))
+				.chain_to(fsm.state ("second_chance"));
+		}).new_transition("2nd chance=>final", (t)=>{
+			t.chain_from(fsm.state("second_chance"))
+				.chain_to(fsm.state ("final_tally"));
 		});
 		//Now add a player automata.
 		fsm.new_automata ("player", (a) => {

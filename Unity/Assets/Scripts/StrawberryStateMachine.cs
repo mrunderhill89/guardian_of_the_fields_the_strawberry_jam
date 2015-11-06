@@ -21,9 +21,7 @@ public class StrawberryStateMachine : SingletonBehavior {
 					StrawberryComponent sb = a.gameObject.GetComponent<StrawberryComponent>();
 					sb.Initialize();
 				}))
-				.on_exit(new StateEvent(()=>{
-					GenerateStrawberries(1);
-				})), true
+				, true
 			).add_child (
 				fsm.state ("drag")
 			).add_child (
@@ -52,6 +50,9 @@ public class StrawberryStateMachine : SingletonBehavior {
 			.chain_to (fsm.state("drag"))
 			.add_test(new TransitionTest(()=>{
 				return player_state.can_pick();
+			}))
+			.on_exit(new TransitionEvent(()=>{
+				GenerateStrawberries(1);
 			}))
 			.chain_auto_run(false)
 			;

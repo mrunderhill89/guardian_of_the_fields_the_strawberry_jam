@@ -11,22 +11,41 @@ public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
 	public static List<BasketComponent> baskets = new List<BasketComponent>();
+	public OverflowDetector overflow;
 	public BasketWeightIndicator weight_text;
+
+	protected bool _locked = false;
+	[Show]
+	public bool locked{
+		get{ return _locked; }
+		set{ _locked = value; update_text(); }
+	}
+	protected bool _second_chance = false;
+	[Show]
+	public bool second_chance{
+		get{ return _second_chance; }
+		set{ _second_chance = value; update_text(); }
+	}
 
 	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
 		baskets.Add(this);
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
-		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");
+		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit")
+			.add_test(new TransitionTest(()=>{
+				return !this.locked;
+			}));
 		valid_positions = new Dictionary<GameObject, Vector3>();
 	}
 
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+		if (overflow == null)
+			overflow = GetComponent<OverflowDetector> ();
 		slot.chain_parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))
-			.on_update(new StateEvent(UpdatePhysics));
+			.on_update(new StateEvent(this.UpdatePhysics));
 		drop.chain_from(state_machine.fsm.state("fall"))
 			.chain_auto_run(false)
 			.chain_priority(2)
@@ -45,7 +64,7 @@ public class BasketComponent : BetterBehaviour {
 		}
 	}
 
-	void Destroy(){
+	void OnDestroy(){
 		baskets.Remove(this);
 	}
 
@@ -74,10 +93,10 @@ public class BasketComponent : BetterBehaviour {
 		}
 	}
 
-	static void UpdatePhysics(Automata a){
+	void UpdatePhysics(Automata a){
 		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
 		if (body != null) {
-			if (!SingletonBehavior.get_instance<GameStateManager>().basket_physics_enabled()){
+			if (locked || !SingletonBehavior.get_instance<GameStateManager>().basket_physics_enabled()){
 				body.isKinematic = true;
 			} else {
 				body.isKinematic = false;
@@ -87,10 +106,15 @@ public class BasketComponent : BetterBehaviour {
 
 	void OnTriggerStay(Collider that) {
 		GameObject obj = that.gameObject;
-		Automata a = obj.GetComponent<Automata>();
-		if (a != null){
-			drop.trigger_single(a);
-			valid_positions[obj] = obj.transform.position;
+		if (obj == null) {
+			Debug.LogWarning("Found a collider with no gameobject. Deleting...");
+			Destroy(that);
+		} else {
+			Automata a = obj.GetComponent<Automata> ();
+			if (a != null) {
+				drop.trigger_single (a);
+				valid_positions[obj] = obj.transform.position;
+			}
 		}
 	}
 

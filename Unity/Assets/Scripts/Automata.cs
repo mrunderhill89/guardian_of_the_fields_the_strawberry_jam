@@ -76,9 +76,11 @@ public class Automata : BetterBehaviour
 		}
 	}
 
-	void Destroy(){
+	void OnDestroy(){
 		foreach(State state in stack.ToArray()){
-			state.invoke_exit(this);
+			if (state != null){
+				state.invoke_exit(this);
+			}
 		}
 	}
 	#endregion
