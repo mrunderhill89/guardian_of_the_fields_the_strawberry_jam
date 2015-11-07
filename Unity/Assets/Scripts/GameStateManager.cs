@@ -18,37 +18,41 @@ public class GameStateManager : SingletonBehavior {
 	}
 	new void Awake(){
 		base.Awake();
-		fsm = gameObject.AddComponent<StateMachine> ();
+		if (fsm == null)
+			fsm = gameObject.AddComponent<StateMachine> ();
 	}
 	void Start () {
 		Physics.gravity = gravity;
 		//Set up States
 		fsm.state ("root")
-		.add_child (
-			fsm.state("loading"),true
-		).add_child (
-			fsm.state ("look")
-				.add_child(fsm.state("look_forward")
-					.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
-				).add_child(fsm.state("look_left")
-					.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
-				).add_child(fsm.state("look_right")
-					.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
-				).add_child(fsm.state("look_behind")
-					.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
-			    )
-		).add_child (
-			fsm.state ("pick")
-			.add_child(fsm.state("pick_left")
-	    		.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left")))
-	        ).add_child(fsm.state("pick_right")
-		        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_right")))
-	        ).add_child(fsm.state("pick_behind")
-		        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_behind")))
-	        )
-		).add_child (
-			fsm.state ("pack")
-				.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
+		.add_child( 
+           fsm.state ("gameplay")
+			.add_child (
+				fsm.state("loading"),true
+			).add_child (
+				fsm.state ("look")
+					.add_child(fsm.state("look_forward")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))),true
+					).add_child(fsm.state("look_left")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
+					).add_child(fsm.state("look_right")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
+					).add_child(fsm.state("look_behind")
+						.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
+				    )
+			).add_child (
+				fsm.state ("pick")
+				.add_child(fsm.state("pick_left")
+		    		.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left")))
+		        ).add_child(fsm.state("pick_right")
+			        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_right")))
+		        ).add_child(fsm.state("pick_behind")
+			        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_behind")))
+		        )
+			).add_child (
+				fsm.state ("pack")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
+			), true
 		).add_child (
 			fsm.state ("game_end")
 				.add_child(
@@ -256,15 +260,15 @@ public class GameStateManager : SingletonBehavior {
 		return fsm.state(name);
 	}
 	public bool is_loading(){
-		return fsm.state("loading").is_visited();
+		return fsm.is_state_visited("loading");
 	}
 	public bool can_pick(){
-		return fsm.state ("pick").is_visited();
+		return fsm.is_state_visited("pick");
 	}
 	public bool can_drag(){
 		return fsm.match(drag_states, true, false);
 	}
 	public bool basket_physics_enabled(){
-		return fsm.state("pack").is_visited();
+		return fsm.is_state_visited("pack");
 	}
 }

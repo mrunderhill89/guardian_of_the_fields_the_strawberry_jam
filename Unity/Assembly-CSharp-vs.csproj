@@ -102,6 +102,7 @@
      <Compile Include="Assets\Scripts\Transition.cs" />
      <Compile Include="Assets\Scripts\TransitionEvent.cs" />
      <Compile Include="Assets\Scripts\TransitionTest.cs" />
+     <Compile Include="Assets\ShowInState.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />

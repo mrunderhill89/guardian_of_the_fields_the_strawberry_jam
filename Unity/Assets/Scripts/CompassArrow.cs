@@ -21,7 +21,7 @@ public class CompassArrow : BetterBehaviour {
 	}
 
 	public bool should_be_visible(){
-		if (input.direction_transitions [direction] != null) {
+		if (input.direction_transitions[direction] != null) {
 			IList<Transition> transitions = input.direction_transitions[direction];
 			if (transitions.Count > 0){
 				foreach(Transition trans in transitions){

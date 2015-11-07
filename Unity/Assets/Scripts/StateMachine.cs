@@ -23,8 +23,11 @@ public class StateMachine : BetterBehaviour {
 	}
 
 	//States
+	public State read_state(string name){
+		return states [name];
+	}
 	public State state(string name){
-		if (!states.ContainsKey (name)) {
+		if (!has_state(name)) {
 			State s = NamedBehavior.GetOrCreateComponentByName<State>(gameObject,name);
 			s.instance_name = name;
 			return state(name,s);
@@ -32,7 +35,7 @@ public class StateMachine : BetterBehaviour {
 		return states[name];
 	}
 	public State state(string name, State s){
-		states [name] = s;
+		states[name] = s;
 		return s;
 	}
 	public StateMachine new_state(string name, Action<State> apply = null){
@@ -47,9 +50,14 @@ public class StateMachine : BetterBehaviour {
 		state(name, s);
 		return this;
 	}
-	
+	public bool has_state(string name){
+		return states.ContainsKey(name);
+	}
+
 	public bool is_state_visited(string name){
-		return state(name).is_visited();
+		if (!has_state (name))
+			return false;
+		return read_state(name).is_visited();
 	}
 	//Transitions
 	public Transition transition(string name){
@@ -104,23 +112,23 @@ public class StateMachine : BetterBehaviour {
 	public T match<T>(Dictionary<string,T> cases, T def = default(T)){
 		foreach(KeyValuePair<string, T> c in cases)
 		{
-			if (state(c.Key).is_visited()){
+			if (has_state(c.Key) && read_state(c.Key).is_visited()){
 				return c.Value;
 			}
 		}
 		return def;
 	}
-	public T match<T>(IEnumerable<string> states, Func<State, T> value, T def = default(T)){
-		foreach(string name in states){
-			if (state(name).is_visited()){
+	public T match<T>(IEnumerable<string> names, Func<State, T> value, T def = default(T)){
+		foreach(string name in names){
+			if (has_state(name) && read_state(name).is_visited()){
 				return value(state(name));
 			}
 		}
 		return def;
 	}
-	public T match<T>(IEnumerable<string> states, T value, T def = default(T)){
-		foreach(string name in states){
-			if (state(name).is_visited()){
+	public T match<T>(IEnumerable<string> names, T value, T def = default(T)){
+		foreach(string name in names){
+			if (has_state(name) && read_state(name).is_visited()){
 				return value;
 			}
 		}
