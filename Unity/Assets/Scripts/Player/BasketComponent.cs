@@ -10,6 +10,8 @@ using UniRx;
 public class BasketComponent : BetterBehaviour {
 	public State slot;
 	public Transition drop;
+	public Transition remove;
+	public Transform spawn_point;
 	public static List<BasketComponent> baskets = new List<BasketComponent>();
 	public OverflowDetector overflow;
 	public BasketWeightIndicator weight_text;
@@ -31,15 +33,14 @@ public class BasketComponent : BetterBehaviour {
 	void Awake () {
 		baskets.Add(this);
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
-		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit")
-			.add_test(new TransitionTest(()=>{
-				return !this.locked;
-			}));
+		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");
+		remove = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "remove");
 		valid_positions = new Dictionary<GameObject, Vector3>();
 	}
 
 	void Start(){
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+		GameStateManager player_state = SingletonBehavior.get_instance<GameStateManager>();
 		if (overflow == null)
 			overflow = GetComponent<OverflowDetector> ();
 		slot.chain_parent (state_machine.fsm.state("basket"))
@@ -55,6 +56,12 @@ public class BasketComponent : BetterBehaviour {
 					return false;
 				}
 				return true;
+			}));
+		remove.chain_from(slot)
+			.chain_to (state_machine.fsm.state("drag"))
+			.chain_auto_run(false)
+			.add_test(new TransitionTest(()=>{
+				return player_state.can_drag() && !this.locked;
 			}));
 	}
 
@@ -147,5 +154,15 @@ public class BasketComponent : BetterBehaviour {
 				yield return berry;
 			}
 		}
+	}
+	
+	public static BasketComponent get_lightest_basket(){
+		BasketComponent lightest = null;
+		foreach(BasketComponent basket in baskets){
+			if (lightest == null || basket.total_weight < lightest.total_weight){
+				lightest = basket;
+			}
+		}
+		return lightest;
 	}
 }

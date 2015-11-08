@@ -17,7 +17,7 @@ public class StrawberryGenerator : BetterBehaviour {
 					RandomUtils.random_float(min.x,max.x),
 					RandomUtils.random_float(min.y,max.y)
 				);
-				a.GetComponent<StrawberryComponent>().hidden(false);
+				a.GetComponent<ObjectVisibility>().visible = true;
 			}))
 			.on_exit(new StateEvent((Automata a)=>{
 				a.transform.SetParent(null,true);

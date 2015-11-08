@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 public class StrawberryStateMachine : SingletonBehavior {
 	public static Vector3 nowhere = new Vector3(-100.0f,-100.0f,-100.0f);
+	[DontSerialize]
 	public StateMachine fsm;
 	public int field_strawberries = 100;
 	public GameStateManager player_state;
@@ -72,14 +73,6 @@ public class StrawberryStateMachine : SingletonBehavior {
 				return player_state.can_drag();
 			}))
 			;
-		}).new_transition("basket_drag", (t)=>{
-			t.chain_from(fsm.state("basket"))
-			.chain_to (fsm.state("drag"))
-			.chain_auto_run(false)
-			.add_test(new TransitionTest(()=>{
-				return player_state.can_drag();
-			}))
-			;
 		}).new_transition("basket_fall", (t)=>{
 			t.chain_from(fsm.state("basket"))
 			.chain_to (fsm.state("fall"))
@@ -89,6 +82,15 @@ public class StrawberryStateMachine : SingletonBehavior {
 			t.chain_from(fsm.state("drag"))
 			.chain_to (fsm.state("fall"))
 			.chain_auto_run(false)
+			;
+		}).new_transition("spawn_direct", (t)=>{
+			t.chain_from(fsm.state("root"))
+			.chain_to (fsm.state("fall"))
+			.chain_auto_run(false)
+			.on_exit(new TransitionEvent((Automata a)=>{
+				a.GetComponent<StrawberryComponent>().Initialize();
+				a.GetComponent<ObjectVisibility>().visible = true;
+			}))
 			;
 		});
 
@@ -101,16 +103,8 @@ public class StrawberryStateMachine : SingletonBehavior {
 		State field = fsm.state("field");
 		return field.is_visited() && !field.has_travellers();
 	}
-	public DragHandle register_drag_handle(DragHandle drag){
-		drag.register_incoming (fsm.transition("field_drag"))
-			.register_incoming (fsm.transition("fall_drag"))
-			.register_incoming (fsm.transition("hand_drag"))
-			.register_incoming (fsm.transition("basket_drag"))
-			.register_state (fsm.state("drag"))
-			.register_outgoing(fsm.transition("drag_fall"));
-		return drag;
-	}
-	void GenerateStrawberries(int num){
+
+	public void GenerateStrawberries(int num){
 		GameObject berry;
 		for (int u = 0; u < num; u++){
 			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
@@ -119,6 +113,13 @@ public class StrawberryStateMachine : SingletonBehavior {
 			fsm.automata(berry_name, berry.GetComponent<Automata>())
 				.move_direct(fsm.state("root"));
 		}
+	}
+	[Show]
+	public void GenerateStrawberryAtPlayer(){
+		GameObject berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
+			berry.transform.position = BasketComponent.get_lightest_basket().spawn_point.position;
+			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
+			fsm.transition("spawn_direct").trigger_single(fsm.automata(berry_name, berry.GetComponent<Automata>()));
 	}
 	public IEnumerable<StrawberryComponent> get_strawberries(string state_name){
 		StrawberryComponent next_component;

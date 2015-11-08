@@ -36,7 +36,7 @@ public class Automata : NamedBehavior
 
 	#region Unity Behavior Methods
 
-	void Start(){
+	void Awake(){
 		if (current != null){
 			stack.Add(current);
 			current.invoke_entry(this);
@@ -44,33 +44,24 @@ public class Automata : NamedBehavior
 	}
 
 	void Update(){
-		if (current != null){
-			if (transitions.Count > 0){
-				List<Transition> sorted = transitions.ToList<Transition>();
-				sorted.Sort();
-				foreach(Transition trans in sorted){
-					if (visiting(trans.to)){
-						//Debug.LogWarning(name+" is already in destination state for transition:"+trans.instance_name);
-					} else if(!visiting(trans.from)){
-						/*Debug.LogWarning(name+" is not in starting state for transition:"+trans.instance_name
-						+"\n Current:"+current.instance_name+" Needs:"+trans.from().instance_name);*/
-					} else if (!trans.test_single(this)){
-						//Debug.LogWarning(name+" failed tests for transition:"+trans.instance_name);
-					} else {
-						move_transition(trans);
-						break;
-					}
+		if (transitions.Count > 0){
+			List<Transition> sorted = transitions.ToList<Transition>();
+			sorted.Sort();
+			foreach(Transition trans in sorted){
+				if (trans.test_single(this)) {
+					move_transition(trans);
+					break;
 				}
-				transitions.Clear();
+			}
+			transitions.Clear();
+		} else if (current != null){
+			State initial = current.initial;
+			if(initial != null){
+				move_direct(initial);
 			} else {
-				State initial = current.initial;
-				if(initial != null){
-					move_direct(initial);
-				} else {
-					_current.invoke_update_own(this);
-					foreach(State state in stack.ToArray()){
-						state.invoke_update(this);
-					}
+				_current.invoke_update_own(this);
+				foreach(State state in stack.ToArray()){
+					state.invoke_update(this);
 				}
 			}
 		}
@@ -102,9 +93,14 @@ public class Automata : NamedBehavior
 					current.invoke_exit(this);
 					current = to;
 				}
-			} else if (current != to){
-				Debug.LogError("Attempted to move directly between non-connected states:\n"+
-							   current.instance_name+"=>"+to.instance_name);
+			} else {
+				if (current == to){
+					Debug.LogError("Attempted to move to and from the same state: "+
+						current.instance_name);
+				} else {
+					Debug.LogError("Attempted to move directly between non-connected states:\n"+
+								current.instance_name+"=>"+to.instance_name);
+				}
 			}
 		} else {
 			Debug.LogError("Automata should never be moved out of the state system once placed. Currently in "+
@@ -128,12 +124,16 @@ public class Automata : NamedBehavior
 	{
 		// if the from_state is above ours, we need to get to the pivot first
 		trans.invoke_entry(this);
-		while (current != trans.pivot) {
-			if (current == null){
-				Debug.LogError("Automata not on transition path.");
-				return this;
+		if (current != null){
+			while (current != trans.pivot) {
+				if (current == null){
+					Debug.LogError("Automata not on transition path.");
+					return this;
+				}
+				eject();
 			}
-			move_direct(current.parent);
+		} else {
+			move_direct(trans.pivot);
 		}
 		trans.invoke_transfer(this);
 		foreach(State down in trans.downswing){
