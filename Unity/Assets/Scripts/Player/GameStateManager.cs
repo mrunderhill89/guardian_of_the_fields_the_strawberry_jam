@@ -112,8 +112,13 @@ public class GameStateManager : SingletonBehavior {
 						}))
 				).add_child(
 					fsm.state("second_chance")
+					.on_entry(new StateEvent(()=>{
+					//Create a time that will go off in X minutes.
+					//That timer will trigger the transition to the next state.
+					}))
 				).add_child(
 				fsm.state("final_tally").on_entry(new StateEvent(()=>{
+						//Lock all the baskets so that dragging isn't possible anymore.
 						foreach (BasketComponent basket in BasketComponent.baskets){
 							basket.locked = true;
 						}

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UniRx;
 
-public class Automata : BetterBehaviour
+public class Automata : NamedBehavior
 {
 
 	#region Attributes

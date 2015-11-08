@@ -12,11 +12,13 @@ public class StateMachine : BetterBehaviour {
 		private set{_states=value;}
 	}
 	protected Dictionary<string, Transition> _transitions = new Dictionary<string, Transition>();
+	[Show]
 	public Dictionary<string,Transition> transitions{
 		get{return _transitions;}
 		private set{_transitions=value;}
 	}
 	protected Dictionary<string, Automata> _automatum  = new Dictionary<string, Automata>();
+	[Show]
 	public Dictionary<string,Automata> automatum{
 		get{return _automatum;}
 		private set{_automatum=value;}
@@ -26,6 +28,7 @@ public class StateMachine : BetterBehaviour {
 	public State read_state(string name){
 		return states [name];
 	}
+	[Show]
 	public State state(string name){
 		if (!has_state(name)) {
 			State s = NamedBehavior.GetOrCreateComponentByName<State>(gameObject,name);
@@ -60,6 +63,7 @@ public class StateMachine : BetterBehaviour {
 		return read_state(name).is_visited();
 	}
 	//Transitions
+	[Show]
 	public Transition transition(string name){
 		if (!transitions.ContainsKey (name)) {
 			Transition t = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject,name);
@@ -87,6 +91,7 @@ public class StateMachine : BetterBehaviour {
 		return this;
 	}
 	//Automata
+	[Show]
 	public Automata automata(string name){
 		if (!automatum.ContainsKey(name)) {
 			Automata a = gameObject.AddComponent<Automata>();
