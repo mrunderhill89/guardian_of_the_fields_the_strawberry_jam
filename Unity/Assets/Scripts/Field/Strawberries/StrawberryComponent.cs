@@ -14,19 +14,65 @@ public class StrawberryComponent : BetterBehaviour {
 			*transform.localScale.z)
 			;}
 	}
-
-	public DragHandle drag = null;
-	public StrawberryStateMachine berry_state;
+	public enum BerryPenalty
+	{
+		Accepted,
+		None,
+		Small,
+		Medium,
+		Big
+	}
+	public BerryPenalty get_penalty_type(bool dropped = false){
+		if (dropped) {
+			if (is_under_ripe ()) {
+				return BerryPenalty.Medium; //Dropped an underripe berry.
+			} else {
+				if (!is_over_ripe ()) {
+					if (is_under_size ()) {
+						return BerryPenalty.Medium; //Dropped a ripe but undersized berry.
+					} else {
+						return BerryPenalty.Big; //Dropped a perfectly good berry!
+					}
+				}
+			}
+			return BerryPenalty.None; //No penalty for dropping overripe berries.
+		} else {
+			if (is_over_ripe()){
+				return BerryPenalty.Medium; //Held onto an overripe berry
+			} else {
+				if (is_under_ripe()){
+					return BerryPenalty.Small; //Held onto an underripe berry, regardless of size
+				} else if (is_under_size()){
+					return BerryPenalty.None; //Held onto a berry that was ripe but undersized
+				}
+			}
+			return BerryPenalty.Accepted;
+		}
+	}
+	public float get_penalty_value(bool dropped = false){
+		BerryPenalty penalty = get_penalty_type (dropped);
+		if (!GameStartData.penalty_values.ContainsKey (penalty))
+			return 0.0f;
+		return GameStartData.penalty_values[penalty];
+	}
+	public bool is_under_ripe(){
+		return quality < GameStartData.min_accepted_ripeness;
+	}
+	public bool is_over_ripe(){
+		return quality > GameStartData.max_accepted_ripeness;
+	}
+	public bool is_under_size(){
+		return weight < GameStartData.min_berry_weight;
+	}
+	public DragHandle drag;
 	public Automata automata;
 	public ObjectVisibility visibility;
-	new protected Renderer renderer;
 
 	// Use this for initialization
 	void Start () {
-		berry_state = SingletonBehavior.get_instance<StrawberryStateMachine> ();
+		StrawberryStateMachine berry_state = SingletonBehavior.get_instance<StrawberryStateMachine> ();
 		automata = gameObject.GetComponent<Automata> ();
 		visibility = gameObject.GetComponent<ObjectVisibility>();
-		renderer = transform.Find("Strawberry_Mesh/Cube").GetComponent<Renderer>();
 		Initialize();
 		drag = gameObject.GetComponent<DragHandle>();
 		drag.register_incoming (berry_state.fsm.transition("field_drag"))

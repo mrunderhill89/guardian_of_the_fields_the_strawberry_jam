@@ -42,7 +42,7 @@ public class BasketComponent : BetterBehaviour {
 		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
 		GameStateManager player_state = SingletonBehavior.get_instance<GameStateManager>();
 		if (overflow == null)
-			overflow = GetComponent<OverflowDetector> ();
+			overflow = GetComponentInChildren<OverflowDetector> ();
 		slot.chain_parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))
@@ -55,7 +55,7 @@ public class BasketComponent : BetterBehaviour {
 				if (a.gameObject.GetComponent<StrawberryComponent>() == null){
 					return false;
 				}
-				return true;
+				return player_state.can_drag() && !this.locked;
 			}));
 		remove.chain_from(slot)
 			.chain_to (state_machine.fsm.state("drag"))
@@ -139,7 +139,11 @@ public class BasketComponent : BetterBehaviour {
 			valid_positions.Remove(obj);
 		}
 	}
-	
+
+	public bool is_overflow(){
+		return overflow.is_overflow();
+	}
+
 	public IEnumerable<StrawberryComponent> get_gathered_strawberries(){
 		StrawberryComponent next_component;
 		foreach(Automata a in slot.visitors){

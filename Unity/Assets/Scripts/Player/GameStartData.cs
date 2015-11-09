@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Vexe.Runtime.Types;
 public class GameStartData : BetterBehaviour {
 	public static int rng_seed;
@@ -31,6 +32,7 @@ public class GameStartData : BetterBehaviour {
 	public static float min_berry_weight = 0.00f;
 	public static float min_basket_weight = 15.00f;
 	public static float max_basket_weight = 17.00f;
-
+	public static Dictionary<StrawberryComponent.BerryPenalty, float> penalty_values
+		= new Dictionary<StrawberryComponent.BerryPenalty, float>();
 	//Hazard Data goes here
 }

@@ -114,6 +114,13 @@ public class StateMachine : BetterBehaviour {
 	public int count_automata(){
 		return automatum.Count;
 	}
+
+	public void trigger_transition(string name){
+		if (transitions.ContainsKey (name)) {
+			transitions[name].trigger();
+		}
+	}
+
 	public T match<T>(Dictionary<string,T> cases, T def = default(T)){
 		foreach(KeyValuePair<string, T> c in cases)
 		{
