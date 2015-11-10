@@ -127,7 +127,7 @@ public class GameStateManager : SingletonBehavior {
 							GameMessages.Log("Underweight Baskets:"+under_weight);
 							GameMessages.Log("Overweight Baskets:"+over_weight);
 							GameMessages.Log("Overflowing Baskets:"+over_flow);
-							GameMessages.Log("Accepted Baskets:"+correct);
+							GameMessages.Log("First Try Bonus:"+correct);
 						}))
 				).add_child(
 					fsm.state("second_chance")

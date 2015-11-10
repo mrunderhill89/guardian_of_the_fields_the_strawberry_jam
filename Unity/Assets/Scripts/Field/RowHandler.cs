@@ -11,7 +11,8 @@ public class RowHandler : BetterBehaviour{
 	public float cell_distance = 1.0f;
 	public int break_at = GameStartData.break_distance;
 	public int break_length = 5;
-	
+	public Vector3 cell_rotation = new Vector3(0.0f,0.0f,0.0f);
+
 	public string prefab = "GroundCell";
 	LinkedList<Cell> cells = new LinkedList<Cell>();
 	
@@ -119,6 +120,7 @@ public class RowHandler : BetterBehaviour{
 		cell.cell_number = cell_number;
 		cell.obj = GameObject.Instantiate(Resources.Load(prefab)) as GameObject;
 		cell.obj.transform.localPosition = new Vector3(transform.localPosition.x,transform.localPosition.y, z);
+		cell.obj.transform.localRotation = Quaternion.Euler(cell_rotation);
 		cell.obj.transform.SetParent(transform,true);
 		foreach(Action<GameObject> act in create_events){
 			act(cell.obj);

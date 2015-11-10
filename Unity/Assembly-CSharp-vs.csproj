@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\BasketWeightIndicator.cs" />
      <Compile Include="Assets\GameStateLabel.cs" />
+     <Compile Include="Assets\ProceduralScrollingTerrain.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
      <Compile Include="Assets\Scripts\Field\LeafGenerator.cs" />
      <Compile Include="Assets\Scripts\Field\RowHandler.cs" />
