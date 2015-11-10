@@ -1,7 +1,31 @@
 Base path: C:/Program Files/Unity/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-2084
+Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-9
 Cmd: getPlatforms
-Unhandled exception: Readfile from pipe failed. GLE=The pipe has been ended.
-
-
-Quitting shader compiler process
+Cmd: preprocess
+  insize=1295 outsize=421 ok=1
+Cmd: preprocess
+  insize=1530 outsize=1527 ok=1
+Cmd: preprocess
+  insize=14759 outsize=5409 ok=1
+Cmd: preprocess
+  insize=1228 outsize=1369 ok=1
+Cmd: preprocess
+  insize=15873 outsize=5188 ok=1
+Cmd: preprocess
+  insize=1796 outsize=1504 ok=1
+Cmd: preprocess
+  insize=13154 outsize=4357 ok=1
+Cmd: preprocess
+  insize=4170 outsize=2544 ok=1
+Cmd: compileSnippet
+  api=1 type=0 insize=3445 outsize=2237 kw=SHADOWS_DEPTH ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=3445 outsize=151 kw=SHADOWS_DEPTH ok=1
+Cmd: compileSnippet
+  api=1 type=0 insize=3054 outsize=2091 kw=SHADOWS_DEPTH ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=3054 outsize=151 kw=SHADOWS_DEPTH ok=1
+Cmd: compileSnippet
+  api=1 type=0 insize=70500 outsize=915 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=70500 outsize=4129 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
