@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\BasketWeightIndicator.cs" />
+     <Compile Include="Assets\CombineMesh.cs" />
+     <Compile Include="Assets\DisplaceMesh.cs" />
+     <Compile Include="Assets\DisplaceNoise.cs" />
+     <Compile Include="Assets\DisplaceSelf.cs" />
+     <Compile Include="Assets\DisplaceTerrain.cs" />
+     <Compile Include="Assets\Displacer.cs" />
      <Compile Include="Assets\GameStateLabel.cs" />
      <Compile Include="Assets\ProceduralScrollingTerrain.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
@@ -280,6 +286,7 @@
      <Compile Include="Assets\VFW Misc\Examples\RequirementsExample.cs" />
      <Compile Include="Assets\VFW Misc\Message.cs" />
      <Compile Include="Assets\VFW Misc\Requirements.cs" />
+     <Compile Include="Assets\WrapToTerrain.cs" />
      <None Include="Assets\Plugins\Editor\Vexe\LICENSE.txt" />
      <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
      <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
