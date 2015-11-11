@@ -10,10 +10,11 @@ using Vexe.Runtime.Types;
 public class DisplaceMesh : BetterBehaviour {
 	public List<Displacer> displacers = new List<Displacer>();
 	public MeshFilter filter;
-
+	public bool auto_update = false;
+	protected Vector3[] original_verts;
 	[Show]
 	void construct(){
-		filter.mesh.vertices = filter.sharedMesh.vertices.Select((Vector3 local)=>{
+		filter.mesh.vertices = original_verts.Select((Vector3 local)=>{
 			Vector3 world = transform.TransformPoint(local);
 			return displacers.Select((Displacer displacer)=>{
 				return displacer.displace(local,world);
@@ -22,8 +23,12 @@ public class DisplaceMesh : BetterBehaviour {
 			});
 		}).ToArray();
 	}
-	
-	void Update(){
+	void Start(){
+		original_verts = filter.sharedMesh.vertices;
 		construct();
+	}
+	void Update(){
+		if (auto_update)
+			construct();
 	}
 }

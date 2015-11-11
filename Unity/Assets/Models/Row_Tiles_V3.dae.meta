@@ -11,21 +11,26 @@ ModelImporter:
     100006: Middle
     100008: //RootNode
     100010: Start
+    100012: Ground
     400000: Camera
     400002: End
     400004: Lamp
     400006: Middle
     400008: //RootNode
     400010: Start
+    400012: Ground
     2300000: End
     2300002: Middle
     2300004: Start
+    2300006: Ground
     3300000: End
     3300002: Middle
     3300004: Start
+    3300006: Ground
     4300000: Middle
     4300002: Start
     4300004: End
+    4300006: Ground
     9500000: //RootNode
   materials:
     importMaterials: 1
