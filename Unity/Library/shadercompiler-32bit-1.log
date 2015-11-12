@@ -2,10 +2,18 @@ Base path: C:/Program Files/Unity/Editor/Data
 Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-9
 Cmd: getPlatforms
 Cmd: compileSnippet
-  api=1 type=0 insize=70500 outsize=668 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_COMBINED DYNAMICLIGHTMAP_ON ok=1
+  api=1 type=0 insize=982 outsize=1026 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
 Cmd: compileSnippet
-  api=1 type=1 insize=70500 outsize=4322 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_COMBINED DYNAMICLIGHTMAP_ON ok=1
+  api=1 type=1 insize=982 outsize=4044 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
 Cmd: compileSnippet
-  api=1 type=0 insize=70500 outsize=766 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+  api=1 type=0 insize=938 outsize=808 kw=DIRECTIONAL SHADOWS_OFF _NORMALMAP ok=1
 Cmd: compileSnippet
-  api=1 type=1 insize=70500 outsize=4049 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+  api=1 type=1 insize=938 outsize=2304 kw=DIRECTIONAL SHADOWS_OFF _NORMALMAP ok=1
+Cmd: compileSnippet
+  api=1 type=0 insize=982 outsize=1175 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
+Cmd: compileSnippet
+  api=1 type=1 insize=982 outsize=4153 kw=DIRECTIONAL SHADOWS_SCREEN LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
+Unhandled exception: Readfile from pipe failed. GLE=Broken pipe.
+
+
+Quitting shader compiler process

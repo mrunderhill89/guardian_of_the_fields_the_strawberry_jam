@@ -22,7 +22,28 @@ public class DisplaceMesh : BetterBehaviour {
 				return sum+part;
 			});
 		}).ToArray();
+		RecalculateNormalsSmooth(filter.mesh);
 	}
+	
+	public static void RecalculateNormalsSmooth(Mesh mesh){
+		mesh.normals = mesh.normals.Select((Vector3 original)=>{
+			return new Vector3(0.0f,0.0f,0.0f);
+		}).ToArray();
+		Vector3 triangle_normal, side_ab, side_bc, vert_a, vert_b, vert_c;
+		int[] triangles = mesh.triangles;
+		for (int v = 0; v < triangles.Length; v+=3){
+			vert_a = mesh.vertices[triangles[v]];
+			vert_b = mesh.vertices[triangles[v+1]];
+			vert_c = mesh.vertices[triangles[v+2]];
+			side_ab = vert_a - vert_b;
+			side_bc = vert_b - vert_c;
+			triangle_normal = Vector3.Cross(side_ab,side_bc);
+			mesh.normals[triangles[v]] += triangle_normal;
+			mesh.normals[triangles[v+1]] += triangle_normal;
+			mesh.normals[triangles[v+2]] += triangle_normal;
+		}
+	}
+	
 	void Start(){
 		original_verts = filter.sharedMesh.vertices;
 		construct();
