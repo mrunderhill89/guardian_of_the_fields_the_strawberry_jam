@@ -6,5 +6,5 @@ using System;
 using Vexe.Runtime.Types;
 
 public abstract class Displacer : BetterBehaviour{
-	public abstract Vector3 displace(Vector3 local, Vector3 world);
+	public abstract Vector3 displace(Vector3 local, Vector3 world, Vector3 displaced);
 }

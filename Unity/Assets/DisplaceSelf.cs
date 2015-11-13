@@ -7,7 +7,7 @@ using Vexe.Runtime.Types;
 
 public class DisplaceSelf : Displacer{
 	public Vector3 scale = new Vector3(1.0f,1.0f,1.0f);
-	public override Vector3 displace(Vector3 local, Vector3 world){
+	public override Vector3 displace(Vector3 local, Vector3 world, Vector3 displaced){
 		return new Vector3(
 			scale.x * local.x,
 			scale.y * local.y,

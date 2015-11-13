@@ -15,7 +15,7 @@ public class DisplaceNoise : Displacer{
 	public AnimationCurve y_curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
 	public AnimationCurve z_curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
 	public bool use_local = false;
-	public override Vector3 displace(Vector3 local, Vector3 world){
+	public override Vector3 displace(Vector3 local, Vector3 world, Vector3 displaced){
 		Vector3 input = use_local? local:world;
 		Vector2 noise_position = new Vector2(
 			x_component.x * input.x 

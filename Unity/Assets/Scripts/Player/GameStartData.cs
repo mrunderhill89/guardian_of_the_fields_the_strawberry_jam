@@ -19,6 +19,7 @@ public class GameStartData : BetterBehaviour {
 
 	//Rows and Breaks
 	public static int break_distance = 100;
+	public static int break_length = 10;
 	//Break data goes here
 	
 	//Time of Day & Game Length

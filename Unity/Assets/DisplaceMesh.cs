@@ -14,23 +14,37 @@ public class DisplaceMesh : BetterBehaviour {
 	protected Vector3[] original_verts;
 	[Show]
 	void construct(){
+		Vector3[] original_normals = filter.sharedMesh.normals;
 		filter.mesh.vertices = original_verts.Select((Vector3 local)=>{
 			Vector3 world = transform.TransformPoint(local);
-			return displacers.Select((Displacer displacer)=>{
-				return displacer.displace(local,world);
-			}).Aggregate(Vector3.zero, (Vector3 sum, Vector3 part)=>{
-				return sum+part;
+			return displacers.Aggregate(Vector3.zero, (Vector3 sum, Displacer displacer)=>{
+				return sum + displacer.displace(local, world, sum);
 			});
 		}).ToArray();
-		RecalculateNormalsSmooth(filter.mesh);
+		if (normal_recalculation == NormalRecalculation.KeepOriginal) {
+			filter.mesh.normals = original_normals;
+		} else if (normal_recalculation == NormalRecalculation.RecalculateFlat) {
+			filter.mesh.RecalculateNormals();
+		} else if (normal_recalculation == NormalRecalculation.RecalculateSmooth) {
+			RecalculateNormalsSmooth(filter.mesh);
+		}
 	}
-	
-	public static void RecalculateNormalsSmooth(Mesh mesh){
-		mesh.normals = mesh.normals.Select((Vector3 original)=>{
-			return new Vector3(0.0f,0.0f,0.0f);
-		}).ToArray();
+	public enum NormalRecalculation
+	{
+		KeepOriginal,
+		RecalculateFlat,
+		RecalculateSmooth,
+		NoNormals
+	}
+	public NormalRecalculation normal_recalculation = NormalRecalculation.RecalculateSmooth;
+
+	public static void RecalculateNormalsSmooth(Mesh mesh, bool unbiased = false){
 		Vector3 triangle_normal, side_ab, side_bc, vert_a, vert_b, vert_c;
 		int[] triangles = mesh.triangles;
+		Vector3[] normals = new Vector3[mesh.normals.Length];
+		for (int n = 0; n < normals.Length; n++) {
+			normals[n] = new Vector3(0.0f,0.0f,0.0f);
+		}
 		for (int v = 0; v < triangles.Length; v+=3){
 			vert_a = mesh.vertices[triangles[v]];
 			vert_b = mesh.vertices[triangles[v+1]];
@@ -38,10 +52,14 @@ public class DisplaceMesh : BetterBehaviour {
 			side_ab = vert_a - vert_b;
 			side_bc = vert_b - vert_c;
 			triangle_normal = Vector3.Cross(side_ab,side_bc);
-			mesh.normals[triangles[v]] += triangle_normal;
-			mesh.normals[triangles[v+1]] += triangle_normal;
-			mesh.normals[triangles[v+2]] += triangle_normal;
+			if (unbiased){
+				triangle_normal.Normalize();
+			}
+			normals[triangles[v]] += triangle_normal;
+			normals[triangles[v+1]] += triangle_normal;
+			normals[triangles[v+2]] += triangle_normal;
 		}
+		mesh.normals = normals;
 	}
 	
 	void Start(){
