@@ -6,10 +6,10 @@ public class ScrollGroundTexture : BetterBehaviour {
 	public Transform target;
 	new public Renderer renderer;
 	public float parallax = 1.0f;
-	public System.Func<Vector3,Vector2> project = xz_plane;
+	public System.Func<Vector3,Vector2> project = along_z;
 
-	public static Vector2 xz_plane(Vector3 three_d){
-		return new Vector2 (three_d.x, three_d.z);
+	public static Vector2 along_z(Vector3 three_d){
+		return new Vector2 (0.0f, three_d.z);
 	}
 
 	[Show]

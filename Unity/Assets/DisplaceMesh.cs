@@ -10,6 +10,7 @@ using Vexe.Runtime.Types;
 public class DisplaceMesh : BetterBehaviour {
 	public List<Displacer> displacers = new List<Displacer>();
 	public MeshFilter filter;
+	new public MeshCollider collider;
 	public bool auto_update = false;
 	protected Vector3[] original_verts;
 	[Show]
@@ -27,6 +28,9 @@ public class DisplaceMesh : BetterBehaviour {
 			filter.mesh.RecalculateNormals();
 		} else if (normal_recalculation == NormalRecalculation.RecalculateSmooth) {
 			RecalculateNormalsSmooth(filter.mesh);
+		}
+		if (collider != null){
+			collider.sharedMesh = filter.mesh;
 		}
 	}
 	public enum NormalRecalculation
@@ -63,6 +67,8 @@ public class DisplaceMesh : BetterBehaviour {
 	}
 	
 	void Start(){
+		if (collider == null)
+			collider = gameObject.GetComponent<MeshCollider>();
 		original_verts = filter.sharedMesh.vertices;
 		construct();
 	}
