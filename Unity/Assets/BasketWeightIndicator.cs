@@ -9,8 +9,15 @@ public class BasketWeightIndicator : BetterBehaviour {
 	public static Color over_weight = new Color();
 	public static Color locked_color = new Color();
 	public static Color second_chance_color = new Color();
+	public static Sprite under_sprite;
+	public static Sprite over_sprite;
+	public static Sprite correct_sprite;
+	public static Sprite overflow_sprite;
+
 	public static string format = "0.00";
 	public TextMesh text;
+	public SpriteRenderer sprite;
+
 	public BasketComponent basket;
 	void Start(){
 		if (basket == null)
@@ -29,10 +36,17 @@ public class BasketWeightIndicator : BetterBehaviour {
 			}
 		} else if (value < GameStartData.min_basket_weight){
 			text.color = under_weight;
+				sprite.sprite = under_sprite;
 		} else if (value > GameStartData.max_basket_weight){
 			text.color = over_weight;
+				sprite.sprite = over_sprite;
 		} else {
 			text.color = correct_weight;
+				if (basket.is_overflow()){
+					sprite.sprite = overflow_sprite;
+				} else {
+					sprite.sprite = correct_sprite;
+				}
 		}
 	}
 }
