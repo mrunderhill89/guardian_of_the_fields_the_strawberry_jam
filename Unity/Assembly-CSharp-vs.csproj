@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\BasketUIComponent.cs" />
      <Compile Include="Assets\BasketWeightIndicator.cs" />
      <Compile Include="Assets\CombineMesh.cs" />
      <Compile Include="Assets\DisplaceFade.cs" />

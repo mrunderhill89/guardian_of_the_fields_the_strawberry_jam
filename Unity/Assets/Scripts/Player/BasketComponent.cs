@@ -100,6 +100,14 @@ public class BasketComponent : BetterBehaviour {
 		}
 	}
 
+	public bool is_overweight(){
+		return total_weight > GameStartData.max_basket_weight;
+	}
+
+	public bool is_underweight(){
+		return total_weight < GameStartData.min_basket_weight;
+	}
+
 	void UpdatePhysics(Automata a){
 		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
 		if (body != null) {
@@ -168,5 +176,41 @@ public class BasketComponent : BetterBehaviour {
 			}
 		}
 		return lightest;
+	}
+	
+	public class BasketScoreData{
+		public int accepted = 0;
+		public int overweight = 0;
+		public int underweight = 0;
+		public int overflow = 0;
+		public void reset(){
+			accepted = 0;
+			overweight = 0;
+			underweight = 0;
+			overflow = 0;
+		}
+	}
+	protected static BasketScoreData saved_score = new BasketScoreData();
+	public static bool lock_scores = false;
+	
+	public static BasketScoreData current_score{
+		get{
+			if (!lock_scores){
+				saved_score.reset();
+				foreach(BasketComponent basket in baskets){
+					if (basket.is_overflow()){
+						saved_score.overflow++;
+					}
+					if (basket.is_overweight()){
+						saved_score.overweight++;
+					} else if (basket.is_underweight()){
+						saved_score.underweight++;
+					} else if (!basket.is_overflow()){
+						saved_score.overflow++;
+					}
+				}
+			}
+			return saved_score;
+		}
 	}
 }

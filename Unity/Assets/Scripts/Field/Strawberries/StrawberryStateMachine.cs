@@ -133,26 +133,33 @@ public class StrawberryStateMachine : SingletonBehavior {
 		public int overripe = 0;
 		public int underripe = 0;
 		public int undersize = 0;
+		public void reset(){
+			ripe = 0;
+			overripe = 0;
+			underripe = 0;
+			undersize = 0;
+		}
 	}
 	protected Dictionary<string, StrawberryScoreData> saved_scores = new Dictionary<string,StrawberryScoreData>();
 	public StrawberryScoreData get_score_data(string state_name){
-		if (!saved_scores.ContainsKey(state_name) || !lock_scores){
-			StrawberryScoreData data = new StrawberryScoreData();
+		if (!saved_scores.ContainsKey(state_name))
+			saved_scores[state_name] = new StrawberryScoreData();
+		if (!lock_scores){
+			saved_scores[state_name].reset();
 			if (fsm != null){
 				foreach (StrawberryComponent berry in get_strawberries(state_name)){
 					if (berry.is_under_size()){
-						data.undersize++;
+						saved_scores[state_name].undersize++;
 					}
 					if (berry.is_over_ripe()){
-						data.overripe++;
+						saved_scores[state_name].overripe++;
 					} else if (berry.is_under_ripe()){
-						data.underripe++;
+						saved_scores[state_name].underripe++;
 					} else if (!berry.is_under_size()){
-						data.ripe++;
+						saved_scores[state_name].ripe++;
 					}
 				}
 			}
-			saved_scores[state_name] = data;
 		}
 		return saved_scores[state_name];
 	}
