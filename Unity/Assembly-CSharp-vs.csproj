@@ -112,6 +112,7 @@
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
      <Compile Include="Assets\ScrollGroundTexture.cs" />
      <Compile Include="Assets\ShowInState.cs" />
+     <Compile Include="Assets\StrawberryUIComponent.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />

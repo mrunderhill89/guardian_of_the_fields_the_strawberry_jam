@@ -128,4 +128,45 @@ public class StrawberryStateMachine : SingletonBehavior {
 			if (next_component != null) yield return next_component;
 		}
 	}
+	public class StrawberryScoreData{
+		public int ripe = 0;
+		public int overripe = 0;
+		public int underripe = 0;
+		public int undersize = 0;
+	}
+	protected Dictionary<string, StrawberryScoreData> saved_scores = new Dictionary<string,StrawberryScoreData>();
+	public StrawberryScoreData get_score_data(string state_name){
+		if (!saved_scores.ContainsKey(state_name) || !lock_scores){
+			StrawberryScoreData data = new StrawberryScoreData();
+			if (fsm != null){
+				foreach (StrawberryComponent berry in get_strawberries(state_name)){
+					if (berry.is_under_size()){
+						data.undersize++;
+					}
+					if (berry.is_over_ripe()){
+						data.overripe++;
+					} else if (berry.is_under_ripe()){
+						data.underripe++;
+					} else if (!berry.is_under_size()){
+						data.ripe++;
+					}
+				}
+			}
+			saved_scores[state_name] = data;
+		}
+		return saved_scores[state_name];
+	}
+	public bool lock_scores = false;
+	[Show]
+	public StrawberryScoreData gathered{
+		get{
+			return get_score_data("basket");
+		}
+	}
+	[Show]
+	public StrawberryScoreData dropped{
+		get{
+			return get_score_data("fall");
+		}
+	}
 }

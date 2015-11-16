@@ -11,11 +11,13 @@ public class GameStateManager : SingletonBehavior {
 	public Vector3 gravity;
 	public StateMachine fsm;
 	public List<string> drag_states = new List<string>();
+
 	Action lazy_log(string message){
 		return () => {
 			Debug.Log (message);
 		};
 	}
+
 	new void Awake(){
 		base.Awake();
 		if (fsm == null)
@@ -64,6 +66,7 @@ public class GameStateManager : SingletonBehavior {
 						bool ineligible;
 						//Clear all remaining strawberries in the field.
 						StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+						sb_machine.lock_scores = true;
 						foreach (StrawberryComponent berry in sb_machine.get_strawberries("field")){
 							Destroy (berry.gameObject);
 						}
@@ -95,11 +98,6 @@ public class GameStateManager : SingletonBehavior {
 								DestroyObject(berry.gameObject);
 							}
 						}
-						GameMessages.Log("Dropped Berries:"+dropped);
-						GameMessages.Log("Underripe Berries:"+under_ripe);
-						GameMessages.Log("Overripe Berries:"+over_ripe);
-						GameMessages.Log("Undersized Berries:"+under_size);
-						GameMessages.Log("Current Penalty:"+penalty);
 					}))
 					,true
 				).add_child(
@@ -124,10 +122,6 @@ public class GameStateManager : SingletonBehavior {
 								}
 								basket.second_chance = !basket.locked;
 							}
-							GameMessages.Log("Underweight Baskets:"+under_weight);
-							GameMessages.Log("Overweight Baskets:"+over_weight);
-							GameMessages.Log("Overflowing Baskets:"+over_flow);
-							GameMessages.Log("First Try Bonus:"+correct);
 						}))
 				).add_child(
 					fsm.state("second_chance")
