@@ -18,14 +18,14 @@ public class DisplaceNoise : Displacer{
 	public override Vector3 displace(Vector3 local, Vector3 world, Vector3 displaced){
 		Vector3 input = use_local? local:world;
 		Vector2 noise_position = new Vector2(
-			Mathf.Abs(x_component.x * input.x 
+			x_component.x * input.x 
 				+ x_component.y * input.y + 
 				x_component.z * input.z + 
-				x_component.w),
-			Mathf.Abs(y_component.x * input.x 
+				x_component.w,
+			y_component.x * input.x 
 				+ y_component.y * input.y + 
 				y_component.z * input.z + 
-				y_component.w)
+				y_component.w
 		);
 		float noise_value = Mathf.PerlinNoise(noise_position.x, noise_position.y);
 		return new Vector3(

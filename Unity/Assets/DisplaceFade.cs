@@ -7,8 +7,8 @@ public class DisplaceFade : Displacer {
 	public AnimationCurve fade_curve;
 	public override Vector3 displace(Vector3 local, Vector3 world, Vector3 displaced){
 		if (source_displacer != null){
-			float distance = Vector3.Dot(local, fade_direction)/fade_direction.magnitude;
-			return source_displacer.displace(local,world,displaced) * (1.0f-fade_curve.Evaluate(distance));
+			float distance = Mathf.Abs(Vector3.Dot(local, fade_direction));
+			return source_displacer.displace(local,world,displaced) * (1.0f-Mathf.Clamp(fade_curve.Evaluate(distance),0.0f,1.0f));
 		}
 		return Vector3.zero;
 	}
