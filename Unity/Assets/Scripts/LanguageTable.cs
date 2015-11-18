@@ -1,103 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.RepresentationModel;
 
 public class LanguageTable : BetterBehaviour {
-	public enum Language
-	{
-		English,
-		Spanish
-	}
-	protected static Language default_lang = Language.English;
-	protected static Language _current_lang = Language.English;
-	[Serialize][Hide]
-	protected static Dictionary<Language,Dictionary<string,string>> languages
-		= new Dictionary<Language, Dictionary<string, string>>();
-	[Show]
-	public static Dictionary<string,string> entries{
-		get{ return languages[current_lang];}
-	}
-	static LanguageTable(){
-		foreach (Language lang in Language.GetValues(typeof(Language))) {
-			if (!languages.ContainsKey(lang)){
-				languages[lang] = new Dictionary<string, string> ();
-			}
-		}
-	}
-	public static string get(string key){
-		return get(key, current_lang);
-	}
-
-	public static string get(string key, Language lang){
-		if (key == "")
-			return "<No entry>";
-		if (!languages [_current_lang].ContainsKey (key)) {
-			if (!languages [default_lang].ContainsKey (key)) {
-				languages[default_lang][key] = "!!"+key;
-			}
-			if (_current_lang != default_lang){
-				languages[_current_lang][key] = "??"+languages[default_lang][key];
-			}
-		}
-		return languages [_current_lang] [key];
-	}
-
-
 	public List<Text> text_objects = new List<Text>();
 	public List<TextMesh> text_meshes = new List<TextMesh>();
-	[Show]
-	public static Language current_lang{
-		get{ return _current_lang;}
-		set{ 
-			_current_lang = value;
-			foreach (LanguageTable component in GameObject.FindObjectsOfType<LanguageTable>()){
-				component.update();
-			}
-		}
-	}
 	public string key = "";
 	[Show]
-	public string value{
-		get { return get(key);}
-		set { languages[current_lang][key] = value;}
-	}
-	[Show]
-	public static void delete_entry(string key, Language lang){
-		languages[lang].Remove (key);
-	}
-	[Show]
-	public static void fix_entry_name(string old_key, string new_key){
-		foreach (LanguageTable component in GameObject.FindObjectsOfType<LanguageTable>()) {
-			if (component.key == old_key)
-				component.key = new_key;
+	public string value {
+		get{
+			return get(key);
 		}
-		string hold;
-		foreach (Language lang in Language.GetValues(typeof(Language))) {
-			hold = languages[lang][old_key];
-			delete_entry(old_key,lang);
-			languages[lang][new_key] = hold;
+		set{
+			languages[current_language][key] = value;
+			update();
 		}
-	}
-	[Show]
-	public static void sync(){
-		foreach (Language x in Language.GetValues(typeof(Language))) {
-			foreach(string key in languages[x].Keys){
-				foreach (Language y in Language.GetValues(typeof(Language))) {
-					get (key,y);
-				}
-			}
-		}
-	}
-	public static string folder_name = "/Text";
-	[Show]
-	public static void Export(){
-
-	}
-	[Show]
-	public static void Import(){
-
 	}
 	public void Start(){
 		update ();
@@ -108,6 +32,64 @@ public class LanguageTable : BetterBehaviour {
 		}
 		foreach (TextMesh mesh in text_meshes) {
 			mesh.text = value;
+		}
+	}
+	
+	//Static Elements Go Here
+	[Show]
+	static Dictionary<string, Dictionary<string,string>> languages = new Dictionary<string, Dictionary<string,string>>();
+	[Show]
+	static string current_language = "English";
+	static string default_language = "English";
+	static LanguageTable(){
+		Import("Assets/Languages.yaml");
+	}
+	public static Dictionary<string,string> get_language(string lang){
+		if (!languages.ContainsKey(lang)){
+			languages[lang] = new Dictionary<string,string>();
+		}
+		return languages[lang];
+	}
+	
+	public static string get(string key, bool read_only = false){
+		return get(key, current_language, read_only);
+	}
+	public static string get(string key, string lang, bool read_only = false){
+		if (!get_language(lang).ContainsKey(key)){
+			if (read_only){
+				return "<No Entry>";
+			} else {
+				if(get_language(default_language).ContainsKey(key)){
+					get_language(lang)[key] = "??"+get_language(default_language)[key];
+				} else {
+					get_language(lang)[key] = "!!"+key;
+				}
+			}
+		}
+		return get_language(lang)[key];
+	}
+	
+	[Show]
+	public static void Export(string filename = "Assets/Languages.yaml"){
+		StreamWriter fout = new StreamWriter(filename);
+			var serializer = new Serializer();
+			serializer.Serialize(fout, languages);
+		fout.Close();
+	}
+	[Show]
+	public static void Import(string filename = "Assets/Languages.yaml"){
+		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
+			if (b == "") return n;
+			return b+"\n"+n;
+		});
+		var input = new StringReader(Document);
+		var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
+		languages = deserializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(input);
+	}
+	[Show]
+	public static void Refresh(){
+		foreach (LanguageTable comp in GameObject.FindObjectsOfType<LanguageTable>()){
+			comp.update();
 		}
 	}
 }
