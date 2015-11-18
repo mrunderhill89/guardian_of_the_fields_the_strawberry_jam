@@ -1,23 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BasketWeightIndicator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LanguageTable.cs">
     <Files>
-      <File FileName="Assets\Scripts\Player\BasketComponent.cs" Line="1" Column="1" />
-      <File FileName="Assets\RowHandler2.cs" Line="1" Column="1" />
-      <File FileName="Assets\DisplaceMesh.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Technical\CountdownTimer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\ProceduralScrollingTerrain.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Field\RowHandler.cs" Line="1" Column="1" />
-      <File FileName="Assets\Displacer.cs" Line="1" Column="1" />
-      <File FileName="Assets\DisplaceSelf.cs" Line="1" Column="1" />
-      <File FileName="Assets\DisplaceTerrain.cs" Line="1" Column="1" />
-      <File FileName="Assets\DisplaceNoise.cs" Line="18" Column="82" />
-      <File FileName="Assets\RowGenerator.cs" Line="1" Column="1" />
-      <File FileName="Assets\EmptyRowSetup.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player\GameStartData.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryRowState.cs" Line="1" Column="1" />
-      <File FileName="Assets\BasketWeightIndicator.cs" Line="48" Column="37" />
+      <File FileName="Assets\Scripts\UserInterface\GameStateLabel.cs" Line="25" Column="23" />
+      <File FileName="Assets\ScoreHandlerComponent.cs" Line="6" Column="44" />
+      <File FileName="Assets\Scripts\LanguageTable.cs" Line="18" Column="8" />
+      <File FileName="Assets\StrawberryUIComponent.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
