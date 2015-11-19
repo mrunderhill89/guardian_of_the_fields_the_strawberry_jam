@@ -1,32 +1,99 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Vexe.Runtime.Types;
 public class GameTimer : BetterBehaviour {
-	float _time = 0.0f;
+	public const float F_MS_IN_SECOND = 10000.0f;
+	public const int   I_MS_IN_SECOND = 10000;
+	public const float F_SECONDS_IN_MINUTE = 60.0f;
+	public const int   I_SECONDS_IN_MINUTE = 60;
+	public const int   I_MINUTES_IN_HOUR = 60;
+	public const float F_SECONDS_IN_HOUR = 3600.0f;
+	public const int   I_SECONDS_IN_HOUR = 3600;
+	
+	public class Time{
+		public float total = 0.0f;
+		public Time(float _t = 0.0f){
+			total = _t;
+		}
+		[Show]
+		public int milliseconds{
+			get{return Mathf.FloorToInt(total * F_MS_IN_SECOND) % I_MS_IN_SECOND;}
+		}
+		[Show]
+		public int seconds{
+			get{return Mathf.FloorToInt(total) % I_SECONDS_IN_MINUTE;}
+		}
+		[Show]
+		public int minutes{
+			get{return Mathf.FloorToInt(total/F_SECONDS_IN_MINUTE)% I_MINUTES_IN_HOUR;}
+		}
+		[Show]
+		public int hours{
+			get{return Mathf.FloorToInt(total/F_SECONDS_IN_HOUR);}
+		}
+		public float f_hours{
+			get{return total/F_SECONDS_IN_HOUR;}
+		}
+		[Show]
+		public string as_stopwatch
+		{
+			get{return hours.ToString()+"'"+minutes.ToString("00")+"\""+seconds.ToString("00")+"."+milliseconds.ToString("00");}
+		}
+		[Show]
+		public string as_clock{
+			get{return hours.ToString()+":"+minutes.ToString("00");}
+		}
+	}
+	public class Countdown{
+		float time = 0.0f;
+		Action<float> act;
+		public Countdown(float t, Action<float> a){
+			time = t;
+			act = a;
+		}
+		public void invoke(float t){
+			act(t);
+		}
+		public Time remaining(Time t){
+			return new Time(time - t.total);
+		}
+	}
+	Time time = new Time(0.0f);
+	List<Countdown> countdowns = new List<Countdown>();
+
 	[Show]
-	public float time{
-		get{ return _time;}
+	public Time real_time{
+		get{ return time;}
 	}
 	[Show]
-	public string formatted_time{
-		get{ return ToString();}
+	public Time game_time{
+		get{
+			return new Time(real_to_game(time.total));
+		}
 	}
+	
+	public float real_to_game(float real){
+		return (
+			GameStartData.start_hour +
+			(time.total / GameStartData.game_length) * 
+			(GameStartData.end_hour - GameStartData.start_hour)
+		) * F_SECONDS_IN_HOUR;
+	}
+	public static float game_to_real(float game){
+		return (
+			GameStartData.game_length * ((game/F_SECONDS_IN_HOUR) - GameStartData.start_hour)
+		)/(GameStartData.end_hour - GameStartData.start_hour);
+	}
+	
+	GameTimer add_countdown(float t, Action<float> act, bool from_now = true){
+		float cd_time = from_now? time.total+t:t;
+		countdowns.Add(new Countdown(cd_time, act));
+		return this;
+	}
+	
 	void Update () {
-		_time += Time.deltaTime;
-	}
-	public int milliseconds(){
-		return Mathf.FloorToInt(time * 10000.0f) % 10000;
-	}
-	public int seconds(){
-		return Mathf.FloorToInt(time) % 60;
-	}
-	public int minutes(){
-		return Mathf.FloorToInt(time/60.0f)% 60;
-	}
-	public int hours(){
-		return Mathf.FloorToInt(time/3600.0f);
-	}
-	public override string ToString(){
-		return hours () + "'" + minutes() + "\"" + seconds () + "." + milliseconds();
+		time.total += UnityEngine.Time.deltaTime;
 	}
 }

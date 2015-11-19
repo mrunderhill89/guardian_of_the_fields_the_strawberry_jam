@@ -206,7 +206,7 @@ public class BasketComponent : BetterBehaviour {
 					} else if (basket.is_underweight()){
 						saved_score.underweight++;
 					} else if (!basket.is_overflow()){
-						saved_score.overflow++;
+						saved_score.accepted++;
 					}
 				}
 			}
