@@ -56,11 +56,10 @@
      <Compile Include="Assets\DisplaceTerrain.cs" />
      <Compile Include="Assets\Displacer.cs" />
      <Compile Include="Assets\EmptyRowSetup.cs" />
-     <Compile Include="Assets\GameStateLabel.cs" />
      <Compile Include="Assets\ProceduralScrollingTerrain.cs" />
      <Compile Include="Assets\RowGenerator.cs" />
      <Compile Include="Assets\RowHandler2.cs" />
-     <Compile Include="Assets\ScoreHandlerComponent.cs" />
+     <Compile Include="Assets\ScoreHandler.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
      <Compile Include="Assets\Scripts\Field\LeafGenerator.cs" />
      <Compile Include="Assets\Scripts\Field\RowHandler.cs" />

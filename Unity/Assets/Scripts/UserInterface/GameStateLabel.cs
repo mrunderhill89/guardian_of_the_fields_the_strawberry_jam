@@ -4,11 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
 
-public class GameNameLabel : BetterBehaviour {
+public class GameStateLabel : BetterBehaviour {
 	public GameStateManager game;
 	public Text text;
 	public Dictionary<string,string> state_names = new Dictionary<string,string>();
-
+	public LanguageTable lang;
+	
 	[Show]
 	public string key{
 		get{
@@ -23,6 +24,7 @@ public class GameNameLabel : BetterBehaviour {
 		}
 	}
 	public void Update(){
-		text.text = LanguageTable.get(key);
+		lang.key = key;
+		//text.text = LanguageTable.get(key);
 	}
 }

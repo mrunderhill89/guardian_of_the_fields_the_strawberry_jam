@@ -5,6 +5,7 @@ using Vexe.Runtime.Types;
 
 public class StrawberryUIComponent : BetterBehaviour {
 	public StrawberryStateMachine berry_state;
+	public ScoreHandler scores;
 	public Text ripe_text;
 	public Text over_text;
 	public Text under_text;
@@ -13,7 +14,7 @@ public class StrawberryUIComponent : BetterBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		StrawberryStateMachine.StrawberryScoreData data = berry_state.get_score_data(state_name);
+		ScoreHandler.StrawberryScore data = scores.current_score.strawberries[state_name];
 		ripe_text.text = data.ripe.ToString();
 		over_text.text = data.overripe.ToString();
 		under_text.text = data.underripe.ToString();

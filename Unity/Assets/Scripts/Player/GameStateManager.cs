@@ -10,6 +10,7 @@ public class GameStateManager : SingletonBehavior {
 	public PaceManager cart_control;
 	public Vector3 gravity;
 	public StateMachine fsm;
+	public ScoreHandler scores;
 	public List<string> drag_states = new List<string>();
 
 	Action lazy_log(string message){
@@ -22,6 +23,8 @@ public class GameStateManager : SingletonBehavior {
 		base.Awake();
 		if (fsm == null)
 			fsm = gameObject.AddComponent<StateMachine> ();
+		if (scores == null)
+			scores = GetComponent<ScoreHandler>();
 	}
 	void Start () {
 		Physics.gravity = gravity;
@@ -58,71 +61,26 @@ public class GameStateManager : SingletonBehavior {
 		).add_child (
 			fsm.state ("game_end")
 				.add_child(
-					fsm.state("remove_ineligible_berries")
+					fsm.state("weigh_baskets")
 					.on_entry(new StateEvent(()=>{
 						camera_control.set_target("pack");
-						float penalty = 0.0f;
-						int dropped = 0, under_ripe = 0, over_ripe = 0, under_size = 0;
-						bool ineligible;
 						//Clear all remaining strawberries in the field.
 						StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-						sb_machine.lock_scores = true;
+						scores.lock_strawberries = true;
 						foreach (StrawberryComponent berry in sb_machine.get_strawberries("field")){
 							Destroy (berry.gameObject);
 						}
 						foreach (StrawberryComponent berry in sb_machine.get_strawberries("fall")){
-							dropped++;
-							penalty += berry.get_penalty_value(true);
 							Destroy (berry.gameObject);
 						}
 						//Check strawberries that the player has gathered
 						foreach (StrawberryComponent berry in BasketComponent.get_all_strawberries().ToList()){
-							ineligible = false;
-							//Underripe
-							if (berry.quality < GameStartData.min_accepted_ripeness){
-								under_ripe++;
-								ineligible = true;
-							}
-							//Overripe
-							if (berry.quality > GameStartData.max_accepted_ripeness){
-								over_ripe++;
-								ineligible = true;
-							}
-							//Undersize
-							if (berry.weight < GameStartData.min_berry_weight){
-								under_size++;
-								ineligible = true;
-							}
-							if (ineligible){
-								penalty += berry.get_penalty_value(false);
+							if (berry.is_ineligible()){
 								DestroyObject(berry.gameObject);
 							}
 						}
 					}))
 					,true
-				).add_child(
-					fsm.state("weigh_baskets")
-						.on_entry(new StateEvent(()=>{
-							int over_weight = 0, under_weight = 0, over_flow = 0, correct = 0;
-							foreach (BasketComponent basket in BasketComponent.baskets){
-								if (basket.is_overflow()){
-									over_flow++;
-								}
-								if (basket.total_weight >= GameStartData.min_basket_weight){
-									if (basket.total_weight <= GameStartData.max_basket_weight){
-										if (!basket.is_overflow()){
-											correct++;
-											basket.locked = true;
-										}
-									} else {
-										over_weight++;
-									}
-								} else {
-									under_weight++;
-								}
-								basket.second_chance = !basket.locked;
-							}
-						}))
 				).add_child(
 					fsm.state("second_chance")
 					.on_entry(new StateEvent(()=>{
@@ -259,10 +217,7 @@ public class GameStateManager : SingletonBehavior {
 		}).new_transition("time_up", (t)=>{
 			t.chain_from(fsm.state("gameplay"))
 			.chain_to(fsm.state("game_end"));
-		}).new_transition("berry=>basket", (t)=>{
-			t.chain_from(fsm.state("remove_ineligible_berries"))
-				.chain_to(fsm.state ("weigh_baskets"));
-		}).new_transition("basket=>2nd chance", (t)=>{
+		}).new_transition("weight=>2nd_chance", (t)=>{
 			t.chain_from(fsm.state("weigh_baskets"))
 				.chain_to(fsm.state ("second_chance"));
 		}).new_transition("2nd chance=>final", (t)=>{

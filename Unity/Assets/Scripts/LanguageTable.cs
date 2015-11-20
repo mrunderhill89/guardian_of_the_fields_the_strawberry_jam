@@ -12,7 +12,16 @@ using YamlDotNet.RepresentationModel;
 public class LanguageTable : BetterBehaviour {
 	public List<Text> text_objects = new List<Text>();
 	public List<TextMesh> text_meshes = new List<TextMesh>();
-	public string key = "";
+	[Serialize][Hide]
+	protected string _key = "";
+	[Show]
+	public string key {
+		get{return _key;}
+		set{ 
+			_key = value;
+			update();
+		}
+	}
 	[Show]
 	public string value {
 		get{
@@ -38,8 +47,9 @@ public class LanguageTable : BetterBehaviour {
 	//Static Elements Go Here
 	[Show]
 	static Dictionary<string, Dictionary<string,string>> languages = new Dictionary<string, Dictionary<string,string>>();
-	[Show]
-	static string current_language = "English";
+	[Serialize][Show]
+	public static string current_language = "English";
+	[Serialize][Hide]
 	static string default_language = "English";
 	static LanguageTable(){
 		Import("Assets/Languages.yaml");
@@ -55,6 +65,7 @@ public class LanguageTable : BetterBehaviour {
 		return get(key, current_language, read_only);
 	}
 	public static string get(string key, string lang, bool read_only = false){
+		if (key == "") return get("no_key",lang,false);
 		if (!get_language(lang).ContainsKey(key)){
 			if (read_only){
 				return "<No Entry>";

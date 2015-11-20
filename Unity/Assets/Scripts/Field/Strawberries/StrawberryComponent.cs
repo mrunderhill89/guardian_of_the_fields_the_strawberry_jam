@@ -64,6 +64,10 @@ public class StrawberryComponent : BetterBehaviour {
 	public bool is_under_size(){
 		return weight < GameStartData.min_berry_weight;
 	}
+	public bool is_ineligible(){
+		return is_under_ripe() || is_over_ripe() || is_under_size();
+	}
+	
 	public DragHandle drag;
 	public Automata automata;
 	public ObjectVisibility visibility;
