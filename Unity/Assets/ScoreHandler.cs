@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections;
@@ -10,6 +11,7 @@ using YamlDotNet.RepresentationModel;
 
 public class ScoreHandler : BetterBehaviour {
 	public StrawberryStateMachine berry_state;
+	[Serializable]
 	public class TotalScore{
 		public Dictionary<string, StrawberryScore> strawberries = 
 			new Dictionary<string, StrawberryScore>();
@@ -19,6 +21,7 @@ public class ScoreHandler : BetterBehaviour {
 			strawberries["basket"] = new StrawberryScore();
 		}
 	}
+	[Serializable]
 	public class StrawberryScore{
 		public int ripe = 0;
 		public int overripe = 0;
@@ -45,6 +48,7 @@ public class ScoreHandler : BetterBehaviour {
 			return this;
 		}
 	}
+	[Serializable]
 	public class BasketScore{
 		public int accepted = 0;
 		public int overweight = 0;
@@ -69,7 +73,20 @@ public class ScoreHandler : BetterBehaviour {
 			return this;
 		}
 	}
+	[DontSerialize][Show]
 	public TotalScore current_score = new TotalScore();
+	public List<TotalScore> saved_scores = new List<TotalScore>();
+	[Show]
+	public void record_score(){
+		saved_scores.Add(current_score);
+	}
+	[Show]
+	public void load_scores(string filename){
+	}
+	[Show]
+	public void save_scores(string filename){
+	}
+
 	public bool lock_strawberries = false;
 	public bool lock_baskets = false;
 	

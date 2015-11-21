@@ -43,7 +43,7 @@ public class GameTimer : BetterBehaviour {
 		}
 		[Show]
 		public string as_clock{
-			get{return hours.ToString()+":"+minutes.ToString("00");}
+			get{return (hours%12).ToString()+":"+minutes.ToString("00")+((hours<12)?" AM":" PM");}
 		}
 	}
 	public class Countdown{
