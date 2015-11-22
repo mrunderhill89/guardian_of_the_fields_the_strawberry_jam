@@ -76,15 +76,15 @@ public class GameTimer : BetterBehaviour {
 	
 	public float real_to_game(float real){
 		return (
-			GameStartData.start_hour +
-			(time.total / GameStartData.game_length) * 
-			(GameStartData.end_hour - GameStartData.start_hour)
+			GameStartData.instance.start_hour +
+			(time.total / GameStartData.instance.game_length) * 
+			(GameStartData.instance.end_hour - GameStartData.instance.start_hour)
 		) * F_SECONDS_IN_HOUR;
 	}
 	public static float game_to_real(float game){
 		return (
-			GameStartData.game_length * ((game/F_SECONDS_IN_HOUR) - GameStartData.start_hour)
-		)/(GameStartData.end_hour - GameStartData.start_hour);
+			GameStartData.instance.game_length * ((game/F_SECONDS_IN_HOUR) - GameStartData.instance.start_hour)
+			)/(GameStartData.instance.end_hour - GameStartData.instance.start_hour);
 	}
 	
 	GameTimer add_countdown(float t, Action<float> act, bool from_now = true){

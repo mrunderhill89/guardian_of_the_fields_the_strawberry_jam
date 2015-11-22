@@ -22,6 +22,8 @@ public class StrawberryRowState : BetterBehaviour{
 	public RowHandler2 row;
 	public RowGenerator generator;
 	public string prefab = "PlantCell";
+	public string start_prefab = "RowStart";
+	public string end_prefab = "RowEnd";
 	public int num_receiving = 1;
 	public int start_break = 4;
 	[DontSerialize]
@@ -36,19 +38,25 @@ public class StrawberryRowState : BetterBehaviour{
 			generator = GetComponent<RowGenerator> ();
 		generator.pattern.Clear ();
 		row.target = Camera.main.transform;
-		for (int i = 0; i < GameStartData.break_distance; i++) {
+		generator.pattern.Add(start_prefab);
+		for (int i = 0; i < GameStartData.instance.break_distance; i++) {
 			generator.pattern.Add (prefab);
 		}
-		for (int i = 0; i < GameStartData.break_length; i++) {
+		generator.pattern.Add(end_prefab);
+		for (int i = 0; i < GameStartData.instance.break_length; i++) {
 			generator.pattern.Add ("");
 		}
 		state = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "row");
 		generator.on_create((GameObject cell) => {
 			StrawberryGenerator sb_generator = cell.GetComponent<StrawberryGenerator> ();
-			sb_generator.state.chain_parent(state);
+			if (sb_generator != null){
+				sb_generator.state.chain_parent(state);
+			}
 		}).on_destroy((GameObject cell) => {
 			StrawberryGenerator sb_generator = cell.GetComponent<StrawberryGenerator>();
-			sb_generator.PreDestroy();
+			if (sb_generator != null){
+				sb_generator.PreDestroy();
+			}
 		});
 	}
 	void Start(){

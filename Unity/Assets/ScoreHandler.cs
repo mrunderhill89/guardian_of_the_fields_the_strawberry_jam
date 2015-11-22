@@ -26,11 +26,25 @@ public class ScoreHandler : BetterBehaviour {
 			get{ return _baskets;}
 			private set{ _baskets = value;}
 		}
+
+		protected GameStartData.StartData _start_data = null;
+		[Show]
+		public GameStartData.StartData startdata{
+			get{
+				return _start_data;
+			}
+			set{
+				_start_data = value;
+			}
+		}
+
 		public TotalScore(StrawberryScore picked, StrawberryScore dropped, BasketScore bs){
 			strawberries["fall"] = picked;
 			strawberries["basket"] = dropped;
 			baskets = bs;
+			startdata = GameStartData.instance;
 		}
+
 		public TotalScore clone(TotalScore that){
 			foreach (KeyValuePair<string,StrawberryScore> kvp in strawberries){
 				if (that.strawberries.ContainsKey(kvp.Key)){
@@ -167,7 +181,7 @@ public class ScoreHandler : BetterBehaviour {
 			return b+"\n"+n;
 		});
 		var input = new StringReader(Document);
-		var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
+		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);
 	}
 	[Show]
@@ -194,68 +208,4 @@ public class ScoreHandler : BetterBehaviour {
 			current_score.baskets.get_from_current();
 		}
 	}
-	/*
-	public class BasketScoreData{
-		public int accepted = 0;
-		public int overweight = 0;
-		public int underweight = 0;
-		public int overflow = 0;
-		public void reset(){
-			accepted = 0;
-			overweight = 0;
-			underweight = 0;
-			overflow = 0;
-		}
-	}
-	protected static BasketScoreData saved_score = new BasketScoreData();
-	public static bool lock_scores = false;
-	
-	public static BasketScoreData current_score{
-		get{
-			if (!lock_scores){
-				saved_score.reset();
-				foreach(BasketComponent basket in BasketComponent.baskets){
-					if (basket.is_overflow()){
-						saved_score.overflow++;
-					}
-					if (basket.is_overweight()){
-						saved_score.overweight++;
-					} else if (basket.is_underweight()){
-						saved_score.underweight++;
-					} else if (!basket.is_overflow()){
-						saved_score.accepted++;
-					}
-				}
-			}
-			return saved_score;
-		}
-	}
-	
-		public class StrawberryScoreData{
-		public int ripe = 0;
-		public int overripe = 0;
-		public int underripe = 0;
-		public int undersize = 0;
-		public void reset(){
-			ripe = 0;
-			overripe = 0;
-			underripe = 0;
-			undersize = 0;
-		}
-	}
-
-	public bool lock_scores = false;
-	[Show]
-	public StrawberryScoreData gathered{
-		get{
-			return get_score_data("basket");
-		}
-	}
-	[Show]
-	public StrawberryScoreData dropped{
-		get{
-			return get_score_data("fall");
-		}
-	}
-*/
 }

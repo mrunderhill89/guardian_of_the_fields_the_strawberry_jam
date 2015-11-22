@@ -34,10 +34,10 @@ public class BasketWeightIndicator : BetterBehaviour {
 			} else {
 				text.color = locked_color;
 			}
-		} else if (value < GameStartData.min_basket_weight){
+		} else if (basket.is_underweight()){
 			text.color = under_weight;
 				sprite.sprite = under_sprite;
-		} else if (value > GameStartData.max_basket_weight){
+		} else if (basket.is_overweight()){
 			text.color = over_weight;
 				sprite.sprite = over_sprite;
 		} else {

@@ -1,39 +1,145 @@
 ﻿using UnityEngine;
+using System;
+using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.RepresentationModel;
+
 public class GameStartData : BetterBehaviour {
-	public static int rng_seed;
+	public static StartData instance = new StartData();
 
 	void Awake(){
-		rng_seed = Random.seed;
+		instance.RngSeed = UnityEngine.Random.seed;
 	}
 
-	//Strawberry Settings
-	public static int max_berries_in_field = 40;
-	public static float min_ripeness = 0.0f;
-	public static float max_ripeness = 2.0f;
-	public static float min_size = 0.06f;
-	public static float max_size = 0.06f;
-	public static float berry_density = 1.00f;
+	[Serializable]
+	public class StartData{
+		protected int _rng_seed;
+		[Show]
+		public int RngSeed{
+			get{ return _rng_seed;}
+			set{ _rng_seed = value;}
+		}
+		
+		//Strawberry Settings
+		protected int _max_berries_in_field = 40;
+		[Show]
+		public int max_berries_in_field{
+			get{ return _max_berries_in_field;}
+			set{ _max_berries_in_field = value;}
+		}
 
-	//Rows and Breaks
-	public static int break_distance = 100;
-	public static int break_length = 10;
-	//Break data goes here
-	
-	//Time of Day & Game Length
-	public static float game_length = 2400.0f; //In Seconds
-	public static float start_hour = 6.0f;//In Hours
-	public static float end_hour = 18.0f; //In Hours
-	
-	//Win Condition Settings
-	public static float min_accepted_ripeness = 0.5f;
-	public static float max_accepted_ripeness = 1.25f;
-	public static float min_berry_weight = 0.00f;
-	public static float min_basket_weight = 15.00f;
-	public static float max_basket_weight = 17.00f;
-	public static Dictionary<StrawberryComponent.BerryPenalty, float> penalty_values
-		= new Dictionary<StrawberryComponent.BerryPenalty, float>();
-	//Hazard Data goes here
+		protected float _min_ripeness = 0.0f;
+		[Show]
+		public float min_ripeness{
+			get{ return _min_ripeness;}
+			set{ _min_ripeness = value;}
+		}
+
+		protected float _max_ripeness = 2.0f;
+		[Show]
+		public float max_ripeness{
+			get{ return _max_ripeness;}
+			set{ _max_ripeness = value;}
+		}
+
+		protected float _min_size = 0.06f;
+		[Show]
+		public float min_size{
+			get{ return _min_size;}
+			set{ _min_size = value;}
+		}
+
+		protected float _max_size = 0.06f;
+		[Show]
+		public float max_size{
+			get{ return _max_size;}
+			set{ _max_size = value;}
+		}
+
+		protected float _berry_density = 1.00f;
+		[Show]
+		public float berry_density{
+			get{ return _berry_density;}
+			set{ _berry_density = value;}
+		}
+		
+		//Rows and Breaks
+		protected int _break_distance = 100;
+		[Show]
+		public int break_distance{
+			get{ return _break_distance;}
+			set{ _break_distance = value;}
+		}
+		protected int _break_length = 10;
+		[Show]
+		public int break_length{
+			get{ return _break_length;}
+			set{ _break_length = value;}
+		}
+		//Break data goes here
+		
+		//Time of Day & Game Length
+		protected float _game_length = 2400.0f; //In Seconds
+		[Show]
+		public float game_length{
+			get{ return _game_length;}
+			set{ _game_length = value;}
+		}
+		protected float _start_hour = 6.0f;//In Hours
+		[Show]
+		public float start_hour{
+			get{ return _start_hour;}
+			set{ _start_hour = value;}
+		}
+		protected float _end_hour = 18.0f; //In Hours
+		[Show]
+		public float end_hour{
+			get{ return _end_hour;}
+			set{ _end_hour = value;}
+		}
+		//Win Condition Settings
+		protected float _min_accepted_ripeness = 0.5f;
+		[Show]
+		public float min_accepted_ripeness{
+			get{ return _min_accepted_ripeness;}
+			set{ _min_accepted_ripeness = value;}
+		}
+		protected float _max_accepted_ripeness = 1.25f;
+		[Show]
+		public float max_accepted_ripeness{
+			get{ return _max_accepted_ripeness;}
+			set{ _max_accepted_ripeness = value;}
+		}
+		protected float _min_berry_weight = 0.00f;
+		[Show]
+		public float min_berry_weight{
+			get{ return _min_berry_weight;}
+			set{ _min_berry_weight = value;}
+		}
+		protected float _min_basket_weight = 15.00f;
+		[Show]
+		public float min_basket_weight{
+			get{ return _min_basket_weight;}
+			set{ _min_basket_weight = value;}
+		}
+		protected float _max_basket_weight = 17.00f;
+		[Show]
+		public float max_basket_weight{
+			get{ return _max_basket_weight;}
+			set{ _max_basket_weight = value;}
+		}
+		protected Dictionary<StrawberryComponent.BerryPenalty, float> _penalty_values
+			= new Dictionary<StrawberryComponent.BerryPenalty, float>();
+		[Show]	
+		public Dictionary<StrawberryComponent.BerryPenalty, float> penalty_values{
+			get{ return _penalty_values; }
+			set{ _penalty_values = value; }
+		}
+		//Hazard Data goes here
+	}
 }

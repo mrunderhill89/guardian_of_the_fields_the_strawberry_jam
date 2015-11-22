@@ -93,6 +93,9 @@ public class GameStateManager : SingletonBehavior {
 						foreach (BasketComponent basket in BasketComponent.baskets){
 							basket.locked = true;
 						}
+						scores.lock_baskets=true;
+						scores.record_score();
+						scores.save_scores("Assets/Data/Scores.yaml");
 					}))
 				)
 		);

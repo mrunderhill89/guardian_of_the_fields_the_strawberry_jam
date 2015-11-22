@@ -101,11 +101,11 @@ public class BasketComponent : BetterBehaviour {
 	}
 
 	public bool is_overweight(){
-		return total_weight > GameStartData.max_basket_weight;
+		return total_weight > GameStartData.instance.max_basket_weight;
 	}
 
 	public bool is_underweight(){
-		return total_weight < GameStartData.min_basket_weight;
+		return total_weight < GameStartData.instance.min_basket_weight;
 	}
 
 	void UpdatePhysics(Automata a){

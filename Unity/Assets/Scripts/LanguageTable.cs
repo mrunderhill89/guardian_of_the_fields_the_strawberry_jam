@@ -94,7 +94,7 @@ public class LanguageTable : BetterBehaviour {
 			return b+"\n"+n;
 		});
 		var input = new StringReader(Document);
-		var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
+		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		languages = deserializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(input);
 	}
 	[Show]
