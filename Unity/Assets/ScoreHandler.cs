@@ -13,25 +13,73 @@ public class ScoreHandler : BetterBehaviour {
 	public StrawberryStateMachine berry_state;
 	[Serializable]
 	public class TotalScore{
-		public Dictionary<string, StrawberryScore> strawberries = 
+		protected Dictionary<string, StrawberryScore> _strawberries = 
 			new Dictionary<string, StrawberryScore>();
-		public BasketScore baskets = new BasketScore();
-		public TotalScore(){
-			strawberries["fall"] = new StrawberryScore();
-			strawberries["basket"] = new StrawberryScore();
+		[Show]
+		public Dictionary<string, StrawberryScore> strawberries{
+			get{ return _strawberries;}
+			private set{ _strawberries = value;}
 		}
+		protected BasketScore _baskets;
+		[Show]
+		public BasketScore baskets{
+			get{ return _baskets;}
+			private set{ _baskets = value;}
+		}
+		public TotalScore(StrawberryScore picked, StrawberryScore dropped, BasketScore bs){
+			strawberries["fall"] = picked;
+			strawberries["basket"] = dropped;
+			baskets = bs;
+		}
+		public TotalScore clone(TotalScore that){
+			foreach (KeyValuePair<string,StrawberryScore> kvp in strawberries){
+				if (that.strawberries.ContainsKey(kvp.Key)){
+					kvp.Value.clone(that.strawberries[kvp.Key]);
+				}
+			}
+			baskets.clone(that.baskets);
+			return this;
+		}
+		public TotalScore() : this(new StrawberryScore(), new StrawberryScore(), new BasketScore()) {}
 	}
 	[Serializable]
 	public class StrawberryScore{
-		public int ripe = 0;
-		public int overripe = 0;
-		public int underripe = 0;
-		public int undersize = 0;
+		protected int _ripe = 0;
+		[Show]
+		public int ripe {
+			get{ return _ripe;}
+			private set{ _ripe = value;}
+		}
+		protected int _overripe = 0;
+		[Show]
+		public int overripe {
+			get{ return _overripe;}
+			private set{ _overripe = value;}
+		}
+		protected int _underripe = 0;
+		[Show]
+		public int underripe {
+			get{ return _underripe;}
+			private set{ _underripe = value;}
+		}
+		protected int _undersize = 0;
+		[Show]
+		public int undersize {
+			get{ return _undersize;}
+			private set{ _undersize = value;}
+		}
 		public void reset(){
 			ripe = 0;
 			overripe = 0;
 			underripe = 0;
 			undersize = 0;
+		}
+		public StrawberryScore clone(StrawberryScore that){
+			ripe = that.ripe;
+			overripe = that.overripe;
+			underripe = that.underripe;
+			undersize = that.undersize;
+			return this;
 		}
 		public StrawberryScore get_from_state(StrawberryStateMachine berry_state, string state_name){
 			reset();
@@ -50,15 +98,46 @@ public class ScoreHandler : BetterBehaviour {
 	}
 	[Serializable]
 	public class BasketScore{
-		public int accepted = 0;
-		public int overweight = 0;
-		public int underweight = 0;
-		public int overflow = 0;
+		protected int _accepted = 0;
+		[Show]
+		public int accepted{
+			get{ return _accepted; }
+			set{ _accepted = value; }
+		}
+
+		protected int _overweight = 0;
+		[Show]
+		public int overweight{
+			get{ return _overweight; }
+			set{ _overweight = value; }
+		}
+
+		protected int _underweight = 0;
+		[Show]
+		public int underweight{
+			get{ return _underweight; }
+			set{ _underweight = value; }
+		}
+
+		protected int _overflow = 0;
+		[Show]
+		public int overflow{
+			get{ return _overflow; }
+			set{ _overflow = value; }
+		}
+
 		public void reset(){
 			accepted = 0;
 			overweight = 0;
 			underweight = 0;
 			overflow = 0;
+		}
+		public BasketScore clone(BasketScore that){
+			accepted = that.accepted;
+			overweight = that.overweight;
+			underweight = that.underweight;
+			overflow = that.overflow;
+			return this;
 		}
 		public BasketScore get_from_current(){
 			reset();
@@ -78,13 +157,24 @@ public class ScoreHandler : BetterBehaviour {
 	public List<TotalScore> saved_scores = new List<TotalScore>();
 	[Show]
 	public void record_score(){
-		saved_scores.Add(current_score);
+		saved_scores.Add(new TotalScore().clone(current_score));
 	}
 	[Show]
 	public void load_scores(string filename){
+		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
+			if (b == "") return n;
+			return b+"\n"+n;
+		});
+		var input = new StringReader(Document);
+		var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
+		saved_scores = deserializer.Deserialize<List<TotalScore>>(input);
 	}
 	[Show]
 	public void save_scores(string filename){
+		StreamWriter fout = new StreamWriter(filename);
+			var serializer = new Serializer();
+			serializer.Serialize(fout, saved_scores);
+		fout.Close();
 	}
 
 	public bool lock_strawberries = false;

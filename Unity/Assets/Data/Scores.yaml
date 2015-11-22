@@ -1,0 +1,20 @@
+- strawberries:
+    fall:
+      ripe: 10
+      overripe: 20
+      underripe: 30
+      undersize: 40
+    basket:
+      ripe: 50
+      overripe: 60
+      underripe: 70
+      undersize: 80
+  baskets:
+    accepted: 10
+    overweight: 20
+    underweight: 30
+    overflow: 40
+- strawberries:
+    fall: {}
+    basket: {}
+  baskets: {}
