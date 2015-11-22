@@ -154,10 +154,11 @@ public class ScoreHandler : BetterBehaviour {
 	}
 	[DontSerialize][Show]
 	public TotalScore current_score = new TotalScore();
-	public List<TotalScore> saved_scores = new List<TotalScore>();
+	[DontSerialize][Show]
+	public SortedList<DateTime, TotalScore> saved_scores = new SortedList<DateTime, TotalScore>();
 	[Show]
 	public void record_score(){
-		saved_scores.Add(new TotalScore().clone(current_score));
+		saved_scores.Add(DateTime.Now, new TotalScore().clone(current_score));
 	}
 	[Show]
 	public void load_scores(string filename){
@@ -167,7 +168,7 @@ public class ScoreHandler : BetterBehaviour {
 		});
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
-		saved_scores = deserializer.Deserialize<List<TotalScore>>(input);
+		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);
 	}
 	[Show]
 	public void save_scores(string filename){
@@ -179,6 +180,10 @@ public class ScoreHandler : BetterBehaviour {
 
 	public bool lock_strawberries = false;
 	public bool lock_baskets = false;
+	
+	void Start(){
+		load_scores("Assets/Data/Scores.yaml");
+	}
 	
 	void Update(){
 		if (!lock_strawberries){
