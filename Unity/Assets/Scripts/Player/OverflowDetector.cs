@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Vexe.Runtime.Types;
 
 public class OverflowDetector : BetterBehaviour {
@@ -14,6 +16,16 @@ public class OverflowDetector : BetterBehaviour {
 	float panic_time = 0.0f;
 	public bool show_while_passive = false;
 
+	public List<Action> panic_events = new List<Action>();
+	public List<Action> relax_events = new List<Action>();
+	public OverflowDetector on_panic(Action act){
+		panic_events.Add(act);
+		return this;
+	}
+	public OverflowDetector on_relax(Action act){
+		relax_events.Add(act);
+		return this;
+	}
 	void Awake(){
 		normal_material = GetComponent<Renderer> ().material;
 		panic_material = Resources.Load<Material>(panic_material_name);
@@ -30,6 +42,9 @@ public class OverflowDetector : BetterBehaviour {
 			panic_time -= Time.deltaTime;
 			if (panic_time < 0.0f) {
 				relax_time = 0.0f;
+				foreach(Action act in relax_events){
+					act();
+				}
 			}
 		} else {
 			my_renderer.material = normal_material;
@@ -42,9 +57,8 @@ public class OverflowDetector : BetterBehaviour {
 			relax_time += Time.deltaTime;
 			if (relax_time > Time_Before_Panic){
 				panic_time = Time_Before_Relax;
-				if (basket.locked && !basket.second_chance){
-					basket.second_chance = true;
-					basket.locked = false;
+				foreach(Action act in panic_events){
+					act();
 				}
 			}
 		}

@@ -70,7 +70,9 @@ public class StrawberryRowState : BetterBehaviour{
 		int rear_index = player.is_loading()?
 			start_break:Math.Max(row.front_index - num_receiving,0);
 		if (generator.Count > 0){
-			GameObject cell = generator.random_entry(rear_index,row.front_index);
+			GameObject cell = generator.random_entry(rear_index,row.front_index, (GameObject obj)=>{
+				return obj.GetComponent<StrawberryGenerator>() != null;
+			});
 			if (cell != null)
 				return cell.GetComponent<StrawberryGenerator>().state;
 		}

@@ -175,7 +175,7 @@ public class ScoreHandler : BetterBehaviour {
 		saved_scores.Add(DateTime.Now, new TotalScore().clone(current_score));
 	}
 	[Show]
-	public void load_scores(string filename){
+	public void load_scores(string filename = "/Assets/Data/Scores.yaml"){
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
@@ -185,7 +185,7 @@ public class ScoreHandler : BetterBehaviour {
 		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);
 	}
 	[Show]
-	public void save_scores(string filename){
+	public void save_scores(string filename = "/Assets/Data/Scores.yaml"){
 		StreamWriter fout = new StreamWriter(filename);
 			var serializer = new Serializer();
 			serializer.Serialize(fout, saved_scores);

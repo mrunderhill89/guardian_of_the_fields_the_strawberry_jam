@@ -43,6 +43,8 @@ public class BasketComponent : BetterBehaviour {
 		GameStateManager player_state = SingletonBehavior.get_instance<GameStateManager>();
 		if (overflow == null)
 			overflow = GetComponentInChildren<OverflowDetector> ();
+		overflow.on_panic (update_text)
+			.on_relax(update_text);
 		slot.chain_parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))

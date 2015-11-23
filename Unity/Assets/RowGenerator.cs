@@ -34,12 +34,13 @@ public class RowGenerator : BetterBehaviour {
 		}
 		return null;
 	}
-	public GameObject random_entry(int from, int to){
+	public GameObject random_entry(int from, int to, Func<GameObject,bool> filter = null){
 		int r = RandomUtils.random_int (from, to), i;
 		for (int adjust = 0; adjust < to - from; adjust++) {
 			i = from + wrap(r+adjust, to-from);
 			if (objects.ContainsKey(i)){
-				return objects[i];
+				if (filter == null || filter(objects[i]))
+					return objects[i];
 			}
 		}
 		return null;
