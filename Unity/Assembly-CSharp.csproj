@@ -56,6 +56,7 @@
      <Compile Include="Assets\DisplaceTerrain.cs" />
      <Compile Include="Assets\Displacer.cs" />
      <Compile Include="Assets\EmptyRowSetup.cs" />
+     <Compile Include="Assets\MenuStateMachine.cs" />
      <Compile Include="Assets\ProceduralScrollingTerrain.cs" />
      <Compile Include="Assets\RowGenerator.cs" />
      <Compile Include="Assets\RowHandler2.cs" />

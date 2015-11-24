@@ -8,6 +8,8 @@ using UniRx;
 [ExecuteInEditMode]
 public class ObjectVisibility : BetterBehaviour {
 	[Serialize]
+	public List<GameObject> objects = new List<GameObject>();
+	[Serialize]
 	public List<MonoBehaviour> behaviors = new List<MonoBehaviour>();
 	[Serialize]
 	public List<MeshRenderer> renderers = new List<MeshRenderer>();
@@ -58,8 +60,10 @@ public class ObjectVisibility : BetterBehaviour {
 		_status = value;
 		return this;
 	}
-	//Small-u update should only be run from other functions.
 	void Update () {
+		foreach (GameObject game_object in objects) {
+			if (game_object != null) game_object.SetActive(visible);
+		}
 		foreach (MonoBehaviour behavior in behaviors) {
 			if (behavior != null) behavior.enabled = visible;
 		}
