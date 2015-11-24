@@ -9,19 +9,24 @@ ModelImporter:
     100002: Middle
     100004: //RootNode
     100006: Start
+    100008: GroundPlane
     400000: End
     400002: Middle
     400004: //RootNode
     400006: Start
+    400008: GroundPlane
     2300000: End
     2300002: Middle
     2300004: Start
+    2300006: GroundPlane
     3300000: End
     3300002: Middle
     3300004: Start
+    3300006: GroundPlane
     4300000: End
     4300002: Start
     4300004: Middle
+    4300006: GroundPlane
     7400000: Default Take
     9500000: //RootNode
   materials:
