@@ -4,7 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-public class GameStateManager : SingletonBehavior {
+public class GameStateManager : BetterBehaviour {
+	protected static GameStateManager _main = null;
+	public static GameStateManager main{
+		get{ return _main;}
+		private set{ _main = value;}
+	}
+
 	public InputController input;
 	public CameraController camera_control;
 	public PaceManager cart_control;
@@ -19,8 +25,8 @@ public class GameStateManager : SingletonBehavior {
 		};
 	}
 
-	new void Awake(){
-		base.Awake();
+	void Awake(){
+		main = this;
 		if (fsm == null)
 			fsm = gameObject.AddComponent<StateMachine> ();
 		if (scores == null)
@@ -28,6 +34,7 @@ public class GameStateManager : SingletonBehavior {
 	}
 	void Start () {
 		Physics.gravity = gravity;
+		StrawberryStateMachine berry_state = StrawberryStateMachine.main;
 		//Set up States
 		fsm.state ("root")
 		.add_child( 
@@ -65,12 +72,11 @@ public class GameStateManager : SingletonBehavior {
 					.on_entry(new StateEvent(()=>{
 						camera_control.set_target("pack");
 						//Clear all remaining strawberries in the field.
-						StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
 						scores.lock_strawberries = true;
-						foreach (StrawberryComponent berry in sb_machine.get_strawberries("field")){
+						foreach (StrawberryComponent berry in berry_state.get_strawberries("field")){
 							Destroy (berry.gameObject);
 						}
-						foreach (StrawberryComponent berry in sb_machine.get_strawberries("fall")){
+						foreach (StrawberryComponent berry in berry_state.get_strawberries("fall")){
 							Destroy (berry.gameObject);
 						}
 						//Check strawberries that the player has gathered
@@ -97,7 +103,11 @@ public class GameStateManager : SingletonBehavior {
 						scores.record_score();
 						scores.save_scores("Assets/Data/Scores.yaml");
 					}))
-				)
+				).add_child(
+				fsm.state("return_to_menu").on_entry(new StateEvent(()=>{
+					Application.LoadLevel("title_screen");
+				}))
+			)
 		);
 		//Set up Transitions
 		//Loading -> Look
@@ -106,11 +116,7 @@ public class GameStateManager : SingletonBehavior {
 			.chain_to (fsm.state("look"))
 	  		.chain_auto_run(true)
 			.add_test(new TransitionTest(()=>{
-				StrawberryStateMachine sb_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-				if (sb_machine != null){
-					return sb_machine.finished_loading();
-				}
-				return false;
+				return berry_state.finished_loading();
 			}));
 		//Look Forward -> Look Left, Look Right, Pack
 		}).new_transition("look_forward=>left", (t)=>{
@@ -226,6 +232,9 @@ public class GameStateManager : SingletonBehavior {
 		}).new_transition("2nd chance=>final", (t)=>{
 			t.chain_from(fsm.state("second_chance"))
 				.chain_to(fsm.state ("final_tally"));
+		}).new_transition("final=>menu", (t)=>{
+			t.chain_from(fsm.state("final_tally"))
+				.chain_to(fsm.state ("return_to_menu"));
 		});
 		//Now add a player automata.
 		fsm.new_automata ("player", (a) => {

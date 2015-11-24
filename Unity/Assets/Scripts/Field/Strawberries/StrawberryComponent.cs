@@ -74,7 +74,7 @@ public class StrawberryComponent : BetterBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StrawberryStateMachine berry_state = SingletonBehavior.get_instance<StrawberryStateMachine> ();
+		StrawberryStateMachine berry_state = StrawberryStateMachine.main;
 		automata = gameObject.GetComponent<Automata> ();
 		visibility = gameObject.GetComponent<ObjectVisibility>();
 		Initialize();

@@ -3,14 +3,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-public class StrawberryStateMachine : SingletonBehavior {
+public class StrawberryStateMachine : BetterBehaviour {
+	protected static StrawberryStateMachine _main = null;
+	public static StrawberryStateMachine main{
+		get{ return _main;}
+		private set{ _main = value;}
+	}
 	public static Vector3 nowhere = new Vector3(-100.0f,-100.0f,-100.0f);
 	[DontSerialize]
 	public StateMachine fsm;
 	public int field_strawberries = 100;
 	public GameStateManager player_state;
-	new void Awake () {
-		base.Awake();
+	void Awake () {
+		main = this;
 		fsm = gameObject.AddComponent<StateMachine>();
 		fsm.state ("root")
 			.add_child (
@@ -93,10 +98,8 @@ public class StrawberryStateMachine : SingletonBehavior {
 			}))
 			;
 		});
-
 	}
 	void Start(){
-		player_state = SingletonBehavior.get_instance<GameStateManager> ();
 		GenerateStrawberries(field_strawberries);
 	}
 	public bool finished_loading(){

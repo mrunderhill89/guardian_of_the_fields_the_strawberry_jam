@@ -39,8 +39,8 @@ public class BasketComponent : BetterBehaviour {
 	}
 
 	void Start(){
-		StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		GameStateManager player_state = SingletonBehavior.get_instance<GameStateManager>();
+		StrawberryStateMachine state_machine = StrawberryStateMachine.main;
+		GameStateManager player_state = GameStateManager.main;
 		if (overflow == null)
 			overflow = GetComponentInChildren<OverflowDetector> ();
 		overflow.on_panic (update_text)
@@ -113,7 +113,7 @@ public class BasketComponent : BetterBehaviour {
 	void UpdatePhysics(Automata a){
 		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
 		if (body != null) {
-			if (locked || !SingletonBehavior.get_instance<GameStateManager>().basket_physics_enabled()){
+			if (locked || !GameStateManager.main.basket_physics_enabled()){
 				body.isKinematic = true;
 			} else {
 				body.isKinematic = false;
@@ -140,7 +140,7 @@ public class BasketComponent : BetterBehaviour {
 		Automata a = obj.GetComponent<Automata>();
 		if (a != null && a.current == slot){
 			//GameMessages.Log("Uh-oh, a strawberry fell out of your basket!");
-			StrawberryStateMachine state_machine = SingletonBehavior.get_instance<StrawberryStateMachine>();
+			StrawberryStateMachine state_machine = StrawberryStateMachine.main;
 			state_machine.fsm.transition("basket_fall").trigger_single(a);
 			obj.transform.position = valid_positions[obj];
 			Rigidbody body = obj.GetComponent<Rigidbody>();

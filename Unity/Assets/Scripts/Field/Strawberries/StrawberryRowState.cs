@@ -26,10 +26,6 @@ public class StrawberryRowState : BetterBehaviour{
 	public string end_prefab = "RowEnd";
 	public int num_receiving = 1;
 	public int start_break = 4;
-	[DontSerialize]
-	public GameStateManager player;
-	[DontSerialize]
-	public StrawberryStateMachine berry_state;
 	void Awake(){
 		rows.Add (this);
 		if (row == null)
@@ -60,14 +56,12 @@ public class StrawberryRowState : BetterBehaviour{
 		});
 	}
 	void Start(){
-		if (berry_state == null) berry_state = SingletonBehavior.get_instance<StrawberryStateMachine>();
-		if (player == null) player = SingletonBehavior.get_instance<GameStateManager>();
-		state.chain_parent(berry_state.fsm.state("field")).initial_function(distribute);
+		state.chain_parent(StrawberryStateMachine.main.fsm.state("field")).initial_function(distribute);
 	}
 
 	State distribute(){
 		//If the game is just starting, we can place into any cell we want.
-		int rear_index = player.is_loading()?
+		int rear_index = GameStateManager.main.is_loading()?
 			start_break:Math.Max(row.front_index - num_receiving,0);
 		if (generator.Count > 0){
 			GameObject cell = generator.random_entry(rear_index,row.front_index, (GameObject obj)=>{

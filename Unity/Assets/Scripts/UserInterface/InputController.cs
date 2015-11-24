@@ -6,7 +6,13 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 
-public class InputController: SingletonBehavior{
+public class InputController: BetterBehaviour{
+	protected static InputController _main = null;
+	public static InputController main{
+		get{ return _main;}
+		private set{ _main = value;}
+	}
+
 	protected Dictionary<string, bool> went = new Dictionary<string, bool> ();
 	public Dictionary<string, UnityEvent> direction_events = new Dictionary<string, UnityEvent> ();
 	public Dictionary<string, List<Transition>> direction_transitions = new Dictionary<string, List<Transition>> ();
@@ -55,8 +61,8 @@ public class InputController: SingletonBehavior{
 		return t;
 	}
 
-	new void Awake(){
-		base.Awake ();
+	void Awake(){
+		main = this;
 		if (direction_events == null) {
 			direction_events = new Dictionary<string, UnityEvent> ();
 		}

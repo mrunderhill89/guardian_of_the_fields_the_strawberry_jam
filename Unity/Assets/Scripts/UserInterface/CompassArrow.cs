@@ -9,7 +9,7 @@ public class CompassArrow : BetterBehaviour {
 	InputController input;
 	ObjectVisibility visibility;
 	void Start(){
-		input = SingletonBehavior.get_instance<InputController> ();
+		input = InputController.main;
 		if (visibility == null){
 			visibility = GetComponent<ObjectVisibility>();
 		}
