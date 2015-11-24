@@ -1,3 +1,4 @@
+rng_seed: 0
 max_berries_in_field: 40
 max_ripeness: 2
 min_size: 0.06

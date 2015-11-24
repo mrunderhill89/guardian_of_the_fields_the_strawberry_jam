@@ -11,21 +11,35 @@ using YamlDotNet.RepresentationModel;
 
 public class GameStartData : BetterBehaviour {
 
-	public static StartData instance = new StartData();
+	public static StartData instance;
 
 	void Awake(){
-		instance.rng_seed = UnityEngine.Random.seed;
+		if (instance == null) {
+			load_settings();
+		}
+		if (instance.randomize) {
+			instance.rng_seed = UnityEngine.Random.seed;
+		}
 	}
 
 	[Serializable]
 	public class StartData{
+		[Serialize][Hide]
 		protected int _rng_seed;
 		[Show]
 		public int rng_seed{
 			get{ return _rng_seed;}
 			set{ _rng_seed = value;}
 		}
-		
+		[Serialize][Hide]
+		protected bool _randomize = false;
+		[Show]
+		public bool randomize{
+			get{ return _randomize;}
+			set{ _randomize = value;}
+		}
+
+
 		//Strawberry Settings
 		[Serialize][Hide]
 		protected int _max_berries_in_field = 40;
@@ -178,6 +192,9 @@ public class GameStartData : BetterBehaviour {
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		instance = deserializer.Deserialize<GameStartData.StartData>(input);
+		if (instance.randomize) {
+			instance.rng_seed = UnityEngine.Random.seed;
+		}
 	}
 	[Show]
 	public void save_settings(string filename = "/Assets/Data/Settings/default.yaml"){

@@ -100,6 +100,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 		});
 	}
 	void Start(){
+		UnityEngine.Random.seed = GameStartData.instance.rng_seed;
 		GenerateStrawberries(field_strawberries);
 	}
 	public bool finished_loading(){

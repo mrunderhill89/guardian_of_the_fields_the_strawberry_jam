@@ -1,6 +1,19 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player\GameStartData.cs">
+    <Files>
+      <File FileName="Assets\MenuStateMachine.cs" Line="20" Column="35" />
+      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="43" Column="25" />
+      <File FileName="Assets\Scripts\Universal\ObjectVisibility.cs" Line="63" Column="1" />
+      <File FileName="Assets\Plugins\Vexe\Runtime\Serialization\Serializers\SerializerBackend.cs" Line="80" Column="1" />
+      <File FileName="Assets\Scripts\UserInterface\CompassArrow.cs" Line="38" Column="1" />
+      <File FileName="Assets\Scripts\Player\GameStartData.cs" Line="34" Column="20" />
+      <File FileName="Assets\Data\Settings\default.yaml" Line="1" Column="12" />
+      <File FileName="Assets\Data\Settings\initial.yaml" Line="1" Column="11" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryRowState.cs" Line="75" Column="2" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" Line="103" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
