@@ -43,8 +43,9 @@ public class GameStateManager : BetterBehaviour {
 			.add_child (
 				fsm.state("loading").on_exit(new StateEvent(()=>{
 					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
-						Debug.Log("Time Up!");
+						fsm.transition("time_up").trigger();
 					});
+					timer.started = true;
 				})),true
 			).add_child (
 				fsm.state ("look")
@@ -75,6 +76,7 @@ public class GameStateManager : BetterBehaviour {
 				.add_child(
 					fsm.state("weigh_baskets")
 					.on_entry(new StateEvent(()=>{
+						timer.started = false;
 						camera_control.set_target("pack");
 						//Clear all remaining strawberries in the field.
 						scores.lock_strawberries = true;

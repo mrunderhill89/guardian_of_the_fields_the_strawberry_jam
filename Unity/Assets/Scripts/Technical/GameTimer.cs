@@ -12,7 +12,7 @@ public class GameTimer : BetterBehaviour {
 	public const int   I_MINUTES_IN_HOUR = 60;
 	public const float F_SECONDS_IN_HOUR = 3600.0f;
 	public const int   I_SECONDS_IN_HOUR = 3600;
-	
+	[Serializable]
 	public class Time{
 		public float total = 0.0f;
 		public Time(float _t = 0.0f){
@@ -63,6 +63,7 @@ public class GameTimer : BetterBehaviour {
 		}
 	}
 	
+	[DontSerialize]
 	public Time time = new Time(0.0f);
 	public List<Countdown> countdowns = new List<Countdown>();
 	public bool started = false;
