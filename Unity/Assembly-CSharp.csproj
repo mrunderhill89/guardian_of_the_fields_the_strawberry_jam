@@ -112,6 +112,7 @@
      <Compile Include="Assets\Scripts\UserInterface\StartGame.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StrawberryUIComponent.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
+     <Compile Include="Assets\TutorialHandler.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\BooleanDisposable.cs" />
      <Compile Include="Assets\UniRx\Scripts\Disposables\CompositeDisposable.cs" />

@@ -20,7 +20,8 @@ public class StateEvent
 	private AutomataAction automata;
 	private StateAction state;
 	private Action neutral;
-
+	private int times_ran = 0;
+	private int limit = -1;
 	#endregion
 
 
@@ -39,19 +40,27 @@ public class StateEvent
 		neutral = act;
 	}
 
+	public StateEvent Limit(int times){
+		limit = times;
+		return this;
+	}
+
 	public void run(Automata a, State s)
 	{
-		if (full != null){
-			full(a,s);
-		}
-		if (automata != null){
-			automata(a);
-		}
-		if (state != null){
-			state(s);
-		}
-		if (neutral != null){
-			neutral();
+		if (limit < 0 || times_ran < limit){
+			if (full != null){
+				full(a,s);
+			}
+			if (automata != null){
+				automata(a);
+			}
+			if (state != null){
+				state(s);
+			}
+			if (neutral != null){
+				neutral();
+			}
+			times_ran++;
 		}
 	}
 

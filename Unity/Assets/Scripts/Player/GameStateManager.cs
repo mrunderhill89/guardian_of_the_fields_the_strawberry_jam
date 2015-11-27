@@ -45,6 +45,9 @@ public class GameStateManager : BetterBehaviour {
 					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
 						fsm.transition("time_up").trigger();
 					});
+					if (GameStartData.instance.tutorial){
+						GameMessages.Log(LanguageTable.get("tutorial_move"), 10.0f);
+					}
 					timer.started = true;
 				})),true
 			).add_child (
@@ -60,7 +63,12 @@ public class GameStateManager : BetterBehaviour {
 				    )
 			).add_child (
 				fsm.state ("pick")
-				.add_child(fsm.state("pick_left")
+				.on_entry(new StateEvent(()=>{
+					if (GameStartData.instance.tutorial){
+						GameMessages.Log(LanguageTable.get("tutorial_pick"), 10.0f);
+					}
+				}).Limit(1)
+				).add_child(fsm.state("pick_left")
 		    		.on_entry(new StateEvent(camera_control.lazy_set_target("pick_left")))
 		        ).add_child(fsm.state("pick_right")
 			        .on_entry(new StateEvent(camera_control.lazy_set_target("pick_right")))
@@ -70,6 +78,12 @@ public class GameStateManager : BetterBehaviour {
 			).add_child (
 				fsm.state ("pack")
 					.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
+					.on_entry(new StateEvent(()=>{
+							if (GameStartData.instance.tutorial){
+								GameMessages.Log(LanguageTable.get("tutorial_pack"), 10.0f);
+							}
+						}).Limit(1)
+					)
 			), true
 		).add_child (
 			fsm.state ("game_end")

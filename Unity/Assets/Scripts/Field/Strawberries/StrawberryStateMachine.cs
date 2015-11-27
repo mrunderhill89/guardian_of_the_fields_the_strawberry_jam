@@ -30,6 +30,9 @@ public class StrawberryStateMachine : BetterBehaviour {
 				, true
 			).add_child (
 				fsm.state ("drag")
+					.on_entry(new StateEvent(()=>{
+						GameMessages.Log(LanguageTable.get("tutorial_pick_scroll"));
+					}).Limit(1))
 			).add_child (
 				fsm.state ("fall")
 				.on_entry(new StateEvent((Automata a)=>{

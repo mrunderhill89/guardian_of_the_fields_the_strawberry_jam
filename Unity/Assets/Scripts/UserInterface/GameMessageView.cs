@@ -19,7 +19,7 @@ public class GameMessageView : BetterBehaviour {
 			if (stored_messages.Count > max_messages){
 				stored_messages.Dequeue();
 			}
-			clear_next_message = message_life;
+			clear_next_message = msg.life;
 		});
 	}
 	
@@ -34,9 +34,11 @@ public class GameMessageView : BetterBehaviour {
 			}
 		}
 		if (clear_next_message <= 0.0f) {
-			if (stored_messages.Count > 0)
+			if (stored_messages.Count > 0){
 				stored_messages.Dequeue();
-			clear_next_message = message_life;
+				if (stored_messages.Count > 0)
+					clear_next_message = stored_messages.Peek().life;
+			}
 		} else {
 			clear_next_message -= Time.deltaTime;
 		}

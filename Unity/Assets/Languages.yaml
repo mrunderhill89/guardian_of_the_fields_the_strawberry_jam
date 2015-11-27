@@ -36,7 +36,7 @@ English:
   state_pick: Picking
   state_pack: Packing
   state_weigh: 'Initial Weigh-In'
-  state_rearrange: Rearrange berries to fill baskets
+  state_rearrange: Rearrange Berries
   state_final: 'Final Weigh-In'
   move_while_pack: Move while Packing
   pace_reverse: Reverse
@@ -44,4 +44,12 @@ English:
   pace_medium: Medium
   pace_fast: Fast
   pace_max: Max Speed
+  tutorial_move: 'Use arrow keys or "WASD" to move around.'
+  tutorial_speed: 'Press "E" or "Num 1" to speed up.'
+  tutorial_slow: 'Press "Q" or "Num 1" to slow up.'
+  tutorial_stop: 'Press "Space" or "Num 0" to stop.'
+  tutorial_pick: 'Click and hold on a strawberry to pick it up.'
+  tutorial_pick_scroll: 'Use the mouse wheel to pull the strawberry towards you.'
+  tutorial_pack: 'Pick up a strawberry and carry it to these baskets.'
+  tutorial_rearrange: 'Rearrange strawberries before time runs out.'
   no_key: <No Key>

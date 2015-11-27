@@ -39,6 +39,12 @@ public class GameStartData : BetterBehaviour {
 			set{ _randomize = value;}
 		}
 
+		//Tutorial Settings
+		protected bool _tutorial = true;
+		public bool tutorial {
+			get{ return _tutorial; }
+			set{ _tutorial = value; }
+		}
 
 		//Strawberry Settings
 		[Serialize][Hide]
