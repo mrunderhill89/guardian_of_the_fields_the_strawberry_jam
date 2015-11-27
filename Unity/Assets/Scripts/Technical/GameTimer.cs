@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
@@ -47,21 +48,24 @@ public class GameTimer : BetterBehaviour {
 		}
 	}
 	public class Countdown{
+		[Show]
 		float time = 0.0f;
-		Action<float> act;
-		public Countdown(float t, Action<float> a){
+		Action<Time> act;
+		public Countdown(float t, Action<Time> a){
 			time = t;
 			act = a;
 		}
-		public void invoke(float t){
+		public void invoke(Time t){
 			act(t);
 		}
 		public Time remaining(Time t){
 			return new Time(time - t.total);
 		}
 	}
-	Time time = new Time(0.0f);
-	List<Countdown> countdowns = new List<Countdown>();
+	
+	public Time time = new Time(0.0f);
+	public List<Countdown> countdowns = new List<Countdown>();
+	public bool started = false;
 
 	[Show]
 	public Time real_time{
@@ -87,13 +91,22 @@ public class GameTimer : BetterBehaviour {
 			)/(GameStartData.instance.end_hour - GameStartData.instance.start_hour);
 	}
 	
-	GameTimer add_countdown(float t, Action<float> act, bool from_now = true){
+	public GameTimer add_countdown(float t, Action<Time> act, bool from_now = true){
 		float cd_time = from_now? time.total+t:t;
 		countdowns.Add(new Countdown(cd_time, act));
 		return this;
 	}
 	
 	void Update () {
-		time.total += UnityEngine.Time.deltaTime;
+		if (started){
+			time.total += UnityEngine.Time.deltaTime;
+			countdowns = countdowns.Where((Countdown cd)=>{
+				if (cd.remaining(time).total < 0.0f){
+					cd.invoke(time);
+					return false;
+				}
+				return true;
+			}).ToList();
+		}
 	}
 }

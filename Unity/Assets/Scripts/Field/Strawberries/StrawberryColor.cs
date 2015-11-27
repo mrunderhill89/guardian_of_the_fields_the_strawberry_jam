@@ -7,6 +7,8 @@ public class StrawberryColor : BetterBehaviour {
 	public static float max_quality = 2.00f;
 	public Color color;
 	protected Material material;
+	[Show]
+	protected Texture bump_map;
 	static StrawberryColor(){
 		color_gradient = new Gradient ();
 	}
@@ -16,9 +18,12 @@ public class StrawberryColor : BetterBehaviour {
 	void Start () {
 		if (data == null)
 			data = GetComponent<StrawberryComponent> ();
-		renderer = transform.Find("Strawberry_Mesh/Cube").GetComponent<Renderer>();
-		if (material == null)
+		renderer = transform.Find("StrawberryMesh/Berry").GetComponent<Renderer>();
+		if (material == null){
 			material = new Material(Shader.Find ("Standard"));
+			material.CopyPropertiesFromMaterial(renderer.material);
+		}
+		bump_map = renderer.material.GetTexture("_BumpMap");
 		renderer.material = material;
 	}
 
@@ -27,5 +32,6 @@ public class StrawberryColor : BetterBehaviour {
 		float quality = data.quality;
 		color = color_gradient.Evaluate (quality / max_quality);
 		material.SetColor ("_Color", color);
+		material.SetTexture("_BumpMap", bump_map);
 	}
 }

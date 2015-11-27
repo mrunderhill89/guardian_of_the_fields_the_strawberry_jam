@@ -17,6 +17,7 @@ public class GameStateManager : BetterBehaviour {
 	public Vector3 gravity;
 	public StateMachine fsm;
 	public ScoreHandler scores;
+	public GameTimer timer;
 	public List<string> drag_states = new List<string>();
 
 	Action lazy_log(string message){
@@ -40,7 +41,11 @@ public class GameStateManager : BetterBehaviour {
 		.add_child( 
            fsm.state ("gameplay")
 			.add_child (
-				fsm.state("loading"),true
+				fsm.state("loading").on_exit(new StateEvent(()=>{
+					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
+						Debug.Log("Time Up!");
+					});
+				})),true
 			).add_child (
 				fsm.state ("look")
 					.add_child(fsm.state("look_forward")
