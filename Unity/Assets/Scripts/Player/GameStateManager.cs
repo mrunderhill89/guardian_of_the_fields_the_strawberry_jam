@@ -45,6 +45,9 @@ public class GameStateManager : BetterBehaviour {
 					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
 						fsm.transition("time_up").trigger();
 					});
+					timer.add_countdown(GameStartData.instance.game_length-60.0f, (t)=>{
+						GameMessages.Log(LanguageTable.get("tutorial_time_up"), 10.0f);
+					});
 					if (GameStartData.instance.tutorial){
 						GameMessages.Log(LanguageTable.get("tutorial_move"), 10.0f);
 					}
