@@ -11,16 +11,25 @@ using YamlDotNet.RepresentationModel;
 
 public class GameStartData : BetterBehaviour {
 	[DontSerialize]
-	public static StartData instance;
+	protected static StartData _instance = null;
+	public static StartData instance{
+		get{
+			if (_instance == null) {
+				_instance = load_settings();
+				if (_instance.randomize) {
+					_instance.rng_seed = UnityEngine.Random.seed;
+				}
+			}
+			return _instance;
+		}
+		private set{
+			_instance = value;
+		}
+	}
+	
 	
 	public StartData current;
 	void Awake(){
-		if (instance == null) {
-			instance = load_settings();
-		}
-		if (instance.randomize) {
-			instance.rng_seed = UnityEngine.Random.seed;
-		}
 		if (current == null){
 			current = new StartData();
 		}

@@ -20,7 +20,7 @@ public class PaceNameLabel : BetterBehaviour {
 		if (pace != null && text != null){
 			foreach(KeyValuePair<float,string> pair in pace_names){
 				if (value < pair.Key) break;
-				text.text = pair.Value;
+				text.text = LanguageTable.get(pair.Value);
 			}
 		}
 	}
