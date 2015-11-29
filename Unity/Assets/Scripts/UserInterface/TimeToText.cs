@@ -13,8 +13,8 @@ public class TimeToText : MonoBehaviour {
 	}
 	protected static Dictionary<TimeFormat, Func<GameTimer, string>> formats = 
 	new Dictionary<TimeFormat, Func<GameTimer, string>>{
-		{TimeFormat.Real, (timer)=>{ return timer.real_time.as_stopwatch; }},
-		{TimeFormat.Game, (timer)=>{ return timer.game_time.as_clock; }}
+		{TimeFormat.Real, (timer)=>{ return timer.time.as_stopwatch; }},
+		{TimeFormat.Game, (timer)=>{ return timer.time.as_clock; }}
 	};
 	public TimeFormat format = TimeFormat.Real;
 	void Start(){

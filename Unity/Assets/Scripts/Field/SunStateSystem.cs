@@ -17,6 +17,6 @@ public class SunStateSystem : BetterBehaviour {
 		return (hr-zero_angle_hour) * 15.0f;
 	}
 	void Update(){
-		sun_angle = hour_to_angle(timer.game_time.f_hours);
+		sun_angle = hour_to_angle(timer.time.game_f_hours);
 	}
 }

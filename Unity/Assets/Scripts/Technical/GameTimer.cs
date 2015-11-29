@@ -12,6 +12,21 @@ public class GameTimer : BetterBehaviour {
 	public const int   I_MINUTES_IN_HOUR = 60;
 	public const float F_SECONDS_IN_HOUR = 3600.0f;
 	public const int   I_SECONDS_IN_HOUR = 3600;
+	public static int to_milliseconds(float t){
+		return Mathf.FloorToInt(t * F_MS_IN_SECOND) % I_MS_IN_SECOND;
+	}
+	public static int to_seconds(float t){
+		return Mathf.FloorToInt(t) % I_SECONDS_IN_MINUTE;
+	}
+	public static int to_minutes(float t){
+		return Mathf.FloorToInt(t/F_SECONDS_IN_MINUTE)% I_MINUTES_IN_HOUR;
+	}
+	public static int to_hours(float t){
+		return Mathf.FloorToInt(t/F_SECONDS_IN_HOUR);
+	}
+	public static float to_f_hours(float t){
+		return t/F_SECONDS_IN_HOUR;
+	}
 	[Serializable]
 	public class Time{
 		public float total = 0.0f;
@@ -20,22 +35,38 @@ public class GameTimer : BetterBehaviour {
 		}
 		[Show]
 		public int milliseconds{
-			get{return Mathf.FloorToInt(total * F_MS_IN_SECOND) % I_MS_IN_SECOND;}
+			get{return to_milliseconds(total);}
 		}
 		[Show]
 		public int seconds{
-			get{return Mathf.FloorToInt(total) % I_SECONDS_IN_MINUTE;}
+			get{return to_seconds(total);}
 		}
 		[Show]
 		public int minutes{
-			get{return Mathf.FloorToInt(total/F_SECONDS_IN_MINUTE)% I_MINUTES_IN_HOUR;}
+			get{return to_minutes(total);}
 		}
 		[Show]
 		public int hours{
-			get{return Mathf.FloorToInt(total/F_SECONDS_IN_HOUR);}
+			get{return to_hours(total);}
 		}
 		public float f_hours{
-			get{return total/F_SECONDS_IN_HOUR;}
+			get{return to_f_hours(total);}
+		}
+		[Show]
+		public float game_time{
+			get{return real_to_game(total);}
+		}
+		[Show]
+		public int game_hours{
+			get{return to_hours(game_time);}
+		}
+		[Show]
+		public int game_minutes{
+			get{return to_minutes(game_time);}
+		}
+		[Show]
+		public float game_f_hours{
+			get{return to_f_hours(game_time);}
 		}
 		[Show]
 		public string as_stopwatch
@@ -44,7 +75,7 @@ public class GameTimer : BetterBehaviour {
 		}
 		[Show]
 		public string as_clock{
-			get{return (hours%12==0?12:hours%12).ToString()+":"+minutes.ToString("00")+((hours<12)?" AM":" PM");}
+			get{return (game_hours%12==0?12:game_hours%12).ToString()+":"+game_minutes.ToString("00")+((game_hours<12)?" AM":" PM");}
 		}
 	}
 	public class Countdown{
@@ -62,27 +93,15 @@ public class GameTimer : BetterBehaviour {
 			return new Time(time - t.total);
 		}
 	}
-	
 	[DontSerialize]
 	public Time time = new Time(0.0f);
 	public List<Countdown> countdowns = new List<Countdown>();
 	public bool started = false;
 
-	[Show]
-	public Time real_time{
-		get{ return time;}
-	}
-	[Show]
-	public Time game_time{
-		get{
-			return new Time(real_to_game(time.total));
-		}
-	}
-	
-	public float real_to_game(float real){
+	public static float real_to_game(float real){
 		return (
 			GameStartData.instance.start_hour +
-			(time.total / GameStartData.instance.game_length) * 
+			(real / GameStartData.instance.game_length) * 
 			(GameStartData.instance.end_hour - GameStartData.instance.start_hour)
 		) * F_SECONDS_IN_HOUR;
 	}

@@ -13,19 +13,16 @@ public class GameStartData : BetterBehaviour {
 	[DontSerialize]
 	public static StartData instance;
 	
-	static GameStartData(){
+	public StartData current;
+	void Awake(){
 		if (instance == null) {
 			instance = load_settings();
 		}
 		if (instance.randomize) {
 			instance.rng_seed = UnityEngine.Random.seed;
 		}
-	}
-	
-	public StartData current;
-	void Awake(){
 		if (current == null){
-			
+			current = new StartData();
 		}
 	}
 
