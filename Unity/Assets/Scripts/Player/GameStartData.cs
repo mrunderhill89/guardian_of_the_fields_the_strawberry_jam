@@ -10,15 +10,22 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
 
 public class GameStartData : BetterBehaviour {
-
+	[DontSerialize]
 	public static StartData instance;
-
-	void Awake(){
+	
+	static GameStartData(){
 		if (instance == null) {
-			load_settings();
+			instance = load_settings();
 		}
 		if (instance.randomize) {
 			instance.rng_seed = UnityEngine.Random.seed;
+		}
+	}
+	
+	public StartData current;
+	void Awake(){
+		if (current == null){
+			
 		}
 	}
 
@@ -46,6 +53,12 @@ public class GameStartData : BetterBehaviour {
 			set{ _tutorial = value; }
 		}
 
+		protected bool _debug = false;
+		public bool debug {
+			get{ return _debug; }
+			set{ _debug = value; }
+		}
+
 		//Strawberry Settings
 		[Serialize][Hide]
 		protected int _max_berries_in_field = 40;
@@ -60,7 +73,12 @@ public class GameStartData : BetterBehaviour {
 		[Show]
 		public float min_ripeness{
 			get{ return _min_ripeness;}
-			set{ _min_ripeness = value;}
+			set{ 
+				_min_ripeness = value;
+				if (max_ripeness < _min_ripeness){
+					max_ripeness = _min_ripeness;
+				}
+			}
 		}
 
 		[Serialize][Hide]
@@ -68,7 +86,12 @@ public class GameStartData : BetterBehaviour {
 		[Show]
 		public float max_ripeness{
 			get{ return _max_ripeness;}
-			set{ _max_ripeness = value;}
+			set{ 
+				_max_ripeness = value;
+				if (min_ripeness > _max_ripeness){
+					min_ripeness = _max_ripeness;
+				}
+			}
 		}
 
 		[Serialize][Hide]
@@ -143,7 +166,11 @@ public class GameStartData : BetterBehaviour {
 		[Show]
 		public float min_accepted_ripeness{
 			get{ return _min_accepted_ripeness;}
-			set{ _min_accepted_ripeness = value;}
+			set{ _min_accepted_ripeness = Mathf.Clamp(value, _min_ripeness, _max_ripeness);
+				if (max_accepted_ripeness < _min_accepted_ripeness){
+					max_accepted_ripeness = _min_accepted_ripeness;
+				}
+			}
 		}
 
 		[Serialize][Hide]
@@ -151,7 +178,11 @@ public class GameStartData : BetterBehaviour {
 		[Show]
 		public float max_accepted_ripeness{
 			get{ return _max_accepted_ripeness;}
-			set{ _max_accepted_ripeness = value;}
+			set{ _max_accepted_ripeness = Mathf.Clamp(value, _min_ripeness, _max_ripeness);
+				if (min_accepted_ripeness > _max_accepted_ripeness){
+					min_accepted_ripeness = _max_accepted_ripeness;
+				}
+			}
 		}
 
 		[Serialize][Hide]
@@ -189,24 +220,32 @@ public class GameStartData : BetterBehaviour {
 		//Hazard Data goes here
 	}
 
+	public static string default_filepath{
+		get{ return Application.dataPath + "/Data/Settings/default.yaml"; }
+	}
+	public static StartData load_settings(){
+		return load_settings(default_filepath);
+	}
 	[Show]
-	public void load_settings(string filename = "/Assets/Data/Settings/default.yaml"){
+	public static StartData load_settings(string filename){
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
-		instance = deserializer.Deserialize<GameStartData.StartData>(input);
-		if (instance.randomize) {
-			instance.rng_seed = UnityEngine.Random.seed;
-		}
+		StartData data = deserializer.Deserialize<GameStartData.StartData>(input);
+		return data;
 	}
 	[Show]
-	public void save_settings(string filename = "/Assets/Data/Settings/default.yaml"){
+
+	public static void save_settings(StartData data){
+		save_settings(data, default_filepath);
+	}
+	public static void save_settings(StartData data, string filename){
 		StreamWriter fout = new StreamWriter(filename);
 		var serializer = new Serializer();
-		serializer.Serialize(fout, instance);
+		serializer.Serialize(fout, data);
 		fout.Close();
 	}
 }
