@@ -154,7 +154,6 @@
      <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump Cutout.shader" />
      <None Include="Assets\Resources\Materials\DrawOnTop.shader" />
      <None Include="Assets\UniRx\ReadMe.txt" />
-     <None Include="Assets\Resources\Materials\DoubleSided.shader" />
      <None Include="Assets\Plugins\YamlDotNet\YamlDotNet.license.txt" />
      <None Include="Assets\Resources\Materials\UI-Unlit-Transparent-Ignore-ZTest.shader" />
      <None Include="Assets\Plugins\Vexe\Runtime\FastSave\README.txt" />

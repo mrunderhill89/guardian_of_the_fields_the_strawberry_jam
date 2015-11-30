@@ -227,7 +227,7 @@ public class GameStartData : BetterBehaviour {
 	}
 
 	public static string default_filepath{
-		get{ return Application.dataPath + "/Data/Settings/default.yaml"; }
+		get{ return Application.streamingAssetsPath + "/Data/Settings/default.yaml"; }
 	}
 	public static StartData load_settings(){
 		return load_settings(default_filepath);
@@ -238,6 +238,7 @@ public class GameStartData : BetterBehaviour {
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
+		Debug.Log("Settings:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		StartData data = deserializer.Deserialize<GameStartData.StartData>(input);

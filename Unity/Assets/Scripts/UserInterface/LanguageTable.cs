@@ -33,6 +33,7 @@ public class LanguageTable : BetterBehaviour {
 		}
 	}
 	public void Start(){
+		Import ();
 		update ();
 	}
 	public void update(){
@@ -51,9 +52,7 @@ public class LanguageTable : BetterBehaviour {
 	public static string current_language = "English";
 	[Serialize][Hide]
 	static string default_language = "English";
-	static LanguageTable(){
-		Import("Assets/Languages.yaml");
-	}
+
 	public static Dictionary<string,string> get_language(string lang){
 		if (!languages.ContainsKey(lang)){
 			languages[lang] = new Dictionary<string,string>();
@@ -79,20 +78,30 @@ public class LanguageTable : BetterBehaviour {
 		}
 		return get_language(lang)[key];
 	}
-	
+
+	public static string default_filepath{
+		get{ return Application.streamingAssetsPath + "/Data/Languages.yaml"; }
+	}
+
+	public static void Export(){
+		Export (default_filepath);
+	}
 	[Show]
-	public static void Export(string filename = "Assets/Languages.yaml"){
+	public static void Export(string filename){
 		StreamWriter fout = new StreamWriter(filename);
 			var serializer = new Serializer();
 			serializer.Serialize(fout, languages);
 		fout.Close();
 	}
+
+	public static void Import(){Import (default_filepath);}
 	[Show]
-	public static void Import(string filename = "Assets/Languages.yaml"){
+	public static void Import(string filename){
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
+		Debug.Log("Languages:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		languages = deserializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(input);

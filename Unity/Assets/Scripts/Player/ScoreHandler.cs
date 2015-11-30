@@ -42,10 +42,10 @@ public class ScoreHandler : BetterBehaviour {
 			strawberries["fall"] = picked;
 			strawberries["basket"] = dropped;
 			baskets = bs;
-			startdata = GameStartData.instance;
 		}
 
 		public TotalScore clone(TotalScore that){
+			startdata = that.startdata;
 			foreach (KeyValuePair<string,StrawberryScore> kvp in strawberries){
 				if (that.strawberries.ContainsKey(kvp.Key)){
 					kvp.Value.clone(that.strawberries[kvp.Key]);
@@ -167,25 +167,34 @@ public class ScoreHandler : BetterBehaviour {
 		}
 	}
 	[DontSerialize][Show]
-	public TotalScore current_score = new TotalScore();
+	public TotalScore current_score;
 	[DontSerialize][Show]
 	public SortedList<DateTime, TotalScore> saved_scores = new SortedList<DateTime, TotalScore>();
 	[Show]
 	public void record_score(){
 		saved_scores.Add(DateTime.Now, new TotalScore().clone(current_score));
 	}
+
+	public static string default_filepath{
+		get{ return Application.streamingAssetsPath + "/Data/Scores.yaml"; }
+	}
+
+	public void load_scores(){ load_scores (default_filepath);}
 	[Show]
-	public void load_scores(string filename = "/Assets/Data/Scores.yaml"){
+	public void load_scores(string filename){
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
+		Debug.Log ("Scores:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);
 	}
+
+	public void save_scores(){ save_scores (default_filepath);}
 	[Show]
-	public void save_scores(string filename = "/Assets/Data/Scores.yaml"){
+	public void save_scores(string filename){
 		StreamWriter fout = new StreamWriter(filename);
 			var serializer = new Serializer();
 			serializer.Serialize(fout, saved_scores);
@@ -196,7 +205,9 @@ public class ScoreHandler : BetterBehaviour {
 	public bool lock_baskets = false;
 	
 	void Start(){
-		load_scores("Assets/Data/Scores.yaml");
+		current_score = new TotalScore();
+		current_score.startdata = GameStartData.instance;
+		load_scores();
 	}
 	
 	void Update(){
