@@ -167,9 +167,18 @@ public class ScoreHandler : BetterBehaviour {
 		}
 	}
 	[DontSerialize][Show]
-	public TotalScore current_score;
+	protected TotalScore _current_score;
+	public TotalScore current_score{
+		get{
+			if (_current_score == null){
+				current_score = new TotalScore();
+			}
+			return _current_score;
+		}
+		set{ _current_score = value;}
+	}
 	[DontSerialize][Show]
-	public SortedList<DateTime, TotalScore> saved_scores = new SortedList<DateTime, TotalScore>();
+	public SortedList<DateTime, TotalScore> saved_scores;
 	[Show]
 	public void record_score(){
 		saved_scores.Add(DateTime.Now, new TotalScore().clone(current_score));
@@ -182,6 +191,9 @@ public class ScoreHandler : BetterBehaviour {
 	public void load_scores(){ load_scores (default_filepath);}
 	[Show]
 	public void load_scores(string filename){
+		if (saved_scores == null){
+			saved_scores = new SortedList<DateTime, TotalScore>();
+		}
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
@@ -204,7 +216,7 @@ public class ScoreHandler : BetterBehaviour {
 	public bool lock_strawberries = false;
 	public bool lock_baskets = false;
 	
-	void Start(){
+	void Awake(){
 		current_score = new TotalScore();
 		current_score.startdata = GameStartData.instance;
 		load_scores();

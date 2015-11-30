@@ -128,7 +128,7 @@ public class GameStateManager : BetterBehaviour {
 						}
 						scores.lock_baskets=true;
 						scores.record_score();
-						scores.save_scores("Assets/Data/Scores.yaml");
+						scores.save_scores();
 					}))
 				).add_child(
 				fsm.state("return_to_menu").on_entry(new StateEvent(()=>{
