@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+
 [ExecuteInEditMode]
 public class PaceNameLabel : BetterBehaviour {
 	public PaceManager pace;

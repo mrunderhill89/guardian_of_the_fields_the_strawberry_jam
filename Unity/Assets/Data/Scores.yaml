@@ -292,3 +292,34 @@
     min_basket_weight: 15
     max_basket_weight: 17
     penalty_values: {}
+2015-11-29T14:43:54.5197107-08:00:
+  strawberries:
+    fall:
+      ripe: 2
+      overripe: 15
+      underripe: 1
+    basket:
+      ripe: 28
+      overripe: 24
+  baskets:
+    accepted: 1
+    underweight: 5
+  startdata:
+    rng_seed: 1448835191
+    randomize: true
+    tutorial: true
+    max_berries_in_field: 40
+    max_ripeness: 2
+    min_size: 0.06
+    max_size: 0.06
+    berry_density: 2400
+    break_distance: 100
+    break_length: 10
+    game_length: 2400
+    start_hour: 6
+    end_hour: 18
+    min_accepted_ripeness: 0.5
+    max_accepted_ripeness: 1.25
+    min_basket_weight: 15
+    max_basket_weight: 17
+    penalty_values: {}
