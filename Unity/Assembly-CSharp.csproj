@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\MeshModifiers\DisplaceNoise.cs" />
      <Compile Include="Assets\Scripts\MeshModifiers\DisplaceSelf.cs" />
      <Compile Include="Assets\Scripts\MeshModifiers\DisplaceTerrain.cs" />
+     <Compile Include="Assets\Scripts\MeshModifiers\DisplaceTransform.cs" />
      <Compile Include="Assets\Scripts\MeshModifiers\Displacer.cs" />
      <Compile Include="Assets\Scripts\Player\BasketComponent.cs" />
      <Compile Include="Assets\Scripts\Player\GamePlayData.cs" />

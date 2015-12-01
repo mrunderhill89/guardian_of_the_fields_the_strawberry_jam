@@ -21,9 +21,9 @@ public class RowGenerator : BetterBehaviour {
 	public List<Action<GameObject>> create_events = new List<Action<GameObject>>();
 	public List<Action<GameObject>> destroy_events = new List<Action<GameObject>>();
 	[DontSerialize]
-	public IObservable<GameObject> creation;
+	public Subject<GameObject> creation = new Subject<GameObject>();
 	[DontSerialize]
-	public IObservable<GameObject> destruction;
+	public Subject<GameObject> destruction = new Subject<GameObject>();
 
 	public int Count{
 		get{return objects.Count;}
@@ -46,11 +46,17 @@ public class RowGenerator : BetterBehaviour {
 		return null;
 	}
 	public RowGenerator on_create(Action<GameObject> act){
-		create_events.Add (act);
+		//create_events.Add (act);
+		creation.Subscribe((GameObject obj)=>{
+			act(obj);
+		});
 		return this;
 	}
 	public RowGenerator on_destroy(Action<GameObject> act){
-		destroy_events.Add (act);
+		//destroy_events.Add (act);
+		destruction.Subscribe((GameObject obj)=>{
+			act(obj);
+		});
 		return this;
 	}
 
@@ -65,6 +71,7 @@ public class RowGenerator : BetterBehaviour {
 					objects[ci] = GameObject.Instantiate(Resources.Load(prefab)) as GameObject;
 					objects[ci].transform.position = row.cell_to_pos(ci);
 					objects[ci].transform.SetParent(transform,true);
+					creation.OnNext(objects[ci]);
 					foreach(Action<GameObject> act in create_events){
 						act(objects[ci]);
 					}
@@ -73,6 +80,7 @@ public class RowGenerator : BetterBehaviour {
 		});
 		row.destruction.Subscribe ((int di) => {
 			if (objects.ContainsKey(di)){
+				destruction.OnNext(objects[di]);
 				foreach(Action<GameObject> act in destroy_events){
 					act(objects[di]);
 				}

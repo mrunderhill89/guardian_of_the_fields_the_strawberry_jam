@@ -146,4 +146,12 @@ public class StateMachine : BetterBehaviour {
 		}
 		return def;
 	}
+	
+	public static StateMachine GetMachine(GameObject obj, StateMachine existing = null){
+		if (existing != null)
+			return existing;
+		if (obj.GetComponent<StateMachine>() == null)
+			return obj.AddComponent<StateMachine>();
+		return obj.GetComponent<StateMachine>();
+	}
 }

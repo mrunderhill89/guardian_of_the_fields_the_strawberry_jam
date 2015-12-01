@@ -165,6 +165,13 @@ public class State : NamedBehavior
 		return this;
 	}
 
+	public static State GetState(GameObject obj, State existing = null){
+		if (existing != null)
+			return existing;
+		if (obj.GetComponent<State>() == null)
+			return obj.AddComponent<State>();
+		return obj.GetComponent<State>();
+	}
 	#endregion
 
 }
