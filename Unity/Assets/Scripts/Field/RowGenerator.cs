@@ -24,6 +24,7 @@ public class RowGenerator : BetterBehaviour {
 	public Subject<GameObject> creation = new Subject<GameObject>();
 	[DontSerialize]
 	public Subject<GameObject> destruction = new Subject<GameObject>();
+	public bool log = true;
 
 	public int Count{
 		get{return objects.Count;}
@@ -46,17 +47,21 @@ public class RowGenerator : BetterBehaviour {
 		return null;
 	}
 	public RowGenerator on_create(Action<GameObject> act){
-		//create_events.Add (act);
+		create_events.Add (act);
+		/*
 		creation.Subscribe((GameObject obj)=>{
 			act(obj);
 		});
+		*/
 		return this;
 	}
 	public RowGenerator on_destroy(Action<GameObject> act){
-		//destroy_events.Add (act);
+		destroy_events.Add (act);
+		/*
 		destruction.Subscribe((GameObject obj)=>{
 			act(obj);
 		});
+		*/
 		return this;
 	}
 

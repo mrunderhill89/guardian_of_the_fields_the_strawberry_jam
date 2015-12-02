@@ -101,7 +101,6 @@ public class LanguageTable : BetterBehaviour {
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
-		Debug.Log("Languages:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		languages = deserializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(input);

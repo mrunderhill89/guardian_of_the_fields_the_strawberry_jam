@@ -198,7 +198,6 @@ public class ScoreHandler : BetterBehaviour {
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
-		Debug.Log ("Scores:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);

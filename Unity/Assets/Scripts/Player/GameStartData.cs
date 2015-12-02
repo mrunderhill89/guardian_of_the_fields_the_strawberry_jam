@@ -238,7 +238,6 @@ public class GameStartData : BetterBehaviour {
 			if (b == "") return n;
 			return b+"\n"+n;
 		});
-		Debug.Log("Settings:\n"+Document);
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		StartData data = deserializer.Deserialize<GameStartData.StartData>(input);

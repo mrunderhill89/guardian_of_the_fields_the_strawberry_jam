@@ -11,6 +11,8 @@ public class RowHandler2 : BetterBehaviour {
 	public float cell_distance = 1.0f;
 	public Transform target;
 	public Vector3 direction = new Vector3(0.0f,0.0f,1.0f);
+	public bool log = false;
+
 
 	public float pos_to_dist(Vector3 pos){
 		return Vector3.Dot(pos-transform.position, direction.normalized);
@@ -38,7 +40,11 @@ public class RowHandler2 : BetterBehaviour {
 	[DontSerialize][Show]
 	public ReactiveProperty<int> index = new ReactiveProperty<int>();
 
+
+
 	void Start(){
+		if (target == null)
+			target = Camera.main.transform;
 		index.Subscribe ((int i) => {
 			fill (i-view_behind, i+view_ahead);
 		});
@@ -49,12 +55,16 @@ public class RowHandler2 : BetterBehaviour {
 	[Show]
 	public int front_index{
 		get{ return _front_index;}
-		private set{ _front_index = value;}
+		private set{ 
+			_front_index = value;
+		}
 	}
 	[Show]
 	public int rear_index{
 		get{ return _rear_index;}
-		private set{ _rear_index = value;}
+		private set{ 
+			_rear_index = value;
+		}
 	}
 	public static bool int_between(int i, int min, int max){
 		return i >= min && i <= max;
