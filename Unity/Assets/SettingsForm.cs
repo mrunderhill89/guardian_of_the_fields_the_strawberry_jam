@@ -60,7 +60,7 @@ public class SettingsForm : BetterBehaviour {
 			max_size.text = data.max_size.ToString();
 			density.text = data.berry_density.ToString();
 			break_distance.text = data.break_distance.ToString();
-			break_length.text = data.break_length.ToString();
+			break_length.text = data.break_length.ToString();//
 			game_length.text = data.game_length.ToString();
 			start_hour.text = data.start_hour.ToString();
 			end_hour.text = data.end_hour.ToString();
@@ -108,6 +108,12 @@ public class SettingsForm : BetterBehaviour {
 			start_data.max_berries_in_field = ParseIntOrDefault(max_berries.text, start_data.max_berries_in_field);
 			start_data.min_size = ParseFloatOrDefault(min_size.text, start_data.min_size);
 			start_data.max_size = ParseFloatOrDefault(max_size.text, start_data.max_size);
+			start_data.berry_density = ParseFloatOrDefault(density.text, start_data.berry_density);
+			start_data.break_distance = ParseIntOrDefault(break_distance.text, start_data.break_distance);
+			start_data.break_length = ParseIntOrDefault(break_length.text, start_data.break_length);
+			start_data.game_length = ParseFloatOrDefault(game_length.text, start_data.game_length);
+			start_data.start_hour = ParseFloatOrDefault(start_hour.text, start_data.start_hour);
+			start_data.end_hour = ParseFloatOrDefault(end_hour.text, start_data.end_hour);
 		}
 	}
 }

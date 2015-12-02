@@ -11,7 +11,7 @@ using YamlDotNet.RepresentationModel;
 using UniRx;
 
 public class GameStartData : BetterBehaviour {
-	[DontSerialize]
+	[DontSerialize][Show]
 	protected static StartData _instance = null;
 	public static StartData instance{
 		get{
