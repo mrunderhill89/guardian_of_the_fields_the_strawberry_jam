@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\HideDebugControls.cs" />
      <Compile Include="Assets\Scripts\Field\EmptyRowSetup.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
      <Compile Include="Assets\Scripts\Field\LeafGenerator.cs" />

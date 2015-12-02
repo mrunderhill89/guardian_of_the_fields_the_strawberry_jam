@@ -22,6 +22,8 @@ public class TimeToText : MonoBehaviour {
 			text_component = GetComponent<Text> ();
 		if (timer == null)
 			timer = GetComponent<GameTimer> ();
+		if (GameStartData.instance.start_hour == GameStartData.instance.end_hour)
+			format = TimeFormat.Real;
 	}
 	void Update () {
 		text_component.text = formats[format](timer);
