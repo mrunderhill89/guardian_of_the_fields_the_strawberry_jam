@@ -8,6 +8,7 @@ using Vexe.Runtime.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
+using UniRx;
 
 public class GameStartData : BetterBehaviour {
 	[DontSerialize]
@@ -27,12 +28,10 @@ public class GameStartData : BetterBehaviour {
 		}
 	}
 	
-	
-	public StartData current;
+	[DontSerialize]
+	public ReactiveProperty<StartData> current;
 	void Awake(){
-		if (current == null){
-			current = new StartData();
-		}
+		current = new ReactiveProperty<StartData>(instance);
 	}
 
 	[Serializable]
@@ -223,6 +222,17 @@ public class GameStartData : BetterBehaviour {
 			get{ return _penalty_values; }
 			set{ _penalty_values = value; }
 		}
+		
+		public float get_penalty(StrawberryComponent.BerryPenalty penalty_type){
+			if (penalty_values.ContainsKey(penalty_type)){
+				return penalty_values[penalty_type];
+			}
+			return 0.0f;
+		}
+		public void set_penalty(StrawberryComponent.BerryPenalty penalty_type, float value){
+			penalty_values[penalty_type] = value;
+		}
+
 		//Hazard Data goes here
 	}
 
@@ -243,11 +253,10 @@ public class GameStartData : BetterBehaviour {
 		StartData data = deserializer.Deserialize<GameStartData.StartData>(input);
 		return data;
 	}
-	[Show]
-
 	public static void save_settings(StartData data){
 		save_settings(data, default_filepath);
 	}
+	[Show]
 	public static void save_settings(StartData data, string filename){
 		StreamWriter fout = new StreamWriter(filename);
 		var serializer = new Serializer();
