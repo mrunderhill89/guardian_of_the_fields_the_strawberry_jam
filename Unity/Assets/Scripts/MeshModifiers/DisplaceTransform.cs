@@ -52,14 +52,16 @@ public class DisplaceTransform : BetterBehaviour {
 		if (auto_write) write();
 	}
 	
-	void read(){
+	public DisplaceTransform read(){
 		local = input.localPosition;
 		world = input.position;
+		return this;
 	}
 	
-	void write () {
+	public DisplaceTransform write () {
 		output.position = displacers.Aggregate(Vector3.zero, 
 			(Vector3 sum, Displacer displacer)=>{return sum + displacer.displace(local, world, sum);}
 		);
+		return this;
 	}
 }

@@ -44,7 +44,7 @@ public class StrawberryRowState : BetterBehaviour{
 		}
 		state = NamedBehavior.GetOrCreateComponentByName<State> (gameObject, "row");
 		generator.on_create((GameObject cell) => {
-			StrawberryGenerator sb_generator = cell.GetComponent<StrawberryGenerator> ();
+			StrawberryGenerator sb_generator = cell.GetComponentInChildren<StrawberryGenerator> ();
 			if (sb_generator != null){
 				sb_generator.state.chain_parent(state);
 			}
@@ -65,10 +65,10 @@ public class StrawberryRowState : BetterBehaviour{
 			start_break:Math.Max(row.front_index - num_receiving,0);
 		if (generator.Count > 0){
 			GameObject cell = generator.random_entry(rear_index,row.front_index, (GameObject obj)=>{
-				return obj.GetComponent<StrawberryGenerator>() != null;
+				return obj.GetComponentInChildren<StrawberryGenerator>() != null;
 			});
 			if (cell != null)
-				return cell.GetComponent<StrawberryGenerator>().state;
+				return cell.GetComponentInChildren<StrawberryGenerator>().state;
 		}
 		return null;
 	}
