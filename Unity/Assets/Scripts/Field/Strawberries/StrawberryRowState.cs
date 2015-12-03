@@ -49,7 +49,7 @@ public class StrawberryRowState : BetterBehaviour{
 				sb_generator.state.chain_parent(state);
 			}
 		}).on_destroy((GameObject cell) => {
-			StrawberryGenerator sb_generator = cell.GetComponent<StrawberryGenerator>();
+			StrawberryGenerator sb_generator = cell.GetComponentInChildren<StrawberryGenerator>();
 			if (sb_generator != null){
 				sb_generator.PreDestroy();
 			}

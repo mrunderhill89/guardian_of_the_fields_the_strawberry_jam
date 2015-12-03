@@ -172,6 +172,7 @@ public class State : NamedBehavior
 			return obj.AddComponent<State>();
 		return obj.GetComponent<State>();
 	}
+	
 	#endregion
 
 }
