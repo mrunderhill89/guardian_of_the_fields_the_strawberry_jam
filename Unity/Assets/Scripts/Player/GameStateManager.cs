@@ -41,7 +41,17 @@ public class GameStateManager : BetterBehaviour {
 		.add_child( 
            fsm.state ("gameplay")
 			.add_child (
-				fsm.state("loading").on_exit(new StateEvent(()=>{
+				fsm.state("loading")
+				.add_child(fsm.state("load_forward")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_forward"))), true
+				).add_child(fsm.state("load_left")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_left")))
+				).add_child(fsm.state("load_right")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_right")))
+				).add_child(fsm.state("load_behind")
+					.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
+				).chain_initial(fsm.state("load_forward")
+				).on_exit(new StateEvent(()=>{
 					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
 						fsm.transition("time_up").trigger();
 					});
@@ -141,10 +151,46 @@ public class GameStateManager : BetterBehaviour {
 		fsm.new_transition("loading=>look", (t)=>{
 			t.chain_from(fsm.state("loading"))
 			.chain_to (fsm.state("look"))
-	  		.chain_auto_run(true)
+	  		.chain_auto_run(false)
 			.add_test(new TransitionTest(()=>{
-				return berry_state.finished_loading();
+				return berry_state.finished_loading() && LeafStateSystem.instance.finished_loading;
 			}));
+		//Loading Look Forward -> Look Left, Look Right
+		}).new_transition("load_forward=>left", (t)=>{
+			input.register_transition(t,"left")
+				.chain_from(fsm.state("load_forward"))
+					.chain_to(fsm.state("load_left"));
+		}).new_transition("load_forward=>right", (t)=>{
+			input.register_transition(t,"right")
+				.chain_from(fsm.state("load_forward"))
+					.chain_to(fsm.state("load_right"));
+		//Loading Look Left -> Look Behind, Look Forward
+		}).new_transition("load_left=>behind", (t)=>{
+			input.register_transition(t,"left")
+				.chain_from(fsm.state("load_left"))
+					.chain_to(fsm.state("load_behind"));
+		}).new_transition("load_left=>forward", (t)=>{
+			input.register_transition(t,"right")
+				.chain_from(fsm.state("load_left"))
+					.chain_to(fsm.state("load_forward"));
+		//Loading Look Right -> Look Behind, Look Forward
+		}).new_transition("load_right=>forward", (t)=>{
+			input.register_transition(t,"left")
+				.chain_from(fsm.state("load_right"))
+					.chain_to(fsm.state("load_forward"));
+		}).new_transition("load_right=>behind", (t)=>{
+			input.register_transition(t,"right")
+				.chain_from(fsm.state("load_right"))
+					.chain_to(fsm.state("load_behind"));
+		//Loading Look Behind -> Look Left, Look Right
+		}).new_transition("load_behind=>left", (t)=>{
+			input.register_transition(t,"right")
+				.chain_from(fsm.state("load_behind"))
+					.chain_to(fsm.state("load_left"));
+		}).new_transition("load_behind=>right", (t)=>{
+			input.register_transition(t,"left")
+				.chain_from(fsm.state("load_behind"))
+					.chain_to(fsm.state("load_right"));
 		//Look Forward -> Look Left, Look Right, Pack
 		}).new_transition("look_forward=>left", (t)=>{
 			input.register_transition(t,"left")

@@ -137,11 +137,6 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return this;
 	}
 
-	public int CompareTo(Transition that){
-		//The values are in reverse so that a default Sort() puts high priority first.
-		return this._priority.CompareTo(that._priority);
-	}
-
 	public Transition add_test(TransitionTest test)
 	{
 		tests.Add(test);
@@ -236,6 +231,10 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return _from.is_visited();
 	}
 
+	public int CompareTo(Transition that){
+		//The values are in reverse so that a default Sort() puts high priority first.
+		return this._priority.CompareTo(that._priority);
+	}
 	#endregion
 
 

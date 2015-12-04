@@ -12,6 +12,7 @@ public class LeafStateSystem : BetterBehaviour {
 	public StateMachine fsm;
 
 	public int max_leaves = 500;
+	public float load_percent = 0.75f;
 	public int leaves_per_frame = 5;
 	public int num_leaves{
 		get{
@@ -27,6 +28,17 @@ public class LeafStateSystem : BetterBehaviour {
 			return 0;
 		}
 	}
+	
+	public float loading_progress{
+		get{ 
+			if (load_percent == 0.0f) return 1.0f;
+			return num_leaves / (max_leaves * load_percent); 
+		}
+	}
+	public bool finished_loading{
+		get{ return num_leaves >= max_leaves * load_percent;}
+	}
+	
 	void Awake () {
 		instance = this;
 		fsm = StateMachine.GetMachine(gameObject, fsm);
@@ -37,8 +49,8 @@ public class LeafStateSystem : BetterBehaviour {
 	
 	void InitializeLeaf(GameObject obj){
 		ObjectVisibility vis = obj.GetComponent<ObjectVisibility>();
-		obj.transform.SetParent(null);
 		vis.visible = false;
+		obj.transform.SetParent(null);
 	}
 	
 	GameObject create_leaf(){
