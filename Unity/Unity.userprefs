@@ -1,14 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Field\RowHandler2.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player\GameStateManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\Field\RowGenerator.cs" Line="72" Column="1" />
-      <File FileName="Assets\Scripts\UserInterface\LanguageTable.cs" Line="104" Column="1" />
+      <File FileName="Assets\Scripts\Player\OverflowDetector.cs" Line="57" Column="33" />
+      <File FileName="Assets\Scripts\Field\RowGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UserInterface\LanguageTable.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\UserInterface\MenuStateMachine.cs" Line="1" Column="1" />
       <File FileName="Assets\SettingsForm.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Player\GameStartData.cs" Line="241" Column="1" />
-      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player\ScoreHandler.cs" Line="201" Column="1" />
+      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="56" Column="6" />
+      <File FileName="Assets\Scripts\Player\ScoreHandler.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Field\RowHandler2.cs" Line="90" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

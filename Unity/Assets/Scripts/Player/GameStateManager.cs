@@ -51,7 +51,9 @@ public class GameStateManager : BetterBehaviour {
 				).add_child(fsm.state("load_behind")
 					.on_entry(new StateEvent(camera_control.lazy_set_target("look_behind")))
 				).chain_initial(fsm.state("load_forward")
+			    ).on_entry( new StateEvent(()=>{Application.runInBackground = true;})
 				).on_exit(new StateEvent(()=>{
+					Application.runInBackground = false;
 					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
 						fsm.transition("time_up").trigger();
 					});
