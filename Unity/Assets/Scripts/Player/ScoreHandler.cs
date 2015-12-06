@@ -27,6 +27,18 @@ public class ScoreHandler : BetterBehaviour {
 			private set{ _baskets = value;}
 		}
 
+		protected DateTime _date_recorded;
+		public DateTime date_recorded{
+			get{ return _date_recorded; }
+			set{ _date_recorded = value; }
+		}
+
+		protected float _play_length = 0.0f;
+		public float play_length{
+			get{ return _play_length; }
+			set{ _play_length = value;}
+		}
+
 		protected GameStartData.StartData _start_data = null;
 		[Show]
 		public GameStartData.StartData startdata{
@@ -46,6 +58,8 @@ public class ScoreHandler : BetterBehaviour {
 
 		public TotalScore clone(TotalScore that){
 			startdata = that.startdata;
+			date_recorded = that.date_recorded;
+			play_length = that.play_length;
 			foreach (KeyValuePair<string,StrawberryScore> kvp in strawberries){
 				if (that.strawberries.ContainsKey(kvp.Key)){
 					kvp.Value.clone(that.strawberries[kvp.Key]);
@@ -177,22 +191,24 @@ public class ScoreHandler : BetterBehaviour {
 		}
 		set{ _current_score = value;}
 	}
+
 	[DontSerialize][Show]
-	public SortedList<DateTime, TotalScore> saved_scores;
+	public List<TotalScore> saved_scores = new List<TotalScore>();
 	[Show]
 	public void record_score(){
-		saved_scores.Add(DateTime.Now, new TotalScore().clone(current_score));
+		current_score.date_recorded = DateTime.Now;
+		saved_scores.Add(new TotalScore().clone(current_score));
 	}
 
 	public static string default_filepath{
 		get{ return Application.streamingAssetsPath + "/Data/Scores.yaml"; }
 	}
-
+	[Show]
 	public void load_scores(){ load_scores (default_filepath);}
 	[Show]
 	public void load_scores(string filename){
 		if (saved_scores == null){
-			saved_scores = new SortedList<DateTime, TotalScore>();
+			saved_scores = new List<TotalScore>();
 		}
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
@@ -200,9 +216,9 @@ public class ScoreHandler : BetterBehaviour {
 		});
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
-		saved_scores = deserializer.Deserialize<SortedList<DateTime, TotalScore>>(input);
+		saved_scores = deserializer.Deserialize<List<TotalScore>>(input);
 	}
-
+	[Show]
 	public void save_scores(){ save_scores (default_filepath);}
 	[Show]
 	public void save_scores(string filename){

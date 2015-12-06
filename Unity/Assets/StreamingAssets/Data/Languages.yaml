@@ -32,6 +32,7 @@ English:
   basket_overweight: 'Overweight:'
   basket_overflow: 'Overflowing:'
   berries_dropped: Strawberries Dropped
+  state_loading: Loading
   state_look: Looking
   state_pick: Picking
   state_pack: Packing
@@ -39,6 +40,7 @@ English:
   state_rearrange: Rearrange Berries
   state_final: Final Weigh-In
   move_while_pack: Move while Packing
+  date: 'Date:'
   pace_label: 'Pace:'
   pace_reverse: Reverse
   pace_stop: Stop
