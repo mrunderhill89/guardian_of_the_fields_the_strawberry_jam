@@ -20,8 +20,7 @@ public class StrawberryColor : BetterBehaviour {
 			data = GetComponent<StrawberryComponent> ();
 		renderer = transform.Find("StrawberryMesh/Berry").GetComponent<Renderer>();
 		if (material == null){
-			material = new Material(Shader.Find ("Standard"));
-			material.CopyPropertiesFromMaterial(renderer.material);
+			material = new Material(renderer.material);
 		}
 		bump_map = renderer.material.GetTexture("_BumpMap");
 		renderer.material = material;
