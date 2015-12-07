@@ -16,6 +16,8 @@ public class MenuStateMachine : BetterBehaviour {
 			fsm.state ("scores")
 		).add_child (
 			fsm.state ("settings")
+		).add_child (
+			fsm.state ("credits")
 		);
 		fsm.new_transition("main->scores", t => {
 			t.chain_from(fsm.state("main"))
@@ -31,6 +33,14 @@ public class MenuStateMachine : BetterBehaviour {
 					.chain_auto_run(false);
 		}).new_transition("settings->main", t => {
 			t.chain_from(fsm.state("settings"))
+				.chain_to(fsm.state("main"))
+					.chain_auto_run(false);
+		}).new_transition("main->credits", t => {
+			t.chain_from(fsm.state("main"))
+				.chain_to(fsm.state("credits"))
+					.chain_auto_run(false);
+		}).new_transition("credits->main", t => {
+			t.chain_from(fsm.state("credits"))
 				.chain_to(fsm.state("main"))
 					.chain_auto_run(false);
 		});
