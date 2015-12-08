@@ -48,6 +48,13 @@ English:
   pace_medium: Medium
   pace_fast: Fast
   pace_max: Max Speed
+  menu_start: Start Game
+  menu_controls: Controls
+  menu_settings: Game Settings
+  menu_scores: High Scores
+  menu_credits: Credits
+  menu_quit: Quit Game
+  menu_back: Back
   tutorial_move: Use arrow keys or "WASD" to move around.
   tutorial_speed: Press "E" or "Num 1" to speed up.
   tutorial_slow: Press "Q" or "Num 1" to slow up.
