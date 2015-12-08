@@ -17,6 +17,8 @@ public class LeafGenerator : BetterBehaviour {
 	
 	public State state;
 
+	public ObjectVisibility billboard = null;
+	
 	[DontSerialize]
 	public static LeafGenerator closest = null;
 	[DontSerialize]
@@ -27,6 +29,11 @@ public class LeafGenerator : BetterBehaviour {
 	}
 	public bool is_empty{
 		get{ return state.count() <= 0;}
+	}
+	
+	public float billboard_percent = 0.5f;
+	public bool show_billboard{
+		get{ return state.count() <= Mathf.FloorToInt(visible_leaves * billboard_percent);}
 	}
 	
 	public float distance{
@@ -78,6 +85,9 @@ public class LeafGenerator : BetterBehaviour {
 			){
 				closest = this;
 			}
+		}
+		if (billboard != null){
+			billboard.visible = show_billboard;
 		}
 		if (!is_empty){
 			if (furthest == null ||
