@@ -10,6 +10,9 @@ using UniRx.Triggers;
 public class LeafStateSystem : BetterBehaviour {
 	public static LeafStateSystem instance = null;
 	public StateMachine fsm;
+	public string prefab = "stem";
+	[DontSerialize]
+	public UnityEngine.Object loaded_prefab;
 
 	public int max_leaves = 500;
 	public float load_percent = 0.75f;
@@ -45,6 +48,7 @@ public class LeafStateSystem : BetterBehaviour {
 		fsm.state("root").on_entry(new StateEvent((Automata a)=>{
 			InitializeLeaf(a.gameObject);
 		}));
+		loaded_prefab = Resources.Load(prefab);
 	}
 	
 	void InitializeLeaf(GameObject obj){
@@ -54,7 +58,7 @@ public class LeafStateSystem : BetterBehaviour {
 	}
 	
 	GameObject create_leaf(){
-		GameObject leaf = GameObject.Instantiate(Resources.Load("stem")) as GameObject;
+		GameObject leaf = GameObject.Instantiate(loaded_prefab) as GameObject;
 		fsm.automata(leaf.name, leaf.GetComponent<Automata>()).move_direct(fsm.state("root"));
 		return leaf;
 	}

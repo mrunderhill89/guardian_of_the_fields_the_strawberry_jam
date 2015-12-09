@@ -47,11 +47,6 @@ public class DisplaceTransform : BetterBehaviour {
 		write();
 	}
 	
-	void Update(){
-		if (auto_read) read();
-		if (auto_write) write();
-	}
-	
 	public DisplaceTransform read(){
 		local = input.localPosition;
 		world = input.position;

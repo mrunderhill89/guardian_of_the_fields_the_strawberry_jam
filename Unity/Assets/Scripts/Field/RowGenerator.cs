@@ -9,6 +9,14 @@ public class RowGenerator : BetterBehaviour {
 	[Show]
 	public Dictionary<int,GameObject> objects = new Dictionary<int, GameObject>();
 	public List<string> pattern = new List<string>();
+	public Dictionary<string, UnityEngine.Object> loaded_prefabs = new Dictionary<string,UnityEngine.Object>();
+	public UnityEngine.Object get_prefab(string name){
+		if (!loaded_prefabs.ContainsKey(name)){
+			loaded_prefabs[name] = Resources.Load(name);
+		}
+		return loaded_prefabs[name];
+	}
+	
 	public static int wrap(int i, int around){
 		if (around <= 0)
 			return i;
@@ -73,7 +81,7 @@ public class RowGenerator : BetterBehaviour {
 				string prefab = pattern[wrap(ci, pattern.Count)];
 				if (prefab != ""){
 					//Debug.Log ("Creating "+prefab+" at "+ci);
-					objects[ci] = GameObject.Instantiate(Resources.Load(prefab)) as GameObject;
+					objects[ci] = GameObject.Instantiate(get_prefab(prefab)) as GameObject;
 					objects[ci].transform.position = row.cell_to_pos(ci);
 					objects[ci].transform.SetParent(transform,true);
 					creation.OnNext(objects[ci]);

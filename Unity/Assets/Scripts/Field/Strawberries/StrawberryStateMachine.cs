@@ -12,6 +12,9 @@ public class StrawberryStateMachine : BetterBehaviour {
 	public static Vector3 nowhere = new Vector3(-100.0f,-100.0f,-100.0f);
 	[DontSerialize]
 	public StateMachine fsm;
+	public string prefab = "Strawberry";
+	public UnityEngine.Object loaded_prefab;
+	
 	public int field_strawberries = 100;
 	public GameStateManager player_state;
 	void Awake () {
@@ -101,6 +104,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 			}))
 			;
 		});
+		loaded_prefab = Resources.Load(prefab);
 	}
 	void Start(){
 		UnityEngine.Random.seed = GameStartData.instance.rng_seed;
@@ -114,7 +118,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 	public void GenerateStrawberries(int num){
 		GameObject berry;
 		for (int u = 0; u < num; u++){
-			berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
+			berry = GameObject.Instantiate(loaded_prefab) as GameObject;
 			berry.transform.position = nowhere;
 			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
 			fsm.automata(berry_name, berry.GetComponent<Automata>())
@@ -123,7 +127,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 	}
 	[Show]
 	public void GenerateStrawberryAtPlayer(){
-		GameObject berry = GameObject.Instantiate(Resources.Load ("Strawberry")) as GameObject;
+		GameObject berry = GameObject.Instantiate(loaded_prefab) as GameObject;
 			berry.transform.position = BasketComponent.get_lightest_basket().spawn_point.position;
 			string berry_name = berry.name+":"+(fsm.count_automata()+1).ToString();
 			fsm.transition("spawn_direct").trigger_single(fsm.automata(berry_name, berry.GetComponent<Automata>()));

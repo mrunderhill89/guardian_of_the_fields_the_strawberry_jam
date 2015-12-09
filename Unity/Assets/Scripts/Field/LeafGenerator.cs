@@ -12,6 +12,8 @@ public class LeafGenerator : BetterBehaviour {
 	public Vector2 radius = new Vector2(0.1f,0.25f);
 	public float crown_height = 0.25f;
 	
+	public Matrix4x4 distance_transform = Matrix4x4.identity;
+	
 	public Vector3 twist_min = new Vector3(0.0f,0.0f,0.0f);
 	public Vector3 twist_max = new Vector3(0.0f,0.0f,0.0f);
 	
@@ -37,7 +39,7 @@ public class LeafGenerator : BetterBehaviour {
 	}
 	
 	public float distance{
-		get{ return Vector3.Distance(transform.position, Camera.main.transform.position); }
+		get{ return Vector3.Magnitude(distance_transform.MultiplyVector(transform.position - Camera.main.transform.position)); }
 	}
 	public static float max_distance = 100.0f;
 	public static AnimationCurve vis_curve;
