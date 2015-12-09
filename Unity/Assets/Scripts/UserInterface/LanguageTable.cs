@@ -12,6 +12,11 @@ using YamlDotNet.RepresentationModel;
 public class LanguageTable : BetterBehaviour {
 	public List<Text> text_objects = new List<Text>();
 	public List<TextMesh> text_meshes = new List<TextMesh>();
+	[Show]
+	public int Count{
+		get{return text_objects.Count + text_meshes.Count;}
+	}
+	
 	[Serialize][Hide]
 	protected string _key = "";
 	[Show]
@@ -33,6 +38,10 @@ public class LanguageTable : BetterBehaviour {
 		}
 	}
 	public void Start(){
+		if (Count == 0 && GetComponent<Text>() != null)
+			text_objects.Add(GetComponent<Text>());
+		if (Count == 0 && GetComponent<TextMesh>() != null)
+			text_meshes.Add(GetComponent<TextMesh>());
 		Import ();
 		update ();
 	}

@@ -66,3 +66,32 @@ English:
   tutorial_midday: It's mid-day. The game ends when the sun goes down.
   tutorial_time_up: Sunset is coming soon! Hurry up!
   no_key: <No Key>
+  input_float: 'Decimal number (##.##)'
+  input_integer: 'Whole number (###)'
+  file_load: Load
+  file_save: Save
+  file_filename: Filename
+  settings_seed: Random Number Seed
+  settings_debug: Debug Options
+  settings_max_berries: Max Berries in Field
+  settings_set_to_current: Use These Settings
+  settings_penalty_big: Big Penalty
+  settings_penalty_medium: Medium Penalty
+  settings_penalty_small: Small Penalty
+  settings_max_basket_weight: Maximum Basket Weight
+  settings_min_basket_weight: Minimum Basket Weight
+  settings_min_accepted_size: Min. Accepted Berry Size
+  max_accepted_ripeness: Max. Accepted Ripeness
+  min_accepted_ripeness: Min. Accepted Ripeness
+  settings_game_length: Game Length
+  settings_min_ripeness: Minimum Ripeness
+  settings_break_length: Break Length
+  settings_max_ripeness: Maximum Ripeness
+  settings_end_hour: End Hour
+  settings_start_hour: Start Hour
+  settings_break_distance: Break Distance
+  settings_min_size: Minimum Berry Size
+  settings_max_size: Maximum Berry Size
+  settings_randomize: Randomize
+  settings_density: Berry Weight Multiplier
+  settings_tutorial: Tutorial

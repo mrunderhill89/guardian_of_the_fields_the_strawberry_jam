@@ -16,7 +16,7 @@ public class ShowInState : BetterBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (vis != null && fsm != null) {
-			vis.c_set_status(fsm.match<ObjectVisibility.VisibilityStatus>(state_map,default_status));
+			vis.status = fsm.match<ObjectVisibility.VisibilityStatus>(state_map,default_status);
 		}
 	}
 }
