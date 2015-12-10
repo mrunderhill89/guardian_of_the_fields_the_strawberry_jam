@@ -1,5 +1,5 @@
-rng_seed: 0
 randomize: true
+tutorial: true
 debug: true
 max_berries_in_field: 40
 max_ripeness: 2
@@ -12,7 +12,10 @@ game_length: 2400
 start_hour: 6
 end_hour: 18
 min_accepted_ripeness: 0.5
-max_accepted_ripeness: 1.25
+max_accepted_ripeness: 1.6
 min_basket_weight: 15
 max_basket_weight: 17
-penalty_values: {}
+penalty_values:
+  Small: 0
+  Medium: 0
+  Big: 0

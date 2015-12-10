@@ -65,7 +65,7 @@
     underweight: 6
   date_recorded: 2015-12-08T18:02:30.3392970-08:00
   startdata:
-    rng_seed: -183309752
+    rng_seed: 183309752
     randomize: true
     tutorial: true
     debug: true
@@ -84,3 +84,65 @@
     min_basket_weight: 15
     max_basket_weight: 17
     penalty_values: {}
+- strawberries:
+    fall: {}
+    basket:
+      ripe: 107
+      overripe: 7
+  baskets:
+    accepted: 6
+  date_recorded: 2015-12-09T18:10:56.6957580-08:00
+  startdata:
+    rng_seed: 1607543139
+    randomize: true
+    tutorial: true
+    debug: true
+    max_berries_in_field: 40
+    min_ripeness: 0.7277237
+    max_ripeness: 1.305354
+    min_size: 0.06
+    max_size: 0.06
+    berry_density: 2400
+    break_distance: 100
+    break_length: 10
+    game_length: 2400
+    start_hour: 6
+    end_hour: 18
+    min_accepted_ripeness: 0.7277237
+    max_accepted_ripeness: 1.25
+    min_basket_weight: 15
+    max_basket_weight: 17
+    penalty_values: {}
+- strawberries:
+    fall: {}
+    basket:
+      ripe: 64
+      overripe: 19
+      underripe: 14
+  baskets:
+    underweight: 6
+  date_recorded: 2015-12-09T18:25:35.7776650-08:00
+  startdata:
+    rng_seed: -1925553360
+    randomize: true
+    tutorial: true
+    debug: true
+    max_berries_in_field: 40
+    min_ripeness: 0.2811661
+    max_ripeness: 1.80153
+    min_size: 0.06
+    max_size: 0.06
+    berry_density: 2400
+    break_distance: 100
+    break_length: 10
+    game_length: 2400
+    start_hour: 6
+    end_hour: 18
+    min_accepted_ripeness: 0.5
+    max_accepted_ripeness: 1.57449
+    min_basket_weight: 15
+    max_basket_weight: 17
+    penalty_values:
+      Small: 0
+      Medium: 0
+      Big: 0

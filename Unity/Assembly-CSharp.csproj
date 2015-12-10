@@ -119,6 +119,7 @@
      <Compile Include="Assets\Scripts\UserInterface\StartGame.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StrawberryUIComponent.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
+     <Compile Include="Assets\SettingsFileBar.cs" />
      <Compile Include="Assets\SettingsForm.cs" />
      <Compile Include="Assets\StrawberryColorIcon.cs" />
      <Compile Include="Assets\TutorialHandler.cs" />

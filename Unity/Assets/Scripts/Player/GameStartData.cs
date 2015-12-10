@@ -16,14 +16,14 @@ public class GameStartData : BetterBehaviour {
 	public static StartData instance{
 		get{
 			if (_instance == null) {
-				_instance = load_settings();
+				_instance = load_settings_static();
 				if (_instance.randomize) {
 					_instance.rng_seed = UnityEngine.Random.seed;
 				}
 			}
 			return _instance;
 		}
-		private set{
+		set{
 			_instance = value;
 		}
 	}
@@ -239,11 +239,23 @@ public class GameStartData : BetterBehaviour {
 	public static string default_filepath{
 		get{ return Application.streamingAssetsPath + "/Data/Settings/default.yaml"; }
 	}
-	public static StartData load_settings(){
-		return load_settings(default_filepath);
-	}
+
 	[Show]
-	public static StartData load_settings(string filename){
+	public GameStartData load_settings(){
+		return this.load_settings(default_filepath);
+	}
+	
+	[Show]
+	public GameStartData load_settings(string filename){
+		current.Value = load_settings_static(filename);
+		return this;
+	}
+
+	public static StartData load_settings_static(){
+		return load_settings_static(default_filepath);
+	}
+	
+	public static StartData load_settings_static(string filename){
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
@@ -253,11 +265,23 @@ public class GameStartData : BetterBehaviour {
 		StartData data = deserializer.Deserialize<GameStartData.StartData>(input);
 		return data;
 	}
-	public static void save_settings(StartData data){
-		save_settings(data, default_filepath);
+
+	[Show]
+	public GameStartData save_settings(){
+		return this.save_settings(default_filepath);
+	}
+	
+	[Show]
+	public GameStartData save_settings(string filename){
+		save_settings_static(current.Value, filename);
+		return this;
+	}
+
+	public static void save_settings_static(StartData data){
+		save_settings_static(data, default_filepath);
 	}
 	[Show]
-	public static void save_settings(StartData data, string filename){
+	public static void save_settings_static(StartData data, string filename){
 		StreamWriter fout = new StreamWriter(filename);
 		var serializer = new Serializer();
 		serializer.Serialize(fout, data);
