@@ -40,7 +40,8 @@ English:
   state_rearrange: Rearrange Berries
   state_final: Final Weigh-In
   move_while_pack: Move while Packing
-  date: 'Date:'
+  date: Date
+  time: Time
   pace_label: 'Pace:'
   pace_reverse: Reverse
   pace_stop: Stop
@@ -49,12 +50,19 @@ English:
   pace_fast: Fast
   pace_max: Max Speed
   menu_start: Start Game
+  menu_language: Choose Language
   menu_controls: Controls
   menu_settings: Game Settings
   menu_scores: High Scores
   menu_credits: Credits
   menu_quit: Quit Game
   menu_back: Back
+  menu_next: Next
+  loading_splash:
+    Hello!
+    The game is taking a little time to set up the strawberry field for you.
+    In the meantime, you're welcome to look around and get a feel for the controls.
+    When the field is done loading, press the button below to start the clock.
   tutorial_move: Use arrow keys or "WASD" to move around.
   tutorial_speed: Press "E" or "Num 1" to speed up.
   tutorial_slow: Press "Q" or "Num 1" to slow up.
@@ -68,9 +76,9 @@ English:
   no_key: <No Key>
   input_float: 'Decimal number (##.##)'
   input_integer: 'Whole number (###)'
+  input_filename: Filename
   file_load: Load
   file_save: Save
-  file_filename: Filename
   settings_seed: Random Number Seed
   settings_debug: Debug Options
   settings_max_berries: Max Berries in Field
@@ -81,8 +89,8 @@ English:
   settings_max_basket_weight: Maximum Basket Weight
   settings_min_basket_weight: Minimum Basket Weight
   settings_min_accepted_size: Min. Accepted Berry Size
-  max_accepted_ripeness: Max. Accepted Ripeness
-  min_accepted_ripeness: Min. Accepted Ripeness
+  settings_max_accepted_ripeness: Max. Accepted Ripeness
+  settings_min_accepted_ripeness: Min. Accepted Ripeness
   settings_game_length: Game Length
   settings_min_ripeness: Minimum Ripeness
   settings_break_length: Break Length
@@ -95,3 +103,5 @@ English:
   settings_randomize: Randomize
   settings_density: Berry Weight Multiplier
   settings_tutorial: Tutorial
+  debug_end_game: End Game
+  debug_free_berry: Make it Rain!

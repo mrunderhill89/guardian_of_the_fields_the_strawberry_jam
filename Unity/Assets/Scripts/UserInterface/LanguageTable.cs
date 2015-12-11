@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections;
@@ -8,104 +9,59 @@ using Vexe.Runtime.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
+using UniRx;
 
-public class LanguageTable : BetterBehaviour {
-	public List<Text> text_objects = new List<Text>();
-	public List<TextMesh> text_meshes = new List<TextMesh>();
-	[Show]
-	public int Count{
-		get{return text_objects.Count + text_meshes.Count;}
+public class LanguageDictionary{
+	public Dictionary<string,Dictionary<string,string>> languages;
+	public Dictionary<string,ReadOnlyReactiveProperty<string>> observables;
+	public StringReactiveProperty current_language;
+	string default_language = "English";
+	public LanguageDictionary(){
+		languages = new Dictionary<string, Dictionary<string, string>> ();
+		observables = new Dictionary<string, ReadOnlyReactiveProperty<string>> ();
+		current_language = new StringReactiveProperty (default_language);
 	}
-	
-	[Serialize][Hide]
-	protected string _key = "";
-	[Show]
-	public string key {
-		get{return _key;}
-		set{ 
-			_key = value;
-			update();
-		}
+	public string get(string key, bool read_only = false){
+		return get (key, current_language.Value, read_only);
 	}
-	[Show]
-	public string value {
-		get{
-			return get(key);
-		}
-		set{
-			languages[current_language][key] = value;
-			update();
-		}
-	}
-	public void Start(){
-		if (Count == 0 && GetComponent<Text>() != null)
-			text_objects.Add(GetComponent<Text>());
-		if (Count == 0 && GetComponent<TextMesh>() != null)
-			text_meshes.Add(GetComponent<TextMesh>());
-		Import ();
-		update ();
-	}
-	public void update(){
-		foreach (Text tex in text_objects) {
-			tex.text = value;
-		}
-		foreach (TextMesh mesh in text_meshes) {
-			mesh.text = value;
-		}
-	}
-	
-	//Static Elements Go Here
-	[Show]
-	static Dictionary<string, Dictionary<string,string>> languages = new Dictionary<string, Dictionary<string,string>>();
-	[Serialize][Show]
-	public static string current_language = "English";
-	[Serialize][Hide]
-	static string default_language = "English";
-
-	public static Dictionary<string,string> get_language(string lang){
-		if (!languages.ContainsKey(lang)){
-			languages[lang] = new Dictionary<string,string>();
-		}
-		return languages[lang];
-	}
-	
-	public static string get(string key, bool read_only = false){
-		return get(key, current_language, read_only);
-	}
-	public static string get(string key, string lang, bool read_only = false){
-		if (key == "") return get("no_key",lang,false);
-		if (!get_language(lang).ContainsKey(key)){
-			if (read_only){
-				return "<No Entry>";
-			} else {
-				if(get_language(default_language).ContainsKey(key)){
-					get_language(lang)[key] = "??"+get_language(default_language)[key];
+	public string get(string key, string lang, bool read_only = false){
+		if (key == "") key = "no_key";
+		if (!read_only){
+			if (!languages.ContainsKey(lang)){
+				languages[lang] = new Dictionary<string, string>();
+			}
+			if (!languages[lang].ContainsKey(key)){
+				if (languages[default_language].ContainsKey(key)){
+					languages[lang][key] = "??"+languages[default_language][key];
 				} else {
-					get_language(lang)[key] = "!!"+key;
+					languages[lang][key] = "!!"+key;
 				}
 			}
 		}
-		return get_language(lang)[key];
+		if (!languages [lang].ContainsKey (key))
+			return "";
+		return languages [lang] [key];
 	}
 
-	public static string default_filepath{
-		get{ return Application.streamingAssetsPath + "/Data/Languages.yaml"; }
+	public ReadOnlyReactiveProperty<string> get_property(string key, bool read_only = false){
+		if (!observables.ContainsKey (key)) {
+			observables[key] = current_language.Select ((string lang) => {
+				return get (key, lang, read_only);
+			}).ToReadOnlyReactiveProperty<string>();
+		}
+		return observables [key];
 	}
 
-	public static void Export(){
-		Export (default_filepath);
+	public string default_filename {
+		get { return Application.streamingAssetsPath + "/Data/Languages.yaml";}
+	}
+	public LanguageDictionary import(){
+		return import (default_filename);
 	}
 	[Show]
-	public static void Export(string filename){
-		StreamWriter fout = new StreamWriter(filename);
-			var serializer = new Serializer();
-			serializer.Serialize(fout, languages);
-		fout.Close();
-	}
-
-	public static void Import(){Import (default_filepath);}
-	[Show]
-	public static void Import(string filename){
+	public LanguageDictionary import(string filename){
+		if (filename == null || filename == "")
+			filename = default_filename;
 		string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
 			if (b == "") return n;
 			return b+"\n"+n;
@@ -113,11 +69,127 @@ public class LanguageTable : BetterBehaviour {
 		var input = new StringReader(Document);
 		var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
 		languages = deserializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(input);
+		return this;
+	}
+	public LanguageDictionary export(){
+		return export (default_filename);
 	}
 	[Show]
-	public static void Refresh(){
-		foreach (LanguageTable comp in GameObject.FindObjectsOfType<LanguageTable>()){
-			comp.update();
+	public LanguageDictionary export(string filename){
+		if (filename == null || filename == "")
+			filename = default_filename;
+		StreamWriter fout = new StreamWriter(filename);
+		var serializer = new Serializer();
+		serializer.Serialize(fout, languages);
+		fout.Close();
+		return this;
+	}
+}
+
+[ExecuteInEditMode]
+public class LanguageTable : BetterBehaviour {
+	[DontSerialize][Show]
+	public static LanguageDictionary dictionary;
+	static LanguageTable(){
+		dictionary = new LanguageDictionary().import();
+	}
+	public Dictionary<string, List<Text>> text_objects = new Dictionary<string, List<Text>>();
+	public Dictionary<string, List<TextMesh>> text_meshes = new Dictionary<string, List<TextMesh>>();
+	public int Count{
+		get{
+			return text_objects.Count + text_meshes.Count;
 		}
+	}
+	[Serialize][Hide]
+	protected string _key = "";
+	[Show]
+	public string key{
+		get{ 
+			if (_key == "") _key = name;
+			return _key;
+		}
+		set{ _key = value; }
+	}
+	[Show]
+	public string value{
+		get{
+			return get(key,true);
+		}
+	}
+
+	[Serialize][Hide]
+	protected bool _auto_assign = true;
+	[Show]
+	public bool auto_assign{
+		get{ return _auto_assign;}
+		set{ _auto_assign = value;}
+	}
+
+	[Serialize][Hide]
+	protected string _prefix = "";
+	[Show]
+	public string prefix{
+		get{ return _prefix;}
+		set{ _prefix = value;}
+	}
+
+	[Serialize][Hide]
+	protected string _suffix = "";
+	[Show]
+	public string suffix{
+		get{ return _suffix;}
+		set{ _suffix = value;}
+	}
+
+	void Start(){
+		if (auto_assign && Count == 0) {
+			if (GetComponent<Text>() != null){
+				SubscribeText(GetComponent<Text>());
+			} else if(GetComponent<TextMesh>() != null){
+				SubscribeMesh(GetComponent<TextMesh>());
+			}
+		}
+		foreach (KeyValuePair<string,List<Text>> text_list in text_objects) {
+			foreach(Text text in text_list.Value){
+				SubscribeText(text_list.Key, text);
+			}
+		}
+		foreach (KeyValuePair<string,List<TextMesh>> mesh_list in text_meshes) {
+			foreach(TextMesh mesh in mesh_list.Value){
+				SubscribeMesh(mesh_list.Key, mesh);
+			}
+		}
+	}
+
+	public LanguageTable SubscribeText (Text target){
+		return SubscribeText (key, target);
+	}
+	public LanguageTable SubscribeText (string key, Text target){
+		if (key == "")
+			key = this.key;
+		dictionary.get_property(key).Subscribe ((string value)=>{
+			target.text = prefix + value + suffix;
+		});
+		return this;
+	}
+
+	public LanguageTable SubscribeMesh (TextMesh target){
+		return SubscribeMesh(key, target);
+	}
+	public LanguageTable SubscribeMesh (string key, TextMesh target){
+		if (key == "")
+			key = this.key;
+		dictionary.get_property(key).Subscribe ((string value)=>{
+			target.text = prefix + value + suffix;
+		});
+		return this;
+	}
+
+	public void set_language(string lang){
+		dictionary.current_language.Value = lang;
+	}
+
+	public static string get(string key, bool read_only = false){
+		return dictionary.get(key, read_only);
 	}
 }

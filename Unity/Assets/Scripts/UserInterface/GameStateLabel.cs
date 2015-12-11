@@ -8,8 +8,7 @@ public class GameStateLabel : BetterBehaviour {
 	public GameStateManager game;
 	public Text text;
 	public Dictionary<string,string> state_names = new Dictionary<string,string>();
-	public LanguageTable lang;
-	
+
 	[Show]
 	public string key{
 		get{
@@ -24,7 +23,6 @@ public class GameStateLabel : BetterBehaviour {
 		}
 	}
 	public void Update(){
-		lang.key = key;
-		//text.text = LanguageTable.get(key);
+		text.text = LanguageTable.get(key);
 	}
 }

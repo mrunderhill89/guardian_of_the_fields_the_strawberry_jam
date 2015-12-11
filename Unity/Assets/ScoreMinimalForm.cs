@@ -31,7 +31,7 @@ public class ScoreMinimalForm : BetterBehaviour {
 	void Start () {
 		score.Subscribe((total_score)=>{
 			if (total_score != null){
-				date_time.text = LanguageTable.get("date")+total_score.date_recorded.ToString();
+				date_time.text = total_score.date_recorded.ToString();
 				//Baskets
 				accepted_baskets.text = total_score.baskets.accepted.ToString();
 				overweight_baskets.text = total_score.baskets.overweight.ToString();
