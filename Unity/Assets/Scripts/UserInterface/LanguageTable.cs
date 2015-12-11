@@ -101,6 +101,16 @@ public class LanguageTable : BetterBehaviour {
 		}
 	}
 	[Serialize][Hide]
+	protected string _language = "";
+	[Show]
+	public string language{
+		get{ 
+			return _language;
+		}
+		set{ _language = value;}
+	}
+
+	[Serialize][Hide]
 	protected string _key = "";
 	[Show]
 	public string key{
@@ -113,7 +123,7 @@ public class LanguageTable : BetterBehaviour {
 	[Show]
 	public string value{
 		get{
-			return get(key,true);
+			return get(key,language,true);
 		}
 	}
 
@@ -149,14 +159,18 @@ public class LanguageTable : BetterBehaviour {
 				SubscribeMesh(GetComponent<TextMesh>());
 			}
 		}
-		foreach (KeyValuePair<string,List<Text>> text_list in text_objects) {
-			foreach(Text text in text_list.Value){
-				SubscribeText(text_list.Key, text);
+		if (text_objects != null) {
+			foreach (KeyValuePair<string,List<Text>> text_list in text_objects) {
+				foreach (Text text in text_list.Value) {
+					SubscribeText (text_list.Key, text);
+				}
 			}
 		}
-		foreach (KeyValuePair<string,List<TextMesh>> mesh_list in text_meshes) {
-			foreach(TextMesh mesh in mesh_list.Value){
-				SubscribeMesh(mesh_list.Key, mesh);
+		if (text_meshes != null) {
+			foreach (KeyValuePair<string,List<TextMesh>> mesh_list in text_meshes) {
+				foreach (TextMesh mesh in mesh_list.Value) {
+					SubscribeMesh (mesh_list.Key, mesh);
+				}
 			}
 		}
 	}
@@ -167,8 +181,8 @@ public class LanguageTable : BetterBehaviour {
 	public LanguageTable SubscribeText (string key, Text target){
 		if (key == "")
 			key = this.key;
-		dictionary.get_property(key).Subscribe ((string value)=>{
-			target.text = prefix + value + suffix;
+		dictionary.get_property (key).Subscribe ((string value) => {
+			target.text = build_text(key,value);
 		});
 		return this;
 	}
@@ -176,20 +190,32 @@ public class LanguageTable : BetterBehaviour {
 	public LanguageTable SubscribeMesh (TextMesh target){
 		return SubscribeMesh(key, target);
 	}
+
 	public LanguageTable SubscribeMesh (string key, TextMesh target){
 		if (key == "")
 			key = this.key;
-		dictionary.get_property(key).Subscribe ((string value)=>{
-			target.text = prefix + value + suffix;
+		dictionary.get_property (key).Subscribe ((string value) => {
+			target.text = build_text(key,value);
 		});
 		return this;
 	}
 
-	public void set_language(string lang){
+	string build_text(string key, string value){
+		if (language != "" && language != dictionary.current_language.Value) {
+			string native_value = get(key,language);
+			if (native_value != value)
+				return prefix + native_value + " (" + value + ")" + suffix;
+		}
+		return prefix + value + suffix;
+	}
+
+	public void set_global_language(string lang){
 		dictionary.current_language.Value = lang;
 	}
 
-	public static string get(string key, bool read_only = false){
-		return dictionary.get(key, read_only);
+	public static string get(string key, string language = "", bool read_only = false){
+		if (!dictionary.languages.ContainsKey(language))
+			language = dictionary.current_language.Value;
+		return dictionary.get(key, language, read_only);
 	}
 }

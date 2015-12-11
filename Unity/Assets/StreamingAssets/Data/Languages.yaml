@@ -18,7 +18,10 @@ Spanish:
   pace_slow: Slow
   pace_medium: Medium
   pace_fast: Fast
+  pace_label: Paso
   pace_max: Max Speed
+  language_english: Inglés
+  language_spanish: Español
   no_key: <No hay Clave>
 English:
   berries_gathered: Strawberries Gathered
@@ -103,5 +106,7 @@ English:
   settings_randomize: Randomize
   settings_density: Berry Weight Multiplier
   settings_tutorial: Tutorial
+  language_english: English
+  language_spanish: Spanish
   debug_end_game: End Game
   debug_free_berry: Make it Rain!
