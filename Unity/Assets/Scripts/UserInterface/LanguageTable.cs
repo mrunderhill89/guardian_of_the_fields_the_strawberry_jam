@@ -51,9 +51,22 @@ public class LanguageDictionary{
 		}
 		return observables [key];
 	}
-
+	[Serialize][Hide]
+	static string _default_filename = "";
 	public string default_filename {
-		get { return Application.streamingAssetsPath + "/Data/Languages.yaml";}
+		get {
+			try{
+				_default_filename = Application.streamingAssetsPath + "/Data/Languages.yaml";
+			}
+			catch(ArgumentException){
+				if (_default_filename == ""){
+					_default_filename = "/StreamingAssets/Data/Languages.yaml";
+				}
+			}
+			//I know, I know! get_streamingAssetsPath can only be run from the main thread.
+			//But it's a stupid restriction, so just use best path you can get.
+			return _default_filename;
+		}
 	}
 	public LanguageDictionary import(){
 		return import (default_filename);
@@ -86,7 +99,6 @@ public class LanguageDictionary{
 	}
 }
 
-[ExecuteInEditMode]
 public class LanguageTable : BetterBehaviour {
 	[DontSerialize][Show]
 	public static LanguageDictionary dictionary;

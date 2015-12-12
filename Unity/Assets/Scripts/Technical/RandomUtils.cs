@@ -1,5 +1,6 @@
 using Vexe.Runtime.Types;
 using UnityEngine;
+using System.Collections;
 using Random = UnityEngine.Random;
 using System;
 public class RandomUtils
@@ -38,5 +39,8 @@ public class RandomUtils
 		Vector3 vec = random_vec3 (0.1f, 1.0f);
 		vec.Normalize ();
 		return vec;
+	}
+	public static int random_index(ICollection that){
+		return random_int (0, that.Count);
 	}
 }
