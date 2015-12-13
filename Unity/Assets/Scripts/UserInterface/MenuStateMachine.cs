@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using UniRx;
 using Vexe.Runtime.Types;
 
 public class MenuStateMachine : BetterBehaviour {
@@ -11,6 +13,7 @@ public class MenuStateMachine : BetterBehaviour {
 		fsm.state ("root")
 		.add_child (
 			fsm.state ("main")
+			, true
 		).add_child (
 			fsm.state ("scores")
 		).add_child (
@@ -19,7 +22,6 @@ public class MenuStateMachine : BetterBehaviour {
 			fsm.state ("credits")
 		).add_child (
 			fsm.state ("language")
-			, true
 		).add_child (
 			fsm.state ("controls")
 		);
@@ -66,6 +68,9 @@ public class MenuStateMachine : BetterBehaviour {
 		});
 		fsm.new_automata ("player", (a) => {
 			a.move_direct (fsm.state ("root"));
+			if (LanguageTable.dictionary.current_language.Value == ""){
+				a.move_direct(fsm.state("language"));
+			}
 		});
 	}
 	

@@ -19,13 +19,21 @@ public class LanguageDictionary{
 	public LanguageDictionary(){
 		languages = new Dictionary<string, Dictionary<string, string>> ();
 		observables = new Dictionary<string, ReadOnlyReactiveProperty<string>> ();
-		current_language = new StringReactiveProperty (default_language);
+		current_language = new StringReactiveProperty("");
 	}
 	public string get(string key, bool read_only = false){
 		return get (key, current_language.Value, read_only);
 	}
 	public string get(string key, string lang, bool read_only = false){
-		if (key == "") key = "no_key";
+		if (lang == "") {
+			if (current_language.Value == ""){
+				lang = default_language;
+			} else {
+				lang = current_language.Value;
+			}
+		}
+		if (key == "") 
+			key = "no_key";
 		if (!read_only){
 			if (!languages.ContainsKey(lang)){
 				languages[lang] = new Dictionary<string, string>();
@@ -60,7 +68,7 @@ public class LanguageDictionary{
 			}
 			catch(ArgumentException){
 				if (_default_filename == ""){
-					_default_filename = "/StreamingAssets/Data/Languages.yaml";
+					_default_filename = "./StreamingAssets/Data/Languages.yaml";
 				}
 			}
 			//I know, I know! get_streamingAssetsPath can only be run from the main thread.
@@ -100,10 +108,18 @@ public class LanguageDictionary{
 }
 
 public class LanguageTable : BetterBehaviour {
-	[DontSerialize][Show]
-	public static LanguageDictionary dictionary;
-	static LanguageTable(){
-		dictionary = new LanguageDictionary().import();
+	protected static LanguageDictionary _dictionary = null;
+	[Show]
+	public static LanguageDictionary dictionary{
+		get{
+			if (_dictionary == null){
+				dictionary = new LanguageDictionary().import();
+			}
+			return _dictionary;
+		}
+		private set {
+			_dictionary = value;
+		}
 	}
 	public Dictionary<string, List<Text>> text_objects = new Dictionary<string, List<Text>>();
 	public Dictionary<string, List<TextMesh>> text_meshes = new Dictionary<string, List<TextMesh>>();
