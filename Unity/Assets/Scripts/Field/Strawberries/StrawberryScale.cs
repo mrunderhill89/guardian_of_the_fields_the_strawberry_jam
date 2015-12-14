@@ -18,10 +18,10 @@ public class StrawberryScale : MonoBehaviour {
 	public void Initialize(){
 		shape = shape_matrix.MultiplyVector(RandomUtils.random_vec3 (1.0f,2.0f));
 		shape.Normalize();
-		float quality_percent = data.quality / GameStartData.instance.max_ripeness;
-		final_scale = GameStartData.instance.min_size + RandomUtils.random_float (
-			quality_to_min.Evaluate (quality_percent) * GameStartData.instance.max_size,
-			quality_to_max.Evaluate (quality_percent) * GameStartData.instance.max_size
+		float quality_percent = data.quality / GameSettingsComponent.working_rules.strawberry.max_ripeness;
+		final_scale = GameSettingsComponent.working_rules.strawberry.min_size + RandomUtils.random_float (
+			quality_to_min.Evaluate (quality_percent) * GameSettingsComponent.working_rules.strawberry.max_size,
+			quality_to_max.Evaluate (quality_percent) * GameSettingsComponent.working_rules.strawberry.max_size
 		);
 		transform.localScale = shape * final_scale;
 	}

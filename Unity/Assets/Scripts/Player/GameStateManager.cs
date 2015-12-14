@@ -26,6 +26,12 @@ public class GameStateManager : BetterBehaviour {
 		};
 	}
 
+	float game_length {
+		get{ return GameSettingsComponent.working_rules.time.game_length;}
+	}
+	bool tutorial {
+		get{ return GameSettingsComponent.working_rules.flags.tutorial;}
+	}
 	void Awake(){
 		main = this;
 		if (fsm == null)
@@ -54,14 +60,14 @@ public class GameStateManager : BetterBehaviour {
 			    ).on_entry( new StateEvent(()=>{Application.runInBackground = true;})
 				).on_exit(new StateEvent(()=>{
 					Application.runInBackground = false;
-					timer.add_countdown(GameStartData.instance.game_length, (t)=>{
+					timer.add_countdown(game_length, (t)=>{
 						fsm.transition("time_up").trigger();
 					});
-					if (GameStartData.instance.tutorial){
-						timer.add_countdown(GameStartData.instance.game_length-60.0f, (t)=>{
+					if (tutorial){
+						timer.add_countdown(game_length-60.0f, (t)=>{
 							GameMessages.Log(LanguageTable.get("tutorial_time_up"), 10.0f);
 						});
-						timer.add_countdown(GameStartData.instance.game_length/2.0f, (t)=>{
+						timer.add_countdown(game_length/2.0f, (t)=>{
 							GameMessages.Log(LanguageTable.get("tutorial_midday"), 10.0f);
 						});
 						GameMessages.Log(LanguageTable.get("tutorial_move"), 10.0f);
@@ -82,7 +88,7 @@ public class GameStateManager : BetterBehaviour {
 			).add_child (
 				fsm.state ("pick")
 				.on_entry(new StateEvent(()=>{
-					if (GameStartData.instance.tutorial){
+					if (tutorial){
 						GameMessages.Log(LanguageTable.get("tutorial_pick"), 10.0f);
 					}
 				}).Limit(1)
@@ -97,7 +103,7 @@ public class GameStateManager : BetterBehaviour {
 				fsm.state ("pack")
 					.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
 					.on_entry(new StateEvent(()=>{
-							if (GameStartData.instance.tutorial){
+							if (tutorial){
 								GameMessages.Log(LanguageTable.get("tutorial_pack"), 10.0f);
 							}
 						}).Limit(1)

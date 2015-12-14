@@ -98,17 +98,27 @@ public class GameTimer : BetterBehaviour {
 	public List<Countdown> countdowns = new List<Countdown>();
 	public bool started = false;
 
+	public static float game_length{
+		get{ return GameSettingsComponent.working_rules.time.game_length;}
+	}
+	public static float start_hour{
+		get{ return GameSettingsComponent.working_rules.time.start_hour;}
+	}
+	public static float end_hour{
+		get{ return GameSettingsComponent.working_rules.time.end_hour;}
+	}
+
 	public static float real_to_game(float real){
 		return (
-			GameStartData.instance.start_hour +
-			(real / GameStartData.instance.game_length) * 
-			(GameStartData.instance.end_hour - GameStartData.instance.start_hour)
+			start_hour +
+			(real / game_length) * 
+			(end_hour - start_hour)
 		) * F_SECONDS_IN_HOUR;
 	}
 	public static float game_to_real(float game){
 		return (
-			GameStartData.instance.game_length * ((game/F_SECONDS_IN_HOUR) - GameStartData.instance.start_hour)
-			)/(GameStartData.instance.end_hour - GameStartData.instance.start_hour);
+			game_length * ((game/F_SECONDS_IN_HOUR) - start_hour)
+			)/(end_hour - start_hour);
 	}
 	
 	public GameTimer add_countdown(float t, Action<Time> act, bool from_now = true){

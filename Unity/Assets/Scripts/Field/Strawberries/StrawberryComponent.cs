@@ -9,7 +9,7 @@ public class StrawberryComponent : BetterBehaviour {
 	public float quality = 1.00f;
 	[Show]
 	public float weight{
-		get{return GameStartData.instance.berry_density * (transform.localScale.x
+		get{return GameSettingsComponent.working_rules.strawberry.density * (transform.localScale.x
 			*transform.localScale.y
 			*transform.localScale.z)
 			;}
@@ -51,18 +51,16 @@ public class StrawberryComponent : BetterBehaviour {
 	}
 	public float get_penalty_value(bool dropped = false){
 		BerryPenalty penalty = get_penalty_type (dropped);
-		if (!GameStartData.instance.penalty_values.ContainsKey (penalty))
-			return 0.0f;
-		return GameStartData.instance.penalty_values[penalty];
+		return GameSettingsComponent.working_rules.win_condition.penalty (penalty);
 	}
 	public bool is_under_ripe(){
-		return quality < GameStartData.instance.min_accepted_ripeness;
+		return quality < GameSettingsComponent.working_rules.win_condition.min_ripeness;
 	}
 	public bool is_over_ripe(){
-		return quality > GameStartData.instance.max_accepted_ripeness;
+		return quality > GameSettingsComponent.working_rules.win_condition.max_ripeness;
 	}
 	public bool is_under_size(){
-		return weight < GameStartData.instance.min_berry_weight;
+		return weight < GameSettingsComponent.working_rules.win_condition.min_size;
 	}
 	public bool is_ineligible(){
 		return is_under_ripe() || is_over_ripe() || is_under_size();
@@ -91,7 +89,9 @@ public class StrawberryComponent : BetterBehaviour {
 
 	public void Initialize(){
 		visibility.visible = false;
-		quality = RandomUtils.random_float(GameStartData.instance.min_ripeness, GameStartData.instance.max_ripeness);
+		quality = RandomUtils.random_float(
+			GameSettingsComponent.working_rules.strawberry.min_ripeness, 
+			GameSettingsComponent.working_rules.strawberry.max_ripeness);
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();

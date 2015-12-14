@@ -6,6 +6,6 @@ public class HideDebugControls : MonoBehaviour {
 	void Start () {
 		if (vis == null)
 			vis = GetComponent<ObjectVisibility>();
-		vis.visible = GameStartData.instance.debug;
+		vis.visible = GameSettingsComponent.working_rules.flags.cheats;
 	}
 }

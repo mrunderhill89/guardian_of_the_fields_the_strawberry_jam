@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using Vexe.Runtime.Types;
 using UniRx;
 public class SettingsForm : BetterBehaviour {
-	public GameStartData data_component;
+	public GameSettingsComponent data_component;
 	//Toggles
 	/* 
 	Randomize
@@ -39,58 +40,93 @@ public class SettingsForm : BetterBehaviour {
 	public Slider min_accepted_ripeness;
 	public Slider max_accepted_ripeness;
 
-	public ReactiveProperty<bool> using_main;
-	
-	void Awake(){
-		using_main = data_component.current.Select((data)=>{
-			return data == GameStartData.instance;
-		}).ToReactiveProperty();
-	}
-	// Update is called once per frame
 	void Start () {
-		randomize.onValueChanged.AddListener((value)=>{
-			start_data.randomize = value;
-		});
-		debug.onValueChanged.AddListener((value)=>{
-			start_data.debug = value;
-		});
-		tutorial.onValueChanged.AddListener((value)=>{
-			start_data.tutorial = value;
-		});
-		data_component.current.Subscribe((data)=>{
-			rng_seed.text = data.rng_seed.ToString();
-			randomize.isOn = data.randomize;
-			debug.isOn = data.debug;
-			tutorial.isOn = data.tutorial;
-			max_berries.text = data.max_berries_in_field.ToString();
-			min_size.text = data.min_size.ToString();
-			max_size.text = data.max_size.ToString();
-			density.text = data.berry_density.ToString();
-			break_distance.text = data.break_distance.ToString();
-			break_length.text = data.break_length.ToString();//
-			game_length.text = data.game_length.ToString();
-			start_hour.text = data.start_hour.ToString();
-			end_hour.text = data.end_hour.ToString();
-			min_berry_weight.text = data.min_berry_weight.ToString();
-			min_basket_weight.text = data.min_basket_weight.ToString();
-			max_basket_weight.text = data.max_basket_weight.ToString();
-			min_ripeness.value = data.min_ripeness;
-			max_ripeness.value = data.max_ripeness;
-			min_accepted_ripeness.value = data.min_accepted_ripeness;
-			max_accepted_ripeness.value = data.max_accepted_ripeness;
-			penalty_small.text = data.get_penalty(StrawberryComponent.BerryPenalty.Small).ToString();
-			penalty_medium.text = data.get_penalty(StrawberryComponent.BerryPenalty.Medium).ToString();
-			penalty_big.text = data.get_penalty(StrawberryComponent.BerryPenalty.Big).ToString();
-		});
+		register_toggle (randomize, (x => x.randomness.rx_randomize));
+		register_toggle (tutorial, (x => x.flags.rx_tutorial));
+		register_toggle (debug, (x => x.flags.rx_cheats));
+		register_input_int (rng_seed, (x => x.randomness.rx_seed));
+		register_input_int (max_berries, (x => x.strawberry.rx_max_berries_in_field));
+		register_input_float (min_size, (x => x.strawberry.rx_min_size));
+		register_input_float (max_size, (x => x.strawberry.rx_max_size));
+		register_input_float (density, (x => x.strawberry.rx_density));
+		register_input_int (break_distance, (x=> x.breaks.rx_distance));
+		register_input_int (break_length, (x=> x.breaks.rx_length));
+		register_input_float (game_length, (x => x.time.rx_game_length));
+		register_input_float (start_hour, (x => x.time.rx_start_hour));
+		register_input_float (end_hour, (x => x.time.rx_end_hour));
+		register_input_float (min_berry_weight, (x => x.win_condition.rx_min_size));
+		register_input_float (min_basket_weight, (x => x.win_condition.rx_min_basket_weight));
+		register_input_float (max_basket_weight, (x => x.win_condition.rx_max_basket_weight));
+		register_input_float (penalty_small, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Small)));
+		register_input_float (penalty_medium, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Medium)));
+		register_input_float (penalty_big, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Big)));
+		register_slider (min_ripeness, (x => x.strawberry.rx_min_ripeness));
+		register_slider (max_ripeness, (x => x.strawberry.rx_max_ripeness));
+		register_slider (min_accepted_ripeness, (x => x.win_condition.rx_min_ripeness));
+		register_slider (max_accepted_ripeness, (x => x.win_condition.rx_max_ripeness));
+
 	}
-	
-	protected GameStartData.StartData start_data{
-		get{
-			if (data_component == null) return null;
-			return data_component.current.Value;
-		}
+
+	public SettingsForm register_toggle(Toggle toggle, Func<GameSettings.Model, BoolReactiveProperty> get_property){
+		data_component.rx_current_rules
+			.SelectMany<GameSettings.Model, bool>((model)=>{
+				return get_property(model).AsObservable<bool>();
+			})
+			.DistinctUntilChanged()
+			.Subscribe ((value) => {
+				toggle.isOn = value;
+			});
+		toggle.onValueChanged.AddListener ((value) => {
+			get_property(data_component.current_rules).Value = value;
+		});
+		return this;
 	}
-	
+
+	public SettingsForm register_slider(Slider slider, Func<GameSettings.Model, FloatReactiveProperty> get_property){
+		data_component.rx_current_rules
+			.SelectMany<GameSettings.Model, float>((model)=>{
+				return get_property(model).AsObservable<float>();
+			}).DistinctUntilChanged()
+			.Subscribe ((value) => {
+				slider.value = value;
+			});
+		slider.onValueChanged.AddListener ((value) => {
+			get_property(data_component.current_rules).Value = value;
+		});
+		return this;
+	}
+
+	public SettingsForm register_input_int(InputField input, Func<GameSettings.Model, IntReactiveProperty> get_property){
+		data_component.rx_current_rules
+			.SelectMany<GameSettings.Model, int>((model)=>{
+				return get_property(model).AsObservable<int>();
+			}).DistinctUntilChanged()
+			.Subscribe ((value) => {
+				input.text = value.ToString();
+			});
+		input.onValueChange.AddListener ((value) => {
+			get_property(data_component.current_rules).Value = 
+				ParseIntOrDefault(input.text, get_property(data_component.current_rules).Value);
+		});
+		return this;
+	}
+
+	public SettingsForm register_input_float(InputField input, Func<GameSettings.Model, FloatReactiveProperty> get_property){
+		data_component.rx_current_rules
+			.SelectMany<GameSettings.Model, float>((model)=>{
+				return get_property(model).AsObservable<float>();
+			}).DistinctUntilChanged()
+			.Subscribe ((value) => {
+				input.text = value.ToString();
+			});
+		input.onValueChange.AddListener ((value) => {
+			get_property(data_component.current_rules).Value = 
+				ParseFloatOrDefault(input.text, get_property(data_component.current_rules).Value);
+		});
+		return this;
+	}
+
+
 	public static int ParseIntOrDefault(string s, int def)
 	{
 		int number;
@@ -105,35 +141,5 @@ public class SettingsForm : BetterBehaviour {
 		if (float.TryParse(s, out number))
 			return number;
 		return def;
-	}
-
-	
-	void Update(){
-		if (start_data != null){
-			rng_seed.enabled = !start_data.randomize;
-			start_data.rng_seed = ParseIntOrDefault(rng_seed.text, start_data.rng_seed);
-			start_data.max_berries_in_field = ParseIntOrDefault(max_berries.text, start_data.max_berries_in_field);
-			start_data.min_size = ParseFloatOrDefault(min_size.text, start_data.min_size);
-			start_data.max_size = ParseFloatOrDefault(max_size.text, start_data.max_size);
-			start_data.min_ripeness = min_ripeness.value;
-			start_data.max_ripeness = max_ripeness.value;
-			start_data.berry_density = ParseFloatOrDefault(density.text, start_data.berry_density);
-			start_data.break_distance = ParseIntOrDefault(break_distance.text, start_data.break_distance);
-			start_data.break_length = ParseIntOrDefault(break_length.text, start_data.break_length);
-			start_data.game_length = ParseFloatOrDefault(game_length.text, start_data.game_length);
-			start_data.start_hour = ParseFloatOrDefault(start_hour.text, start_data.start_hour);
-			start_data.end_hour = ParseFloatOrDefault(end_hour.text, start_data.end_hour);
-			start_data.min_accepted_ripeness = min_accepted_ripeness.value;
-			start_data.max_accepted_ripeness = max_accepted_ripeness.value;
-			start_data.min_berry_weight = ParseFloatOrDefault(min_berry_weight.text, start_data.min_berry_weight);
-			start_data.min_basket_weight = ParseFloatOrDefault(min_basket_weight.text, start_data.min_basket_weight);
-			start_data.max_basket_weight = ParseFloatOrDefault(max_basket_weight.text, start_data.max_basket_weight);
-			start_data.set_penalty(StrawberryComponent.BerryPenalty.Small, 
-				ParseFloatOrDefault(penalty_small.text, start_data.get_penalty(StrawberryComponent.BerryPenalty.Small)));
-			start_data.set_penalty(StrawberryComponent.BerryPenalty.Medium, 
-				ParseFloatOrDefault(penalty_medium.text, start_data.get_penalty(StrawberryComponent.BerryPenalty.Medium)));
-			start_data.set_penalty(StrawberryComponent.BerryPenalty.Big, 
-				ParseFloatOrDefault(penalty_big.text, start_data.get_penalty(StrawberryComponent.BerryPenalty.Big)));
-		}
 	}
 }

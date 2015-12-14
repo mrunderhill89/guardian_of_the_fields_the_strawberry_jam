@@ -8,6 +8,17 @@ public class EmptyRowSetup : MonoBehaviour {
 	public string start_prefab = "RowStart";
 	public string end_prefab = "RowEnd";
 
+	public int break_distance{
+		get{
+			return GameSettingsComponent.working_rules.breaks.distance;
+		}
+	}
+	public int break_length{
+		get{
+			return GameSettingsComponent.working_rules.breaks.length;
+		}
+	}
+
 	void Start () {
 		if (row == null)
 			row = GetComponent<RowHandler2> ();
@@ -16,11 +27,11 @@ public class EmptyRowSetup : MonoBehaviour {
 		generator.pattern.Clear ();
 		row.target = Camera.main.transform;
 		generator.pattern.Add (start_prefab);
-		for (int i = 0; i < GameStartData.instance.break_distance; i++){
+		for (int i = 0; i < break_distance; i++){
 			generator.pattern.Add(prefab);
 		}
 		generator.pattern.Add (end_prefab);
-		for (int i = 0; i < GameStartData.instance.break_length; i++){
+		for (int i = 0; i < break_length; i++){
 			generator.pattern.Add("");
 		}
 	}

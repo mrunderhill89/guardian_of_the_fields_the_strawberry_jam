@@ -15,8 +15,12 @@ public class StrawberryStateMachine : BetterBehaviour {
 	public string prefab = "Strawberry";
 	public UnityEngine.Object loaded_prefab;
 	
-	public int field_strawberries = 100;
+	public int field_strawberries {
+		get{return GameSettingsComponent.working_rules.strawberry.max_berries_in_field;}
+	}
+
 	public GameStateManager player_state;
+
 	void Awake () {
 		main = this;
 		fsm = gameObject.AddComponent<StateMachine>();
@@ -107,7 +111,6 @@ public class StrawberryStateMachine : BetterBehaviour {
 		loaded_prefab = Resources.Load(prefab);
 	}
 	void Start(){
-		UnityEngine.Random.seed = GameStartData.instance.rng_seed;
 		GenerateStrawberries(field_strawberries);
 	}
 	public bool finished_loading(){

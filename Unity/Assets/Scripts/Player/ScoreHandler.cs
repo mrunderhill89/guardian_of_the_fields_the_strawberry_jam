@@ -39,16 +39,7 @@ public class ScoreHandler : BetterBehaviour {
 			set{ _play_length = value;}
 		}
 
-		protected GameStartData.StartData _start_data = null;
-		[Show]
-		public GameStartData.StartData startdata{
-			get{
-				return _start_data;
-			}
-			set{
-				_start_data = value;
-			}
-		}
+		public GameSettings.Model settings {get; set;}
 
 		public TotalScore(StrawberryScore picked, StrawberryScore dropped, BasketScore bs){
 			strawberries["fall"] = picked;
@@ -57,7 +48,7 @@ public class ScoreHandler : BetterBehaviour {
 		}
 
 		public TotalScore clone(TotalScore that){
-			startdata = that.startdata;
+			settings.copy_from (that.settings);
 			date_recorded = that.date_recorded;
 			play_length = that.play_length;
 			foreach (KeyValuePair<string,StrawberryScore> kvp in strawberries){
@@ -233,7 +224,7 @@ public class ScoreHandler : BetterBehaviour {
 	
 	void Awake(){
 		current_score = new TotalScore();
-		current_score.startdata = GameStartData.instance;
+		current_score.settings = GameSettingsComponent.working_rules;
 		load_scores();
 	}
 	

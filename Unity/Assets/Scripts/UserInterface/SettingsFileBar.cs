@@ -15,18 +15,14 @@ public class SettingsFileBar : BetterBehaviour {
 	// Use this for initialization
 	void Start () {
 		load.onClick.AddListener(()=>{
-			form.data_component.load_settings(filename.text);
+			form.data_component.import(filename.text);
 		});
 		save.onClick.AddListener(()=>{
-			form.data_component.save_settings(filename.text);
+			form.data_component.export(filename.text);
 		});
 		set_to_current.onClick.AddListener(()=>{
-			GameStartData.instance = form.data_component.current.Value;
-			set_to_current.gameObject.SetActive(false);
+			form.data_component.apply();
 		});
-		form.using_main.Subscribe((main)=>{
-			set_to_current.gameObject.SetActive(!main);
-		});
-		filename.text = GameStartData.default_filepath;
+		filename.text = GameSettings.Model.default_filename;
 	}
 }
