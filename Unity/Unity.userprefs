@@ -1,7 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs">
     <Files>
+      <File FileName="Assets\ControlsTooltip.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameSettings\GameSettingsComponent.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\UserInterface\SettingsForm.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameSettings\Time.cs" Line="1" Column="1" />
@@ -10,20 +11,20 @@
       <File FileName="Assets\Scripts\GameSettings\Randomness.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameSettings\Breaks.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameSettings\Flags.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameSettings\Model.cs" Line="88" Column="35" />
+      <File FileName="Assets\Scripts\GameSettings\Model.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\UserInterface\LanguageTable.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\UserInterface\SettingsFileBar.cs" Line="26" Column="54" />
-      <File FileName="Assets\Scripts\Player\ScoreHandler.cs" Line="241" Column="1" />
-      <File FileName="Assets\Scripts\Field\EmptyRowSetup.cs" Line="11" Column="1" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryRowState.cs" Line="54" Column="23" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" Line="60" Column="8" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryComponent.cs" Line="12" Column="61" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryScale.cs" Line="25" Column="5" />
-      <File FileName="Assets\Scripts\Player\BasketComponent.cs" Line="110" Column="74" />
-      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="106" Column="12" />
-      <File FileName="Assets\Scripts\Technical\GameTimer.cs" Line="107" Column="9" />
-      <File FileName="Assets\Scripts\UserInterface\HideDebugControls.cs" Line="9" Column="66" />
-      <File FileName="Assets\Scripts\UserInterface\TimeToText.cs" Line="25" Column="16" />
+      <File FileName="Assets\Scripts\UserInterface\SettingsFileBar.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player\ScoreHandler.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Field\EmptyRowSetup.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryRowState.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" Line="68" Column="36" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryScale.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player\BasketComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Technical\GameTimer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UserInterface\HideDebugControls.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UserInterface\TimeToText.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

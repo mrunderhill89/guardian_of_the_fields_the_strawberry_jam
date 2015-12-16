@@ -61,6 +61,13 @@ English:
   menu_quit: Quit Game
   menu_back: Back
   menu_next: Next
+  controls_up: Up
+  controls_left: Left
+  controls_down: Down
+  controls_right: Right
+  controls_fast: Speed Up
+  controls_slow: Slow Down
+  controls_stop: Stop
   loading_splash:
     Hello!
     The game is taking a little time to set up the strawberry field for you.

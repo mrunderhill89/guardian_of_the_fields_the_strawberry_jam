@@ -1,0 +1,210 @@
+fileFormatVersion: 2
+guid: e3b536dcc2427b54e8d81cdc7206a19e
+timeCreated: 1450287184
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: key_controls_0
+    21300002: key_controls_1
+    21300004: key_controls_2
+    21300006: key_controls_3
+    21300008: key_controls_4
+    21300010: key_controls_5
+    21300012: key_controls_6
+    21300014: key_controls_7
+    21300016: key_controls_8
+    21300018: key_controls_9
+    21300020: key_controls_10
+    21300022: key_controls_11
+    21300024: key_controls_12
+    21300026: key_controls_13
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: key_controls_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 399
+        width: 93
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_1
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 399
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_2
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 399
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_3
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 399
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_4
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 273
+        width: 93
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_5
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 273
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_6
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 273
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_7
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 273
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_8
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 147
+        width: 93
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_9
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 147
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_10
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 147
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_11
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 147
+        width: 92
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_12
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 20
+        width: 220
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: key_controls_13
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 20
+        width: 220
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -100,7 +100,13 @@ public class ObjectVisibility : BetterBehaviour {
 	
 	void Awake(){
 		init_visible();
-
-
+	}
+	
+	public static ObjectVisibility GetVisibility(GameObject obj, ObjectVisibility existing){
+		if (existing != null)
+			return existing;
+		if (obj.GetComponent<ObjectVisibility>() == null)
+			return obj.AddComponent<ObjectVisibility>();
+		return obj.GetComponent<ObjectVisibility>();
 	}
 }
