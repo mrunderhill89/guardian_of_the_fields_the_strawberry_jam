@@ -12,6 +12,7 @@ ModelImporter:
     100008: //RootNode
     100010: Start
     100012: Ground
+    100014: Plane
     400000: Camera
     400002: End
     400004: Lamp
@@ -19,18 +20,22 @@ ModelImporter:
     400008: //RootNode
     400010: Start
     400012: Ground
+    400014: Plane
     2300000: End
     2300002: Middle
     2300004: Start
     2300006: Ground
+    2300008: Plane
     3300000: End
     3300002: Middle
     3300004: Start
     3300006: Ground
+    3300008: Plane
     4300000: Middle
     4300002: Start
     4300004: End
     4300006: Ground
+    4300008: Plane
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -88,8 +93,10 @@ ModelImporter:
     legStretch: .0500000007
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
