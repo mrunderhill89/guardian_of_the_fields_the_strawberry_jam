@@ -1,48 +1,10 @@
 fileFormatVersion: 2
-guid: 62b9774ae6c62d149b377273a75fa808
-timeCreated: 1447965127
+guid: ccc6d3dee5782614c90ec780dfe169fe
+timeCreated: 1450323298
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
-  fileIDToRecycleName:
-    100000: Camera
-    100002: //RootNode
-    100004: Cube
-    100006: Frame
-    100008: Lamp
-    100010: Point
-    100012: Wheel
-    100014: Frame_001
-    100016: Camera_001
-    100018: Cube_001
-    100020: Lamp_001
-    400000: Camera
-    400002: //RootNode
-    400004: Cube
-    400006: Frame
-    400008: Lamp
-    400010: Point
-    400012: Wheel
-    400014: Frame_001
-    400016: Camera_001
-    400018: Cube_001
-    400020: Lamp_001
-    2300000: Cube
-    2300002: Frame
-    2300004: Wheel
-    2300006: Frame_001
-    2300008: Cube_001
-    3300000: Cube
-    3300002: Frame
-    3300004: Wheel
-    3300006: Frame_001
-    3300008: Cube_001
-    4300000: Frame
-    4300002: Wheel
-    4300004: Cube
-    4300006: Frame_001
-    4300008: Cube_001
-    9500000: //RootNode
+  fileIDToRecycleName: {}
   materials:
     importMaterials: 1
     materialName: 0
