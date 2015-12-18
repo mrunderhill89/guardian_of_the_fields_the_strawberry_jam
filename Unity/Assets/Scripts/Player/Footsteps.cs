@@ -30,11 +30,11 @@ public class Footsteps : BetterBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		float delta_z = transform.position.z - record_z;
-		float new_foot_position = foot_position + (pace_curve.Evaluate(delta_z / max_delta_z) * speed_adjust);
+		float delta_z = (transform.position.z - record_z) / max_delta_z;
+		float new_foot_position = foot_position + (pace_curve.Evaluate(delta_z) * speed_adjust);
 		float s_old = Mathf.Sin(foot_position);
 		float s_new = Mathf.Sin(new_foot_position);
-		float volume = volume_adjust * volume_curve.Evaluate(Mathf.Abs(s_new - s_old)/2.0f);
+		float volume = volume_adjust * volume_curve.Evaluate(Mathf.Abs(delta_z));
 		if (s_new > 0.0f && s_old < 0.0f) {
 			left_foot_source.PlayOneShot(left_foot_sound(), volume);
 		}

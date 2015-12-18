@@ -21,7 +21,7 @@ public class Randomness
 		}
 
 	public Randomness(){
-			rx_randomize.Subscribe ((value) => {
+			rx_randomize.ObserveOnMainThread().Subscribe((value) => {
 				if (value){
 					seed = unity_seed;
 				}
