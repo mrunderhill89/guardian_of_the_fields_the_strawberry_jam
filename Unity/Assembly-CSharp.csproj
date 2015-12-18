@@ -120,6 +120,7 @@
      <Compile Include="Assets\Scripts\UserInterface\LanguageTable.cs" />
      <Compile Include="Assets\Scripts\UserInterface\LanguageTableV1.cs" />
      <Compile Include="Assets\Scripts\UserInterface\LoadingProgress.cs" />
+     <Compile Include="Assets\Scripts\UserInterface\MainMenuReturn.cs" />
      <Compile Include="Assets\Scripts\UserInterface\MenuStateMachine.cs" />
      <Compile Include="Assets\Scripts\UserInterface\PaceNameLabel.cs" />
      <Compile Include="Assets\Scripts\UserInterface\PlaceOnSliderUI.cs" />
