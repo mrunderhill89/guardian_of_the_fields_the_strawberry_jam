@@ -70,6 +70,7 @@ public class SettingsForm : BetterBehaviour {
 	public SettingsForm register_toggle(Toggle toggle, Func<GameSettings.Model, BoolReactiveProperty> get_property){
 		data_component.rx_current_rules
 			.SelectMany<GameSettings.Model, bool>((model)=>{
+				if (model == null) return Observable.Never<bool>();
 				return get_property(model).AsObservable<bool>();
 			})
 			.DistinctUntilChanged()
@@ -85,6 +86,7 @@ public class SettingsForm : BetterBehaviour {
 	public SettingsForm register_slider(Slider slider, Func<GameSettings.Model, FloatReactiveProperty> get_property){
 		data_component.rx_current_rules
 			.SelectMany<GameSettings.Model, float>((model)=>{
+				if (model == null) return Observable.Never<float>();
 				return get_property(model).AsObservable<float>();
 			}).DistinctUntilChanged()
 			.Subscribe ((value) => {
@@ -99,6 +101,7 @@ public class SettingsForm : BetterBehaviour {
 	public SettingsForm register_input_int(InputField input, Func<GameSettings.Model, IntReactiveProperty> get_property){
 		data_component.rx_current_rules
 			.SelectMany<GameSettings.Model, int>((model)=>{
+				if (model == null) return Observable.Never<int>();
 				return get_property(model).AsObservable<int>();
 			}).DistinctUntilChanged()
 			.Subscribe ((value) => {
@@ -114,6 +117,7 @@ public class SettingsForm : BetterBehaviour {
 	public SettingsForm register_input_float(InputField input, Func<GameSettings.Model, FloatReactiveProperty> get_property){
 		data_component.rx_current_rules
 			.SelectMany<GameSettings.Model, float>((model)=>{
+				if (model == null) return Observable.Never<float>();
 				return get_property(model).AsObservable<float>();
 			}).DistinctUntilChanged()
 			.Subscribe ((value) => {

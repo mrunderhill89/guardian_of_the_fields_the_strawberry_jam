@@ -15,15 +15,12 @@ public class GameSettingsComponent : BetterBehaviour
 	[Show]
 	public static Model working_rules{
 		get{
-			if (rx_working_rules.Value == null){
-				working_rules = new Model();
-			}
 			return rx_working_rules.Value;
 		}
 		private set {rx_working_rules.Value = value;}
 	}
 	[DontSerialize]
-	public ReactiveProperty<Model> rx_current_rules = new ReactiveProperty<Model>(working_rules);
+	public ReactiveProperty<Model> rx_current_rules = new ReactiveProperty<Model>();
 	[Show]
 	public Model current_rules{
 		get{
@@ -42,7 +39,7 @@ public class GameSettingsComponent : BetterBehaviour
 
 	[Show]
 	public GameSettingsComponent import(string filename = ""){
-		current_rules = Model.import (filename);
+		current_rules.import (filename);
 		return this;
 	}
 
@@ -61,7 +58,26 @@ public class GameSettingsComponent : BetterBehaviour
 		current_rules.export (filename);
 		return this;
 	}
-
+	void Awake(){
+		//Synchronize Unity's random number seed with the working ruleset's.
+		rx_working_rules.SelectMany((rules)=>{
+			if (rules == null)
+				return Observable.Never<UniRx.Tuple<Model,bool>>();
+			return rules.randomness.rx_randomize.Select((randomize)=>{
+				return new UniRx.Tuple<Model,bool>(rules, randomize);
+			});
+		}).ObserveOnMainThread().Subscribe((tuple)=>{
+			Model rules = tuple.Item1;
+			bool randomize = tuple.Item2;
+			if (randomize){
+				rules.randomness.seed = UnityEngine.Random.seed;
+			} else {
+				UnityEngine.Random.seed = rules.randomness.seed;
+			}
+		});
+		rx_working_rules.Value = Model.import_static();
+		current_rules = working_rules;
+	}
 	#endregion
 
 

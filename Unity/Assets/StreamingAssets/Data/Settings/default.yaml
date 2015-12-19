@@ -1,5 +1,5 @@
 randomness:
-  seed: -2108460239
+  seed: 0
   randomize: true
 flags:
   tutorial: true

@@ -8,6 +8,7 @@ using Vexe.Runtime.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
+using UniRx;
 
 public class ScoreHandler : BetterBehaviour {
 	public StrawberryStateMachine berry_state;
@@ -190,9 +191,8 @@ public class ScoreHandler : BetterBehaviour {
 		current_score.date_recorded = DateTime.Now;
 		saved_scores.Add(new TotalScore().clone(current_score));
 	}
-
-	public static string default_filepath{
-		get{ return Application.streamingAssetsPath + "/Data/Scores.yaml"; }
+	public static string default_filepath {
+		get{ return Application.streamingAssetsPath + "/Data/Scores.yaml";}
 	}
 	[Show]
 	public void load_scores(){ load_scores (default_filepath);}

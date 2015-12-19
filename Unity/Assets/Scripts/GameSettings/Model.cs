@@ -21,20 +21,8 @@ namespace GameSettings{
 		public Breaks breaks {get; set;}
 		public WinCondition win_condition {get; set;}
 		public GameSettings.Time time {get; set;}
-
-		private static string _default_filename = "";
-		public static string default_filename{
-			get{
-				try{
-					_default_filename = Application.streamingAssetsPath + "/Data/Settings/default.yaml";
-				}
-				catch(ArgumentException){
-					if (_default_filename == ""){
-						_default_filename = "./StreamingAssets/Data/Settings/default.yaml";
-					}
-				}
-				return _default_filename;
-			}
+		public static string default_filename {
+			get{ return Application.streamingAssetsPath + "/Data/Settings/default.yaml";}
 		}
 		public const float precision = 100.0f;
 		#endregion
@@ -92,7 +80,15 @@ namespace GameSettings{
 			initialize ();
 		}
 
-		public static Model import(string filename = "")
+		public Model import(string filename = ""){
+			Model that = import_static(filename);
+			if (that == null) return this;
+			copy_from(that);
+			//Fix so that randomize settings are correctly copied from files, but not saved games.
+			this.randomness.randomize = that.randomness.randomize;
+			return this;
+		}
+		public static Model import_static(string filename = "")
 		{
 			if (filename == "")
 				filename = default_filename;
