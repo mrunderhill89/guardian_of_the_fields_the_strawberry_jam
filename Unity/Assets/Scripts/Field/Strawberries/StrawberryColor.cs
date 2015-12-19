@@ -38,10 +38,13 @@ public class StrawberryColor : BetterBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (material != null){
-			float quality = data.quality;
-			color = color_gradient.Evaluate (quality / max_quality);
+			color = get_color(data.quality);
 			material.SetColor ("_Color", color);
 			material.SetTexture("_BumpMap", bump_map);
 		}
+	}
+	
+	public static Color get_color(float quality){
+		return color_gradient.Evaluate (quality / max_quality);
 	}
 }

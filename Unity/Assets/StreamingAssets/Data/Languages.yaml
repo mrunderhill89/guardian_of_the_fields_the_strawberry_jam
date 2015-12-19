@@ -55,6 +55,7 @@ English:
   menu_start: Start Game
   menu_language: Choose Language
   menu_controls: Controls
+  menu_controls_and_instructions: Controls and Instructions
   menu_settings: Game Settings
   menu_scores: High Scores
   menu_credits: Credits
@@ -68,6 +69,14 @@ English:
   controls_fast: Speed Up
   controls_slow: Slow Down
   controls_stop: Stop
+  controls_forward: Forward
+  controls_space: Space
+  controls_slider: Click and drag to set pace.
+  controls_movement: Movement Controls
+  controls_picking: Strawberry Picking
+  controls_keyboard: Keyboard
+  controls_mouse: "Mouse (On-Screen)"
+  controls_keypad: "Arrow Keys and Number Pad"
   loading_splash:
     Hello!
     The game is taking a little time to set up the strawberry field for you.
@@ -115,5 +124,7 @@ English:
   settings_tutorial: Tutorial
   language_english: English
   language_spanish: Spanish
+  debug_quick_start: Quick Start
   debug_end_game: End Game
   debug_free_berry: Make it Rain!
+  help_ripeness: Ripeness

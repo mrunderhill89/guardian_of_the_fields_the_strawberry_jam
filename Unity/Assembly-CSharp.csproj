@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\InGameRipenessMeter.cs" />
      <Compile Include="Assets\RulesQuickSelect.cs" />
      <Compile Include="Assets\Scripts\Field\EmptyRowSetup.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
@@ -316,6 +317,7 @@
      <Compile Include="Assets\VFW Misc\Requirements.cs" />
      <None Include="Assets\Plugins\Editor\Vexe\LICENSE.txt" />
      <None Include="Assets\Plugins\Vexe\HISTORY.txt" />
+     <None Include="Assets\Materials\3DTextOneSided.shader" />
      <None Include="Assets\Plugins\Vexe\LICENSE.txt" />
      <None Include="Assets\Resources\Materials\StrawberrySkin.shader" />
      <None Include="Assets\Double Sided Shaders\Double Sided Emissive Diffuse.shader" />
@@ -329,6 +331,12 @@
      <None Include="Assets\Plugins\YamlDotNet\Readme.txt" />
      <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
      <None Include="Assets\Materials\StrawberryShader.shader" />
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
