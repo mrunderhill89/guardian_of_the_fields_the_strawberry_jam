@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -75,6 +76,17 @@ namespace UniRx
             return string.Format("Index:{0} OldValue:{1} NewValue:{2}", Index, OldValue, NewValue);
         }
     }
+    
+    public class CollectionContentsEvent<T>
+    {
+		public T[] Contents{ get; private set; }
+		public int Count{ get; private set;}
+		public CollectionContentsEvent(ICollection<T> contents)
+		{
+			this.Contents = contents.ToArray();
+			this.Count = contents.Count;
+		}
+	}
 
     public interface IReactiveCollection<T> : IList<T>
     {
@@ -84,6 +96,7 @@ namespace UniRx
         IObservable<CollectionMoveEvent<T>> ObserveMove();
         IObservable<CollectionRemoveEvent<T>> ObserveRemove();
         IObservable<CollectionReplaceEvent<T>> ObserveReplace();
+        ReadOnlyReactiveProperty<CollectionContentsEvent<T>> ObserveContents();
         IObservable<Unit> ObserveReset();
     }
 
@@ -116,6 +129,7 @@ namespace UniRx
             base.ClearItems();
 
             if (collectionReset != null) collectionReset.OnNext(Unit.Default);
+            if (collectionContents != null) collectionContents.OnNext(new CollectionContentsEvent<T>(this));
             if (beforeCount > 0)
             {
                 if (countChanged != null) countChanged.OnNext(Count);
@@ -127,6 +141,7 @@ namespace UniRx
             base.InsertItem(index, item);
 
             if (collectionAdd != null) collectionAdd.OnNext(new CollectionAddEvent<T>(index, item));
+            if (collectionContents != null) collectionContents.OnNext(new CollectionContentsEvent<T>(this));
             if (countChanged != null) countChanged.OnNext(Count);
         }
 
@@ -142,6 +157,7 @@ namespace UniRx
             base.InsertItem(newIndex, item);
 
             if (collectionMove != null) collectionMove.OnNext(new CollectionMoveEvent<T>(oldIndex, newIndex, item));
+            if (collectionContents != null) collectionContents.OnNext(new CollectionContentsEvent<T>(this));
         }
 
         protected override void RemoveItem(int index)
@@ -150,6 +166,7 @@ namespace UniRx
             base.RemoveItem(index);
 
             if (collectionRemove != null) collectionRemove.OnNext(new CollectionRemoveEvent<T>(index, item));
+            if (collectionContents != null) collectionContents.OnNext(new CollectionContentsEvent<T>(this));
             if (countChanged != null) countChanged.OnNext(Count);
         }
 
@@ -159,6 +176,7 @@ namespace UniRx
             base.SetItem(index, item);
 
             if (collectionReplace != null) collectionReplace.OnNext(new CollectionReplaceEvent<T>(index, oldItem, item));
+            if (collectionContents != null) collectionContents.OnNext(new CollectionContentsEvent<T>(this));
         }
 
 
@@ -210,6 +228,18 @@ namespace UniRx
         public IObservable<CollectionReplaceEvent<T>> ObserveReplace()
         {
             return collectionReplace ?? (collectionReplace = new Subject<CollectionReplaceEvent<T>>());
+        }
+        
+		[NonSerialized]
+        Subject<CollectionContentsEvent<T>> collectionContents = null;
+        ReadOnlyReactiveProperty<CollectionContentsEvent<T>> collectionContentsProperty = null;
+		public ReadOnlyReactiveProperty<CollectionContentsEvent<T>> ObserveContents()
+        {
+			if (collectionContents == null)
+				collectionContents = new Subject<CollectionContentsEvent<T>>();
+			if (collectionContentsProperty == null)
+				collectionContentsProperty = collectionContents.ToReadOnlyReactiveProperty<CollectionContentsEvent<T>>(new CollectionContentsEvent<T>(this));
+            return collectionContentsProperty;
         }
     }
 

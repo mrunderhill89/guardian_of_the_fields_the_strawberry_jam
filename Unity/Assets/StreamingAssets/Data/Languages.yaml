@@ -77,6 +77,14 @@ English:
   controls_keyboard: Keyboard
   controls_mouse: "Mouse (On-Screen)"
   controls_keypad: "Arrow Keys and Number Pad"
+  controls_pov: Point of View
+  controls_pace: "Pace (Walking Speed)"
+  controls_left_click: "Left Click: Pick Up"
+  controls_left_hold: "Left Drag: Hold/Move"
+  controls_left_release: "Left Release: Drop"
+  controls_scroll_up: "Scroll Up: Push Away"
+  controls_scroll_down: "Scroll Down: Pull Towards"
+  controls_right_click: "Right Click: Nothing"
   loading_splash:
     Hello!
     The game is taking a little time to set up the strawberry field for you.
