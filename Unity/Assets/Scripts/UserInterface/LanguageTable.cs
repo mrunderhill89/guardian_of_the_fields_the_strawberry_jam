@@ -123,6 +123,8 @@ public class LanguageTable : BetterBehaviour {
 	}
 	public Dictionary<string, List<Text>> text_objects = new Dictionary<string, List<Text>>();
 	public Dictionary<string, List<TextMesh>> text_meshes = new Dictionary<string, List<TextMesh>>();
+	[DontSerialize]
+	public List<IDisposable> disposables = new List<IDisposable>();
 	public int Count{
 		get{
 			return text_objects.Count + text_meshes.Count;
@@ -203,15 +205,21 @@ public class LanguageTable : BetterBehaviour {
 		}
 	}
 
+	void OnDestroy(){
+		foreach (IDisposable disposable in disposables) {
+			disposable.Dispose();
+		}
+	}
+
 	public LanguageTable SubscribeText (Text target){
 		return SubscribeText (key, target);
 	}
 	public LanguageTable SubscribeText (string key, Text target){
 		if (key == "")
 			key = this.key;
-		dictionary.get_property (key).Subscribe ((string value) => {
+		disposables.Add(dictionary.get_property (key).Subscribe ((string value) => {
 			target.text = build_text(key,value);
-		});
+		}));
 		return this;
 	}
 
@@ -222,9 +230,9 @@ public class LanguageTable : BetterBehaviour {
 	public LanguageTable SubscribeMesh (string key, TextMesh target){
 		if (key == "")
 			key = this.key;
-		dictionary.get_property (key).Subscribe ((string value) => {
+		disposables.Add(dictionary.get_property (key).Subscribe ((string value) => {
 			target.text = build_text(key,value);
-		});
+		}));
 		return this;
 	}
 

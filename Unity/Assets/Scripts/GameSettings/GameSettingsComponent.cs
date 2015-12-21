@@ -15,6 +15,8 @@ public class GameSettingsComponent : BetterBehaviour
 	[Show]
 	public static Model working_rules{
 		get{
+			if (rx_working_rules.Value == null)
+				rx_working_rules.Value = Model.import_static();
 			return rx_working_rules.Value;
 		}
 		private set {rx_working_rules.Value = value;}

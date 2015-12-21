@@ -1,7 +1,7 @@
 Spanish:
   berries_gathered: Fresas Escogidas
   berry_ripe: 'Madura:'
-  berry_overripe: 'Mohosa:'
+  berry_overripe: 'Podrida:'
   berry_underripe: 'Inmatura:'
   berry_small: "Peque�ña:"
   basket_label: Canastas
@@ -9,20 +9,95 @@ Spanish:
   basket_underweight: 'Insuficiente:'
   basket_overweight: 'Demasiados:'
   basket_overflow: 'Desbordante:'
-  berries_dropped: Fresas Cayeron
+  berries_dropped: Fresas Tiradas
   state_look: Buscando
-  state_pick: Cosechado
-  state_pack: Embalando
-  move_while_pack: Moverse mientras que Embalando
-  pace_reverse: Reverse
-  pace_slow: Slow
-  pace_medium: Medium
-  pace_fast: Fast
+  state_pick: Piscando
+  state_pack: Empacando
+  move_while_pack: Moverse mientras que Empaca
+  pace_reverse: Reversa
+  pace_slow: Lento
+  pace_medium: Mediano
+  pace_fast: Rapido
   pace_label: Paso
-  pace_max: Max Speed
+  pace_max: Maxima Velocidad
   language_english: Inglés
   language_spanish: Español
+  menu_start: Comienze el Juego
+  menu_language: Elija su Idioma 
+  menu_controls: Controles
+  menu_controls_and_instructions: Controles y Instrucciones
+  menu_settings: Configuraciones de Juego
+  menu_scores: Alto Puntuaje 
+  menu_credits: "Creditos"
+  menu_quit: Salir del Juego
+  menu_back: "Atras"
+  menu_next: Siguiente
+  controls_up: Arriba
+  controls_left: Izquierda
+  controls_down: Abajo
+  controls_right: Derecha
+  controls_fast: Mas Rapido
+  controls_slow: Mas Lento
+  controls_stop: Detenerse
+  controls_forward: Avanzar
+  controls_space: Space/Espacio
+  controls_slider: Haga click y jale para selecionar su paso.
+  controls_movement: Controles de Movimiento
+  controls_picking: Controles para Piscar Fresas
+  controls_keyboard: Teclado
+  controls_mouse: "Raton (En la pantalla)"
+  controls_keypad: "Teclas de Flecha y Teclado Numerico"
+  loading_splash:
+    Hola!
+    El juego esta tomando un poco de tiempo para generar los campos de fresas.
+    Mientras tanto, sientase libre de mover el raton para aprender los controles.
+    Cuando el campo se termine de generar, por favor presione el boton de abajo para comenzar.
+  tutorial_move: Use las teclas de flecha o "WASD" para mover su punto de vista.
+  tutorial_speed: Presione "E" o "Num 1" para ir mas rapido.
+  tutorial_slow: Presione "Q" o "Num 2" para ir mas despasio.
+  tutorial_stop: Presione "Space" o "Num 0" para detenerse.
+  tutorial_pick: Presione y detenga el boton del raton sobre una fresa para recogerla.
+  tutorial_pick_scroll: Use la rueda del raton para acercar la fresa hacia usted.
+  tutorial_pack: Pisque la fresa y pongala en una canasta.
+  tutorial_rearrange: Ordene sus fresas antes que se termine el tiempo.
+  tutorial_midday: Es medio dia. El juego terminara cuando baje el sol.
+  tutorial_time_up: "Ya casi baja el sol! Apurele!"
   no_key: <No hay Clave>
+  input_float: 'Numero decimal (##.##)'
+  input_integer: 'Numero entero (###)'
+  input_filename: Nombre de archivo
+  file_load: Carge archivo
+  file_save: Guarde archivo
+  settings_seed: Numerdo de Semillas Incierto
+  settings_debug: Opciones de Depurracion
+  settings_max_berries: Limite de Fresas en el Campo
+  settings_set_to_current: Use estas Configuraciones
+  settings_penalty_big: Consecuencia Grande
+  settings_penalty_medium: Consecuencia Mediana
+  settings_penalty_small: "Consecuencia Pequeña"
+  settings_max_basket_weight: Peso de Canasta Maximo
+  settings_min_basket_weight: Peso de Canasta Minimo
+  settings_min_accepted_size: "Tamaño de fresas minimo"
+  settings_max_accepted_ripeness: Madurez Maxima Aceptada
+  settings_min_accepted_ripeness: Madurez Minima Aceptada
+  settings_game_length: Tiempo del Juego
+  settings_min_ripeness: Madurez Minima
+  settings_break_length: Tiempo del descanso
+  settings_max_ripeness: Madurez Maxima
+  settings_end_hour: Hora Final
+  settings_start_hour: Hora de Inicio
+  settings_break_distance: Distancia del descnso
+  settings_min_size: "Tamaño de fresas minimo"
+  settings_max_size: "Tamaño de freas maximo"
+  settings_randomize: Hacer Insierto
+  settings_density: Multiplicador de Peso para Fresas
+  settings_tutorial: Tutorial
+  language_english: Inglés
+  language_spanish: Español
+  debug_quick_start: Empiece Rapido
+  debug_end_game: Termine el Juego
+  debug_free_berry: Muchas Fresas!
+  help_ripeness: Madurez
 English:
   berries_gathered: Strawberries Gathered
   berry_ripe: 'Ripe:'
@@ -85,6 +160,9 @@ English:
   controls_scroll_up: "Scroll Up: Push Away"
   controls_scroll_down: "Scroll Down: Pull Towards"
   controls_right_click: "Right Click: Nothing"
+  controls_left_mouse: Left Mouse Button
+  controls_right_mouse: Right Mouse Button
+  controls_mouse_wheel: Mouse Scroll Wheel
   loading_splash:
     Hello!
     The game is taking a little time to set up the strawberry field for you.

@@ -224,7 +224,11 @@ public class ScoreHandler : BetterBehaviour {
 	
 	void Awake(){
 		current_score = new TotalScore();
-		current_score.settings = GameSettingsComponent.working_rules;
+		GameSettingsComponent.rx_working_rules.Subscribe ((rules) => {
+			if (rules != null){
+				current_score.settings = rules;
+			}
+		});
 		load_scores();
 	}
 	
