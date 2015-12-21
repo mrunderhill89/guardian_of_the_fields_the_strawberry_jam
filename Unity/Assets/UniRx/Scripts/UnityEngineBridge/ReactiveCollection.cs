@@ -241,6 +241,57 @@ namespace UniRx
 				collectionContentsProperty = collectionContents.ToReadOnlyReactiveProperty<CollectionContentsEvent<T>>(new CollectionContentsEvent<T>(this));
             return collectionContentsProperty;
         }
+		
+		public ReactiveCollection<TResult> RxSelect<TResult>(System.Func<T, TResult> map){
+			var that = new ReactiveCollection<TResult>(this.Select(map));
+			ObserveAdd().Subscribe((evn)=>{
+				that.SetItem(evn.Index, map(evn.Value));
+			});
+			ObserveMove().Subscribe((evn)=>{
+				that.MoveItem(evn.OldIndex, evn.NewIndex);
+			});
+			ObserveReplace().Subscribe((evn)=>{
+				that.SetItem(evn.Index, map(evn.NewValue));
+			});
+			ObserveRemove().Subscribe((evn)=>{
+				that.RemoveAt(evn.Index);
+			});
+			return that;
+		}
+		
+		public ReactiveCollection<TResult> RxSelectMany<TResult>(System.Func<T[], IEnumerable<TResult>> map){
+			var that = new ReactiveCollection<TResult>();
+			ObserveContents().Subscribe((evn)=>{
+				that.Clear();
+				foreach (TResult result in map(evn.Contents)){
+					that.Add(result);
+				}
+			});
+			return that;
+		}
+		
+		public ReactiveCollection<T> RxWhere(System.Func<T, bool> test){
+			var that = new ReactiveCollection<T>(this.Where(test));
+			ObserveAdd().Subscribe((evn)=>{
+				if (test(evn.Value)){
+					that.Add(evn.Value);
+				}
+			});
+			ObserveReplace().Subscribe((evn)=>{
+				if (that.Contains(evn.OldValue)){
+					that.Remove(evn.OldValue);
+				}
+				if (test(evn.NewValue)){
+					that.Add(evn.NewValue);
+				}
+			});
+			ObserveRemove().Subscribe((evn)=>{
+				if (that.Contains(evn.Value)){
+					that.Remove(evn.Value);
+				}
+			});
+			return that;
+		}
     }
 
     public static partial class ReactiveCollectionExtensions
