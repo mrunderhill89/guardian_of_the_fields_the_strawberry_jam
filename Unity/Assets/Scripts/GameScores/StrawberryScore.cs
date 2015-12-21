@@ -28,6 +28,16 @@ namespace GameScores
 		public bool is_eligible(float max_ripeness, float min_ripeness, float min_weight){
 			return !(is_overripe (max_ripeness) || is_underripe (min_ripeness) || is_underweight (min_weight));
 		}
+
+		public StrawberrySingleScore copy_from(StrawberrySingleScore that){
+			ripeness = that.ripeness;
+			weight = that.weight;
+			return this;
+		}
+		public StrawberrySingleScore copy_of(){
+			return new StrawberrySingleScore().copy_from(this);
+		}
+
 	}
 	public class StrawberryScore
 	{
@@ -56,6 +66,13 @@ namespace GameScores
 				}
 				return this;
 			}
+			public RipenessSorter copy_from(RipenessSorter that){
+				all_berries = that.all_berries.Select (berry=>berry.copy_of()).ToList();
+				return this;
+			}
+			public RipenessSorter copy_of(){
+				return new RipenessSorter().copy_from(this);
+			}
 		}
 		[Show]
 		protected Dictionary<string, RipenessSorter> categories
@@ -64,6 +81,16 @@ namespace GameScores
 			if (!categories.ContainsKey (name))
 				categories [name] = new RipenessSorter ();
 			return categories [name];
+		}
+		public StrawberryScore copy_from(StrawberryScore that){
+			categories.Clear ();
+			foreach (KeyValuePair<string,RipenessSorter> kvp in that.categories) {
+				categories[kvp.Key] = kvp.Value.copy_of();
+			}
+			return this;
+		}
+		public StrawberryScore copy_of(){
+			return new StrawberryScore().copy_from(this);
 		}
 	}
 }

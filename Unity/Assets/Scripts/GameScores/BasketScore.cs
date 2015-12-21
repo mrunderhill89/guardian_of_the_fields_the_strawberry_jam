@@ -34,6 +34,16 @@ namespace GameScores
 			weight = 0.0f;
 			is_overflow = false;
 		}
+
+		public BasketSingleScore copy_from(BasketSingleScore that){
+			weight = that.weight;
+			is_overflow = that.is_overflow;
+			return this;
+		}
+
+		public BasketSingleScore copy_of(){
+			return new BasketSingleScore ().copy_from (this);
+		}
 	}
 	public class BasketScore
 	{
@@ -51,6 +61,13 @@ namespace GameScores
 			return baskets.Where (basket=>basket.is_overflow);
 		}
 
+		public BasketScore copy_from(BasketScore that){
+			baskets = that.baskets.Select(basket => basket.copy_of()).ToList();
+			return this;
+		}
+		public BasketScore copy_of(){
+			return new BasketScore ().copy_from (this);
+		}
 	}
 }
 

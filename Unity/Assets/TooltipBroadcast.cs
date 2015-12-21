@@ -10,12 +10,26 @@ public class TooltipBroadcast : BetterBehaviour, IPointerEnterHandler, IPointerE
 	public TooltipView tooltip;
 	public string key = "";
 
+	void Start(){
+		if (tooltip == null) {
+			foreach(TooltipView t in GameObject.FindObjectsOfType<TooltipView>()){
+				if (t != null){
+					tooltip = t; break;
+				}
+			}
+		}
+	}
+
 	public void OnPointerEnter(PointerEventData evn){
-		tooltip.show(LanguageTable.get(key));
+		if (tooltip != null) {
+			tooltip.show (LanguageTable.get (key));
+		}
 	}
 
 	public void OnPointerExit(PointerEventData evn){
-		tooltip.hide();
+		if (tooltip != null) {
+			tooltip.hide ();
+		}
 	}
 
 }

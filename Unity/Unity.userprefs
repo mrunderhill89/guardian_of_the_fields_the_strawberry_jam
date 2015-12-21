@@ -1,19 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameScores\SavedScoreComponent.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\TooltipBroadcast.cs">
     <Files>
-      <File FileName="Assets\Scripts\Player\ScoreHandler.cs" Line="115" Column="5" />
-      <File FileName="Assets\Scripts\UserInterface\LanguageTable.cs" Line="204" Column="5" />
-      <File FileName="Assets\Scripts\GameScores\Score.cs" Line="13" Column="9" />
-      <File FileName="Assets\Scripts\GameScores\GameScoreComponent.cs" Line="29" Column="2" />
-      <File FileName="Assets\Scripts\GameScores\BasketScore.cs" Line="35" Column="24" />
-      <File FileName="Assets\Scripts\GameScores\StrawberryScore.cs" Line="55" Column="79" />
-      <File FileName="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" Line="5" Column="19" />
-      <File FileName="Assets\Scripts\Player\BasketComponent.cs" Line="110" Column="1" />
-      <File FileName="Assets\Scripts\GameScores\TimeScore.cs" Line="19" Column="38" />
-      <File FileName="Assets\Scripts\GameScores\SavedScoreComponent.cs" Line="16" Column="8" />
-      <File FileName="Assets\Scripts\GameSettings\GameSettingsComponent.cs" Line="14" Column="89" />
-      <File FileName="Assets\Scripts\GameSettings\Model.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\SavedScoreComponent.cs" Line="75" Column="23" />
+      <File FileName="Assets\Scripts\UserInterface\ScoreboardV2.cs" Line="37" Column="12" />
+      <File FileName="Assets\Scripts\UserInterface\ScoreMinimalFormV2.cs" Line="38" Column="66" />
+      <File FileName="Assets\Scripts\GameScores\Score.cs" Line="17" Column="33" />
+      <File FileName="Assets\Scripts\GameScores\GameScoreComponent.cs" Line="32" Column="40" />
+      <File FileName="Assets\Scripts\GameScores\TimeScore.cs" Line="15" Column="4" />
+      <File FileName="Assets\Scripts\GameScores\StrawberryScore.cs" Line="70" Column="76" />
+      <File FileName="Assets\Scripts\GameScores\BasketScore.cs" Line="69" Column="47" />
+      <File FileName="Assets\UniRx\Scripts\UnityEngineBridge\ReactiveCollection.cs" Line="283" Column="6" />
+      <File FileName="Assets\TooltipBroadcast.cs" Line="32" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

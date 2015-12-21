@@ -26,5 +26,10 @@ public class GameScoreComponent : BetterBehaviour {
 		}).ToList();
 		working_score.time.played_for = timer.time.total;
 	}
-
+	[Show]
+	public GameScoreComponent record_score(){
+		SavedScoreComponent.record_score (working_score.copy_of());
+		SavedScoreComponent.export_static ();
+		return this;
+	}
 }

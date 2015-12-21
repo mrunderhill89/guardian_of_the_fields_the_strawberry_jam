@@ -245,7 +245,7 @@ namespace UniRx
 		public ReactiveCollection<TResult> RxSelect<TResult>(System.Func<T, TResult> map){
 			var that = new ReactiveCollection<TResult>(this.Select(map));
 			ObserveAdd().Subscribe((evn)=>{
-				that.SetItem(evn.Index, map(evn.Value));
+				that.InsertItem(evn.Index, map(evn.Value));
 			});
 			ObserveMove().Subscribe((evn)=>{
 				that.MoveItem(evn.OldIndex, evn.NewIndex);
@@ -285,6 +285,7 @@ namespace UniRx
 					that.Add(evn.NewValue);
 				}
 			});
+			//Since we aren't maintaining element order, anyway, we don't care about movement.
 			ObserveRemove().Subscribe((evn)=>{
 				if (that.Contains(evn.Value)){
 					that.Remove(evn.Value);
