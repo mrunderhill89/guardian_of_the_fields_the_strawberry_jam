@@ -6,13 +6,13 @@ using Vexe.Runtime.Types;
 namespace GameScores
 {
 	public class StrawberrySingleScore{
-		float weight = 0.0f;
-		float ripeness = 0.0f;
-		public StrawberrySingleScore set_weight(float value){
+		public float weight { get; set; }
+		public float ripeness { get; set;}
+		public StrawberrySingleScore chain_weight(float value){
 			weight = value;
 			return this;
 		}
-		public StrawberrySingleScore set_ripeness(float value){
+		public StrawberrySingleScore chain_ripeness(float value){
 			ripeness = value;
 			return this;
 		}
@@ -51,10 +51,8 @@ namespace GameScores
 			[Show]
 			public RipenessSorter from_state_machine(string state_name){
 				if (StrawberryStateMachine.main != null) {
-					all_berries.Clear ();
-					foreach (StrawberryComponent berry in StrawberryStateMachine.main.get_strawberries(state_name)) {
-						all_berries.Add (new StrawberrySingleScore ().set_weight (berry.weight).set_ripeness (berry.quality));
-					}
+					all_berries = StrawberryStateMachine.main.get_strawberries(state_name)
+	                     .Select(berry=>new StrawberrySingleScore ().chain_weight(berry.weight).chain_ripeness(berry.quality)).ToList();
 				}
 				return this;
 			}

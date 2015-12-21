@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using Vexe.Runtime.Types;
 namespace GameScores {
 	public class Score{
 		public GameSettings.Model settings;
@@ -10,7 +10,9 @@ namespace GameScores {
 		public StrawberryScore berries = new StrawberryScore();
 		public BasketScore baskets = new BasketScore();
 
-		public Score(){
+		[Show]
+		public float remaining_time{
+			get{ return settings.time.game_length - time.played_for;}
 		}
 
 		public IEnumerable<StrawberrySingleScore> ripe_berries(string category){
