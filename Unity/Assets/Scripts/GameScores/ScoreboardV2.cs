@@ -36,9 +36,12 @@ public class ScoreboardV2 : BetterBehaviour {
 		.RxWhere(score=>score != null)
 		.RxSelect((score) => {
 			GameObject obj = GameObject.Instantiate(prefab);
-			obj.GetComponent<ScoreMinimalFormV2>().Score = score;
+			obj.GetComponent<ScoreMinimalFormV2>().score = score;
 			obj.transform.SetParent(Place,false);
 			return obj;
+		});
+		views.ObserveRemove ().Subscribe ((evn) => {
+			Destroy (evn.Value);
 		});
 	}
 }

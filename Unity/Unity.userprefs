@@ -1,17 +1,27 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UserInterface\ScoreMinimalFormV2.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameScores\BerryGrid.cs">
     <Files>
-      <File FileName="Assets\Scripts\UserInterface\ScoreMinimalFormV2.cs" Line="52" Column="3" />
-      <File FileName="Assets\Scripts\GameScores\SavedScoreComponent.cs" Line="75" Column="23" />
-      <File FileName="Assets\Scripts\UserInterface\ScoreboardV2.cs" Line="37" Column="12" />
-      <File FileName="Assets\Scripts\GameScores\Score.cs" Line="37" Column="55" />
-      <File FileName="Assets\Scripts\GameScores\GameScoreComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\IScoreSource.cs" Line="13" Column="22" />
+      <File FileName="Assets\Scripts\GameScores\SavedScoreComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\Score.cs" Line="7" Column="59" />
+      <File FileName="Assets\Scripts\GameScores\GameScoreComponent.cs" Line="43" Column="6" />
       <File FileName="Assets\Scripts\GameScores\TimeScore.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameScores\StrawberryScore.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameScores\BasketScore.cs" Line="1" Column="1" />
-      <File FileName="Assets\UniRx\Scripts\UnityEngineBridge\ReactiveCollection.cs" Line="1" Column="1" />
-      <File FileName="Assets\TooltipBroadcast.cs" Line="32" Column="4" />
+      <File FileName="Assets\Scripts\GameScores\StrawberryScore.cs" Line="90" Column="28" />
+      <File FileName="Assets\Scripts\GameScores\BasketScore.cs" Line="74" Column="23" />
+      <File FileName="Assets\Scripts\Player\GameStateManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\BasketUIComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\StrawberryUIComponent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameScores\BerryGrid.cs" Line="39" Column="49" />
+      <File FileName="Assets\Scripts\GameScores\ScoreMinimalFormV2.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Universal\ObjectVisibility.cs" Line="113" Column="1" />
+      <File FileName="Assets\Scripts\UserInterface\LanguageTable.cs" Line="258" Column="1" />
+      <File FileName="Assets\TooltipBroadcast.cs" Line="36" Column="1" />
+      <File FileName="Assets\UniRx\Scripts\UnityEngineBridge\ReactiveCollection.cs" Line="253" Column="22" />
+      <File FileName="Assets\Scripts\GameScores\BasketGrid.cs" Line="44" Column="14" />
+      <File FileName="Assets\Scripts\GameScores\BasketIcon.cs" Line="37" Column="47" />
+      <File FileName="Assets\Scripts\GameScores\ScoreboardV2.cs" Line="42" Column="6" />
+      <File FileName="Assets\Scripts\GameScores\BasketWeightIndicator.cs" Line="17" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

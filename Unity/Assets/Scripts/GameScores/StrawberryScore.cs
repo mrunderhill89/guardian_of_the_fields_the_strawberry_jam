@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using UniRx;
+
 namespace GameScores
 {
 	public class StrawberrySingleScore{
@@ -44,8 +47,12 @@ namespace GameScores
 
 		public class RipenessSorter
 		{
-			public List<StrawberrySingleScore> all_berries
-				= new List<StrawberrySingleScore>();
+			public ReactiveCollection<StrawberrySingleScore> rx_berries
+				= new ReactiveCollection<StrawberrySingleScore>();
+			public List<StrawberrySingleScore> all_berries{
+				get{ return rx_berries.ToList();}
+				set{ rx_berries.SetRange(value);}
+			}
 			public IEnumerable<StrawberrySingleScore> ripe(GameSettings.WinCondition win){
 				return all_berries.Where(berry => berry.is_eligible(win.max_ripeness, win.min_ripeness, win.min_size));
 			}
@@ -61,22 +68,28 @@ namespace GameScores
 			[Show]
 			public RipenessSorter from_state_machine(string state_name){
 				if (StrawberryStateMachine.main != null) {
-					all_berries = StrawberryStateMachine.main.get_strawberries(state_name)
-	                     .Select(berry=>new StrawberrySingleScore ().chain_weight(berry.weight).chain_ripeness(berry.quality)).ToList();
+					rx_berries.SetRange(
+						StrawberryStateMachine.main.get_strawberries(state_name).Select(comp=>
+							new StrawberrySingleScore().chain_ripeness(comp.quality).chain_weight(comp.weight)
+						)
+					);
 				}
 				return this;
 			}
 			public RipenessSorter copy_from(RipenessSorter that){
-				all_berries = that.all_berries.Select (berry=>berry.copy_of()).ToList();
+				rx_berries.SetRange (that.all_berries.Select (score => score.copy_of ()));
 				return this;
 			}
 			public RipenessSorter copy_of(){
 				return new RipenessSorter().copy_from(this);
 			}
 		}
-		[Show]
-		protected Dictionary<string, RipenessSorter> categories
+		protected Dictionary<string, RipenessSorter> _categories
 			= new Dictionary<string, RipenessSorter>();
+		public Dictionary<string, RipenessSorter> categories{
+			get{ return _categories;}
+			set{ _categories = value;}
+		}
 		public RipenessSorter get_category(string name){
 			if (!categories.ContainsKey (name))
 				categories [name] = new RipenessSorter ();

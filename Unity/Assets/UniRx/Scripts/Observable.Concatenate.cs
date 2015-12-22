@@ -436,6 +436,27 @@ namespace UniRx
             });
         }
 
+		public static IObservable<TResult> WithLatestFrom<TResult, TFirst, TSecond>(
+			this IObservable<TFirst> first,
+			IObservable<TSecond> second,
+			Func<TFirst, TSecond, TResult> resultSelector)
+		{
+			return Observable.Create<TResult>(observer =>
+			                                  {
+				var published = first.Publish();
+				
+				var connection = published.Connect();
+				
+				var subscription = second
+					.Select(a => published
+					        .Select(b => resultSelector(b, a)))
+						.Switch()
+						.Subscribe(observer);
+				
+				return new CompositeDisposable(connection, subscription);
+			});
+		}
+
         public static IObservable<TResult> CombineLatest<TLeft, TRight, TResult>(this IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, TRight, TResult> selector)
         {
             return Observable.Create<TResult>(observer =>

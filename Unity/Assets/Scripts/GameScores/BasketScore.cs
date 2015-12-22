@@ -1,20 +1,53 @@
 using UnityEngine;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
-
+using UniRx;
 namespace GameScores
 {
 	public class BasketSingleScore{
+		public FloatReactiveProperty rx_weight = new FloatReactiveProperty(0.0f);
 		[Show]
-		public float weight {get; set;}
+		public float weight {
+			get {
+				return rx_weight.Value;
+			} 
+			set{
+				rx_weight.Value = value;
+			}
+		}
 		public BasketSingleScore chain_weight(float value){
 			weight = value;
 			return this;
 		}
+
+		public IntReactiveProperty rx_count = new IntReactiveProperty(0);
 		[Show]
-		public bool is_overflow {get; set;}
+		public int count {
+			get {
+				return rx_count.Value;
+			} 
+			set{
+				rx_count.Value = value;
+			}
+		}
+		public BasketSingleScore chain_count(int value){
+			count = value;
+			return this;
+		}
+
+		public BoolReactiveProperty rx_overflow = new BoolReactiveProperty(false);
+		[Show]
+		public bool is_overflow {
+			get {
+				return rx_overflow.Value;
+			} 
+			set {
+				rx_overflow.Value = value;
+			}
+		}
 		public BasketSingleScore chain_overflow(bool value){
 			is_overflow = value;
 			return this;
@@ -32,11 +65,13 @@ namespace GameScores
 
 		public BasketSingleScore(){
 			weight = 0.0f;
+			count = 0;
 			is_overflow = false;
 		}
 
 		public BasketSingleScore copy_from(BasketSingleScore that){
 			weight = that.weight;
+			count = that.count;
 			is_overflow = that.is_overflow;
 			return this;
 		}
@@ -47,7 +82,12 @@ namespace GameScores
 	}
 	public class BasketScore
 	{
-		public List<BasketSingleScore> baskets = new List<BasketSingleScore>();
+		public ReactiveCollection<BasketSingleScore> rx_baskets = new ReactiveCollection<BasketSingleScore>();
+		public List<BasketSingleScore> baskets{
+			get{ return rx_baskets.ToList(); }
+			set{ rx_baskets.SetRange(value);}
+		}
+
 		public IEnumerable<BasketSingleScore> accepted(GameSettings.WinCondition win){
 			return baskets.Where (basket=>basket.is_eligible(win.max_basket_weight, win.min_basket_weight));
 		}
@@ -62,7 +102,7 @@ namespace GameScores
 		}
 
 		public BasketScore copy_from(BasketScore that){
-			baskets = that.baskets.Select(basket => basket.copy_of()).ToList();
+			rx_baskets.SetRange (that.rx_baskets.Select (basket => basket.copy_of ()));
 			return this;
 		}
 		public BasketScore copy_of(){
