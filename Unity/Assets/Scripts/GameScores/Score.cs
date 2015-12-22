@@ -33,6 +33,10 @@ namespace GameScores {
 		public IEnumerable<StrawberrySingleScore> underweight_berries(string category){
 			return berries.get_category(category).underweight(settings.win_condition);
 		}
+		public IEnumerable<StrawberrySingleScore> total_berries(string category){
+			return berries.get_category (category).all_berries;
+		}
+
 
 		public Score copy_from(Score that){
 			settings.copy_from(that.settings);
