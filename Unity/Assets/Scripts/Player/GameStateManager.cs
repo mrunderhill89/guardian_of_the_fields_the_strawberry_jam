@@ -16,8 +16,8 @@ public class GameStateManager : BetterBehaviour {
 	public PaceManager cart_control;
 	public Vector3 gravity;
 	public StateMachine fsm;
-	public ScoreHandler scores;
 	public GameTimer timer;
+	public GameScoreComponent scores;
 	public List<string> drag_states = new List<string>();
 
 	Action lazy_log(string message){
@@ -37,7 +37,7 @@ public class GameStateManager : BetterBehaviour {
 		if (fsm == null)
 			fsm = gameObject.AddComponent<StateMachine> ();
 		if (scores == null)
-			scores = GetComponent<ScoreHandler>();
+			scores = GetComponent<GameScoreComponent>();
 	}
 	void Start () {
 		Physics.gravity = gravity;
@@ -116,8 +116,8 @@ public class GameStateManager : BetterBehaviour {
 					.on_entry(new StateEvent(()=>{
 						timer.started = false;
 						camera_control.set_target("pack");
-						//Clear all remaining strawberries in the field.
 						scores.lock_strawberries = true;
+						//Clear all remaining strawberries in the field.
 						foreach (StrawberryComponent berry in berry_state.get_strawberries("field")){
 							Destroy (berry.gameObject);
 						}
@@ -146,7 +146,6 @@ public class GameStateManager : BetterBehaviour {
 						}
 						scores.lock_baskets=true;
 						scores.record_score();
-						scores.save_scores();
 					}))
 				).add_child(
 				fsm.state("return_to_menu").on_entry(new StateEvent(()=>{

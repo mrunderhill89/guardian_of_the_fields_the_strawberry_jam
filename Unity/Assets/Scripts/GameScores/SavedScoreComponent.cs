@@ -20,11 +20,17 @@ public class SavedScores{
 		}
 		set{
 			rx_scores.Clear();
-			foreach (Score s in value){
-				rx_scores.Add(s);
+			if (value != null){
+				foreach (Score s in value){
+					rx_scores.Add(s);
+				}
 			}
 		}
 	}
+	public int Count{
+		get{ return scores.Count;}
+	}
+
 
 	public static string default_filename {
 		get{ return Application.streamingAssetsPath + "/Data/scores.yaml";}
@@ -54,7 +60,7 @@ public class SavedScores{
 			filename = default_filename;
 		StreamWriter fout = new StreamWriter(filename);
 		var serializer = new Serializer();
-		serializer.Serialize(fout, this);
+		serializer.Serialize(fout, scores);
 		fout.Close();
 		return this;
 	}
@@ -66,8 +72,30 @@ public class SavedScores{
 }
 
 public class SavedScoreComponent : BetterBehaviour {
+	[DontSerialize][Show]
 	public static SavedScores saved_scores;
 	void Awake () {
 		saved_scores = SavedScores.import_static ();
+	}
+	[Show]
+	public SavedScoreComponent export(string filename="")
+		{export_static (filename); return this;}
+	public static void export_static(string filename = ""){
+		saved_scores.export(filename);
+	}
+	[Show]
+	public SavedScoreComponent import(string filename="")
+		{import_static (filename); return this;}
+	public static void import_static(string filename = ""){
+		saved_scores.import(filename);
+	}
+	public static void record_score(Score score){
+		saved_scores.rx_scores.Add (score);
+	}
+	public static int Count{
+		get{ 
+			if (saved_scores == null) return 0;
+			return saved_scores.Count;
+		}
 	}
 }

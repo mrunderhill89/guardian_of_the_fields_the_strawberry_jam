@@ -1,15 +1,16 @@
 Spanish:
-  berries_gathered: Fresas Escogidas
-  berry_ripe: 'Madura:'
-  berry_overripe: 'Podrida:'
-  berry_underripe: 'Inmatura:'
-  berry_small: "Peque�ña:"
+  berries_label: Fresas
+  berries_gathered: Escogidas
+  berries_dropped: Tiradas
+  berry_ripe: Madura
+  berry_overripe: Podrida
+  berry_underripe: Inmatura
+  berry_small: Pequeña
   basket_label: Canastas
-  basket_accepted: 'Aceptado:'
-  basket_underweight: 'Insuficiente:'
-  basket_overweight: 'Demasiados:'
-  basket_overflow: 'Desbordante:'
-  berries_dropped: Fresas Tiradas
+  basket_accepted: Aceptado
+  basket_underweight: Insuficiente
+  basket_overweight: Demasiados
+  basket_overflow: Desbordante
   state_look: Buscando
   state_pick: Piscando
   state_pack: Empacando
@@ -99,17 +100,18 @@ Spanish:
   debug_free_berry: Muchas Fresas!
   help_ripeness: Madurez
 English:
-  berries_gathered: Strawberries Gathered
-  berry_ripe: 'Ripe:'
-  berry_overripe: 'Overripe:'
-  berry_underripe: 'Underripe:'
-  berry_small: 'Too Small:'
+  berries_label: Strawberries
+  berries_gathered: Gathered
+  berry_ripe: Ripe
+  berry_overripe: Overripe
+  berry_underripe: Underripe
+  berry_small: Too Small
   basket_label: Baskets
-  basket_accepted: 'Accepted:'
-  basket_underweight: 'Underweight:'
-  basket_overweight: 'Overweight:'
-  basket_overflow: 'Overflowing:'
-  berries_dropped: Strawberries Dropped
+  basket_accepted: Accepted
+  basket_underweight: Underweight
+  basket_overweight: Overweight
+  basket_overflow: Overflowing
+  berries_dropped: Dropped
   state_loading: Loading
   state_look: Looking
   state_pick: Picking
@@ -208,6 +210,12 @@ English:
   settings_randomize: Randomize
   settings_density: Berry Weight Multiplier
   settings_tutorial: Tutorial
+  time_date_recorded: Date Recorded
+  time_played_for: Played For
+  score_total_berries: Total Berries
+  score_total_weight: Total Weight
+  score_avg_weight: Average Weight
+  score_avg_ripeness: Average Ripeness
   language_english: English
   language_spanish: Spanish
   debug_quick_start: Quick Start

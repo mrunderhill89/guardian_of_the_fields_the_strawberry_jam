@@ -241,11 +241,22 @@ namespace UniRx
 				collectionContentsProperty = collectionContents.ToReadOnlyReactiveProperty<CollectionContentsEvent<T>>(new CollectionContentsEvent<T>(this));
             return collectionContentsProperty;
         }
-		
+
+		public void AddRange(IEnumerable<T> source){
+			foreach (T value in source) {
+				Add (value);
+			}
+		}
+
+		public void SetRange(IEnumerable<T> source){
+			Clear ();
+			AddRange (source);
+		}
+
 		public ReactiveCollection<TResult> RxSelect<TResult>(System.Func<T, TResult> map){
 			var that = new ReactiveCollection<TResult>(this.Select(map));
 			ObserveAdd().Subscribe((evn)=>{
-				that.SetItem(evn.Index, map(evn.Value));
+				that.InsertItem(evn.Index, map(evn.Value));
 			});
 			ObserveMove().Subscribe((evn)=>{
 				that.MoveItem(evn.OldIndex, evn.NewIndex);
@@ -285,6 +296,46 @@ namespace UniRx
 					that.Add(evn.NewValue);
 				}
 			});
+			//Since we aren't maintaining element order, anyway, we don't care about movement.
+			ObserveRemove().Subscribe((evn)=>{
+				if (that.Contains(evn.Value)){
+					that.Remove(evn.Value);
+				}
+			});
+			return that;
+		}
+
+		public ReactiveCollection<T> RxWhere(IObservable<System.Func<T,bool>> test_source){
+			var that = new ReactiveCollection<T> ();
+			//Whenever our test condition changes, we need to start over.
+			test_source.Subscribe ((test) => {
+				that.Clear();
+				foreach(T value in this){
+					if (test(value)) that.Add(value);
+				}
+			});
+			ObserveAdd ().WithLatestFrom(test_source, (evn,test) => {
+				if (test (evn.Value))
+					return evn.Value;
+				return default(T);
+			}).Where ((T value)=>{return !value.Equals(default(T));})
+				.Subscribe ((value) => {that.Add (value);});
+
+			ObserveReplace().WithLatestFrom (test_source, (evn,test) => {
+				var results = new UniRx.Tuple<T,T>(
+					evn.OldValue, 
+					test(evn.NewValue)? evn.NewValue:evn.OldValue);
+				return results;
+			}).Where(results=>!results.Item1.Equals(results.Item2))
+			.Subscribe((results)=>{
+				if (that.Contains(results.Item1)){
+					that.Remove(results.Item1);
+				}
+				if (!results.Item2.Equals(default(T))){
+					that.Add(results.Item2);
+				}
+			});
+			//Removals don't require testing, so they're the same as the non-reactive version.
 			ObserveRemove().Subscribe((evn)=>{
 				if (that.Contains(evn.Value)){
 					that.Remove(evn.Value);
