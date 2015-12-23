@@ -41,44 +41,54 @@ public class GameSettingsComponent : BetterBehaviour
 
 	[Show]
 	public GameSettingsComponent import(string filename = ""){
-		current_rules.import (filename);
+		current_rules = Model.import_static(filename);
 		return this;
 	}
 
 	[Show]
-	public GameSettingsComponent apply(){
+	public void apply(){
 		working_rules.copy_from (current_rules);
-		return revert();
 	}
 	[Show]
-	public GameSettingsComponent revert(){
-		current_rules = working_rules;
-		return this;
+	public void revert(){
+		current_rules.copy_from (working_rules);
 	}
 	[Show]
 	public GameSettingsComponent export(string filename = ""){
 		current_rules.export (filename);
 		return this;
 	}
+	
+	public ReactiveProperty<bool> rx_is_working_rules;
+	private static IDisposable sync_seed;
 	void Awake(){
 		//Synchronize Unity's random number seed with the working ruleset's.
-		rx_working_rules.SelectMany((rules)=>{
-			if (rules == null)
-				return Observable.Never<UniRx.Tuple<Model,bool>>();
-			return rules.randomness.rx_randomize.Select((randomize)=>{
-				return new UniRx.Tuple<Model,bool>(rules, randomize);
+		if (sync_seed == null){
+			sync_seed = rx_working_rules.SelectMany((rules)=>{
+				if (rules == null)
+					return Observable.Never<UniRx.Tuple<Model,bool>>();
+				return rules.randomness.rx_randomize.Select((randomize)=>{
+					return new UniRx.Tuple<Model,bool>(rules, randomize);
+				});
+			}).ObserveOnMainThread().Subscribe((tuple)=>{
+				Model rules = tuple.Item1;
+				bool randomize = tuple.Item2;
+				if (randomize){
+					rules.randomness.seed = UnityEngine.Random.seed;
+				} else {
+					UnityEngine.Random.seed = rules.randomness.seed;
+				}
 			});
-		}).ObserveOnMainThread().Subscribe((tuple)=>{
-			Model rules = tuple.Item1;
-			bool randomize = tuple.Item2;
-			if (randomize){
-				rules.randomness.seed = UnityEngine.Random.seed;
-			} else {
-				UnityEngine.Random.seed = rules.randomness.seed;
-			}
-		});
+		}
 		rx_working_rules.Value = Model.import_static();
-		current_rules = working_rules;
+		current_rules = working_rules.copy_of();
+		if (current_rules.randomness.randomize)
+			current_rules.randomness.seed = UnityEngine.Random.seed;
+		rx_is_working_rules = new ReactiveProperty<bool>();
+	}
+	
+	void Update(){
+		rx_is_working_rules.Value = (working_rules == current_rules);
 	}
 	#endregion
 

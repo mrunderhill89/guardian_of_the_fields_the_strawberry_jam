@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UniRx;
 
 namespace GameSettings{
-public class StrawberryGeneration
+public class StrawberryGeneration : IEquatable<StrawberryGeneration>
 {
 
   #region Attributes
@@ -79,6 +79,16 @@ public class StrawberryGeneration
 			max_ripeness = that.max_ripeness;
 			density = that.density;
 			return this;
+		}
+		
+		public bool Equals(StrawberryGeneration that){
+			return System.Object.ReferenceEquals(this,that) || 
+			(max_berries_in_field == that.max_berries_in_field
+			&& min_size == that.min_size
+			&& max_size == that.max_size
+			&& min_ripeness == that.min_ripeness
+			&& max_ripeness == that.max_ripeness
+			&& density == that.density);
 		}
 
 }

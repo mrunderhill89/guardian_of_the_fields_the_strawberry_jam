@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UniRx;
 
 namespace GameSettings{
-public class Time
+public class Time : IEquatable<GameSettings.Time>
 {
 
   #region Attributes
@@ -66,6 +66,13 @@ public class Time
 			end_hour = that.end_hour;
 			return this;
 		}
-
+		public bool Equals(GameSettings.Time that){
+			return System.Object.ReferenceEquals(this,that) || 
+			(infinite_length == that.infinite_length
+			&& end_early == that.end_early
+			&& game_length == that.game_length
+			&& start_hour == that.start_hour 
+			&& end_hour == that.end_hour);
+		}
 	}
 }

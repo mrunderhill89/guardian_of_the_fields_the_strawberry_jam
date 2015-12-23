@@ -33,6 +33,8 @@ Spanish:
   menu_quit: Salir del Juego
   menu_back: "Atras"
   menu_next: Siguiente
+  menu_ok: OK
+  menu_cancel: Cancelar
   controls_up: Arriba
   controls_left: Izquierda
   controls_down: Abajo
@@ -67,8 +69,10 @@ Spanish:
   input_float: 'Numero decimal (##.##)'
   input_integer: 'Numero entero (###)'
   input_filename: Nombre de archivo
-  file_load: Carge archivo
-  file_save: Guarde archivo
+  file_load: Carge
+  file_save: Guarde
+  file_apply: Aplicar
+  file_revert: Revertir
   settings_seed: Numerdo de Semillas Incierto
   settings_debug: Opciones de Depurracion
   settings_max_berries: Limite de Fresas en el Campo
@@ -139,6 +143,8 @@ English:
   menu_quit: Quit Game
   menu_back: Back
   menu_next: Next
+  menu_ok: OK
+  menu_cancel: Cancel
   controls_up: Up
   controls_left: Left
   controls_down: Down
@@ -186,6 +192,8 @@ English:
   input_filename: Filename
   file_load: Load
   file_save: Save
+  file_apply: Apply
+  file_revert: Revert
   settings_seed: Random Number Seed
   settings_debug: Debug Options
   settings_max_berries: Max Berries in Field

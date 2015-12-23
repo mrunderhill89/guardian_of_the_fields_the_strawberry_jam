@@ -12,7 +12,7 @@ using UniRx;
 
 namespace GameSettings{
 	[Serializable]
-	public class Model
+	public class Model : IEquatable<Model>
 	{
 		#region Properties
 		public Randomness randomness { get; set;}
@@ -84,10 +84,9 @@ namespace GameSettings{
 			Model that = import_static(filename);
 			if (that == null) return this;
 			copy_from(that);
-			//Fix so that randomize settings are correctly copied from files, but not saved games.
-			this.randomness.randomize = that.randomness.randomize;
 			return this;
 		}
+		
 		public static Model import_static(string filename = "")
 		{
 			if (filename == "")
@@ -138,6 +137,15 @@ namespace GameSettings{
 			return new Model().copy_from(this);
 		}
 
+		public bool Equals(Model that){
+			return System.Object.ReferenceEquals(this,that) || 
+			(flags.Equals(that.flags)
+			&& randomness.Equals(that.randomness)
+			&& strawberry.Equals(that.strawberry)
+			&& time.Equals(that.time)
+			&& breaks.Equals(that.breaks)
+			&& win_condition.Equals(that.win_condition));
+		}
 		#endregion
 
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UniRx;
 
 namespace GameSettings{
-public class Flags
+public class Flags : IEquatable<Flags>
 {
 
   #region Attributes
@@ -31,6 +31,12 @@ public class Flags
 			tutorial = that.tutorial;
 			cheats = that.cheats;
 			return this;
+		}
+		
+		public bool Equals(Flags that){
+			return System.Object.ReferenceEquals(this,that) || 
+			(tutorial == that.tutorial
+			&& cheats == that.cheats);
 		}
 	}
 

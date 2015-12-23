@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 namespace GameSettings{
-public class WinCondition
+public class WinCondition : IEquatable<WinCondition>
 {
 
   #region Attributes
@@ -106,6 +106,14 @@ public class WinCondition
 			penalties = that.penalties;
 			return this;
 		}
-		
+		public bool Equals (WinCondition that){
+			return System.Object.ReferenceEquals(this,that) || (
+				min_ripeness == that.min_ripeness
+				&& max_ripeness == that.max_ripeness
+				&& min_size == that.min_size
+				&& min_basket_weight == that.min_basket_weight
+				&& max_basket_weight == that.max_basket_weight
+			);
+		}
 	}
 }

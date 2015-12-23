@@ -6,7 +6,7 @@ using UnityEngine;
 using UniRx;
 
 namespace GameSettings{
-public class Randomness
+public class Randomness : IEquatable<Randomness>
 {
   #region Attributes
 	public IntReactiveProperty rx_seed = new IntReactiveProperty();
@@ -32,8 +32,14 @@ public class Randomness
 
 	public Randomness copy_from(Randomness that){
 		seed = that.seed;
-		randomize = false;
+		randomize = that.randomize;
 		return this;
+	}
+	
+	public bool Equals(Randomness that){
+		return System.Object.ReferenceEquals(this,that) || 
+		(seed == that.seed
+		|| (randomize == true && that.randomize == true));
 	}
   #endregion
 }

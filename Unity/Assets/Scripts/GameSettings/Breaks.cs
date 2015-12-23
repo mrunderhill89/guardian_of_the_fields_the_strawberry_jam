@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UniRx;
 
 namespace GameSettings{
-public class Breaks
+public class Breaks : IEquatable<Breaks>
 {
 
   #region Attributes
@@ -37,6 +37,11 @@ public class Breaks
 			distance = that.distance;
 			return this;
 		}
-
+		
+		public bool Equals(Breaks that){
+			return System.Object.ReferenceEquals(this,that) || 
+			(length == that.length
+			&& distance == that.distance);
+		}
 }
 }
