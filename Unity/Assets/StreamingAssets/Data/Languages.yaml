@@ -7,6 +7,7 @@ Spanish:
   berry_underripe: Inmatura
   berry_small: Pequeña
   basket_label: Canastas
+  basket_single: Canasta
   basket_accepted: Aceptado
   basket_underweight: Insuficiente
   basket_overweight: Demasiados
@@ -111,6 +112,7 @@ English:
   berry_underripe: Underripe
   berry_small: Too Small
   basket_label: Baskets
+  basket_single: Basket
   basket_accepted: Accepted
   basket_underweight: Underweight
   basket_overweight: Overweight

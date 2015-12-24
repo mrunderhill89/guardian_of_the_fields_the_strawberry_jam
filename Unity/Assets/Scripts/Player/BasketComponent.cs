@@ -35,6 +35,7 @@ public class BasketComponent : BetterBehaviour {
 		remove = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "remove");
 		valid_positions = new Dictionary<GameObject, Vector3>();
 		score_data = new GameScores.BasketSingleScore();
+		score_data.id = rx_baskets.Count+1;
 		rx_baskets.Add(this);
 	}
 

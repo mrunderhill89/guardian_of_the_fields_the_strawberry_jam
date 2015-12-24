@@ -32,11 +32,19 @@ public class BasketIcon : BetterBehaviour {
 	public TextMesh count_3d;
 	public Text weight;
 	public TextMesh weight_3d;
+	public Text id_text;
+	public TextMesh id_text_3d;
 	public TooltipBroadcast tooltip;
 
+	[DontSerialize]
 	public ReadOnlyReactiveProperty<Sprite> rx_sprite;	
+	[DontSerialize]
+	public ReadOnlyReactiveProperty<String> rx_id_text;
+	[DontSerialize]
 	public ReadOnlyReactiveProperty<String> rx_count_text;
+	[DontSerialize]
 	public ReadOnlyReactiveProperty<String> rx_weight_text;
+	[DontSerialize]
 	public ReadOnlyReactiveProperty<String> rx_tooltip_text;
 	
 	public enum BasketCondition{
@@ -53,6 +61,20 @@ public class BasketIcon : BetterBehaviour {
 			score = component.score_data;
 		if (win == null)
 			win = GameSettingsComponent.working_rules.win_condition;
+			
+		rx_id_text = rx_score
+			.SelectMany(s=>s.rx_id)
+			.Select(id=>{
+				return LanguageTable.get("basket_single")+" #"+id.ToString();
+			})
+			.ToReadOnlyReactiveProperty<string>();
+		rx_id_text.Subscribe((text)=>{
+			if (id_text != null)
+				id_text.text = text;
+			if (id_text_3d != null)
+				id_text_3d.text = text;
+		});
+		
 		rx_count_text = rx_score
 			.SelectMany(s=>s.rx_count)
 			.Select(count=>count.ToString())

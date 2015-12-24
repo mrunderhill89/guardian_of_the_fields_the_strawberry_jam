@@ -8,6 +8,7 @@ using UniRx;
 namespace GameScores
 {
 	public class BasketSingleScore{
+		[DontSerialize]
 		public FloatReactiveProperty rx_weight = new FloatReactiveProperty(0.0f);
 		[Show]
 		public float weight {
@@ -22,7 +23,7 @@ namespace GameScores
 			weight = value;
 			return this;
 		}
-
+		[DontSerialize]
 		public IntReactiveProperty rx_count = new IntReactiveProperty(0);
 		[Show]
 		public int count {
@@ -37,7 +38,22 @@ namespace GameScores
 			count = value;
 			return this;
 		}
-
+		[DontSerialize]
+		public IntReactiveProperty rx_id = new IntReactiveProperty(1);
+		[Show]
+		public int id {
+			get {
+				return rx_id.Value;
+			} 
+			set{
+				rx_id.Value = value;
+			}
+		}
+		public BasketSingleScore chain_id(int value){
+			id = value;
+			return this;
+		}
+		[DontSerialize]
 		public BoolReactiveProperty rx_overflow = new BoolReactiveProperty(false);
 		[Show]
 		public bool is_overflow {
@@ -70,6 +86,7 @@ namespace GameScores
 		}
 
 		public BasketSingleScore copy_from(BasketSingleScore that){
+			id = that.id;
 			weight = that.weight;
 			count = that.count;
 			is_overflow = that.is_overflow;
