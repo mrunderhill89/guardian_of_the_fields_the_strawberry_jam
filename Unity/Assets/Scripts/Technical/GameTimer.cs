@@ -27,6 +27,9 @@ public class GameTimer : BetterBehaviour {
 	public static float to_f_hours(float t){
 		return t/F_SECONDS_IN_HOUR;
 	}
+	public static string to_stopwatch(float t){
+		return to_hours(t).ToString()+"'"+to_minutes(t).ToString("00")+"\""+to_seconds(t).ToString("00")+"."+to_milliseconds(t).ToString("00");
+	}
 	[Serializable]
 	public class Time{
 		public float total = 0.0f;
@@ -71,7 +74,7 @@ public class GameTimer : BetterBehaviour {
 		[Show]
 		public string as_stopwatch
 		{
-			get{return hours.ToString()+"'"+minutes.ToString("00")+"\""+seconds.ToString("00")+"."+milliseconds.ToString("00");}
+			get{ return GameTimer.to_stopwatch(total);}
 		}
 		[Show]
 		public string as_clock{

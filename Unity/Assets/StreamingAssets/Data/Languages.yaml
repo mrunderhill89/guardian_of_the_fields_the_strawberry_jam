@@ -12,10 +12,16 @@ Spanish:
   basket_underweight: Insuficiente
   basket_overweight: Demasiados
   basket_overflow: Desbordante
+  state_loading: Cargando
   state_look: Buscando
   state_pick: Piscando
   state_pack: Empacando
+  state_weigh: Peso Inicial
+  state_rearrange: Componga Fresas
+  state_final: Peso Final
   move_while_pack: Moverse mientras que Empaca
+  date: Fecha
+  time: Hora
   pace_reverse: Reversa
   pace_slow: Lento
   pace_medium: Mediano
@@ -51,6 +57,17 @@ Spanish:
   controls_keyboard: Teclado
   controls_mouse: "Raton (En la pantalla)"
   controls_keypad: "Teclas de Flecha y Teclado Numerico"
+  controls_pov: Punto de Vista
+  controls_pace: "Paso (Como Camina)"
+  controls_left_click: "Click Izquierdo: Pizcar"
+  controls_left_hold: "Arrastrar Izquierdo: Detener/Mover"
+  controls_left_release: "Soltar Izquierdo: Tirar"
+  controls_scroll_up: "Para Arriba: Empujar"
+  controls_scroll_down: "Para Abajo: Jalar"
+  controls_right_click: "Click Derecho: Nada"
+  controls_left_mouse: Boton Izquierdo
+  controls_right_mouse: Boton Derecho
+  controls_mouse_wheel: Llanta del Raton
   loading_splash:
     Hola!
     El juego esta tomando un poco de tiempo para generar los campos de fresas.
@@ -228,6 +245,35 @@ English:
   score_avg_ripeness: Average Ripeness
   language_english: English
   language_spanish: Spanish
+  credits_title: "Guardians of the Fields: The Strawberry Jam"
+  credits_class: "Game Over: Game Design Class"
+  credits_dev_team: Development Team
+  credits_producer: Producer
+  credits_teacher: Teacher
+  credits_ta: Teaching Assistants
+  credits_designers: Game Designers
+  credits_prototype: Prototype Designers
+  credits_programmer: Lead Programmer
+  credits_artists: Artists
+  credits_sound: Sound Design
+  credits_students: Students/Assistant Designers
+  credits_thanks: Special Thanks
+  credits_farmworkers: And to the hundreds of thousands of farmworkers in California and nationw-ide, who grow our food every day!
+  credits_wrenner_gren: Wrenner-Gren Foundation
+  credits_digital_nest: Digital Nest
+  credits_pajaro_teachers: 
+    Pájaro Valley
+    Federation of Teachers
+  credits_migration:
+    PVUSD Migrant Education 
+    District XI
+  credits_UCSC:
+    University of California, 
+    Santa Cruz
+  credits_fresno_state: Fresno State University
+  credits_unity: Unity Technologies
+  time_finished: Finished
+  time_not_finished: Did Not Finish
   debug_quick_start: Quick Start
   debug_end_game: End Game
   debug_free_berry: Make it Rain!
