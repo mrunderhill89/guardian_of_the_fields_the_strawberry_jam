@@ -1,6 +1,6 @@
 - settings:
     randomness:
-      seed: 1450922940
+      seed: 1368742773
       randomize: true
     flags:
       tutorial: true
@@ -28,8 +28,54 @@
       start_hour: 6
       end_hour: 18
   time:
-    date_recorded: 2015-12-24T02:17:43.9701030Z
-    played_for: 0.080448
+    date_recorded: 2015-12-24T07:53:45.1115800-08:00
+    played_for: 0.0885077
+  berries:
+    categories:
+      gathered:
+        all_berries: []
+      dropped:
+        all_berries: []
+  baskets:
+    baskets:
+    - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - id: 6
+- settings:
+    randomness:
+      seed: -357523463
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.06
+      max_size: 0.06
+      max_ripeness: 2
+      density: 2400
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      min_ripeness: 0.5
+      max_ripeness: 1.5
+      min_basket_weight: 15
+      max_basket_weight: 17
+      penalties:
+        Small: 0
+        Medium: 0
+        Big: 0
+    time:
+      end_early: true
+      game_length: 2400
+      start_hour: 6
+      end_hour: 18
+  time:
+    date_recorded: 2015-12-24T15:54:07.8542220Z
+    played_for: 0.0876372
   berries:
     categories:
       gathered:

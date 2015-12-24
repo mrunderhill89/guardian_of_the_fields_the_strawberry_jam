@@ -71,7 +71,7 @@ public class BasketComponent : BetterBehaviour {
 			}));
 	}
 	void OnDestroy(){
-		baskets.Remove(this);
+		rx_baskets.Remove(this);
 	}
 
 	void ParentToBasket(Automata a){
