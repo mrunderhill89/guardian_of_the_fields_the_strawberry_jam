@@ -8,6 +8,7 @@ namespace GameScores {
 		public GameSettings.Model settings { get; set; }
 		public TimeScore time {get; set;}
 		public StrawberryScore berries { get; set;}
+		[Show]
 		public BasketScore baskets { get; set; }
 
 		public Score(){

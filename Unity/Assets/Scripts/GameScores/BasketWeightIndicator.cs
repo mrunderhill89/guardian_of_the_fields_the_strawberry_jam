@@ -27,14 +27,7 @@ public class BasketWeightIndicator : BetterBehaviour {
 	public void update(float value){
 	if (text != null){
 		text.text = value.ToString(format);
-
-		if (basket.locked){
-			if (basket.second_chance){
-				text.color = second_chance_color;
-			} else {
-				text.color = locked_color;
-			}
-		} else if (basket.is_underweight()){
+		if (basket.is_underweight()){
 			text.color = under_weight;
 				sprite.sprite = under_sprite;
 		} else if (basket.is_overweight()){

@@ -24,22 +24,34 @@ public class BasketGrid : BetterBehaviour {
 		}
 	}
 	void Start(){
-		source.rx_score.Subscribe ((score) => {
-			views.Clear ();
+		source.rx_score.Subscribe((score)=>{
+			views.Clear();
 			if (score != null){
-				views.AddRange(score.baskets.baskets.Select((basket)=>{
-					GameObject obj = GameObject.Instantiate(prefab);
-					obj.GetComponent<BasketIcon>().score = basket;
-					obj.GetComponent<BasketIcon>().win = score.settings.win_condition;
-					obj.transform.SetParent(place_icons_here,false);
-					return obj;
+				//Get current icons
+				views.AddRange(score.baskets.rx_baskets.Select((basket)=>{
+					return create_icon(basket, score.settings.win_condition);
 				}));
+				score.baskets.rx_baskets.ObserveAdd().Subscribe((evn)=>{
+					views.Add(create_icon(evn.Value, score.settings.win_condition));
+				});
+				score.baskets.rx_baskets.ObserveRemove().Subscribe((evn)=>{
+					views.RemoveAt(evn.Index);
+				});
+
 			}
 		});
 		views.ObserveRemove ().Subscribe ((evn) => {
 			Destroy(evn.Value);
 		});
 	}
+	
+	GameObject create_icon(BasketSingleScore _score, GameSettings.WinCondition _win){
+		GameObject obj = GameObject.Instantiate(prefab);
+		obj.GetComponent<BasketIcon>().chain_score(_score).chain_win(_win);
+		obj.transform.SetParent(place_icons_here, false);
+		return obj;
+	}
+	
 	void OnDestroy(){
 		views.Clear();
 	}

@@ -6,9 +6,9 @@ using GameScores;
 using Vexe.Runtime.Types;
 using UniRx;
 public class GameScoreComponent : BetterBehaviour, IScoreSource {
-	[DontSerialize][Show]
 	protected ReactiveProperty<GameScores.Score> _rx_score 
 		= new ReactiveProperty<GameScores.Score>();
+	[Show]
 	public ReactiveProperty<Score> rx_score{
 		get { return _rx_score;}
 		private set{ _rx_score = value;}
@@ -25,6 +25,9 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 		GameSettingsComponent.rx_working_rules.Subscribe ((settings) => {
 			score.settings = settings;
 		});
+		score.baskets.rx_baskets = BasketComponent.rx_baskets.RxSelect(comp=>{
+			return comp.score_data;
+		});
 	}
 
 	public bool lock_strawberries = false;
@@ -36,12 +39,6 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 			score.berries.get_category ("dropped").from_state_machine ("fall");
 		}
 		if (!lock_baskets) {
-			score.baskets.baskets = BasketComponent.baskets.Select<BasketComponent,BasketSingleScore> ((BasketComponent component) => {
-				return new BasketSingleScore ()
-					.chain_weight (component.total_weight)
-					.chain_overflow (component.is_overflow ())
-					.chain_count(component.slot.count());
-			}).ToList();
 		}
 		if (!lock_timer) {
 			score.time.played_for = timer.time.total;

@@ -83,9 +83,12 @@ namespace GameScores
 	public class BasketScore
 	{
 		public ReactiveCollection<BasketSingleScore> rx_baskets = new ReactiveCollection<BasketSingleScore>();
+		[Show]
 		public List<BasketSingleScore> baskets{
 			get{ return rx_baskets.ToList(); }
-			set{ rx_baskets.SetRange(value);}
+			set{
+				rx_baskets.SetRange(value);
+			}
 		}
 
 		public IEnumerable<BasketSingleScore> accepted(GameSettings.WinCondition win){

@@ -141,9 +141,6 @@ public class GameStateManager : BetterBehaviour {
 				).add_child(
 				fsm.state("final_tally").on_entry(new StateEvent(()=>{
 						//Lock all the baskets so that dragging isn't possible anymore.
-						foreach (BasketComponent basket in BasketComponent.baskets){
-							basket.locked = true;
-						}
 						scores.lock_baskets=true;
 						scores.record_score();
 					}))

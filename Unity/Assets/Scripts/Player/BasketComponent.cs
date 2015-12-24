@@ -8,34 +8,34 @@ using System;
 using UniRx;
 
 public class BasketComponent : BetterBehaviour {
+	[DontSerialize]
+	public static ReactiveCollection<BasketComponent> rx_baskets = new ReactiveCollection<BasketComponent>();
+	public static List<BasketComponent> baskets{
+		get{ return rx_baskets.ToList();}
+		private set{ rx_baskets.SetRange(value); }
+	}
+
 	public State slot;
 	public Transition drop;
 	public Transition remove;
 	public Transform spawn_point;
-	public static List<BasketComponent> baskets = new List<BasketComponent>();
 	public OverflowDetector overflow;
 	public BasketWeightIndicator weight_text;
+	[DontSerialize]
+	public GameScores.BasketSingleScore score_data;
 
-	protected bool _locked = false;
-	[Show]
-	public bool locked{
-		get{ return _locked; }
-		set{ _locked = value; update_text(); }
-	}
-	protected bool _second_chance = false;
-	[Show]
-	public bool second_chance{
-		get{ return _second_chance; }
-		set{ _second_chance = value; update_text(); }
+	public float total_weight {
+		get{ return score_data.weight; }
 	}
 
 	protected Dictionary<GameObject, Vector3> valid_positions;
 	void Awake () {
-		baskets.Add(this);
 		slot = NamedBehavior.GetOrCreateComponentByName<State>(gameObject, "slot");
 		drop = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "deposit");
 		remove = NamedBehavior.GetOrCreateComponentByName<Transition>(gameObject, "remove");
 		valid_positions = new Dictionary<GameObject, Vector3>();
+		score_data = new GameScores.BasketSingleScore();
+		rx_baskets.Add(this);
 	}
 
 	void Start(){
@@ -43,8 +43,11 @@ public class BasketComponent : BetterBehaviour {
 		GameStateManager player_state = GameStateManager.main;
 		if (overflow == null)
 			overflow = GetComponentInChildren<OverflowDetector> ();
-		overflow.on_panic (update_text)
-			.on_relax(update_text);
+		overflow.on_panic(()=>{
+			score_data.is_overflow = true;
+		}).on_relax(()=>{
+			score_data.is_overflow = false;
+		});
 		slot.chain_parent (state_machine.fsm.state("basket"))
 			.on_entry (new StateEvent(ParentToBasket))
 			.on_exit (new StateEvent(UnparentToBasket))
@@ -57,63 +60,56 @@ public class BasketComponent : BetterBehaviour {
 				if (a.gameObject.GetComponent<StrawberryComponent>() == null){
 					return false;
 				}
-				return player_state.can_drag() && !this.locked;
+				return player_state.can_drag();
 			}));
 		remove.chain_from(slot)
 			.chain_to (state_machine.fsm.state("drag"))
 			.chain_auto_run(false)
 			.add_test(new TransitionTest(()=>{
-				return player_state.can_drag() && !this.locked;
+				return player_state.can_drag();
 			}));
 	}
-
-	void update_text(){
-		if (weight_text != null){
-			weight_text.update(total_weight);
-		}
-	}
-
 	void OnDestroy(){
 		baskets.Remove(this);
 	}
 
 	void ParentToBasket(Automata a){
 		a.gameObject.transform.SetParent(transform, true);
-		update_text();
+		update_stats();
 	}
 
 	void UnparentToBasket(Automata a){
 		a.gameObject.transform.SetParent(null, true);
-		update_text();
+		update_stats();
 	}
 
-	[Show]
-	public float total_weight{
-		get{
-			if (slot == null)
-				return 0.0f;
-			return slot.visitors.Select((Automata a) => {
-				StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
-				if (sb == null) return 0.0f;
-				return sb.weight;
-			}).Aggregate<float,float>(0.0f, (total, next) => {
-				return total + next;
-			});
-		}
+	void update_stats(){
+		score_data.weight = slot.visitors.Select((Automata a) => {
+			StrawberryComponent sb = a.GetComponent<StrawberryComponent> ();
+			if (sb == null) return 0.0f;
+			return sb.weight;
+		}).Aggregate<float,float>(0.0f, (total, next) => {
+			return total + next;
+		});
+		score_data.count = slot.count();
 	}
 
 	public bool is_overweight(){
-		return total_weight > GameSettingsComponent.working_rules.win_condition.max_basket_weight;
+		return score_data.is_overweight(GameSettingsComponent.working_rules.win_condition.max_basket_weight);
 	}
 
 	public bool is_underweight(){
-		return total_weight < GameSettingsComponent.working_rules.win_condition.min_basket_weight;
+		return score_data.is_underweight(GameSettingsComponent.working_rules.win_condition.min_basket_weight);
+	}
+
+	public bool is_overflow(){
+		return overflow.is_overflow();
 	}
 
 	void UpdatePhysics(Automata a){
 		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
 		if (body != null) {
-			if (locked || !GameStateManager.main.basket_physics_enabled()){
+			if (!GameStateManager.main.basket_physics_enabled()){
 				body.isKinematic = true;
 			} else {
 				body.isKinematic = false;
@@ -149,11 +145,7 @@ public class BasketComponent : BetterBehaviour {
 			valid_positions.Remove(obj);
 		}
 	}
-
-	public bool is_overflow(){
-		return overflow.is_overflow();
-	}
-
+	
 	public IEnumerable<StrawberryComponent> get_gathered_strawberries(){
 		StrawberryComponent next_component;
 		foreach(Automata a in slot.visitors){
@@ -173,7 +165,7 @@ public class BasketComponent : BetterBehaviour {
 	public static BasketComponent get_lightest_basket(){
 		BasketComponent lightest = null;
 		foreach(BasketComponent basket in baskets){
-			if (lightest == null || basket.total_weight < lightest.total_weight){
+			if (lightest == null || basket.score_data.weight < lightest.score_data.weight){
 				lightest = basket;
 			}
 		}
