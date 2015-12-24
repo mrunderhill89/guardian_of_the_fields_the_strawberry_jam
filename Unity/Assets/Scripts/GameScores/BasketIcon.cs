@@ -62,12 +62,10 @@ public class BasketIcon : BetterBehaviour {
 		if (win == null)
 			win = GameSettingsComponent.working_rules.win_condition;
 			
-		rx_id_text = rx_score
-			.SelectMany(s=>s.rx_id)
-			.Select(id=>{
-				return LanguageTable.get("basket_single")+" #"+id.ToString();
-			})
-			.ToReadOnlyReactiveProperty<string>();
+		rx_id_text = LanguageTable.get_property("basket_single")
+			.CombineLatest(rx_score.SelectMany(rx_score.SelectMany(s=>s.rx_id)), (text, id)=>{
+				return text+" #"+id.ToString();
+			}).ToReadOnlyReactiveProperty<string>();
 		rx_id_text.Subscribe((text)=>{
 			if (id_text != null)
 				id_text.text = text;

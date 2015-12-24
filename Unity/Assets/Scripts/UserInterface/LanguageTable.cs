@@ -254,4 +254,8 @@ public class LanguageTable : BetterBehaviour {
 			language = dictionary.current_language.Value;
 		return dictionary.get(key, language, read_only);
 	}
+
+	public static ReadOnlyReactiveProperty<string> get_property(string key, bool read_only = false){
+		return dictionary.get_property(key,read_only);
+	}
 }

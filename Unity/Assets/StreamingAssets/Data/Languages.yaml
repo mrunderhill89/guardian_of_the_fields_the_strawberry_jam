@@ -23,6 +23,7 @@ Spanish:
   date: Fecha
   time: Hora
   pace_reverse: Reversa
+  pace_stop: Detenido
   pace_slow: Lento
   pace_medium: Mediano
   pace_fast: Rapido
@@ -115,6 +116,11 @@ Spanish:
   settings_randomize: Hacer Insierto
   settings_density: Multiplicador de Peso para Fresas
   settings_tutorial: Tutorial
+  score_total_berries: Fresas Totales
+  time_date_recorded: Fecha Registrado
+  time_played_for: Jugado Para
+  time_finished: Terminado
+  time_not_finished: No Terminó
   language_english: Inglés
   language_spanish: Español
   debug_quick_start: Empiece Rapido

@@ -26,18 +26,26 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 	public Text game_length;
 	public Text finished;
 
+	[DontSerialize]
+	ReadOnlyReactiveProperty<string> rx_finished;
+
 	void Awake () {
 		rx_score.Subscribe((s)=>{
 			if (s != null){
 				date_time.text = s.time.date_recorded_local().ToString();
 				play_time.text = GameTimer.to_stopwatch(s.time.played_for);
 				game_length.text = GameTimer.to_stopwatch(s.settings.time.game_length);
-				if (s.time.played_for >= s.settings.time.game_length){
-					finished.text = LanguageTable.get("time_finished");
-				} else {
-					finished.text = LanguageTable.get("time_not_finished");
-				}
 			}
+		});
+		rx_finished = rx_score.SelectMany(s=>{
+			if (s == null) return Observable.Never<String>();
+			if (s.time.played_for < s.settings.time.game_length){
+				return LanguageTable.get_property("time_not_finished");
+			}
+			return LanguageTable.get_property("time_finished");
+		}).ToReadOnlyReactiveProperty<string>();
+		rx_finished.Subscribe(t=>{
+			finished.text = t;
 		});
 	}
 }

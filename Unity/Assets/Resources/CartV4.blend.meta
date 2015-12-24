@@ -4,7 +4,31 @@ timeCreated: 1450887478
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Frame
+    100004: Tire
+    100006: Wheel
+    100008: Wheel_001
+    400000: //RootNode
+    400002: Frame
+    400004: Tire
+    400006: Wheel
+    400008: Wheel_001
+    2300000: Frame
+    2300002: Tire
+    2300004: Wheel
+    2300006: Wheel_001
+    3300000: Frame
+    3300002: Tire
+    3300004: Wheel
+    3300006: Wheel_001
+    4300000: Tire
+    4300002: Wheel_001
+    4300004: Wheel
+    4300006: Frame
+    7400000: Default Take
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
