@@ -126,6 +126,13 @@ public class State : NamedBehavior
 			return a.is_travelling();
 		}) != null;
 	}
+	
+	public State eject_all(int steps = 1){
+		foreach(Automata a in visitors.ToArray()){
+			a.eject(steps);
+		}
+		return this;
+	}
 
 	public State add_child(State child, bool set_initial = false){
 		child.chain_parent(this);

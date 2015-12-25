@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
@@ -10,11 +11,25 @@ public class RowGenerator : BetterBehaviour {
 	public Dictionary<int,GameObject> objects = new Dictionary<int, GameObject>();
 	public List<string> pattern = new List<string>();
 	public Dictionary<string, UnityEngine.Object> loaded_prefabs = new Dictionary<string,UnityEngine.Object>();
+	public Dictionary<string, List<GameObject>> object_pools = new Dictionary<string,List<GameObject>>();
 	public UnityEngine.Object get_prefab(string name){
 		if (!loaded_prefabs.ContainsKey(name)){
 			loaded_prefabs[name] = Resources.Load(name);
 		}
 		return loaded_prefabs[name];
+	}
+	public GameObject get_object(string name){
+		if (!object_pools.ContainsKey(name))
+			object_pools[name] = new List<GameObject>();
+		GameObject recycled = object_pools[name].Find((obj)=>{
+			return !obj.activeSelf;
+		});
+		if (recycled == null){
+			GameObject fresh = GameObject.Instantiate(get_prefab(name)) as GameObject;
+			object_pools[name].Add(fresh);
+			return fresh;
+		}
+		return recycled;
 	}
 	
 	public static int wrap(int i, int around){
@@ -81,7 +96,8 @@ public class RowGenerator : BetterBehaviour {
 				string prefab = pattern[wrap(ci, pattern.Count)];
 				if (prefab != ""){
 					//Debug.Log ("Creating "+prefab+" at "+ci);
-					objects[ci] = GameObject.Instantiate(get_prefab(prefab)) as GameObject;
+					objects[ci] = get_object(prefab);
+					objects[ci].SetActive(true);
 					objects[ci].transform.position = row.cell_to_pos(ci);
 					objects[ci].transform.SetParent(transform,true);
 					creation.OnNext(objects[ci]);
@@ -97,7 +113,7 @@ public class RowGenerator : BetterBehaviour {
 				foreach(Action<GameObject> act in destroy_events){
 					act(objects[di]);
 				}
-				Destroy(objects[di]);
+				objects[di].SetActive(false);
 				objects.Remove(di);
 			}
 		});

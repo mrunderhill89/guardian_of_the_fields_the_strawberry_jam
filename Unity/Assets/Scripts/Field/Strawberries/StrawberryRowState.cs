@@ -60,10 +60,12 @@ public class StrawberryRowState : BetterBehaviour{
 			if (sb_generator != null){
 				sb_generator.state.chain_parent(state);
 			}
+			DisplaceMesh displace = cell.GetComponentInChildren<DisplaceMesh>();
+			displace.construct();
 		}).on_destroy((GameObject cell) => {
 			StrawberryGenerator sb_generator = cell.GetComponentInChildren<StrawberryGenerator>();
 			if (sb_generator != null){
-				sb_generator.PreDestroy();
+				sb_generator.eject_berries();
 			}
 		});
 	}

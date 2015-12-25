@@ -25,13 +25,11 @@ public class StrawberryGenerator : BetterBehaviour {
 			state.instance_name = "berries";
 		}
 	}
-	public void PreDestroy(){
-		foreach(Automata a in state.visitors.ToArray()){
-			//Bush->Row->Field
-			a.transform.SetParent(null,true);
-			a.eject(2);
-		}
+	
+	public void eject_berries(){
+		state.eject_all(2);
 	}
+	
 	public static Vector3 CylinderToCube(float r, float d, float h){
 		return new Vector3(
 			Mathf.Cos(r) * d,

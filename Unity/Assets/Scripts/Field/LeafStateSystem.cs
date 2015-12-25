@@ -50,7 +50,7 @@ public class LeafStateSystem : BetterBehaviour {
 		}));
 		loaded_prefab = Resources.Load(prefab);
 	}
-	
+		
 	void InitializeLeaf(GameObject obj){
 		ObjectVisibility vis = obj.GetComponent<ObjectVisibility>();
 		vis.visible = false;

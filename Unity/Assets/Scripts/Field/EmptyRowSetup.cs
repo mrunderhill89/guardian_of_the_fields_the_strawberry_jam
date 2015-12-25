@@ -34,5 +34,13 @@ public class EmptyRowSetup : MonoBehaviour {
 		for (int i = 0; i < break_length; i++){
 			generator.pattern.Add("");
 		}
+		generator.on_create((cell)=>{
+			LeafGenerator leaves = cell.GetComponentInChildren<LeafGenerator>();
+			if (leaves != null)
+				leaves.Start();
+			DisplaceMesh displace = cell.GetComponentInChildren<DisplaceMesh>();
+			if (displace != null)
+				displace.construct();
+		});
 	}
 }

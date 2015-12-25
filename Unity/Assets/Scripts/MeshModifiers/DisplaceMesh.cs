@@ -14,7 +14,7 @@ public class DisplaceMesh : BetterBehaviour {
 	public bool auto_update = false;
 	protected Vector3[] original_verts;
 	[Show]
-	void construct(){
+	public void construct(){
 		Vector3[] original_normals = filter.sharedMesh.normals;
 		filter.mesh.vertices = original_verts.Select((Vector3 local)=>{
 			Vector3 world = transform.TransformPoint(local);
@@ -65,12 +65,10 @@ public class DisplaceMesh : BetterBehaviour {
 		}
 		mesh.normals = normals;
 	}
-	
-	void Start(){
+	void Awake(){
 		if (collider == null)
 			collider = gameObject.GetComponent<MeshCollider>();
 		original_verts = filter.sharedMesh.vertices;
-		construct();
 	}
 	void Update(){
 		if (auto_update)

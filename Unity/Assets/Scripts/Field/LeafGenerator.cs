@@ -55,28 +55,31 @@ public class LeafGenerator : BetterBehaviour {
 		}
 	}
 	
-	void Start () {
-		num_leaves = RandomUtils.random_int(min_leaves,max_leaves);
+	void Awake (){
 		state = State.GetState(gameObject, state)
-			.chain_parent(LeafStateSystem.instance.fsm.state("root"))
-			.on_entry(new StateEvent((Automata a)=>{
-				GameObject leaf = a.gameObject;
-				leaf.transform.SetParent(transform);
-				float r = RandomUtils.random_float(0.0f,360.0f);
-				leaf.transform.localPosition = CylinderToCube(
-					r * Mathf.Deg2Rad,
-					RandomUtils.random_float(radius),
-					crown_height
-				);
-				leaf.transform.localRotation = Quaternion.Euler(
-					RandomUtils.random_vec3(twist_min,twist_max)+
-					new Vector3(0.0f, r, 0.0f)
-				);
-				ObjectVisibility vis = a.GetComponent<ObjectVisibility>();
-				vis.visible = true;
-				DisplaceTransform dis = a.GetComponent<DisplaceTransform>();
-				dis.read().write();
-			}));
+		.chain_parent(LeafStateSystem.instance.fsm.state("root"))
+		.on_entry(new StateEvent((Automata a)=>{
+			GameObject leaf = a.gameObject;
+			leaf.transform.SetParent(transform);
+			float r = RandomUtils.random_float(0.0f,360.0f);
+			leaf.transform.localPosition = CylinderToCube(
+				r * Mathf.Deg2Rad,
+				RandomUtils.random_float(radius),
+				crown_height
+			);
+			leaf.transform.localRotation = Quaternion.Euler(
+				RandomUtils.random_vec3(twist_min,twist_max)+
+				new Vector3(0.0f, r, 0.0f)
+			);
+			ObjectVisibility vis = a.GetComponent<ObjectVisibility>();
+			vis.visible = true;
+			DisplaceTransform dis = a.GetComponent<DisplaceTransform>();
+			dis.read().write();
+		}));
+	}
+	public void Start () {
+		num_leaves = RandomUtils.random_int(min_leaves,max_leaves);
+		state.eject_all();
 	}
 
 	void Update (){

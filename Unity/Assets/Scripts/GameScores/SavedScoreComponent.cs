@@ -33,7 +33,7 @@ public class SavedScores{
 
 
 	public static string default_filename {
-		get{ return Application.streamingAssetsPath + "/Data/scores.yaml";}
+		get{ return Application.streamingAssetsPath + "/Data/Scores.yaml";}
 	}
 
 	public SavedScores import(string filename = ""){
