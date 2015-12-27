@@ -146,6 +146,7 @@
      <Compile Include="Assets\Scripts\UserInterface\StrawberryColorIcon.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TutorialHandler.cs" />
+     <Compile Include="Assets\StrawberryFootprint.cs" />
      <Compile Include="Assets\TooltipBroadcast.cs" />
      <Compile Include="Assets\TooltipView.cs" />
      <Compile Include="Assets\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs" />
@@ -342,12 +343,6 @@
      <None Include="Assets\Plugins\YamlDotNet\Readme.txt" />
      <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
      <None Include="Assets\Materials\StrawberryShader.shader" />
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
