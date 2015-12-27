@@ -17,9 +17,16 @@ public class PaceManager : BetterBehaviour {
 		pace = value;
 		return this;
 	}
+	
+	public float slide_speed = 0.1f;
+	public bool slide_forward {get;set;}
+	public bool slide_reverse {get;set;}
+	
 	[Show]
 	public float target_speed{
 		get{
+			if (slide_forward) return slide_speed;
+			if (slide_reverse) return -slide_speed;
 			if (state_data == null || player_state == null || player_state.fsm == null) return 0.0f;
 			Vector2 pace_factors = player_state.fsm.match<Vector2>(state_data, Vector2.zero);
 			if (player_state.fsm.is_state_visited("pack") && !move_while_packing) return 0.0f;
@@ -42,6 +49,8 @@ public class PaceManager : BetterBehaviour {
 	public float max_acceleration = 2.0f;
 	// Use this for initialization
 	void Start () {
+		slide_forward = false;
+		slide_reverse = false;
 	}
 
 	void Update(){
