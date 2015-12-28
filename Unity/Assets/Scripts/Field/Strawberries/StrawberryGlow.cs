@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Vexe.Runtime.Types;
-[ExecuteInEditMode]
 public class StrawberryGlow : BetterBehaviour {
-	ObjectVisibility visibility;
+	public ObjectOpacity opacity;
 	DragHandle drag;
 	void Start (){
-		visibility = GetComponent<ObjectVisibility> ();
+		if (opacity == null)
+			opacity = GetComponent<ObjectOpacity> ();
 		drag = GetComponentInParent<DragHandle> ();
 	}
 	// Update is called once per frame
 	void Update () {
-		visibility.visible = drag.can_drag || drag.is_dragging();
+		if (opacity != null && drag.can_drag || drag.is_dragging()){
+			opacity.target_opacity = 1.0f;
+		} else {
+			opacity.target_opacity = 0.0f;
+		}
 	}
 }

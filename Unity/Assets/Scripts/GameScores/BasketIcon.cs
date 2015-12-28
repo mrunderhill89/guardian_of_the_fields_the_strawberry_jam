@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 using System.Linq;
 using System.Collections;
@@ -8,7 +9,7 @@ using Vexe.Runtime.Types;
 using GameScores;
 using UniRx;
 
-public class BasketIcon : BetterBehaviour {
+public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointerOrMouseExitHandler {
 	[DontSerialize]
 	public ReactiveProperty<BasketSingleScore> rx_score = new ReactiveProperty<BasketSingleScore>();
 	[Show]
@@ -35,6 +36,9 @@ public class BasketIcon : BetterBehaviour {
 	public Text id_text;
 	public TextMesh id_text_3d;
 	public TooltipBroadcast tooltip;
+	public ObjectOpacity opacity;
+	public float off_opacity = 0.8f;
+	public float over_opacity = 0.0f;
 
 	[DontSerialize]
 	public ReadOnlyReactiveProperty<Sprite> rx_sprite;	
@@ -129,6 +133,10 @@ public class BasketIcon : BetterBehaviour {
 			if (icon_3d != null)
 				icon_3d.sprite = sprite;
 		});
+		
+		if (opacity != null){
+			opacity.opacity = off_opacity;
+		}
 	}
 	
 	public BasketIcon chain_score(BasketSingleScore _score){
@@ -140,4 +148,30 @@ public class BasketIcon : BetterBehaviour {
 		return this;
 	}
 
+	public void fade_in(){
+		if (opacity != null){
+			opacity.target_opacity = over_opacity;
+		}
+	}
+	
+	public void fade_out(){
+		if (opacity != null){
+			opacity.target_opacity = off_opacity;
+		}
+	}
+
+	public void OnPointerEnter(PointerEventData evn){
+		fade_in();
+	}
+
+	public void OnPointerExit(PointerEventData evn){
+		fade_out();
+	}
+
+	public void OnMouseEnter(){
+		fade_in();
+	}
+	public void OnMouseExit(){
+		fade_out();
+	}
 }

@@ -1,6 +1,7 @@
 Shader "Custom/UI-Unlit-Transparent-Ignore-Z"
 {
 Properties {
+	_Color ("Main Color", Color) = (1,1,1,1)
     _MainTex ("Base (RGB)", 2D) = "white" {}
 }
 
@@ -32,6 +33,7 @@ SubShader {
             sampler2D _MainTex;
            
             float4 _MainTex_ST;
+			fixed4 _Color;
            
             v2f vert (appdata_t v)
             {
@@ -43,7 +45,7 @@ SubShader {
            
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.texcoord);
+                fixed4 col = _Color * tex2D(_MainTex, i.texcoord);
                
                 return fixed4(col.r, col.g, col.b, col.a);
             }
