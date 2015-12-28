@@ -25,9 +25,12 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 	public Text play_time;
 	public Text game_length;
 	public Text finished;
+	public Text player_name;
 
 	[DontSerialize]
 	ReadOnlyReactiveProperty<string> rx_finished;
+	[DontSerialize]
+	ReadOnlyReactiveProperty<string> rx_player_name;
 
 	void Awake () {
 		rx_score.Subscribe((s)=>{
@@ -36,6 +39,18 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 				play_time.text = GameTimer.to_stopwatch(s.time.played_for);
 				game_length.text = GameTimer.to_stopwatch(s.settings.time.game_length);
 			}
+		});
+		rx_player_name = rx_score.SelectMany(s=>{
+			if (s == null)
+				return Observable.Never<String>();
+			return s.rx_player_name.AsObservable();
+		}).CombineLatest(LanguageTable.get_property("score_default_name"), (name, default_name)=>{
+			if (name == "")
+				return default_name;
+			return name;
+		}).ToReadOnlyReactiveProperty<string>();
+		rx_player_name.Subscribe(t=>{
+			player_name.text = t;
 		});
 		rx_finished = rx_score.SelectMany(s=>{
 			if (s == null) return Observable.Never<String>();

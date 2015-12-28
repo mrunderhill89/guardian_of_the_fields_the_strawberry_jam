@@ -249,6 +249,8 @@ English:
   score_total_weight: Total Weight
   score_avg_weight: Average Weight
   score_avg_ripeness: Average Ripeness
+  score_name: Name
+  score_default_name: Player
   language_english: English
   language_spanish: Spanish
   credits_title: "Guardians of the Fields: The Strawberry Jam"

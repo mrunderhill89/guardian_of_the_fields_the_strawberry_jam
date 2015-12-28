@@ -30,6 +30,11 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 		});
 	}
 
+	public string player_name{
+		get{ return score.player_name; }
+		set{ score.player_name = value; }
+	}
+
 	public bool lock_strawberries = false;
 	public bool lock_baskets = false;
 	public bool lock_timer = false;
@@ -44,6 +49,7 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 			score.time.played_for = timer.time.total;
 		}
 	}
+	
 	[Show]
 	public GameScoreComponent record_score(){
 		SavedScoreComponent.record_score (score.copy_of());

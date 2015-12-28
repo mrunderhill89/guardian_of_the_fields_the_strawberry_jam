@@ -3,9 +3,19 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using UniRx;
 namespace GameScores {
 	public class Score: IBerryScoreSource, IBasketScoreSource{
 		public GameSettings.Model settings { get; set; }
+		public StringReactiveProperty rx_player_name = new StringReactiveProperty("");
+		public string player_name { 
+			get {
+				return rx_player_name.Value;
+			} 
+			set{
+				rx_player_name.Value = value;
+			} 
+		}
 		public TimeScore time {get; set;}
 		public StrawberryScore berries { get; set;}
 		[Show]
@@ -53,6 +63,7 @@ namespace GameScores {
 
 		
 		public Score copy_from(Score that){
+			player_name = that.player_name;
 			settings.copy_from(that.settings);
 			time.copy_from (that.time);
 			berries.copy_from (that.berries);
