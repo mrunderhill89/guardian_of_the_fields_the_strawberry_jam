@@ -86,6 +86,11 @@ namespace UniRx
 			this.Contents = contents.ToArray();
 			this.Count = contents.Count;
 		}
+		
+		public override string ToString()
+        {
+            return string.Format("Count:{0} Contents:{1}", Count, Contents);
+        }
 	}
 
     public interface IReactiveCollection<T> : IList<T>
@@ -232,13 +237,15 @@ namespace UniRx
         
 		[NonSerialized]
         Subject<CollectionContentsEvent<T>> collectionContents = null;
+		[NonSerialized]
         ReadOnlyReactiveProperty<CollectionContentsEvent<T>> collectionContentsProperty = null;
 		public ReadOnlyReactiveProperty<CollectionContentsEvent<T>> ObserveContents()
         {
 			if (collectionContents == null)
 				collectionContents = new Subject<CollectionContentsEvent<T>>();
 			if (collectionContentsProperty == null)
-				collectionContentsProperty = collectionContents.ToReadOnlyReactiveProperty<CollectionContentsEvent<T>>(new CollectionContentsEvent<T>(this));
+				collectionContentsProperty = collectionContents.ToReadOnlyReactiveProperty<CollectionContentsEvent<T>>();
+			collectionContents.OnNext(new CollectionContentsEvent<T>(this));
             return collectionContentsProperty;
         }
 

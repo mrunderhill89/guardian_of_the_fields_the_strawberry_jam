@@ -19,12 +19,7 @@ public class SavedScores{
 			return rx_scores.ToList();
 		}
 		set{
-			rx_scores.Clear();
-			if (value != null){
-				foreach (Score s in value){
-					rx_scores.Add(s);
-				}
-			}
+			rx_scores.SetRange(value);
 		}
 	}
 	public int Count{

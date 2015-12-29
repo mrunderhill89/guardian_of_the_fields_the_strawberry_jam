@@ -27,6 +27,7 @@
       game_length: 2400
       start_hour: 6
       end_hour: 18
+  player_name: 
   time:
     date_recorded: 2015-12-27T16:18:20.1345380-08:00
     played_for: 0.1044333
@@ -46,7 +47,7 @@
     - id: 6
 - settings:
     randomness:
-      seed: -286970760
+      seed: 286970760
       randomize: true
     flags:
       tutorial: true
@@ -75,8 +76,55 @@
       end_hour: 18
   player_name: Kevin
   time:
-    date_recorded: 2015-12-28T00:25:44.2700740Z
+    date_recorded: 2015-12-27T16:25:44.2700740-08:00
     played_for: 0.1097417
+  berries:
+    categories:
+      gathered:
+        all_berries: []
+      dropped:
+        all_berries: []
+  baskets:
+    baskets:
+    - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - id: 6
+- settings:
+    randomness:
+      seed: 1451348142
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.06
+      max_size: 0.06
+      max_ripeness: 2
+      density: 2400
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      min_ripeness: 0.5
+      max_ripeness: 1.5
+      min_basket_weight: 15
+      max_basket_weight: 17
+      penalties:
+        Small: 0
+        Medium: 0
+        Big: 0
+    time:
+      end_early: true
+      game_length: 2400
+      start_hour: 6
+      end_hour: 18
+  player_name: 
+  time:
+    date_recorded: 2015-12-29T03:18:06.0413080Z
+    played_for: 0.1066178
   berries:
     categories:
       gathered:
