@@ -31,7 +31,16 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 	ReadOnlyReactiveProperty<string> rx_finished;
 	[DontSerialize]
 	ReadOnlyReactiveProperty<string> rx_player_name;
-
+	
+	public static bool IsNullOrWhiteSpace(string s){
+		if (s == null || s.Length <= 0) 
+			return true;
+		foreach(char c in s){
+			if(c != ' ') return false;
+		}
+		return true;
+	}
+	
 	void Awake () {
 		rx_score.Subscribe((s)=>{
 			if (s != null){
@@ -45,7 +54,7 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 				return Observable.Never<String>();
 			return s.rx_player_name.AsObservable();
 		}).CombineLatest(LanguageTable.get_property("score_default_name"), (name, default_name)=>{
-			if (name == "")
+			if (IsNullOrWhiteSpace(name))
 				return default_name;
 			return name;
 		}).ToReadOnlyReactiveProperty<string>();
