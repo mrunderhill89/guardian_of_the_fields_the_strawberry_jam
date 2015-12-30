@@ -52,6 +52,7 @@
      <Compile Include="Assets\PlayerNameForm.cs" />
      <Compile Include="Assets\RulesQuickSelect.cs" />
      <Compile Include="Assets\ScaleWithParent.cs" />
+     <Compile Include="Assets\ScoreFileBar.cs" />
      <Compile Include="Assets\Scripts\Field\EmptyRowSetup.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
      <Compile Include="Assets\Scripts\Field\LeafGenerator.cs" />

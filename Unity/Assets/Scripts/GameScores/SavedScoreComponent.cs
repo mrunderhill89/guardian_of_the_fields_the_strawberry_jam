@@ -60,6 +60,10 @@ public class SavedScores{
 		return this;
 	}
 
+	[Show]
+	public SavedScores clear()
+	{ rx_scores.Clear(); return this; }
+
 	public SavedScores copy_from(SavedScores that){
 		scores = that.scores;
 		return this;
@@ -84,6 +88,10 @@ public class SavedScoreComponent : BetterBehaviour {
 	public static void import_static(string filename = ""){
 		saved_scores.import(filename);
 	}
+	[Show]
+	public SavedScoreComponent clear()
+	{ saved_scores.clear(); return this; }
+	
 	public static void record_score(Score score){
 		saved_scores.rx_scores.Add (score);
 	}

@@ -217,6 +217,7 @@ English:
   input_filename: Filename
   file_load: Load
   file_save: Save
+  file_clear: Clear
   file_apply: Apply
   file_revert: Revert
   filename_default: Default
