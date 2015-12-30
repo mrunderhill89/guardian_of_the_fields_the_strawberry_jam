@@ -75,15 +75,11 @@ public class GameSettingsComponent : BetterBehaviour
 				bool randomize = tuple.Item2;
 				if (randomize){
 					rules.randomness.seed = UnityEngine.Random.seed;
-				} else {
-					UnityEngine.Random.seed = rules.randomness.seed;
 				}
 			});
 		}
 		rx_working_rules.Value = Model.import_static();
 		current_rules = working_rules.copy_of();
-		if (current_rules.randomness.randomize)
-			current_rules.randomness.seed = UnityEngine.Random.seed;
 		rx_is_working_rules = new ReactiveProperty<bool>();
 	}
 	

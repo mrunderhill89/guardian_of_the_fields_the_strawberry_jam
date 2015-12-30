@@ -219,6 +219,7 @@ English:
   file_save: Save
   file_apply: Apply
   file_revert: Revert
+  filename_default: Default
   settings_seed: Random Number Seed
   settings_debug: Debug Options
   settings_max_berries: Max Berries in Field

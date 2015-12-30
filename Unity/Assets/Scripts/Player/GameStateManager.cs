@@ -38,6 +38,12 @@ public class GameStateManager : BetterBehaviour {
 			fsm = gameObject.AddComponent<StateMachine> ();
 		if (scores == null)
 			scores = GetComponent<GameScoreComponent>();
+		//Sync random number generator
+		if (GameSettingsComponent.working_rules.randomness.randomize){
+			GameSettingsComponent.working_rules.randomness.seed = UnityEngine.Random.seed;
+		} else {
+			UnityEngine.Random.seed = GameSettingsComponent.working_rules.randomness.seed;
+		}
 	}
 	void Start () {
 		Physics.gravity = gravity;

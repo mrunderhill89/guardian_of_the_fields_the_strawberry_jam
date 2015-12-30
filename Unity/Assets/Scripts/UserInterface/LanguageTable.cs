@@ -24,7 +24,21 @@ public class LanguageDictionary{
 	public string get(string key, bool read_only = false){
 		return get (key, current_language.Value, read_only);
 	}
-	public string get(string key, string lang, bool read_only = false){
+	public bool has(string key){
+		return has(key, current_language.Value);
+	}
+	public bool has(string key, string lang){
+		if (!languages.ContainsKey(lang))
+			return false;
+		return languages[lang].ContainsKey(key);
+	}
+	public bool has_any(string key){
+		foreach(Dictionary<string, string> dictionary in languages.Values){
+			if (dictionary.ContainsKey(key)) return true;
+		}
+		return false;
+	}
+	public string get(string key, string lang, bool read_only = false, string wrong_language = "??", string no_entry = "!!"){
 		if (lang == "") {
 			if (current_language.Value == ""){
 				lang = default_language;
@@ -40,9 +54,9 @@ public class LanguageDictionary{
 			}
 			if (!languages[lang].ContainsKey(key)){
 				if (languages[default_language].ContainsKey(key)){
-					languages[lang][key] = "??"+languages[default_language][key];
+					languages[lang][key] = wrong_language+languages[default_language][key];
 				} else {
-					languages[lang][key] = "!!"+key;
+					languages[lang][key] = no_entry+key;
 				}
 			}
 		}
@@ -257,5 +271,15 @@ public class LanguageTable : BetterBehaviour {
 
 	public static ReadOnlyReactiveProperty<string> get_property(string key, bool read_only = false){
 		return dictionary.get_property(key,read_only);
+	}
+	
+	public static bool has(string key, string language= ""){
+		if (!dictionary.languages.ContainsKey(language))
+			language = dictionary.current_language.Value;
+		return dictionary.has(key, language);
+	}
+	
+	public static bool has_any(string key){
+		return dictionary.has_any(key);
 	}
 }

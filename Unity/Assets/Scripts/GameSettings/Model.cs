@@ -21,8 +21,11 @@ namespace GameSettings{
 		public Breaks breaks {get; set;}
 		public WinCondition win_condition {get; set;}
 		public GameSettings.Time time {get; set;}
+		public static string default_folder {
+			get{ return Application.streamingAssetsPath + "/Data/Settings/";}
+		}
 		public static string default_filename {
-			get{ return Application.streamingAssetsPath + "/Data/Settings/default.yaml";}
+			get{ return default_folder+"default.yaml";}
 		}
 		public const float precision = 100.0f;
 		#endregion
