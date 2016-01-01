@@ -121,6 +121,11 @@ namespace GameScores
 			return baskets.Where (basket=>basket.is_overflow);
 		}
 
+		
+		public int Count(){
+			return rx_baskets.Count;
+		}
+
 		public BasketScore copy_from(BasketScore that){
 			rx_baskets.SetRange (that.rx_baskets.Select (basket => basket.copy_of ()));
 			return this;

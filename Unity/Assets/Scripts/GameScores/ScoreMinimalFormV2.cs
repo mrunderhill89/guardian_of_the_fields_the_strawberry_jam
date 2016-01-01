@@ -26,6 +26,10 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 	public Text game_length;
 	public Text finished;
 	public Text player_name;
+	
+	public Text total_weight;
+	public Text average_weight;
+	public Image average_ripeness;
 
 	[DontSerialize]
 	ReadOnlyReactiveProperty<string> rx_finished;
@@ -47,8 +51,12 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 				date_time.text = s.time.date_recorded_local().ToString();
 				play_time.text = GameTimer.to_stopwatch(s.time.played_for);
 				game_length.text = GameTimer.to_stopwatch(s.settings.time.game_length);
+				total_weight.text = s.total_weight("gathered").ToString("0.00");
+				average_weight.text = s.average_weight("gathered").ToString("0.00");
+				average_ripeness.color = StrawberryColor.get_color(s.average_ripeness("gathered"));
 			}
 		});
+		
 		rx_player_name = rx_score.SelectMany(s=>{
 			if (s == null)
 				return Observable.Never<String>();
@@ -58,16 +66,19 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 				return default_name;
 			return name;
 		}).ToReadOnlyReactiveProperty<string>();
+		
 		rx_player_name.Subscribe(t=>{
 			player_name.text = t;
 		});
+		
 		rx_finished = rx_score.SelectMany(s=>{
 			if (s == null) return Observable.Never<String>();
-			if (s.time.played_for < s.settings.time.game_length){
-				return LanguageTable.get_property("time_not_finished");
+			if (s.finished()){
+				return LanguageTable.get_property("time_finished");
 			}
-			return LanguageTable.get_property("time_finished");
+			return LanguageTable.get_property("time_not_finished");
 		}).ToReadOnlyReactiveProperty<string>();
+		
 		rx_finished.Subscribe(t=>{
 			finished.text = t;
 		});

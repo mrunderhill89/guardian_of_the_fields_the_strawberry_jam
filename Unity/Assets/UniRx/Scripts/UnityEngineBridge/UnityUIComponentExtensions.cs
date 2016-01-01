@@ -91,6 +91,87 @@ namespace UniRx
                 return inputField.onValueChange.AsObservable().Subscribe(observer);
             });
         }
+		
+		/// <summary>Observe onValueChange with current `text` value on subscribe.</summary>
+        public static IObservable<int> OnValueChangedAsObservable(this Dropdown dropdown)
+        {
+            return Observable.Create<int>(observer =>
+            {
+                observer.OnNext(dropdown.value);
+                return dropdown.onValueChanged.AsObservable().Subscribe(observer);
+            });
+        }
+		
+		/// <summary>Hooks up a Dropdown to select a value from a reactive collection. </summary>
+		public static IObservable<T> SelectFromCollection<T>(
+			this Dropdown dropdown, 
+			ReactiveCollection<T> collection
+		){
+			return dropdown.SelectFromCollection<T>(
+				collection,
+				(T value, int i)=>value.ToString()
+			);
+		}
+		public static IObservable<T> SelectFromCollection<T>(
+			this Dropdown dropdown, 
+			ReactiveCollection<T> collection,
+			System.Func<T, int, string> get_text
+		){
+			return dropdown.SelectFromCollection<T>(
+				collection,
+				(T value, int index)=>{
+					var option = new Dropdown.OptionData();
+					option.text = get_text(value, index);
+					return option;
+				}
+			);
+		}
+		public static IObservable<T> SelectFromCollection<T>(
+			this Dropdown dropdown, 
+			ReactiveCollection<T> collection,
+			System.Func<T, int, IObservable<string>> get_text
+		){
+			return dropdown.SelectFromCollection<T>(
+				collection,
+				(T value, int index)=>{
+					var option = new Dropdown.OptionData();
+					get_text(value, index).Subscribe(text=>{
+						if (dropdown.value == index)
+							dropdown.captionText.text = text;
+						option.text = text;
+					});
+					return option;
+				}
+			);
+		}
+		public static IObservable<T> SelectFromCollection<T>(
+			this Dropdown dropdown, 
+			ReactiveCollection<T> collection, 
+			System.Func<T, int, Dropdown.OptionData> get_option
+		){
+			dropdown.options.Clear();
+			for (int i  = 0; i < collection.Count; i++){
+				dropdown.options.Insert(i, get_option(collection[i],i));
+			}
+			collection.ObserveAdd().Subscribe(evn=>{
+				var option = get_option(evn.Value,evn.Index);
+				if (dropdown.options.Count == 0)
+					dropdown.captionText.text = option.text;
+				dropdown.options.Insert(evn.Index, option);
+			});
+			collection.ObserveRemove().Subscribe(evn=>{
+				dropdown.options.RemoveAt(evn.Index);
+			});
+			return collection.ObserveContents()
+			.CombineLatest(
+				dropdown.OnValueChangedAsObservable().Where(index=>index < collection.Count),
+				(evn, index)=>{
+					if (index >= evn.Contents.Length)
+						return default(T);
+					return evn.Contents[index];
+				}
+			);
+		}
     }
 }
 

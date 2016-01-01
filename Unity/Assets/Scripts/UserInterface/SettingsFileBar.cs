@@ -45,6 +45,7 @@ public class SettingsFileBar : BetterBehaviour {
 	void Start () {
 		quick_import.options.Clear();
 		DirectoryInfo d = new DirectoryInfo(GameSettings.Model.default_folder);
+		//Automatically set the dropdown to the default file if one is present.
 		default_option.Subscribe(value=>{
 			quick_import.value = value;
 			if (value < quick_import_options.Count)
@@ -55,20 +56,21 @@ public class SettingsFileBar : BetterBehaviour {
 		});
 
 		quick_import_options.ObserveAdd().Subscribe(evn=>{
-			quick_import.options.Insert(evn.Index, evn.Value.dropdown_option);
 			if (default_option.Value == 0 
 				&& string.Equals(evn.Value.filename, "default", StringComparison.CurrentCultureIgnoreCase)){
 				default_option.Value = evn.Index;
 			}
 		});
 
-		quick_import_options.ObserveRemove().Subscribe(evn=>{
-			quick_import.options.RemoveAt(evn.Index);
+		quick_import
+		.SelectFromCollection(quick_import_options, (opt, index)=>opt.dropdown_option)
+		.Subscribe(option=>{
+			data_component.import(option.file.FullName);
+			file_input.text = option.file.FullName;
 		});
+		
 		quick_import_options.SetRange(d.GetFiles("*.yaml").Select(file=>new QuickImportOption(file)));
-		quick_import.onValueChanged.AddListener((value)=>{
-			data_component.import(quick_import_options[value].file.FullName);
-		});
+		
 		load.onClick.AddListener(()=>{
 			data_component.import(file_input.text);
 		});

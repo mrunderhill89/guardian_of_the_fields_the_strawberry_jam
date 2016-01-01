@@ -24,7 +24,13 @@ public class BasketGrid : BetterBehaviour {
 		}
 	}
 	void Start(){
+		views.ObserveRemove ().Subscribe ((evn) => {
+			Destroy(evn.Value);
+		});
 		source.rx_score.Subscribe((score)=>{
+			foreach(GameObject view in views){
+				Destroy(view);
+			}
 			views.Clear();
 			if (score != null){
 				//Get current icons
@@ -37,11 +43,7 @@ public class BasketGrid : BetterBehaviour {
 				score.baskets.rx_baskets.ObserveRemove().Subscribe((evn)=>{
 					views.RemoveAt(evn.Index);
 				});
-
 			}
-		});
-		views.ObserveRemove ().Subscribe ((evn) => {
-			Destroy(evn.Value);
 		});
 	}
 	

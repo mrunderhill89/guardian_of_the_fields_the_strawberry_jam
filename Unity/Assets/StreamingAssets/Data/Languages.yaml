@@ -253,6 +253,9 @@ English:
   score_avg_ripeness: Average Ripeness
   score_name: Name
   score_default_name: Player
+  sort_date: Date Recorded
+  sort_accepted_berries: Accepted Strawberries
+  sort_accepted_baskets: Accepted Baskets
   language_english: English
   language_spanish: Spanish
   credits_title: "Guardians of the Fields: The Strawberry Jam"
@@ -268,7 +271,7 @@ English:
   credits_sound: Sound Design
   credits_students: Students/Assistant Designers
   credits_thanks: Special Thanks
-  credits_farmworkers: And to the hundreds of thousands of farmworkers in California and nationw-ide, who grow our food every day!
+  credits_farmworkers: And to the hundreds of thousands of farmworkers in California and nationwide, who grow our food every day!
   credits_wrenner_gren: Wrenner-Gren Foundation
   credits_digital_nest: Digital Nest
   credits_pajaro_teachers: 

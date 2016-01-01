@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Linq;
 using System.Collections;
@@ -21,57 +22,104 @@ public class ScoreboardV2 : BetterBehaviour {
 		}
 	}
 	public float prefab_size = 100.0f;
-	[DontSerialize]
-	public ReactiveProperty<System.Func<Score,Score,int>> rx_compare
-		=	new ReactiveProperty<System.Func<Score,Score,int>>();
-	protected ReadOnlyReactiveProperty<ScoreComparer> rx_comparer;
 	
 	[DontSerialize][Show]
 	public ReactiveProperty<Score[]> sorted_scores;
 	[DontSerialize][Show]
 	public List<GameObject> views = new List<GameObject>();
+	
+	public ReactiveCollection<ScoreComparer> rx_sorters
+		= new ReactiveCollection<ScoreComparer>();
+	public Dropdown select_filter;
+	public Toggle reverse_toggle;
+	[DontSerialize]
+	public ReadOnlyReactiveProperty<ScoreComparer> rx_current_sorter;
+	[DontSerialize]
+	public ReadOnlyReactiveProperty<bool> rx_reverse_sort;
+
 	void Start () {
 		if (Place == null)
 			Place = transform as RectTransform;
-		rx_comparer = rx_compare.Scan(new ScoreComparer(), (comp, fun)=>{
-			comp.fun = fun;
-			return comp;
-		}).ToReadOnlyReactiveProperty();
-		sorted_scores = SavedScoreComponent.saved_scores.rx_scores.ObserveContents()
-		.CombineLatest(rx_comparer, (evn, compare)=>{
-			return new UniRx.Tuple<Score[],IComparer<Score>>(evn.Contents,compare);
+		
+		rx_sorters.Add(
+			new ScoreComparer()
+			.key("sort_date")
+			.compare((a,b)=>{
+				return b.time.date_recorded.CompareTo(a.time.date_recorded);
+			})
+		);
+		rx_sorters.Add(
+			new ScoreComparer()
+			.key("sort_accepted_berries")
+			.compare((a,b)=>{
+				return a.ripe_berries("gathered").Count().CompareTo(b.ripe_berries("gathered").Count());
+			})
+		);
+		rx_sorters.Add(
+			new ScoreComparer()
+			.key("sort_accepted_baskets")
+			.compare((a,b)=>{
+				return a.accepted_baskets().Count().CompareTo(b.accepted_baskets().Count());
+			})
+		);
+
+		rx_current_sorter = select_filter
+		.SelectFromCollection(rx_sorters, (f,index)=>{
+			return f.rx_key.SelectMany(key=>LanguageTable.get_property(key));
 		})
-		.Select((tuple)=>{
-			if (tuple.Item2 != null)
-				Array.Sort(tuple.Item1, tuple.Item2);
-			return tuple.Item1;
+		.ToReadOnlyReactiveProperty();
+		
+		rx_reverse_sort = reverse_toggle.OnValueChangedAsObservable().ToReadOnlyReactiveProperty<bool>(false);
+		
+		sorted_scores = rx_current_sorter
+		.CombineLatest(rx_reverse_sort, (compare, reverse)=>{
+			compare.reverse = reverse;
+			return compare;
+		}).CombineLatest(SavedScoreComponent.saved_scores.rx_scores.ObserveContents(), (compare, evn)=>{
+			if (compare != null){
+				Array.Sort(evn.Contents, compare);
+			}
+			return evn.Contents;
 		}).ToReactiveProperty();
+		
 		sorted_scores.Subscribe(scores=>{
+			foreach(GameObject view in views){
+				view.transform.SetParent(null, false);
+			}
 			views = ZipLongest(scores, views, (score, view)=>{
 				if (view == null){
 					view = GameObject.Instantiate(prefab);
-				} else {
-					view.transform.SetParent(null, false);
 				}
+				view.transform.SetParent(Place, false);
 				if (score == null){
 					view.SetActive(false);
 				} else {
 					view.GetComponent<ScoreMinimalFormV2>().score = score;
 					view.SetActive(true);
-					view.transform.SetParent(Place, false);
 				}
 				return view;
 			}).ToList();
 		});
-		rx_compare.Value = null;
 	}
 	
 	public class ScoreComparer: IComparer<Score>{
-		public System.Func<Score,Score,int> fun;
+		public StringReactiveProperty rx_key = new StringReactiveProperty("sort_unknown");
+		public bool reverse = false;
+		protected System.Func<Score,Score,int> fun;
 		public int Compare(Score a, Score b){
-			if (fun == null)
-				return b.time.date_recorded.CompareTo(a.time.date_recorded);
-			return fun(a,b);
+			int result = fun(a,b) * (reverse ? -1:1);
+			return result;
+		}
+		public ScoreComparer compare(System.Func<Score,Score,int> _compare){
+			fun = _compare;
+			return this;
+		}
+		public string key(){
+			return rx_key.Value;
+		}
+		public ScoreComparer key(string _key){
+			rx_key.Value = _key;
+			return this;
 		}
 	}
 	

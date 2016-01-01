@@ -32,6 +32,30 @@ namespace GameScores {
 			return settings.time.game_length - time.played_for;
 		}
 
+		public bool finished(){
+			return remaining_time() <= 0.0f || accepted_baskets().Count() >= baskets.Count();
+		}
+
+		public float total_weight(string category = "gathered"){
+			return total_berries(category).Aggregate(0.0f, (sum, berry)=>{
+				return sum + berry.weight;
+			});
+		}
+		public float average_weight(string category = "gathered"){
+			int count = baskets.Count();
+			if (count == 0)
+				return 0.0f;
+			return total_weight(category) / count;
+		}
+		public float average_ripeness(string category = "gathered"){
+			int count = total_berries("gathered").Count();
+			if (count == 0)
+				return 0.0f;
+			return total_berries(category).Aggregate(0.0f, (sum, berry)=>{
+				return sum + berry.ripeness;
+			}) / count;
+		}
+
 		public IEnumerable<StrawberrySingleScore> ripe_berries(string category){
 			return berries.get_category(category).ripe(settings.win_condition);
 		}
@@ -60,7 +84,6 @@ namespace GameScores {
 		public IEnumerable<BasketSingleScore> overflow_baskets(){
 			return baskets.overflow (settings.win_condition);
 		}
-
 		
 		public Score copy_from(Score that){
 			player_name = that.player_name;
