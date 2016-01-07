@@ -61,6 +61,7 @@ public class GameSettingsComponent : BetterBehaviour
 	
 	public ReactiveProperty<bool> rx_is_working_rules;
 	private static IDisposable sync_seed;
+
 	void Awake(){
 		//Synchronize Unity's random number seed with the working ruleset's.
 		if (sync_seed == null){

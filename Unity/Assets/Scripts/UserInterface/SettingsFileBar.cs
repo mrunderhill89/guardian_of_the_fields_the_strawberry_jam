@@ -46,7 +46,12 @@ public class SettingsFileBar : BetterBehaviour {
 		quick_import.options.Clear();
 		DirectoryInfo d = new DirectoryInfo(GameSettings.Model.default_folder);
 		//Automatically set the dropdown to the default file if one is present.
-		default_option.Subscribe(value=>{
+		default_option.CombineLatest(
+			quick_import_options.ObserveCountChanged(),
+			(index, count)=>{
+				return Math.Min(index,count);
+			}
+		).Subscribe(value=>{
 			quick_import.value = value;
 			if (value < quick_import_options.Count)
 				quick_import_options[value].text.Subscribe(text=>{
@@ -55,16 +60,14 @@ public class SettingsFileBar : BetterBehaviour {
 				});
 		});
 
-		quick_import_options.ObserveAdd().Subscribe(evn=>{
-			if (default_option.Value == 0 
-				&& string.Equals(evn.Value.filename, "default", StringComparison.CurrentCultureIgnoreCase)){
-				default_option.Value = evn.Index;
-			}
-		});
-
 		quick_import
-		.SelectFromCollection(quick_import_options, (opt, index)=>opt.dropdown_option)
-		.Subscribe(option=>{
+		.SelectFromCollection(quick_import_options, (opt, index)=>{
+			if (default_option.Value == 0 
+				&& string.Equals(opt.filename, "default", StringComparison.CurrentCultureIgnoreCase)){
+				default_option.Value = index;
+			}
+			return opt.dropdown_option;
+		}).Subscribe(option=>{
 			data_component.import(option.file.FullName);
 			file_input.text = option.file.FullName;
 		});

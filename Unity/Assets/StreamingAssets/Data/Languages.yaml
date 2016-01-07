@@ -117,16 +117,48 @@ Spanish:
   settings_density: Multiplicador de Peso para Fresas
   settings_tutorial: Tutorial
   score_total_berries: Fresas Totales
+  score_total_weight: Peso Total
+  score_avg_weight: Peso Promedio
+  score_avg_ripeness: Madurez Promedia
+  score_name: Nombre
   time_date_recorded: Fecha Registrado
   time_played_for: Jugado Para
   time_finished: Terminado
   time_not_finished: No Terminó
   language_english: Inglés
   language_spanish: Español
+  credits_title: "Guardianes de Los Campos: El Aprieto de Fresas"
+  credits_class: "Game Over: Clase de Diseño de Juego"
+  credits_dev_team: Equipo de Desarollo
+  credits_producer: Productor
+  credits_teacher: Maestro/a
+  credits_ta: Asistente
+  credits_designers: "Diseñadores de Juego"
+  credits_prototype: "Diseñadores de Prototipos"
+  credits_programmer: Programador
+  credits_artists: Artistas
+  credits_sound: "Diseño de Sonido"
+  credits_students: Estudiantes de Diseño
+  credits_thanks: Agradecimientos especiales
+  credits_farmworkers: "¡Y a los miles de campesinos/jornaleros en California y alrededor del mundo que cosechan nuestra comida cada año!"
+  credits_wrenner_gren: Wrenner-Gren Foundation
+  credits_digital_nest: Digital Nest
+  credits_pajaro_teachers: 
+    Pájaro Valley
+    Federation of Teachers
+  credits_migration:
+    PVUSD Migrant Education 
+    District XI
+  credits_UCSC:
+    Universidad de California, 
+    Santa Cruz
+  credits_fresno_state: Fresno State University
+  credits_unity: Unity Technologies
   debug_quick_start: Empiece Rapido
   debug_end_game: Termine el Juego
   debug_free_berry: Muchas Fresas!
   help_ripeness: Madurez
+  
 English:
   berries_label: Strawberries
   berries_gathered: Gathered

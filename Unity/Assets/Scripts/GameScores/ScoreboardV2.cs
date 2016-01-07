@@ -24,7 +24,7 @@ public class ScoreboardV2 : BetterBehaviour {
 	public float prefab_size = 100.0f;
 	
 	[DontSerialize][Show]
-	public ReactiveProperty<Score[]> sorted_scores;
+	public IObservable<Score[]> sorted_scores;
 	[DontSerialize][Show]
 	public List<GameObject> views = new List<GameObject>();
 	
@@ -80,7 +80,7 @@ public class ScoreboardV2 : BetterBehaviour {
 				Array.Sort(evn.Contents, compare);
 			}
 			return evn.Contents;
-		}).ToReactiveProperty();
+		});
 		
 		sorted_scores.Subscribe(scores=>{
 			foreach(GameObject view in views){
