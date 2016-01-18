@@ -84,7 +84,9 @@ public class ScoreboardV2 : BetterBehaviour {
 		
 		sorted_scores.Subscribe(scores=>{
 			foreach(GameObject view in views){
-				view.transform.SetParent(null, false);
+				if (view != null){
+					view.transform.SetParent(null, false);
+				}
 			}
 			views = ZipLongest(scores, views, (score, view)=>{
 				if (view == null){
