@@ -10,7 +10,7 @@ public class PlayerNameForm : BetterBehaviour {
 	public IScoreSource source;
 
 	void Start () {
-		input.onValueChange.AddListener((player)=>{
+		input.onValueChanged.AddListener((player)=>{
 			source.score.player_name = player;
 		});
 	}

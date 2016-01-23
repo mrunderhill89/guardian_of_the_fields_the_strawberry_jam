@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MainMenuReturn : MonoBehaviour {
 	public void trigger(){
-		Application.LoadLevel("title_screen");
+		SceneManager.LoadScene("title_screen", LoadSceneMode.Single);
 	}
 }

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class StartGame : MonoBehaviour {
 	public void trigger(){
-		Application.LoadLevel("main");
+		SceneManager.LoadScene("main", LoadSceneMode.Single);
 	}
 }

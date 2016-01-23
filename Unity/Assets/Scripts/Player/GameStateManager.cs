@@ -1,9 +1,12 @@
 ﻿using Vexe.Runtime.Types;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UniRx;
+
 public class GameStateManager : BetterBehaviour {
 	protected static GameStateManager _main = null;
 	public static GameStateManager main{
@@ -109,11 +112,14 @@ public class GameStateManager : BetterBehaviour {
 				fsm.state ("pack")
 					.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
 					.on_entry(new StateEvent(()=>{
+							basket_physics_enabled.Value = true;
 							if (tutorial){
 								GameMessages.Log(LanguageTable.get("tutorial_pack"), 10.0f);
 							}
 						}).Limit(1)
-					)
+					).on_exit(new StateEvent(()=>{
+						basket_physics_enabled.Value = false;
+					}))
 			), true
 		).add_child (
 			fsm.state ("game_end")
@@ -153,7 +159,7 @@ public class GameStateManager : BetterBehaviour {
 					}))
 				).add_child(
 				fsm.state("return_to_menu").on_entry(new StateEvent(()=>{
-					Application.LoadLevel("title_screen");
+						SceneManager.LoadScene("title_screen", LoadSceneMode.Single);
 				}))
 			)
 		);
@@ -337,7 +343,11 @@ public class GameStateManager : BetterBehaviour {
 	public bool can_drag(){
 		return fsm.match(drag_states, true, false);
 	}
+	[DontSerialize]
+	public ReactiveProperty<bool> basket_physics_enabled = new ReactiveProperty<bool>(true);
+	/*
 	public bool basket_physics_enabled(){
 		return fsm.is_state_visited("pack");
 	}
+	*/
 }

@@ -71,10 +71,18 @@ public class SavedScores{
 }
 
 public class SavedScoreComponent : BetterBehaviour {
-	[DontSerialize][Show]
-	public static SavedScores saved_scores;
+	protected static SavedScores _saved_scores;
+	public static SavedScores saved_scores{
+		get{ 
+			if (_saved_scores == null) {
+				saved_scores = SavedScores.import_static ();
+			}
+			return _saved_scores;
+		}
+		private set{ _saved_scores = value;}
+	}
 	void Awake () {
-		saved_scores = SavedScores.import_static ();
+		//saved_scores = SavedScores.import_static ();
 	}
 	[Show]
 	public SavedScoreComponent export(string filename="")

@@ -49,10 +49,9 @@ public class BasketComponent : BetterBehaviour {
 		}).on_relax(()=>{
 			score_data.is_overflow = false;
 		});
-		slot.chain_parent (state_machine.fsm.state("basket"))
-			.on_entry (new StateEvent(ParentToBasket))
-			.on_exit (new StateEvent(UnparentToBasket))
-			.on_update(new StateEvent(this.UpdatePhysics));
+		slot.chain_parent (state_machine.fsm.state ("basket"))
+			.on_entry (new StateEvent (ParentToBasket))
+			.on_exit (new StateEvent (UnparentToBasket));
 		drop.chain_from(state_machine.fsm.state("fall"))
 			.chain_auto_run(false)
 			.chain_priority(2)
@@ -69,6 +68,14 @@ public class BasketComponent : BetterBehaviour {
 			.add_test(new TransitionTest(()=>{
 				return player_state.can_drag();
 			}));
+		GameStateManager.main.basket_physics_enabled.Subscribe ((en) => {
+			Rigidbody body;
+			foreach (Automata a in slot.visitors){
+				body = a.gameObject.GetComponent<Rigidbody> ();
+				if (body != null) {
+					body.isKinematic = !en;
+				}			};
+		});
 	}
 	void OnDestroy(){
 		rx_baskets.Remove(this);
@@ -105,17 +112,6 @@ public class BasketComponent : BetterBehaviour {
 
 	public bool is_overflow(){
 		return overflow.is_overflow();
-	}
-
-	void UpdatePhysics(Automata a){
-		Rigidbody body = a.gameObject.GetComponent<Rigidbody> ();
-		if (body != null) {
-			if (!GameStateManager.main.basket_physics_enabled()){
-				body.isKinematic = true;
-			} else {
-				body.isKinematic = false;
-			}
-		}
 	}
 
 	void OnTriggerStay(Collider that) {

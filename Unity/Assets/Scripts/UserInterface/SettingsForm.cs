@@ -107,7 +107,7 @@ public class SettingsForm : BetterBehaviour {
 			.Subscribe ((value) => {
 				input.text = value.ToString();
 			});
-		input.onValueChange.AddListener ((value) => {
+		input.onValueChanged.AddListener ((value) => {
 			get_property(data_component.current_rules).Value = 
 				ParseIntOrDefault(input.text, get_property(data_component.current_rules).Value);
 		});
@@ -123,7 +123,7 @@ public class SettingsForm : BetterBehaviour {
 			.Subscribe ((value) => {
 				input.text = value.ToString();
 			});
-		input.onValueChange.AddListener ((value) => {
+		input.onValueChanged.AddListener ((value) => {
 			get_property(data_component.current_rules).Value = 
 				ParseFloatOrDefault(input.text, get_property(data_component.current_rules).Value);
 		});
