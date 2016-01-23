@@ -88,7 +88,7 @@ namespace UniRx
             return Observable.Create<string>(observer =>
             {
                 observer.OnNext(inputField.text);
-                return inputField.onValueChange.AsObservable().Subscribe(observer);
+                return inputField.onValueChanged.AsObservable().Subscribe(observer);
             });
         }
 		

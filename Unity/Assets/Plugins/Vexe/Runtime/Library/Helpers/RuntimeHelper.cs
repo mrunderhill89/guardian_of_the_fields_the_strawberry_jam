@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Vexe.Runtime.Extensions;
 using Vexe.Runtime.Serialization;
 using Vexe.Runtime.Types;
