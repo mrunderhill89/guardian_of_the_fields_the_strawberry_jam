@@ -60,6 +60,7 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 	public static Dictionary<BasketCondition, Sprite> sprites = new Dictionary<BasketCondition, Sprite>();
 	public static Dictionary<BasketCondition, string> language_keys = new Dictionary<BasketCondition, string>();
 	ReadOnlyReactiveProperty<BasketCondition> condition;
+
 	void Start () {
 		if (component != null)
 			score = component.score_data;

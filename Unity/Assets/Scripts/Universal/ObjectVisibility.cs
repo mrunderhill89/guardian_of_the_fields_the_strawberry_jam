@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Vexe.Runtime.Types;
 using UniRx;
+
 [ExecuteInEditMode]
 public class ObjectVisibility : BetterBehaviour {
 	public enum VisibilityStatus{
@@ -12,6 +13,7 @@ public class ObjectVisibility : BetterBehaviour {
 		FollowParent,
 		NeverVisible
 	}
+
 	[Serialize]
 	public List<GameObject> objects = new List<GameObject>();
 	[Serialize]
@@ -81,11 +83,7 @@ public class ObjectVisibility : BetterBehaviour {
 	
 	void update(bool vis){
 		foreach(GameObject obj in objects){
-			if (obj != null){
-				obj.SetActive(vis);
-			} else {
-				Debug.LogWarning("Got null object in visibility list:"+gameObject.ToString());
-			}
+			obj.SetActive(vis);
 		}
 		foreach(MonoBehaviour behavior in behaviors){
 			behavior.enabled = vis;
@@ -100,8 +98,32 @@ public class ObjectVisibility : BetterBehaviour {
 	
 	void Awake(){
 		init_visible();
+		assert_lists_correct ();
 	}
-	
+
+	public void assert_lists_correct(){
+		foreach(GameObject obj in objects){
+			if (obj == null){
+				Debug.LogError("Got null object in visibility list:"+gameObject.ToString());
+			}
+		}
+		foreach(MonoBehaviour behavior in behaviors){
+			if (behavior == null){
+				Debug.LogError("Got null behavior in visibility list:"+gameObject.ToString());
+			}
+		}
+		foreach(MeshRenderer renderer in renderers){
+			if (renderer == null){
+				Debug.LogWarning("Got null renderer in visibility list:"+gameObject.ToString());
+			}
+		}
+		foreach(UIBehaviour ui in UI_behaviors){
+			if (ui == null){
+				Debug.LogWarning("Got null UI behavior in visibility list:"+gameObject.ToString());
+			}
+		}
+	}
+
 	public static ObjectVisibility GetVisibility(GameObject obj, ObjectVisibility existing){
 		if (existing != null)
 			return existing;
