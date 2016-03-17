@@ -5,8 +5,8 @@ flags:
   tutorial: true
 strawberry:
   max_berries_in_field: 40
-  min_size: 0.06
-  max_size: 0.06
+  min_size: 0.09
+  max_size: 0.09
   max_ripeness: 2
   density: 2400
 breaks:
