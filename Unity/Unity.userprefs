@@ -1,9 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Universal\ObjectVisibility.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\TooltipView.cs">
     <Files>
-      <File FileName="Assets\TooltipView.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Universal\ObjectVisibility.cs" Line="95" Column="1" />
+      <File FileName="Assets\TooltipView.cs" Line="25" Column="25" />
+      <File FileName="Assets\Scripts\Universal\ObjectVisibility.cs" Line="13" Column="16" />
+      <File FileName="Assets\TooltipBroadcast.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
