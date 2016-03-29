@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -101,27 +102,51 @@ public class ObjectVisibility : BetterBehaviour {
 		assert_lists_correct ();
 	}
 
+	private void log_error(string msg){
+		Debug.LogError (gameObject.name + ".ObjectVisibility:" + msg);
+	}
+
 	public void assert_lists_correct(){
-		foreach(GameObject obj in objects){
+		if (objects == null) {
+			log_error("'objects' should be a list, instead it's null.");
+		}
+		if (behaviors == null) {
+			log_error("'behaviors' should be a list, instead it's null.");
+		}
+		if (renderers == null) {
+			log_error("'renderers' should be a list, instead it's null.");
+		}
+		if (UI_behaviors == null) {
+			log_error("'UI_behaviors' should be a list, instead it's null.");
+		}
+		objects = objects.Where ((obj, index) => {
 			if (obj == null){
-				Debug.LogError("Got null object in visibility list:"+gameObject.ToString());
+				log_error("Found invalid object at index "+index);
+				return false;
 			}
-		}
-		foreach(MonoBehaviour behavior in behaviors){
-			if (behavior == null){
-				Debug.LogError("Got null behavior in visibility list:"+gameObject.ToString());
+			return true;
+		}).ToList();
+		behaviors = behaviors.Where ((obj, index) => {
+			if (obj == null){
+				log_error("Found invalid behavior at index "+index);
+				return false;
 			}
-		}
-		foreach(MeshRenderer renderer in renderers){
-			if (renderer == null){
-				Debug.LogWarning("Got null renderer in visibility list:"+gameObject.ToString());
+			return true;
+		}).ToList();
+		renderers = renderers.Where ((obj, index) => {
+			if (obj == null){
+				log_error("Found invalid renderer at index "+index);
+				return false;
 			}
-		}
-		foreach(UIBehaviour ui in UI_behaviors){
-			if (ui == null){
-				Debug.LogWarning("Got null UI behavior in visibility list:"+gameObject.ToString());
+			return true;
+		}).ToList();
+		UI_behaviors = UI_behaviors.Where ((obj, index) => {
+			if (obj == null){
+				log_error("Found invalid UI behavior at index "+index);
+				return false;
 			}
-		}
+			return true;
+		}).ToList();
 	}
 
 	public static ObjectVisibility GetVisibility(GameObject obj, ObjectVisibility existing){

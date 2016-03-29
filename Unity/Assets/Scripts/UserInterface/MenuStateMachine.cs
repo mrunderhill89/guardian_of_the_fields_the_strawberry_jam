@@ -19,6 +19,8 @@ public class MenuStateMachine : BetterBehaviour {
 		).add_child (
 			fsm.state ("settings")
 		).add_child (
+			fsm.state ("advanced_settings")
+		).add_child (
 			fsm.state ("credits")
 		).add_child (
 			fsm.state ("language")
@@ -35,6 +37,14 @@ public class MenuStateMachine : BetterBehaviour {
 					.chain_auto_run(false);
 		}).new_transition("main->settings", t => {
 			t.chain_from(fsm.state("main"))
+				.chain_to(fsm.state("settings"))
+					.chain_auto_run(false);
+		}).new_transition("settings->advanced", t => {
+			t.chain_from(fsm.state("settings"))
+				.chain_to(fsm.state("advanced_settings"))
+					.chain_auto_run(false);
+		}).new_transition("advanced->settings", t => {
+			t.chain_from(fsm.state("advanced_settings"))
 				.chain_to(fsm.state("settings"))
 					.chain_auto_run(false);
 		}).new_transition("settings->main", t => {

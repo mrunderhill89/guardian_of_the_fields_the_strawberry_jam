@@ -7,6 +7,7 @@ using Vexe.Runtime.Types;
 using UniRx;
 
 public class TooltipBroadcast : BetterBehaviour, IPointerEnterHandler, IPointerExitHandler {
+	[DontSerialize]
 	public TooltipView tooltip;
 	public string key = "";
 

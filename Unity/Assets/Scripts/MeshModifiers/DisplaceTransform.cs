@@ -7,6 +7,7 @@ using Vexe.Runtime.Types;
 
 public class DisplaceTransform : BetterBehaviour {
 	public List<Displacer> displacers = new List<Displacer>();
+
 	[Serialize][Hide]
 	protected Transform _input = null;
 	[Serialize][Hide]
