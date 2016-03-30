@@ -13,11 +13,12 @@ public class GameSettingsComponent : BetterBehaviour
 	[DontSerialize]
 	public static ReactiveProperty<Model> rx_working_rules = new ReactiveProperty<Model>();
 	
-	public ILoader<Model> loader {get; set;}
-	
 	[Show]
 	public static Model working_rules{
 		get{
+			if (rx_working_rules.Value == null){
+				rx_working_rules.Value = SaveLoadSelector.get_settings_loader().load("Default");
+			}
 			return rx_working_rules.Value;
 		}
 		private set {rx_working_rules.Value = value;}
@@ -26,7 +27,6 @@ public class GameSettingsComponent : BetterBehaviour
 	private static IDisposable sync_seed;
 
 	void Awake(){
-		loader = SaveLoadSelector.get_settings_loader();
 		//Synchronize Unity's random number seed with the working ruleset's.
 		if (sync_seed == null){
 			sync_seed = rx_working_rules.SelectMany((rules)=>{
@@ -43,8 +43,6 @@ public class GameSettingsComponent : BetterBehaviour
 				}
 			});
 		}
-		Debug.Log(loader);
-		rx_working_rules.Value = loader.load("default");
 	}
 
 	#endregion
