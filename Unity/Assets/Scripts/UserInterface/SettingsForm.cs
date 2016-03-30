@@ -5,7 +5,7 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using UniRx;
 public class SettingsForm : BetterBehaviour {
-	public GameSettingsComponent data_component;
+	public SettingsFileBar data_component;
 	//Toggles
 	/* 
 	Randomize

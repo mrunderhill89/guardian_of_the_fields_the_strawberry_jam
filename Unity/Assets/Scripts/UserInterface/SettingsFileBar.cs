@@ -17,8 +17,19 @@ public class SettingsFileBar : BetterBehaviour {
 	public Button apply;
 	public Button revert;
 	public GameSettingsComponent data_component;
+	public ReactiveProperty<GameSettings.Model> rx_current_rules = new ReactiveProperty<GameSettings.Model>();
+	public GameSettings.Model current_rules {
+		get{ return rx_current_rules.Value; }
+		set{ rx_current_rules.Value = value; }
+	}
+
+	public IMultiLoader<GameSettings.Model> loader {get; set;}
+	public ISaver<GameSettings.Model> saver {get; set;}
 	
+	public ReactiveProperty<bool> rx_is_working_rules;
+
 	public Dropdown quick_import;
+
 	class QuickImportOption{
 		internal FileInfo file;
 		internal string filename;
@@ -42,7 +53,10 @@ public class SettingsFileBar : BetterBehaviour {
 
 	ReactiveCollection<QuickImportOption> quick_import_options = new ReactiveCollection<QuickImportOption>();
 	IntReactiveProperty default_option = new IntReactiveProperty(0);
+
 	void Start () {
+		loader = SaveLoadSelector.get_settings_loader();
+		saver = SaveLoadSelector.get_settings_saver();
 		quick_import.options.Clear();
 		DirectoryInfo d = new DirectoryInfo(GameSettings.Model.default_folder);
 		//Automatically set the dropdown to the default file if one is present.
@@ -68,25 +82,28 @@ public class SettingsFileBar : BetterBehaviour {
 			}
 			return opt.dropdown_option;
 		}).Subscribe(option=>{
-			data_component.import(option.file.FullName);
+			current_rules = loader.load(option.filename);
 			file_input.text = option.file.FullName;
 		});
 		
 		quick_import_options.SetRange(d.GetFiles("*.yaml").Select(file=>new QuickImportOption(file)));
 		
 		load.onClick.AddListener(()=>{
-			data_component.import(file_input.text);
+			current_rules = loader.load(file_input.text);
 		});
 		save.onClick.AddListener(()=>{
-			data_component.export(file_input.text);
+			saver.save(file_input.text, current_rules);
 		});
 		apply.onClick.AddListener(()=>{
-			data_component.apply();
+			GameSettingsComponent.working_rules.copy_from(current_rules);
 		});
 		revert.onClick.AddListener(()=>{
-			data_component.revert();
+			current_rules.copy_from(GameSettingsComponent.working_rules);
 		});
-		data_component.rx_is_working_rules.Subscribe((value)=>{
+
+		rx_is_working_rules = GameSettingsComponent.rx_working_rules.CombineLatest(rx_current_rules, (working,current) => working == current).ToReactiveProperty<bool>();
+
+		rx_is_working_rules.Subscribe((value)=>{
 			appear_when_different.visible = !value;
 		});
 		file_input.text = GameSettings.Model.default_filename;

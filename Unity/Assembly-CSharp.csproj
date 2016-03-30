@@ -68,6 +68,11 @@
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" />
      <Compile Include="Assets\Scripts\Field\SunStateSystem.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\ILoader.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\IMultiLoader.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\ISaver.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\LocalFileLoader.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\SaveLoadSelector.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketGrid.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketIcon.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketScore.cs" />
@@ -123,7 +128,6 @@
      <Compile Include="Assets\Scripts\Universal\Grounded.cs" />
      <Compile Include="Assets\Scripts\Universal\NamedBehavior.cs" />
      <Compile Include="Assets\Scripts\Universal\ObjectVisibility.cs" />
-     <Compile Include="Assets\Scripts\Universal\ObjectVisibilityV1.cs" />
      <Compile Include="Assets\Scripts\Universal\Randomize_Rotation.cs" />
      <Compile Include="Assets\Scripts\Universal\Randomize_Scale.cs" />
      <Compile Include="Assets\Scripts\UserInterface\BreakButton.cs" />

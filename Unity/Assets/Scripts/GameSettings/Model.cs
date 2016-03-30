@@ -83,38 +83,6 @@ namespace GameSettings{
 			initialize ();
 		}
 
-		public Model import(string filename = ""){
-			Model that = import_static(filename);
-			if (that == null) return this;
-			copy_from(that);
-			return this;
-		}
-		
-		public static Model import_static(string filename = "")
-		{
-			if (filename == "")
-				filename = default_filename;
-			string Document = File.ReadAllLines(filename).Aggregate("", (string b, string n)=>{
-				if (b == "") return n;
-				return b+"\n"+n;
-			});
-			var input = new StringReader(Document);
-			var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
-			Model data = deserializer.Deserialize<Model>(input);
-			return data;
-		}
-
-		public Model export(string filename = "")
-		{
-			if (filename == "")
-				filename = default_filename;
-			StreamWriter fout = new StreamWriter(filename);
-			var serializer = new Serializer();
-			serializer.Serialize(fout, this);
-			fout.Close();
-			return this;
-		}
-
 		public Model initialize(){
 			flags.initialize ();
 			randomness.initialize ();
