@@ -55,6 +55,7 @@ public class Transition : NamedBehavior, IComparable<Transition>
 	protected List<TransitionEvent> entry_actions = new List<TransitionEvent>();
 	protected List<TransitionEvent> transfer_actions = new List<TransitionEvent>();
 	protected List<TransitionEvent> exit_actions = new List<TransitionEvent>();
+	protected List<TransitionEvent> failure_actions = new List<TransitionEvent>();
 
 	#endregion
 
@@ -158,6 +159,11 @@ public class Transition : NamedBehavior, IComparable<Transition>
 		return this;
 	}
 
+	public Transition on_failure(TransitionEvent evn){
+		failure_actions.Add(evn);
+		return this;
+	}
+
 	public Transition on_exit(TransitionEvent evn){
 		entry_actions.Add(evn);
 		return this;
@@ -179,6 +185,13 @@ public class Transition : NamedBehavior, IComparable<Transition>
 
 	public Transition invoke_exit(Automata a){
 		foreach (TransitionEvent evn in exit_actions){
+			evn.run(a,this);
+		}
+		return this;
+	}
+	
+	public Transition invoke_failure(Automata a){
+		foreach (TransitionEvent evn in failure_actions){
 			evn.run(a,this);
 		}
 		return this;

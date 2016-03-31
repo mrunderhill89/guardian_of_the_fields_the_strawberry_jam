@@ -70,6 +70,9 @@ public class StrawberryStateMachine : BetterBehaviour {
 			.on_exit(new TransitionEvent(()=>{
 				GenerateStrawberries(1);
 			}))
+			.on_failure(new TransitionEvent(()=>{
+				GameMessages.Log(LanguageTable.get("tutorial_bend_to_pick_up"));
+			}))
 			.chain_auto_run(false)
 			;
 		}).new_transition("fall_drag", (t)=>{

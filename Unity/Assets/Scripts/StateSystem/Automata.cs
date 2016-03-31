@@ -51,6 +51,9 @@ public class Automata : NamedBehavior
 				if (trans.test_single(this)) {
 					move_transition(trans);
 					break;
+				} else if (current == trans.from){
+					//Only invoke transition failure if we're in the right state.
+					trans.invoke_failure(this);
 				}
 			}
 			transitions.Clear();
