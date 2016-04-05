@@ -1,0 +1,164 @@
+names:
+  Spanish: Español
+  English: Spanish
+image_name: "mexico"
+entries:
+  berries_label: Fresas
+  berries_gathered: Escogidas
+  berries_dropped: Tiradas
+  berry_ripe: Madura
+  berry_overripe: Podrida
+  berry_underripe: Inmatura
+  berry_small: Pequeña
+  basket_label: Canastas
+  basket_single: Canasta
+  basket_accepted: Aceptado
+  basket_underweight: Insuficiente
+  basket_overweight: Demasiados
+  basket_overflow: Desbordante
+  state_loading: Cargando
+  state_look: Buscando
+  state_pick: Piscando
+  state_pack: Empacando
+  state_weigh: Peso Inicial
+  state_rearrange: Componga Fresas
+  state_final: Peso Final
+  move_while_pack: Moverse mientras que Empaca
+  date: Fecha
+  time: Hora
+  pace_reverse: Reversa
+  pace_stop: Detenido
+  pace_slow: Lento
+  pace_medium: Mediano
+  pace_fast: Rapido
+  pace_label: Paso
+  pace_max: Maxima Velocidad
+  language_english: Inglés
+  language_spanish: Español
+  menu_start: Comienze el Juego
+  menu_language: Elija su Idioma 
+  menu_controls: Controles
+  menu_controls_and_instructions: Controles y Instrucciones
+  menu_settings: Configuraciones de Juego
+  menu_scores: Alto Puntuaje 
+  menu_credits: "Creditos"
+  menu_quit: Salir del Juego
+  menu_back: "Atras"
+  menu_next: Siguiente
+  menu_ok: OK
+  menu_cancel: Cancelar
+  controls_up: Arriba
+  controls_left: Izquierda
+  controls_down: Abajo
+  controls_right: Derecha
+  controls_fast: Mas Rapido
+  controls_slow: Mas Lento
+  controls_stop: Detenerse
+  controls_forward: Avanzar
+  controls_space: Space/Espacio
+  controls_slider: Haga click y jale para selecionar su paso.
+  controls_movement: Controles de Movimiento
+  controls_picking: Controles para Piscar Fresas
+  controls_keyboard: Teclado
+  controls_mouse: "Raton (En la pantalla)"
+  controls_keypad: "Teclas de Flecha y Teclado Numerico"
+  controls_pov: Punto de Vista
+  controls_pace: "Paso (Como Camina)"
+  controls_left_click: "Click Izquierdo: Pizcar"
+  controls_left_hold: "Arrastrar Izquierdo: Detener/Mover"
+  controls_left_release: "Soltar Izquierdo: Tirar"
+  controls_scroll_up: "Para Arriba: Empujar"
+  controls_scroll_down: "Para Abajo: Jalar"
+  controls_right_click: "Click Derecho: Nada"
+  controls_left_mouse: Boton Izquierdo
+  controls_right_mouse: Boton Derecho
+  controls_mouse_wheel: Llanta del Raton
+  loading_splash:
+    Hola!
+    El juego esta tomando un poco de tiempo para generar los campos de fresas.
+    Mientras tanto, sientase libre de mover el raton para aprender los controles.
+    Cuando el campo se termine de generar, por favor presione el boton de abajo para comenzar.
+  tutorial_move: Use las teclas de flecha o "WASD" para mover su punto de vista.
+  tutorial_speed: Presione "E" o "Num 1" para ir mas rapido.
+  tutorial_slow: Presione "Q" o "Num 2" para ir mas despasio.
+  tutorial_stop: Presione "Space" o "Num 0" para detenerse.
+  tutorial_pick: Presione y detenga el boton del raton sobre una fresa para recogerla.
+  tutorial_pick_scroll: Use la rueda del raton para acercar la fresa hacia usted.
+  tutorial_pack: Pisque la fresa y pongala en una canasta.
+  tutorial_rearrange: Ordene sus fresas antes que se termine el tiempo.
+  tutorial_midday: Es medio dia. El juego terminara cuando baje el sol.
+  tutorial_time_up: "Ya casi baja el sol! Apurele!"
+  no_key: <No hay Clave>
+  input_float: 'Numero decimal (##.##)'
+  input_integer: 'Numero entero (###)'
+  input_filename: Nombre de archivo
+  file_load: Carge
+  file_save: Guarde
+  file_apply: Aplicar
+  file_revert: Revertir
+  settings_seed: Numerdo de Semillas Incierto
+  settings_debug: Opciones de Depurracion
+  settings_max_berries: Limite de Fresas en el Campo
+  settings_set_to_current: Use estas Configuraciones
+  settings_penalty_big: Consecuencia Grande
+  settings_penalty_medium: Consecuencia Mediana
+  settings_penalty_small: "Consecuencia Pequeña"
+  settings_max_basket_weight: Peso de Canasta Maximo
+  settings_min_basket_weight: Peso de Canasta Minimo
+  settings_min_accepted_size: "Tamaño de fresas minimo"
+  settings_max_accepted_ripeness: Madurez Maxima Aceptada
+  settings_min_accepted_ripeness: Madurez Minima Aceptada
+  settings_game_length: Tiempo del Juego
+  settings_min_ripeness: Madurez Minima
+  settings_break_length: Tiempo del descanso
+  settings_max_ripeness: Madurez Maxima
+  settings_end_hour: Hora Final
+  settings_start_hour: Hora de Inicio
+  settings_break_distance: Distancia del descnso
+  settings_min_size: "Tamaño de fresas minimo"
+  settings_max_size: "Tamaño de freas maximo"
+  settings_randomize: Hacer Insierto
+  settings_density: Multiplicador de Peso para Fresas
+  settings_tutorial: Tutorial
+  score_total_berries: Fresas Totales
+  score_total_weight: Peso Total
+  score_avg_weight: Peso Promedio
+  score_avg_ripeness: Madurez Promedia
+  score_name: Nombre
+  time_date_recorded: Fecha Registrado
+  time_played_for: Jugado Para
+  time_finished: Terminado
+  time_not_finished: No Terminó
+  language_english: Inglés
+  language_spanish: Español
+  credits_title: "Guardianes de Los Campos: El Aprieto de Fresas"
+  credits_class: "Game Over: Clase de Diseño de Juego"
+  credits_dev_team: Equipo de Desarollo
+  credits_producer: Productor
+  credits_teacher: Maestro/a
+  credits_ta: Asistente
+  credits_designers: "Diseñadores de Juego"
+  credits_prototype: "Diseñadores de Prototipos"
+  credits_programmer: Programador
+  credits_artists: Artistas
+  credits_sound: "Diseño de Sonido"
+  credits_students: Estudiantes de Diseño
+  credits_thanks: Agradecimientos especiales
+  credits_farmworkers: "¡Y a los miles de campesinos/jornaleros en California y alrededor del mundo que cosechan nuestra comida cada año!"
+  credits_wrenner_gren: Wrenner-Gren Foundation
+  credits_digital_nest: Digital Nest
+  credits_pajaro_teachers: 
+    Pájaro Valley
+    Federation of Teachers
+  credits_migration:
+    PVUSD Migrant Education 
+    District XI
+  credits_UCSC:
+    Universidad de California, 
+    Santa Cruz
+  credits_fresno_state: Fresno State University
+  credits_unity: Unity Technologies
+  debug_quick_start: Empiece Rapido
+  debug_end_game: Termine el Juego
+  debug_free_berry: Muchas Fresas!
+  help_ripeness: Madurez

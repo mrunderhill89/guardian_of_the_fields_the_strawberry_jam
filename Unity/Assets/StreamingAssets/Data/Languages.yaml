@@ -240,6 +240,7 @@ English:
   tutorial_pick: Click and hold on a strawberry to pick it up.
   tutorial_pick_scroll: Use the mouse wheel to pull the strawberry towards you.
   tutorial_pack: Pick up a strawberry and carry it to these baskets.
+  tutorial_bend_to_pick_up: You need to bend down (down arrow or "S") to pick up a strawberry.
   tutorial_rearrange: Rearrange strawberries before time runs out.
   tutorial_midday: It's mid-day. The game ends when the sun goes down.
   tutorial_time_up: Sunset is coming soon! Hurry up!

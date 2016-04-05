@@ -35,6 +35,10 @@ public class LocalFileLoader<T>: IMultiLoader<T>, ISaver<T> {
 		return d.GetFiles("*.yaml").Select(file=>file.Name).ToArray();
 	}
 	
+	public bool has_option(string name){
+		return File.Exists(name_to_filename(name));
+	}
+	
 	protected Func<string,string> name_to_filename;
 	
 	public T load(string name){
