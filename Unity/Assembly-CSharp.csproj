@@ -147,7 +147,6 @@
      <Compile Include="Assets\Scripts\UserInterface\InputController.cs" />
      <Compile Include="Assets\Scripts\UserInterface\KeyboardSpeedControls.cs" />
      <Compile Include="Assets\Scripts\UserInterface\LanguageTable.cs" />
-     <Compile Include="Assets\Scripts\UserInterface\LanguageTableV1.cs" />
      <Compile Include="Assets\Scripts\UserInterface\LoadingProgress.cs" />
      <Compile Include="Assets\Scripts\UserInterface\MainMenuReturn.cs" />
      <Compile Include="Assets\Scripts\UserInterface\MenuStateMachine.cs" />

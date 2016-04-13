@@ -114,4 +114,8 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 		{ return controller.rx_load_text(key);}
 	public ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key)
 		{ return controller.rx_load_text(rx_key);}
+	public string current_language_key{
+		get{ return controller.current_language_key; }
+		set{ controller.current_language_key = value; }
+	}
 }

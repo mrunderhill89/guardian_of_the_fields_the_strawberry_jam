@@ -121,6 +121,7 @@ public class LanguageDictionary{
 	}
 }
 
+[ExecuteInEditMode]
 public class LanguageTable : BetterBehaviour {
 	protected static LanguageDictionary _dictionary = null;
 	[Show]
@@ -195,7 +196,70 @@ public class LanguageTable : BetterBehaviour {
 		set{ _suffix = value;}
 	}
 
+	[Show]
+	public int Replace(){
+		int replacement_count = 0;
+		//Replace yourself with LanguageTextView
+		if (GetComponents<LanguageTable>().Length > 0){
+			LanguageTextView replacement;
+			foreach (KeyValuePair<string,List<Text>> text_list in text_objects) {
+				foreach (Text text in text_list.Value) {
+					if (text.gameObject.GetComponents<LanguageTextView>().Length == 0){
+						replacement = text.gameObject.AddComponent<LanguageTextView>();
+						replacement.key = text_list.Key;
+						replacement.text = text;
+						replacement.prefix = prefix;
+						replacement.suffix = suffix;
+						replacement_count++;
+					}
+				}
+			}
+			foreach (KeyValuePair<string,List<TextMesh>> mesh_list in text_meshes) {
+				foreach (TextMesh mesh in mesh_list.Value) {
+					if (mesh.gameObject.GetComponents<LanguageTextView>().Length == 0){
+						replacement = mesh.gameObject.AddComponent<LanguageTextView>();
+						replacement.key = mesh_list.Key;
+						replacement.mesh = mesh;
+						replacement.prefix = prefix;
+						replacement.suffix = suffix;
+						replacement_count++;
+					}
+				}
+			}
+			if (replacement_count == 0 && gameObject.GetComponents<LanguageTextView>().Length == 0){
+					replacement = gameObject.AddComponent<LanguageTextView>();
+					replacement.key = key;
+					replacement.prefix = prefix;
+					replacement.suffix = suffix;
+					replacement_count++;						
+			}
+		}
+		return replacement_count;
+	}
+
+	public override void Reset(){
+		int replacement_count = 0;
+		try{
+			replacement_count = Replace();
+		} finally {
+			Debug.Log("Replaced LanguageTable with "+replacement_count+" LanguageTextViews.");
+			if (replacement_count > 0){
+				Invoke("DestroyMe",0);
+			}
+		}
+	}
+	
 	void Start(){
+		int replacement_count = 0;
+		try{
+			replacement_count = Replace();
+		} finally {
+			Debug.Log("Replaced LanguageTable with "+replacement_count+" LanguageTextViews.");
+			if (replacement_count > 0){
+				Invoke("DestroyMe",0);
+			}
+		}
+/*	
 		if (auto_assign && Count == 0) {
 			if (GetComponent<Text>() != null){
 				SubscribeText(GetComponent<Text>());
@@ -216,9 +280,13 @@ public class LanguageTable : BetterBehaviour {
 					SubscribeMesh (mesh_list.Key, mesh);
 				}
 			}
-		}
+		}*/
 	}
-
+	
+	void DestroyMe(){
+		DestroyImmediate(this);
+	}
+	
 	void OnDestroy(){
 		foreach (IDisposable disposable in disposables) {
 			disposable.Dispose();
