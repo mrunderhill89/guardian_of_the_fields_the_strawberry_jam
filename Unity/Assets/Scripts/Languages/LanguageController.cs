@@ -17,6 +17,9 @@ public interface ILanguageController{
 	string get_language_label(string lang);
 	ReadOnlyReactiveProperty<string> rx_load_text(string key);
 	ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key);
+	ReadOnlyReactiveProperty<string> rx_current_language_key {get;}
+	ReadOnlyReactiveProperty<string> rx_get_language_label(string target_language);
+	ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_lang);
 }
 
 public class LanguageControllerStatic : ILanguageController {
@@ -27,7 +30,13 @@ public class LanguageControllerStatic : ILanguageController {
 
 	[DontSerialize]
 	protected StringReactiveProperty _rx_current_language_key;
-	public ReadOnlyReactiveProperty<string> rx_current_language_key;
+	public ReadOnlyReactiveProperty<string> rx_current_language_key{
+		get{
+			return _rx_current_language_key
+			.Where(lang=>lang == "" || loader.has_option(lang))
+			.ToReadOnlyReactiveProperty<string>();
+		}
+	}
 	[Show]
 	public string current_language_key{
 		get{ return rx_current_language_key.Value; }
@@ -47,11 +56,22 @@ public class LanguageControllerStatic : ILanguageController {
 		return loaded_languages[lang];
 	}
 	
+	public bool has_text(string key){
+		return has_text(key, current_language_key);
+	}
+	
+	public bool has_text(string key, string lang){
+		LanguageModel given_language = load_language(lang);
+		return given_language.entries.ContainsKey(key);
+	}
+	
 	public string load_text(string key){
 		return load_text(key, current_language_key);
 	}
 	
 	public string load_text(string key, string lang){
+		if (lang == "")
+			lang = default_language_key;
 		LanguageModel given_language = load_language(lang);
 		if (given_language.entries.ContainsKey(key))
 			return given_language.entries[key];
@@ -87,20 +107,33 @@ public class LanguageControllerStatic : ILanguageController {
 	} 
 	
 	public string get_language_label(string target_language){
+		return get_language_label(target_language, current_language_key);
+	}
+	
+	public string get_language_label(string target_language, string viewing_language){
+		if (viewing_language == "")
+			viewing_language = default_language_key;
 		string native = load_language_name(target_language, target_language);
-		string current = load_language_name(target_language, current_language_key);
+		string current = load_language_name(target_language, viewing_language);
 		if (native != current){
-			return current + "(" + native + ")";
+			return current + " (" + native + ")";
 		}
 		return native;
 	}
 	
+	public ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_key){
+		return rx_key.SelectMany(key=>rx_get_language_label(key)).ToReadOnlyReactiveProperty<string>();
+	}
+	
+	public ReadOnlyReactiveProperty<string> rx_get_language_label(string target_language){
+		return rx_current_language_key.Select((viewing_language)=>{
+			return get_language_label(target_language, viewing_language);
+		}).ToReadOnlyReactiveProperty<string>();
+	}
+	
 	public LanguageControllerStatic(){
 		loader = new LocalFileLoader<LanguageModel>(Application.streamingAssetsPath + "/Data/Languages");
-		_rx_current_language_key = new StringReactiveProperty(default_language_key);
-		rx_current_language_key = _rx_current_language_key
-			.Where(lang=>loader.has_option(lang))
-			.ToReadOnlyReactiveProperty<string>();
+		_rx_current_language_key = new StringReactiveProperty("");
 	}
 }
 
@@ -114,6 +147,15 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 		{ return controller.rx_load_text(key);}
 	public ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key)
 		{ return controller.rx_load_text(rx_key);}
+
+	public ReadOnlyReactiveProperty<string> rx_get_language_label(string key)
+		{ return controller.rx_get_language_label(key);}
+	public ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_key)
+		{ return controller.rx_get_language_label(rx_key);}
+
+	public ReadOnlyReactiveProperty<string> rx_current_language_key{
+		get{ return controller.rx_current_language_key; }
+	}
 	public string current_language_key{
 		get{ return controller.current_language_key; }
 		set{ controller.current_language_key = value; }

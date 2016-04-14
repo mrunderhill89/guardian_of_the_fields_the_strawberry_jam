@@ -38,6 +38,7 @@ entries:
   menu_start: Comienze el Juego
   menu_language: Elija su Idioma 
   menu_controls: Controles
+  menu_rules: Reglas
   menu_controls_and_instructions: Controles y Instrucciones
   menu_settings: Configuraciones de Juego
   menu_scores: Alto Puntuaje 

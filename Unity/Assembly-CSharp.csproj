@@ -99,6 +99,7 @@
      <Compile Include="Assets\Scripts\GameSettings\Time.cs" />
      <Compile Include="Assets\Scripts\GameSettings\WinCondition.cs" />
      <Compile Include="Assets\Scripts\Languages\LanguageController.cs" />
+     <Compile Include="Assets\Scripts\Languages\LanguageLabelView.cs" />
      <Compile Include="Assets\Scripts\Languages\LanguageModel.cs" />
      <Compile Include="Assets\Scripts\Languages\LanguageTextView.cs" />
      <Compile Include="Assets\Scripts\MeshModifiers\DisplaceFade.cs" />
@@ -146,7 +147,6 @@
      <Compile Include="Assets\Scripts\UserInterface\HideDebugControls.cs" />
      <Compile Include="Assets\Scripts\UserInterface\InputController.cs" />
      <Compile Include="Assets\Scripts\UserInterface\KeyboardSpeedControls.cs" />
-     <Compile Include="Assets\Scripts\UserInterface\LanguageTable.cs" />
      <Compile Include="Assets\Scripts\UserInterface\LoadingProgress.cs" />
      <Compile Include="Assets\Scripts\UserInterface\MainMenuReturn.cs" />
      <Compile Include="Assets\Scripts\UserInterface\MenuStateMachine.cs" />

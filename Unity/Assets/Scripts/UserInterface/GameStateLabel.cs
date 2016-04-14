@@ -23,6 +23,6 @@ public class GameStateLabel : BetterBehaviour {
 		}
 	}
 	public void Update(){
-		text.text = LanguageTable.get(key);
+		text.text = LanguageController.controller.load_text(key);
 	}
 }

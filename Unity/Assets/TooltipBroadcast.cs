@@ -23,7 +23,7 @@ public class TooltipBroadcast : BetterBehaviour, IPointerEnterHandler, IPointerE
 
 	public void OnPointerEnter(PointerEventData evn){
 		if (tooltip != null) {
-			tooltip.show (LanguageTable.get (key));
+			tooltip.show (LanguageController.controller.load_text(key));
 		}
 	}
 

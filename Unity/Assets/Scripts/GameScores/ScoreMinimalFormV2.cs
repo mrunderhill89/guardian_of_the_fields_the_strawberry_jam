@@ -61,7 +61,7 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 			if (s == null)
 				return Observable.Never<String>();
 			return s.rx_player_name.AsObservable();
-		}).CombineLatest(LanguageTable.get_property("score_default_name"), (name, default_name)=>{
+		}).CombineLatest(LanguageController.controller.rx_load_text("score_default_name"), (name, default_name)=>{
 			if (IsNullOrWhiteSpace(name))
 				return default_name;
 			return name;
@@ -74,9 +74,9 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 		rx_finished = rx_score.SelectMany(s=>{
 			if (s == null) return Observable.Never<String>();
 			if (s.finished()){
-				return LanguageTable.get_property("time_finished");
+				return LanguageController.controller.rx_load_text("time_finished");
 			}
-			return LanguageTable.get_property("time_not_finished");
+			return LanguageController.controller.rx_load_text("time_not_finished");
 		}).ToReadOnlyReactiveProperty<string>();
 		
 		rx_finished.Subscribe(t=>{

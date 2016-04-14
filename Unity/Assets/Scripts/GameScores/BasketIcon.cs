@@ -67,7 +67,7 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 		if (win == null)
 			win = GameSettingsComponent.working_rules.win_condition;
 			
-		rx_id_text = LanguageTable.get_property("basket_single")
+		rx_id_text = LanguageController.controller.rx_load_text("basket_single")
 			.CombineLatest(rx_score.SelectMany(rx_score.SelectMany(s=>s.rx_id)), (text, id)=>{
 				return text+" #"+id.ToString();
 			}).ToReadOnlyReactiveProperty<string>();

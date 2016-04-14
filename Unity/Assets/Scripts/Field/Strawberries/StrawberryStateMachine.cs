@@ -20,7 +20,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 	}
 
 	public GameStateManager player_state;
-
+	
 	void Awake () {
 		main = this;
 		fsm = gameObject.AddComponent<StateMachine>();
@@ -38,7 +38,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 			).add_child (
 				fsm.state ("drag")
 					.on_entry(new StateEvent(()=>{
-						GameMessages.Log(LanguageTable.get("tutorial_pick_scroll"));
+						GameMessages.Log(LanguageController.controller.load_text("tutorial_pick_scroll"));
 					}).Limit(1))
 			).add_child (
 				fsm.state ("fall")
@@ -71,7 +71,7 @@ public class StrawberryStateMachine : BetterBehaviour {
 				GenerateStrawberries(1);
 			}))
 			.on_failure(new TransitionEvent(()=>{
-				GameMessages.Log(LanguageTable.get("tutorial_bend_to_pick_up"));
+				GameMessages.Log(LanguageController.controller.load_text("tutorial_bend_to_pick_up"));
 			}))
 			.chain_auto_run(false)
 			;

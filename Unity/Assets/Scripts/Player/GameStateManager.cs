@@ -71,12 +71,12 @@ public class GameStateManager : BetterBehaviour {
 					});
 					if (tutorial){
 						timer.add_countdown(game_length-60.0f, (t)=>{
-							GameMessages.Log(LanguageTable.get("tutorial_time_up"), 10.0f);
+							GameMessages.Log(LanguageController.controller.load_text("tutorial_time_up"), 10.0f);
 						});
 						timer.add_countdown(game_length/2.0f, (t)=>{
-							GameMessages.Log(LanguageTable.get("tutorial_midday"), 10.0f);
+							GameMessages.Log(LanguageController.controller.load_text("tutorial_midday"), 10.0f);
 						});
-						GameMessages.Log(LanguageTable.get("tutorial_move"), 10.0f);
+						GameMessages.Log(LanguageController.controller.load_text("tutorial_move"), 10.0f);
 					}
 					timer.started = true;
 				})),true
@@ -95,7 +95,7 @@ public class GameStateManager : BetterBehaviour {
 				fsm.state ("pick")
 				.on_entry(new StateEvent(()=>{
 					if (tutorial){
-						GameMessages.Log(LanguageTable.get("tutorial_pick"), 10.0f);
+						GameMessages.Log(LanguageController.controller.load_text("tutorial_pick"), 10.0f);
 					}
 				}).Limit(1)
 				).add_child(fsm.state("pick_left")
@@ -110,7 +110,7 @@ public class GameStateManager : BetterBehaviour {
 					.on_entry(new StateEvent(camera_control.lazy_set_target("pack")))
 					.on_entry(new StateEvent(()=>{
 							if (tutorial){
-								GameMessages.Log(LanguageTable.get("tutorial_pack"), 10.0f);
+								GameMessages.Log(LanguageController.controller.load_text("tutorial_pack"), 10.0f);
 							}
 						}).Limit(1)
 					)

@@ -17,6 +17,7 @@ public class SettingsFileBar : BetterBehaviour {
 	public Button apply;
 	public Button revert;
 	public GameSettingsComponent data_component;
+	[DontSerialize]
 	public ReactiveProperty<GameSettings.Model> rx_current_rules = new ReactiveProperty<GameSettings.Model>();
 	public GameSettings.Model current_rules {
 		get{ return rx_current_rules.Value; }
@@ -39,9 +40,9 @@ public class SettingsFileBar : BetterBehaviour {
 			file = _file;
 			dropdown_option = new Dropdown.OptionData();
 			filename = Path.GetFileNameWithoutExtension(file.Name);
-			text = LanguageTable.dictionary.current_language.Select(lang=>{
-				if (LanguageTable.has("filename_"+filename))
-					return LanguageTable.get("filename_"+filename);
+			text = LanguageController.controller.rx_current_language_key.Select(lang=>{
+				if (LanguageController.controller.has_text("filename_"+filename))
+					return LanguageController.controller.load_text("filename_"+filename);
 				return textInfo.ToTitleCase(filename);
 			}).ToReactiveProperty();
 			text.Subscribe(t=>{
@@ -83,7 +84,7 @@ public class SettingsFileBar : BetterBehaviour {
 			return opt.dropdown_option;
 		}).Subscribe(option=>{
 			current_rules = loader.load(option.filename);
-			file_input.text = option.file.FullName;
+			file_input.text = option.filename;
 		});
 		
 		quick_import_options.SetRange(d.GetFiles("*.yaml").Select(file=>new QuickImportOption(file)));

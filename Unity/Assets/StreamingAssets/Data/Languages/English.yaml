@@ -36,6 +36,7 @@ entries:
   menu_start: Start Game
   menu_language: Choose Language
   menu_controls: Controls
+  menu_rules: Rules
   menu_controls_and_instructions: Controls and Instructions
   menu_settings: Game Settings
   menu_scores: High Scores

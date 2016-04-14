@@ -78,7 +78,7 @@ public class MenuStateMachine : BetterBehaviour {
 		});
 		fsm.new_automata ("player", (a) => {
 			a.move_direct (fsm.state ("root"));
-			if (LanguageTable.dictionary.current_language.Value == ""){
+			if (LanguageController.controller.current_language_key == ""){
 				a.move_direct(fsm.state("language"));
 			}
 		});

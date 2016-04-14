@@ -12,8 +12,19 @@ using YamlDotNet.RepresentationModel;
 using UniRx;
 
 public class LanguageTextView: BetterBehaviour {
-	public Text text;
-	public TextMesh mesh;
+	public List<Text> ui_texts = new List<Text>();
+	public List<TextMesh> mesh_texts = new List<TextMesh>();
+
+	public LanguageTextView add_text(Text text){
+		ui_texts.Add(text);
+		return this;
+	}
+	
+	public LanguageTextView add_mesh(TextMesh mesh){
+		mesh_texts.Add(mesh);
+		return this;
+	}
+
 	public string prefix = "";
 	public string suffix = "";
 	[Hide]
@@ -31,7 +42,7 @@ public class LanguageTextView: BetterBehaviour {
 	[Show]
 	public string value{
 		get{ 
-			if (rx_value == null) return "Not yet!";
+			if (rx_value == null) return key;
 			return rx_value.Value;
 		}
 	}
@@ -39,12 +50,10 @@ public class LanguageTextView: BetterBehaviour {
 	public ILanguageController controller;
 	
 	void Start(){
-		if (text == null && GetComponent<Text>() != null){
-			text = GetComponent<Text>();
-		}
-		if (mesh == null && GetComponent<TextMesh>() != null){
-			mesh = GetComponent<TextMesh>();
-		}
+		if (ui_texts.Count == 0)
+			ui_texts.AddRange(GetComponents<Text>());
+		if (mesh_texts.Count == 0)
+			mesh_texts.AddRange(GetComponents<TextMesh>());
 		//Stopgap solution until I can get dependency injection working.
 		if (controller == null){
 			controller = LanguageController.controller;
@@ -52,10 +61,12 @@ public class LanguageTextView: BetterBehaviour {
 		rx_value = controller.rx_load_text(rx_key);
 		rx_value.Subscribe((t)=>{
 			string full_text = prefix + t + suffix;
-			if (text != null)
-				text.text = full_text;
-			if (mesh != null)
+			foreach(Text ui in ui_texts){
+				ui.text = full_text;
+			}
+			foreach(TextMesh mesh in mesh_texts){
 				mesh.text = full_text;
+			}
 		});
 	}
 }

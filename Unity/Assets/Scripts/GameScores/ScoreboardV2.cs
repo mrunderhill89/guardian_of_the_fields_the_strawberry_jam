@@ -65,7 +65,7 @@ public class ScoreboardV2 : BetterBehaviour {
 
 		rx_current_sorter = select_filter
 		.SelectFromCollection(rx_sorters, (f,index)=>{
-			return f.rx_key.SelectMany(key=>LanguageTable.get_property(key));
+			return f.rx_key.SelectMany(key=>LanguageController.controller.rx_load_text(key));
 		})
 		.ToReadOnlyReactiveProperty();
 		

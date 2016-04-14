@@ -21,7 +21,7 @@ public class PaceNameLabel : BetterBehaviour {
 		if (pace != null && text != null){
 			foreach(KeyValuePair<float,string> pair in pace_names){
 				if (value < pair.Key) break;
-				text.text = LanguageTable.get(pair.Value);
+				text.text = LanguageController.controller.load_text(pair.Value);
 			}
 		}
 	}
