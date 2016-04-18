@@ -400,6 +400,25 @@ namespace UniRx
         }
 
         #endregion
+		private Dictionary<TKey, ReadOnlyReactiveProperty<TValue>> _properties;
+		public ReadOnlyReactiveProperty<TValue> GetProperty(TKey key){
+			if (_properties == null)
+				_properties = new Dictionary<TKey, ReadOnlyReactiveProperty<TValue>>();
+			if (!_properties.ContainsKey(key)){
+				var changes =  
+					ObserveAdd().Where(add => add.Key.Equals(key)).Select(add => add.Value)
+				.Merge(
+					ObserveReplace().Where(rep => rep.Key.Equals(key)).Select(rep => rep.NewValue)
+				).Merge(
+					ObserveRemove().Where(rem => rem.Key.Equals(key)).Select(rem => default(TValue))
+				);
+				if (inner.ContainsKey(key))
+					_properties[key] = changes.ToReadOnlyReactiveProperty<TValue>(inner[key]);
+				else
+					_properties[key] = changes.ToReadOnlyReactiveProperty<TValue>();
+			}
+			return _properties[key];
+		}
     }
 
     public static partial class ReactiveDictionaryExtensions

@@ -136,7 +136,7 @@ namespace UniRx
 				(T value, int index)=>{
 					var option = new Dropdown.OptionData();
 					get_text(value, index).Subscribe(text=>{
-						if (dropdown.value == index)
+						if (dropdown != null && dropdown.value == index)
 							dropdown.captionText.text = text;
 						option.text = text;
 					});

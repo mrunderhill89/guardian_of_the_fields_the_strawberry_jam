@@ -62,10 +62,14 @@ public class LanguageTextView: BetterBehaviour {
 		rx_value.Subscribe((t)=>{
 			string full_text = prefix + t + suffix;
 			foreach(Text ui in ui_texts){
-				ui.text = full_text;
+				if (ui != null){
+					ui.text = full_text;
+				}
 			}
 			foreach(TextMesh mesh in mesh_texts){
-				mesh.text = full_text;
+				if (mesh != null){
+					mesh.text = full_text;
+				}
 			}
 		});
 	}

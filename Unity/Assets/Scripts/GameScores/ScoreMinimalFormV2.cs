@@ -68,7 +68,8 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 		}).ToReadOnlyReactiveProperty<string>();
 		
 		rx_player_name.Subscribe(t=>{
-			player_name.text = t;
+			if (player_name.text != null)
+				player_name.text = t;
 		});
 		
 		rx_finished = rx_score.SelectMany(s=>{
@@ -80,7 +81,9 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 		}).ToReadOnlyReactiveProperty<string>();
 		
 		rx_finished.Subscribe(t=>{
-			finished.text = t;
+			if (finished != null){
+				finished.text = t;
+			}
 		});
 	}
 }

@@ -32,7 +32,7 @@ public class LocalFileLoader<T>: IMultiLoader<T>, ISaver<T> {
 	
 	public string[] get_options(){
 		DirectoryInfo d = new DirectoryInfo(directory);
-		return d.GetFiles("*.yaml").Select(file=>file.Name).ToArray();
+		return d.GetFiles("*.yaml").Select(file=>Path.GetFileNameWithoutExtension(file.Name)).ToArray();
 	}
 	
 	public bool has_option(string name){
@@ -55,6 +55,14 @@ public class LocalFileLoader<T>: IMultiLoader<T>, ISaver<T> {
 			Debug.LogError("LocalFileLoader: Problem attempting to load file:'"+filename+"':"+e.ToString());
 			return default(T);
 		}
+	}
+	
+	public Dictionary<string,T> load_all() {
+		var results = new Dictionary<string,T>();
+		foreach(string opt in get_options()){
+			results[opt] = load(opt);
+		}
+		return results;
 	}
 	
 	public ReactiveProperty<T> rx_load(StringReactiveProperty rx_name){

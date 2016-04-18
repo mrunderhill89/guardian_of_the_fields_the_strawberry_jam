@@ -45,7 +45,7 @@ public class LanguageLabelView: BetterBehaviour {
 	}
 	[DontSerialize]
 	public ILanguageController controller;
-	
+
 	void Start(){
 		if (ui_texts.Count == 0)
 			ui_texts.AddRange(GetComponents<Text>());
@@ -58,10 +58,14 @@ public class LanguageLabelView: BetterBehaviour {
 		rx_value = controller.rx_get_language_label(rx_language);
 		rx_value.Subscribe((t)=>{
 			foreach(Text ui in ui_texts){
-				ui.text = t;
+				if (ui != null){
+					ui.text = t;
+				}
 			}
 			foreach(TextMesh mesh in mesh_texts){
-				mesh.text = t;
+				if (mesh != null){
+					mesh.text = t;
+				}
 			}
 		});
 	}

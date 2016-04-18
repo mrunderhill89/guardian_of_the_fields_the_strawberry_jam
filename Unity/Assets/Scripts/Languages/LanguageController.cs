@@ -17,52 +17,52 @@ public interface ILanguageController{
 	string get_language_label(string lang);
 	ReadOnlyReactiveProperty<string> rx_load_text(string key);
 	ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key);
-	ReadOnlyReactiveProperty<string> rx_current_language_key {get;}
 	ReadOnlyReactiveProperty<string> rx_get_language_label(string target_language);
 	ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_lang);
+	ReadOnlyReactiveProperty<string> rx_current_language_key {get;}
 }
 
 public class LanguageControllerStatic : ILanguageController {
-	public const string default_language_key = "English";
-	public LanguageModel default_language{
-		get{ return load_language(default_language_key); }
+	protected Dictionary<string, ReactiveProperty<LanguageModel>> _rx_languages = new Dictionary<string,ReactiveProperty<LanguageModel>>();
+	public ReactiveProperty<LanguageModel> get_language_property(string key){
+		if (!_rx_languages.ContainsKey(key)){
+			_rx_languages[key] = new ReactiveProperty<LanguageModel>();
+		}
+		return _rx_languages[key];
+	}
+	public LanguageModel get_language(string key){
+		return get_language_property(key).Value;
+	}
+	public void set_language(string key, LanguageModel value){
+		get_language_property(key).Value = value;
 	}
 
-	[DontSerialize]
-	protected StringReactiveProperty _rx_current_language_key;
-	public ReadOnlyReactiveProperty<string> rx_current_language_key{
+	protected const string default_language_key = "English";
+	public LanguageModel default_language{
 		get{
-			return _rx_current_language_key
-			.Where(lang=>lang == "" || loader.has_option(lang))
-			.ToReadOnlyReactiveProperty<string>();
+			return get_language(default_language_key);
 		}
 	}
+	protected StringReactiveProperty _rx_current_language_key
+		= new StringReactiveProperty("");
+	public ReadOnlyReactiveProperty<string> rx_current_language_key{
+		get{ return _rx_current_language_key.ToReadOnlyReactiveProperty<string>(); }
+	}
+	
 	[Show]
 	public string current_language_key{
-		get{ return rx_current_language_key.Value; }
+		get{ return _rx_current_language_key.Value;}
 		set{ _rx_current_language_key.Value = value; }
 	}
-	
-	public IMultiLoader<LanguageModel> loader;
-	[Show]
-	protected Dictionary<string, LanguageModel> loaded_languages
-		= new Dictionary<string, LanguageModel>();
-	
-	[Show]
-	public LanguageModel load_language(string lang){
-		if (!loaded_languages.ContainsKey(lang)) {
-			loaded_languages[lang] = loader.load(lang);
-		}
-		return loaded_languages[lang];
+
+	public bool has_language(string lang){
+		return _rx_languages.ContainsKey(lang);
 	}
-	
 	public bool has_text(string key){
 		return has_text(key, current_language_key);
 	}
-	
 	public bool has_text(string key, string lang){
-		LanguageModel given_language = load_language(lang);
-		return given_language.entries.ContainsKey(key);
+		return has_language(lang) && get_language(lang).entries.ContainsKey(key);
 	}
 	
 	public string load_text(string key){
@@ -72,68 +72,60 @@ public class LanguageControllerStatic : ILanguageController {
 	public string load_text(string key, string lang){
 		if (lang == "")
 			lang = default_language_key;
-		LanguageModel given_language = load_language(lang);
-		if (given_language.entries.ContainsKey(key))
-			return given_language.entries[key];
-		if (default_language.entries.ContainsKey(key))
-			return "?"+default_language.entries[key];
+		return prioritize_languages(key, get_language(lang), default_language);
+	}
+
+	private string prioritize_languages(string key, LanguageModel first, LanguageModel second){
+		if (first != null && first.entries.ContainsKey(key))
+			return first.entries[key];
+		if (second != null && second.entries.ContainsKey(key))
+			return "?"+second.entries[key];
 		return "!"+key;
 	}
 
-	[Show]
-	protected Dictionary<string, ReadOnlyReactiveProperty<string>> rx_entries
-		= new Dictionary<string,ReadOnlyReactiveProperty<string>>();
+	protected Dictionary<string, ReadOnlyReactiveProperty<string>> properties
+		= new Dictionary<string, ReadOnlyReactiveProperty<string>>();
 	public ReadOnlyReactiveProperty<string> rx_load_text(string key){
-		if (!rx_entries.ContainsKey(key)){
-			rx_entries[key] = rx_current_language_key.Select((lang)=>{
-				return load_text(key,lang);
-			}).ToReadOnlyReactiveProperty();
+		if (!properties.ContainsKey(key)){
+			properties[key] = _rx_current_language_key.SelectMany(lang_key=>{
+				if (lang_key == "")
+					lang_key = default_language_key;
+				return get_language_property(lang_key)
+					.Select(lang_model => prioritize_languages(key, lang_model, default_language));
+			}).ToReadOnlyReactiveProperty<string>();
 		}
-		return rx_entries[key];
+		return properties[key];
 	}
 	
 	public ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key){
-		return rx_key.SelectMany(key=>rx_load_text(key)).ToReadOnlyReactiveProperty<string>();
+		return rx_key.SelectMany(key => rx_load_text(key)).ToReadOnlyReactiveProperty<string>();
 	}
-	
-	protected string load_language_name(string native_key, string other_key){
-		LanguageModel native = load_language(native_key);
-		if (native.names.ContainsKey(other_key)){
-			return native.names[other_key];
-		} else if (native.names.ContainsKey(native_key)){
-			return native.names[native_key];
-		}
-		return "!!"+native_key;
-	} 
 	
 	public string get_language_label(string target_language){
 		return get_language_label(target_language, current_language_key);
 	}
 	
 	public string get_language_label(string target_language, string viewing_language){
-		if (viewing_language == "")
-			viewing_language = default_language_key;
-		string native = load_language_name(target_language, target_language);
-		string current = load_language_name(target_language, viewing_language);
-		if (native != current){
-			return current + " (" + native + ")";
-		}
-		return native;
+		if (!has_language(target_language))
+			return target_language;
+		return get_language(target_language).get_language_label(viewing_language);
 	}
 	
 	public ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_key){
 		return rx_key.SelectMany(key=>rx_get_language_label(key)).ToReadOnlyReactiveProperty<string>();
 	}
-	
+
 	public ReadOnlyReactiveProperty<string> rx_get_language_label(string target_language){
-		return rx_current_language_key.Select((viewing_language)=>{
-			return get_language_label(target_language, viewing_language);
-		}).ToReadOnlyReactiveProperty<string>();
+		return get_language_property(target_language).CombineLatest(
+			rx_current_language_key,
+			(target,viewing)=>target.get_language_label(viewing)
+		).ToReadOnlyReactiveProperty<string>();
 	}
 	
-	public LanguageControllerStatic(){
-		loader = new LocalFileLoader<LanguageModel>(Application.streamingAssetsPath + "/Data/Languages");
-		_rx_current_language_key = new StringReactiveProperty("");
+	public void load_all(IMultiLoader<LanguageModel> loader){
+		foreach(string opt in loader.get_options()){
+			set_language(opt, loader.load(opt));
+		}
 	}
 }
 
@@ -159,5 +151,10 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 	public string current_language_key{
 		get{ return controller.current_language_key; }
 		set{ controller.current_language_key = value; }
+	}
+	
+	void Start(){
+		LocalFileLoader<LanguageModel> local = new LocalFileLoader<LanguageModel>(Application.streamingAssetsPath + "/Data/Languages");
+		controller.load_all(local);
 	}
 }

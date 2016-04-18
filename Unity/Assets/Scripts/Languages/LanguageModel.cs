@@ -13,6 +13,16 @@ public class LanguageModel {
 		}
 	}
 	
+	public string get_language_label(string other_language){
+		string native = names["Native"];
+		if (names.ContainsKey(other_language) && names[other_language] != native){
+			return names[other_language]+" ("+native+")";
+		}
+		return native;
+	}
+
+	public int Count(){ return _entries.Count; }
+	
 	protected Dictionary<string,string> _entries = new Dictionary<string,string>();
 	[Show]
 	public Dictionary<string,string> entries{
@@ -22,5 +32,5 @@ public class LanguageModel {
 		}
 	}
 	
-	public string image_name {get; set;}	
+	public string image_name {get; set;}
 }
