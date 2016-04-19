@@ -13,9 +13,9 @@ public class StrawberryGenerator : BetterBehaviour {
 			.on_entry(new StateEvent((Automata a)=>{
 				a.transform.SetParent(transform);
 				a.transform.localPosition = CylinderToCube(
-					RandomUtils.random_float(0.0f,360.0f * Mathf.Deg2Rad),
-					RandomUtils.random_float(min.x,max.x),
-					RandomUtils.random_float(min.y,max.y)
+					RandomUtils.random_float(0.0f,360.0f * Mathf.Deg2Rad, "level_generation"),
+					RandomUtils.random_float(min.x,max.x, "level_generation"),
+					RandomUtils.random_float(min.y,max.y, "level_generation")
 				);
 				a.GetComponent<ObjectVisibility>().visible = true;
 			}))

@@ -59,7 +59,7 @@ public class RowGenerator : BetterBehaviour {
 		return null;
 	}
 	public GameObject random_entry(int from, int to, Func<GameObject,bool> filter = null){
-		int r = RandomUtils.random_int (from, to), i;
+		int r = RandomUtils.random_int (from, to, "level_generation"), i;
 		for (int adjust = 0; adjust < to - from; adjust++) {
 			i = from + wrap(r+adjust, to-from);
 			if (objects.ContainsKey(i)){

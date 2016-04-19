@@ -40,9 +40,10 @@ public class GameStateManager : BetterBehaviour {
 			scores = GetComponent<GameScoreComponent>();
 		//Sync random number generator
 		if (GameSettingsComponent.working_rules.randomness.randomize){
-			GameSettingsComponent.working_rules.randomness.seed = UnityEngine.Random.seed;
+			int new_seed = RandomUtils.random_int(0,999999, "seed_generation");
+			RandomUtils.initialize_seed("level_generation", new_seed);
 		} else {
-			UnityEngine.Random.seed = GameSettingsComponent.working_rules.randomness.seed;
+			RandomUtils.initialize_seed("level_generation", GameSettingsComponent.working_rules.randomness.seed);
 		}
 	}
 	void Start () {

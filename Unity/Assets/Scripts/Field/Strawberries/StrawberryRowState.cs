@@ -13,7 +13,7 @@ public class StrawberryRowState : BetterBehaviour{
 	}
 	public static State random_row(){
 		if (rows.Count > 0){
-			State state = rows[RandomUtils.random_int(0,rows.Count)].state;
+			State state = rows[RandomUtils.random_int(0,rows.Count, "level_generation")].state;
 			return state;
 		}
 		return null;

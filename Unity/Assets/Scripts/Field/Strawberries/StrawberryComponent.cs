@@ -53,7 +53,7 @@ public class StrawberryComponent : BetterBehaviour {
 		visibility.visible = false;
 		quality = RandomUtils.random_float(
 			GameSettingsComponent.working_rules.strawberry.min_ripeness, 
-			GameSettingsComponent.working_rules.strawberry.max_ripeness);
+			GameSettingsComponent.working_rules.strawberry.max_ripeness, "level_generation");
 		StrawberryScale scale = gameObject.GetComponent<StrawberryScale>();
 		if (scale != null){
 			scale.Initialize();

@@ -61,14 +61,14 @@ public class LeafGenerator : BetterBehaviour {
 		.on_entry(new StateEvent((Automata a)=>{
 			GameObject leaf = a.gameObject;
 			leaf.transform.SetParent(transform);
-			float r = RandomUtils.random_float(0.0f,360.0f);
+			float r = RandomUtils.random_float(0.0f,360.0f, "level_generation");
 			leaf.transform.localPosition = CylinderToCube(
 				r * Mathf.Deg2Rad,
-				RandomUtils.random_float(radius),
+				RandomUtils.random_float(radius, "level_generation"),
 				crown_height
 			);
 			leaf.transform.localRotation = Quaternion.Euler(
-				RandomUtils.random_vec3(twist_min,twist_max)+
+				RandomUtils.random_vec3(twist_min,twist_max, "level_generation")+
 				new Vector3(0.0f, r, 0.0f)
 			);
 			ObjectVisibility vis = a.GetComponent<ObjectVisibility>();
@@ -78,7 +78,7 @@ public class LeafGenerator : BetterBehaviour {
 		}));
 	}
 	public void Start () {
-		num_leaves = RandomUtils.random_int(min_leaves,max_leaves);
+		num_leaves = RandomUtils.random_int(min_leaves,max_leaves, "level_generation");
 		state.eject_all();
 	}
 
