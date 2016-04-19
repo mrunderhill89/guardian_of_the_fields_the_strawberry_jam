@@ -110,13 +110,15 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 			if (overflow){
 				return BasketCondition.Overflow;
 			}
-			if (weight > wc.max_basket_weight){
-				return BasketCondition.Overweight;
+			if (wc.basket_weight.is_accept(weight)){
+				return BasketCondition.Accepted;
+			} else {
+				if (wc.basket_weight.is_over(weight)){
+					return BasketCondition.Overweight;
+				} else {
+					return BasketCondition.Underweight;
+				}
 			}
-			if (weight < wc.min_basket_weight){
-				return BasketCondition.Underweight;
-			}
-			return BasketCondition.Accepted;
 		}).ToReadOnlyReactiveProperty<BasketCondition>();
 		
 		

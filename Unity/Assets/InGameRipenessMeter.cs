@@ -20,9 +20,9 @@ public class InGameRipenessMeter : MonoBehaviour {
 			}
 			sprite.material = material;
 			if (is_max){
-				GameSettingsComponent.working_rules.win_condition.rx_max_ripeness.Subscribe(this.update);
+				GameSettingsComponent.working_rules.win_condition.ripeness.rx_max_accept_true.Subscribe(this.update);
 			} else {
-				GameSettingsComponent.working_rules.win_condition.rx_min_ripeness.Subscribe(this.update);
+				GameSettingsComponent.working_rules.win_condition.ripeness.rx_min_accept_true.Subscribe(this.update);
 			}
 		}
 	}

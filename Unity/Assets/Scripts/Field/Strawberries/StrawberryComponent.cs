@@ -14,56 +14,18 @@ public class StrawberryComponent : BetterBehaviour {
 			*transform.localScale.z)
 			;}
 	}
-	public enum BerryPenalty
-	{
-		Accepted,
-		None,
-		Small,
-		Medium,
-		Big
-	}
-	public BerryPenalty get_penalty_type(bool dropped = false){
-		if (dropped) {
-			if (is_under_ripe ()) {
-				return BerryPenalty.Medium; //Dropped an underripe berry.
-			} else {
-				if (!is_over_ripe ()) {
-					if (is_under_size ()) {
-						return BerryPenalty.Medium; //Dropped a ripe but undersized berry.
-					} else {
-						return BerryPenalty.Big; //Dropped a perfectly good berry!
-					}
-				}
-			}
-			return BerryPenalty.None; //No penalty for dropping overripe berries.
-		} else {
-			if (is_over_ripe()){
-				return BerryPenalty.Medium; //Held onto an overripe berry
-			} else {
-				if (is_under_ripe()){
-					return BerryPenalty.Small; //Held onto an underripe berry, regardless of size
-				} else if (is_under_size()){
-					return BerryPenalty.None; //Held onto a berry that was ripe but undersized
-				}
-			}
-			return BerryPenalty.Accepted;
-		}
-	}
-	public float get_penalty_value(bool dropped = false){
-		BerryPenalty penalty = get_penalty_type (dropped);
-		return GameSettingsComponent.working_rules.win_condition.penalty (penalty);
-	}
 	public bool is_under_ripe(){
-		return quality < GameSettingsComponent.working_rules.win_condition.min_ripeness;
+		return quality < GameSettingsComponent.working_rules.win_condition.ripeness.min_accept;
 	}
 	public bool is_over_ripe(){
-		return quality > GameSettingsComponent.working_rules.win_condition.max_ripeness;
+		return quality > GameSettingsComponent.working_rules.win_condition.ripeness.max_accept;
 	}
 	public bool is_under_size(){
-		return weight < GameSettingsComponent.working_rules.win_condition.min_size;
+		return weight < GameSettingsComponent.working_rules.win_condition.berry_size.min_accept;
 	}
 	public bool is_ineligible(){
-		return is_under_ripe() || is_over_ripe() || is_under_size();
+		return !GameSettingsComponent.working_rules.win_condition.ripeness.is_accept(quality) || 
+			!GameSettingsComponent.working_rules.win_condition.berry_size.is_accept(weight);
 	}
 	
 	public DragHandle drag;

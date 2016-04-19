@@ -27,7 +27,7 @@ public class LanguageTextView: BetterBehaviour {
 
 	public string prefix = "";
 	public string suffix = "";
-	[Hide]
+	[DontSerialize]
 	public StringReactiveProperty rx_key
 		= new StringReactiveProperty("");
 	

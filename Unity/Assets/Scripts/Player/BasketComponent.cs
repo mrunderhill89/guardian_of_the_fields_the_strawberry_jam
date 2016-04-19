@@ -96,11 +96,11 @@ public class BasketComponent : BetterBehaviour {
 	}
 
 	public bool is_overweight(){
-		return score_data.is_overweight(GameSettingsComponent.working_rules.win_condition.max_basket_weight);
+		return GameSettingsComponent.working_rules.win_condition.basket_weight.is_over(score_data.weight);
 	}
 
 	public bool is_underweight(){
-		return score_data.is_underweight(GameSettingsComponent.working_rules.win_condition.min_basket_weight);
+		return GameSettingsComponent.working_rules.win_condition.basket_weight.is_under(score_data.weight);
 	}
 
 	public bool is_overflow(){

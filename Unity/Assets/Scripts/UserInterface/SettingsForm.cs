@@ -30,9 +30,6 @@ public class SettingsForm : BetterBehaviour {
 	public InputField min_berry_weight;
 	public InputField min_basket_weight;
 	public InputField max_basket_weight;
-	public InputField penalty_small;
-	public InputField penalty_medium;
-	public InputField penalty_big;
 
 	//Sliders
 	public Slider min_ripeness;
@@ -54,17 +51,8 @@ public class SettingsForm : BetterBehaviour {
 		register_input_float (game_length, (x => x.time.rx_game_length));
 		register_input_float (start_hour, (x => x.time.rx_start_hour));
 		register_input_float (end_hour, (x => x.time.rx_end_hour));
-		register_input_float (min_berry_weight, (x => x.win_condition.rx_min_size));
-		register_input_float (min_basket_weight, (x => x.win_condition.rx_min_basket_weight));
-		register_input_float (max_basket_weight, (x => x.win_condition.rx_max_basket_weight));
-		register_input_float (penalty_small, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Small)));
-		register_input_float (penalty_medium, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Medium)));
-		register_input_float (penalty_big, (x => x.win_condition.rx_penalty(StrawberryComponent.BerryPenalty.Big)));
 		register_slider (min_ripeness, (x => x.strawberry.rx_min_ripeness));
 		register_slider (max_ripeness, (x => x.strawberry.rx_max_ripeness));
-		register_slider (min_accepted_ripeness, (x => x.win_condition.rx_min_ripeness));
-		register_slider (max_accepted_ripeness, (x => x.win_condition.rx_max_ripeness));
-
 	}
 
 	public SettingsForm register_toggle(Toggle toggle, Func<GameSettings.Model, BoolReactiveProperty> get_property){

@@ -25,7 +25,7 @@ namespace GameSettings{
 			get{ return Application.streamingAssetsPath + "/Data/Settings/";}
 		}
 		public static string default_filename {
-			get{ return default_folder+"default.yaml";}
+			get{ return "default";}
 		}
 		public const float precision = 100.0f;
 		#endregion
@@ -38,48 +38,6 @@ namespace GameSettings{
 			breaks = new Breaks ();
 			win_condition = new WinCondition ();
 			time = new Time ();
-			/*
-			 * These sanity checks are meant to prevent a situation
-			 * where none of the player's strawberries are accepted.
-			 * Basically, there should always be some overlap between
-			 * the possible range and the accepted range.
-			 */
-			strawberry.rx_min_ripeness
-				.Subscribe ((value) => {
-					if (win_condition.max_ripeness < value){
-						win_condition.max_ripeness = value;
-					}
-					if (win_condition.min_ripeness < value){
-						win_condition.min_ripeness = value;
-					}
-				});
-			strawberry.rx_max_ripeness
-				.Subscribe ((value) => {
-					if (win_condition.min_ripeness > value){
-						win_condition.min_ripeness = value;
-					}
-					if (win_condition.max_ripeness > value){
-						win_condition.max_ripeness = value;
-					}
-				});
-			win_condition.rx_min_ripeness
-				.Subscribe ((value) => {
-					if (strawberry.max_ripeness < value){
-						strawberry.max_ripeness = value;
-					}
-					if (strawberry.min_ripeness > value){
-						strawberry.min_ripeness = value;
-					}
-				});
-			win_condition.rx_max_ripeness
-				.Subscribe ((value) => {
-					if (strawberry.min_ripeness > value){
-						strawberry.min_ripeness = value;
-					}
-					if (strawberry.max_ripeness < value){
-						strawberry.max_ripeness = value;
-					}
-				});
 			initialize ();
 		}
 

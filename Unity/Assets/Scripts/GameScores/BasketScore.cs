@@ -109,13 +109,13 @@ namespace GameScores
 		}
 
 		public IEnumerable<BasketSingleScore> accepted(GameSettings.WinCondition win){
-			return baskets.Where (basket=>basket.is_eligible(win.max_basket_weight, win.min_basket_weight));
+			return baskets.Where (basket=>win.basket_weight.is_accept(basket.weight));
 		}
 		public IEnumerable<BasketSingleScore> overweight(GameSettings.WinCondition win){
-			return baskets.Where (basket=>basket.is_overweight(win.max_basket_weight));
+			return baskets.Where (basket=>win.basket_weight.is_over(basket.weight));
 		}
 		public IEnumerable<BasketSingleScore> underweight(GameSettings.WinCondition win){
-			return baskets.Where (basket=>basket.is_underweight(win.min_basket_weight));
+			return baskets.Where (basket=>win.basket_weight.is_under(basket.weight));
 		}
 		public IEnumerable<BasketSingleScore> overflow(GameSettings.WinCondition win){
 			return baskets.Where (basket=>basket.is_overflow);

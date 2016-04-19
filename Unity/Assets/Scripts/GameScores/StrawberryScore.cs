@@ -54,16 +54,16 @@ namespace GameScores
 				set{ rx_berries.SetRange(value);}
 			}
 			public IEnumerable<StrawberrySingleScore> ripe(GameSettings.WinCondition win){
-				return all_berries.Where(berry => berry.is_eligible(win.max_ripeness, win.min_ripeness, win.min_size));
+				return all_berries.Where(berry => win.is_strawberry_eligible(berry.ripeness, berry.weight));
 			}
 			public IEnumerable<StrawberrySingleScore> overripe(GameSettings.WinCondition win){
-				return all_berries.Where(berry => berry.is_overripe(win.max_ripeness));
+				return all_berries.Where(berry => win.ripeness.is_over(berry.ripeness));
 			}
 			public IEnumerable<StrawberrySingleScore> underripe(GameSettings.WinCondition win){
-				return all_berries.Where(berry => berry.is_underripe(win.min_ripeness));
+				return all_berries.Where(berry =>win.ripeness.is_under(berry.ripeness));
 			}
 			public IEnumerable<StrawberrySingleScore> underweight(GameSettings.WinCondition win){
-				return all_berries.Where(berry => berry.is_underweight(win.min_size));
+				return all_berries.Where(berry => win.berry_size.is_under(berry.ripeness));
 			}
 			[Show]
 			public RipenessSorter from_state_machine(string state_name){
