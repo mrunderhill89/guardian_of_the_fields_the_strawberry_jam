@@ -175,6 +175,7 @@
      <Compile Include="Assets\Scripts\UserInterface\StrawberryColorIcon.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TutorialHandler.cs" />
+     <Compile Include="Assets\SpinnerUI.cs" />
      <Compile Include="Assets\StrawberryFootprint.cs" />
      <Compile Include="Assets\TimeSlider.cs" />
      <Compile Include="Assets\TooltipBroadcast.cs" />
