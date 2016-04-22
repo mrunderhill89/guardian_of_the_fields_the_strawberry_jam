@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Vexe.Runtime.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -15,10 +16,16 @@ public interface ILanguageController{
 	string load_text(string key);
 	string load_text(string key, string lang);
 	string get_language_label(string lang);
+	string get_filename_label(string file);
 	ReadOnlyReactiveProperty<string> rx_load_text(string key);
 	ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key);
+
 	ReadOnlyReactiveProperty<string> rx_get_language_label(string target_language);
 	ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_lang);
+
+	ReadOnlyReactiveProperty<string> rx_get_filename_label(string file);	
+	ReadOnlyReactiveProperty<string> rx_get_filename_label(StringReactiveProperty rx_file);	
+
 	ReadOnlyReactiveProperty<string> rx_current_language_key {get;}
 }
 
@@ -85,6 +92,7 @@ public class LanguageControllerStatic : ILanguageController {
 
 	protected Dictionary<string, ReadOnlyReactiveProperty<string>> properties
 		= new Dictionary<string, ReadOnlyReactiveProperty<string>>();
+
 	public ReadOnlyReactiveProperty<string> rx_load_text(string key){
 		if (!properties.ContainsKey(key)){
 			properties[key] = _rx_current_language_key.SelectMany(lang_key=>{
@@ -121,12 +129,36 @@ public class LanguageControllerStatic : ILanguageController {
 			(target,viewing)=>target.get_language_label(viewing)
 		).ToReadOnlyReactiveProperty<string>();
 	}
+
+	public string get_filename_label(string file){
+		return get_filename_label(file, current_language_key);
+	}
 	
-	public void load_all(IMultiLoader<LanguageModel> loader){
-		foreach(string opt in loader.get_options()){
+	public string get_filename_label(string file, string target_language){
+		if (has_text("filename_"+file, target_language)){
+			return load_text("filename_"+file, target_language);
+		}
+		return textInfo.ToTitleCase(file);
+	}
+
+	public ReadOnlyReactiveProperty<string> rx_get_filename_label(string file){
+		return _rx_current_language_key.Select(lang=>{
+			return get_filename_label(file, lang);
+		}).ToReadOnlyReactiveProperty<string>(file);
+	}
+	
+	public ReadOnlyReactiveProperty<string> rx_get_filename_label(StringReactiveProperty rx_file){
+		return rx_file.SelectMany(key=>rx_get_filename_label(key)).ToReadOnlyReactiveProperty<string>();
+	}
+	
+	public void load_all(IFileLoader<LanguageModel> loader){
+		foreach(string opt in loader.available_files()){
 			set_language(opt, loader.load(opt));
 		}
 	}
+	
+	public ILoader<LanguageModel> loader;
+	static TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 }
 
 public class LanguageController: BetterBehaviour, ILanguageController {
@@ -135,6 +167,8 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 	public string load_text(string key){ return controller.load_text(key); }
 	public string load_text(string key, string lang){ return controller.load_text(key, lang); }
 	public string get_language_label(string lang){ return controller.get_language_label(lang); }
+	public string get_filename_label(string file){ return controller.get_filename_label(file); }
+	public string get_filename_label(string file, string lang){ return controller.get_filename_label(file, lang); }
 	public ReadOnlyReactiveProperty<string> rx_load_text(string key)
 		{ return controller.rx_load_text(key);}
 	public ReadOnlyReactiveProperty<string> rx_load_text(StringReactiveProperty rx_key)
@@ -145,6 +179,11 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 	public ReadOnlyReactiveProperty<string> rx_get_language_label(StringReactiveProperty rx_key)
 		{ return controller.rx_get_language_label(rx_key);}
 
+	public ReadOnlyReactiveProperty<string> rx_get_filename_label(string key)
+		{ return controller.rx_get_filename_label(key);}
+	public ReadOnlyReactiveProperty<string> rx_get_filename_label(StringReactiveProperty rx_key)
+		{ return controller.rx_get_filename_label(rx_key);}
+
 	public ReadOnlyReactiveProperty<string> rx_current_language_key{
 		get{ return controller.rx_current_language_key; }
 	}
@@ -154,7 +193,8 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 	}
 	
 	void Start(){
-		LocalFileLoader<LanguageModel> local = new LocalFileLoader<LanguageModel>(Application.streamingAssetsPath + "/Data/Languages");
+		LocalFileLoader<LanguageModel> local = new LocalFileLoader<LanguageModel>();
+		local.directory = Application.streamingAssetsPath + "/Data/Languages";
 		controller.load_all(local);
 	}
 }

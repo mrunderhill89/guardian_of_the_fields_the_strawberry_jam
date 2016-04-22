@@ -45,7 +45,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DirectoryTextField.cs" />
      <Compile Include="Assets\DistanceToText.cs" />
+     <Compile Include="Assets\FilenameTextField.cs" />
      <Compile Include="Assets\GroundGenerator.cs" />
      <Compile Include="Assets\InGameRipenessMeter.cs" />
      <Compile Include="Assets\LanguageImageSelector.cs" />
@@ -70,11 +72,10 @@
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" />
      <Compile Include="Assets\Scripts\Field\SunStateSystem.cs" />
-     <Compile Include="Assets\Scripts\FileManagers\ILoader.cs" />
-     <Compile Include="Assets\Scripts\FileManagers\IMultiLoader.cs" />
-     <Compile Include="Assets\Scripts\FileManagers\ISaver.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\IDirectoryLoadSave.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\IFileLoadSave.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\ILoadSave.cs" />
      <Compile Include="Assets\Scripts\FileManagers\LocalFileLoader.cs" />
-     <Compile Include="Assets\Scripts\FileManagers\SaveLoadSelector.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketGrid.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketIcon.cs" />
      <Compile Include="Assets\Scripts\GameScores\BasketScore.cs" />
@@ -169,7 +170,6 @@
      <Compile Include="Assets\Scripts\UserInterface\PaceNameLabel.cs" />
      <Compile Include="Assets\Scripts\UserInterface\PlaceOnSliderUI.cs" />
      <Compile Include="Assets\Scripts\UserInterface\QuitGame.cs" />
-     <Compile Include="Assets\Scripts\UserInterface\SettingsFileBar.cs" />
      <Compile Include="Assets\Scripts\UserInterface\SettingsForm.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StartGame.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StrawberryColorIcon.cs" />
@@ -374,6 +374,12 @@
      <None Include="Assets\Plugins\YamlDotNet\Readme.txt" />
      <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
      <None Include="Assets\Materials\StrawberryShader.shader" />
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

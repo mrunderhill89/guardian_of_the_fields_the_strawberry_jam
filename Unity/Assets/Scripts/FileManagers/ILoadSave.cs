@@ -10,10 +10,12 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
 using UniRx;
 
-public interface IMultiLoader<T>: ILoader<T>{
-	string[] get_options();
-	Dictionary<string,T> load_all();
-	bool has_option(string opt);
-	string directory{get; set;}
-	StringReactiveProperty rx_directory {get;}
+public interface ILoader<T>{
+	T load();
+	ReadOnlyReactiveProperty<T> rx_load();
+}
+
+public interface ISaver<T>{
+	void save(T value);
+	IObservable<T> rx_save{get;}
 }
