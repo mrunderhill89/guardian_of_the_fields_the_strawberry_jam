@@ -10,7 +10,7 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.RepresentationModel;
 using UniRx;
 using GameScores;
-
+/*
 public class SavedScores{
 	public ReactiveCollection<Score> rx_scores = new ReactiveCollection<Score> ();
 	[Show]
@@ -69,8 +69,147 @@ public class SavedScores{
 		return this;
 	}
 }
+*/
 
-public class SavedScoreComponent : BetterBehaviour {
+public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
+	protected LocalFileLoader<Score[]> _local = new LocalFileLoader<Score[]>();
+	[Show]
+	public LocalFileLoader<Score[]> local{
+		get{
+			return _local;
+		}
+	}
+	public IDirectoryLoader<Score[]> loader{
+		get{ return local; }
+	}
+	public  IDirectorySaver<Score[]> saver{
+		get{ return local; }
+	}
+
+	public void load_current(){
+		scores = loader.load();
+	}
+
+	//ILoader
+		public Score[] load(){
+			return loader.load();
+		}
+		public ReadOnlyReactiveProperty<Score[]> rx_load(){
+			return loader.rx_load();
+		}
+	//IFileLoader
+		public Score[] load(string _file){
+			return loader.load(_file);
+		}
+		public ReadOnlyReactiveProperty<Score[]> rx_load(string file){
+			return loader.rx_load(file);
+		}
+		public string[] available_files(){
+			return loader.available_files();
+		}
+		public bool is_file_available(string file){
+			return loader.is_file_available(file);
+		}
+		
+		public string filename{get{ return loader.filename; } set{ loader.filename = value; }}
+		
+	public ReadOnlyReactiveProperty<string> rx_filename{get{ return loader.rx_filename; }}
+	//IDirectoryLoader
+		public Score[] load(string _file, string _directory){
+			return loader.load(_file, _directory);
+		}
+		public ReadOnlyReactiveProperty<Score[]> rx_load(string _file, string _directory){
+			return loader.rx_load(_file, directory);
+		}
+		
+		public string directory{get {return loader.directory; } set {loader.directory = value;}}
+		public ReadOnlyReactiveProperty<string> rx_directory{get{ return loader.rx_directory; }}
+	//ISaver
+	//Save a single score
+	public void save(Score score){
+		//Add the score to the collection.
+		rx_scores.Add(score);
+		on_save.OnNext(score);
+		//As soon as we have a collection to save to, add our score to it and save it back out.
+		saver.rx_save(rx_scores.ToArray());
+	}
+	public void rx_save(Score score){
+		save(score);
+	}
+	protected Subject<Score> on_save = new Subject<Score>();
+	public IObservable<Score> rx_on_save{
+		get{ return on_save; }
+	}
+	
+	public ReactiveCollection<Score> rx_scores = new ReactiveCollection<Score> ();
+	[Show]
+	public Score[] scores{
+		get{
+			return rx_scores.ToArray();
+		}
+		set{
+			rx_scores.SetRange(value);
+		}
+	}
+	
+	public int Count{
+		get{ return rx_scores.Count;}
+	}
+}
+
+public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
+	protected static SavedScoreController controller = new SavedScoreController();
+	//ILoader
+	public Score[] load(){
+		return controller.load();
+	}
+	public ReadOnlyReactiveProperty<Score[]> rx_load(){
+		return controller.rx_load();
+	}
+	//IFileLoader
+	public Score[] load(string _file){
+		return controller.load(_file);
+	}
+	public ReadOnlyReactiveProperty<Score[]> rx_load(string file){
+		return controller.rx_load(file);
+	}
+	public string filename{get{ return controller.filename; } set{ controller.filename = value; }}
+	public ReadOnlyReactiveProperty<string> rx_filename{get{ return controller.rx_filename; }}
+	//IDirectoryLoader
+	public Score[] load(string _file, string _directory){
+		return controller.load(_file, _directory);
+	}
+
+	public ReadOnlyReactiveProperty<Score[]> rx_load(string _file, string _directory){
+		return controller.rx_load(_file, _directory);
+	}
+	public string[] available_files(){
+		return controller.available_files();
+	}
+	public bool is_file_available(string file){
+		return controller.is_file_available(file);
+	}
+
+	public string directory{get {return controller.directory; } set {controller.directory = value;}}
+	public ReadOnlyReactiveProperty<string> rx_directory{get{ return controller.rx_directory; }}
+	
+	//Internal
+	public static void save_static(Score score){
+		controller.rx_save(score);
+	}
+	public static ReactiveCollection<Score> rx_scores{
+		get{ return controller.rx_scores; }
+	}
+	
+	void Start(){
+		controller.directory = Application.streamingAssetsPath + "/Data";
+		controller.filename = "Scores";
+		controller.load_current();
+	}
+}
+
+
+/*
 	[DontSerialize][Show]
 	public static SavedScores saved_scores;
 	void Awake () {
@@ -101,4 +240,4 @@ public class SavedScoreComponent : BetterBehaviour {
 			return saved_scores.Count;
 		}
 	}
-}
+*/

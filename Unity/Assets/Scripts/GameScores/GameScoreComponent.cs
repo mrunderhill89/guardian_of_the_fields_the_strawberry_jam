@@ -52,8 +52,7 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 	
 	[Show]
 	public GameScoreComponent record_score(){
-		SavedScoreComponent.record_score (score.copy_of());
-		SavedScoreComponent.export_static ();
+		SavedScoreComponent.save_static(score.copy_of());
 		return this;
 	}
 }

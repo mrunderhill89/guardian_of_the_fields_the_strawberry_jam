@@ -1,1 +1,75 @@
-[]
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.07
+      max_size: 0.09
+      max_ripeness: 2
+      density: 2500
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.5
+        max_accept: 0.5
+        min_close: 0.6
+        max_close: 0.6
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      berry_size:
+        target: 1
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 1800
+      start_hour: 6
+      end_hour: 18
+  player_name: 
+  time:
+    date_recorded: 2016-04-22T20:14:17.6662630Z
+    played_for: 4.125031
+  berries:
+    categories:
+      gathered:
+        all_berries: []
+      dropped:
+        all_berries: []
+  baskets:
+    baskets:
+    - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - id: 6

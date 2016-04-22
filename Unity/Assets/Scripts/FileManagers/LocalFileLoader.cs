@@ -15,17 +15,23 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 	public T load(){
 		return load(filename, directory);
 	}
+	protected ReactiveProperty<T> rx_last_loaded = new ReactiveProperty<T>();
 	public ReadOnlyReactiveProperty<T> rx_load(){
-		return rx_load(filename, directory);
+		return rx_last_loaded.ToReadOnlyReactiveProperty<T>();
 	}
 
 	//ISaver
 	public void save(T value){
 		save(value, filename, directory);
 	}
-	protected Subject<T> _rx_save = new Subject<T>();
-	public IObservable<T> rx_save{
-		get{ return _rx_save; }
+	
+	public void rx_save(T value){
+		rx_scheduled_save.Value = value;
+	}
+	
+	protected Subject<T> _rx_on_save = new Subject<T>();
+	public IObservable<T> rx_on_save{
+		get{ return _rx_on_save; }
 	}
 	
 	//IFileLoader
@@ -61,6 +67,12 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 		save(value, file, directory);
 	}
 	
+	protected ReactiveProperty<T> rx_scheduled_save = new ReactiveProperty<T>();
+	public void rx_save(T value, string _file){
+		filename = _file;
+		rx_scheduled_save.Value = value;
+	}
+	
 	//IDirectoryLoader
 	protected StringReactiveProperty _rx_directory = new StringReactiveProperty();
 	public ReadOnlyReactiveProperty<string> rx_directory{
@@ -82,7 +94,9 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 			});
 			var input = new StringReader(Document);
 			var deserializer = new Deserializer(namingConvention: new UnderscoredNamingConvention());
-			return deserializer.Deserialize<T>(input);
+			var output = deserializer.Deserialize<T>(input);
+			rx_last_loaded.Value = output;
+			return output;
 		} catch(Exception e){
 			Debug.LogError("LocalFileLoader: Problem attempting to load file:'"+filesystem_name+"':"+e.ToString());
 			return default(T);
@@ -90,7 +104,7 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 	}
 
 	public ReadOnlyReactiveProperty<T> rx_load(string _file, string _directory){
-		return Observable.Return<T>(load(_file, _directory)).ToReadOnlyReactiveProperty<T>();
+		return Observable.Return<T>(load(_file, _directory)).ToReadOnlyReactiveProperty<T>();;
 	}
 
 	//IDirectorySaver
@@ -106,6 +120,14 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 			Debug.LogError("LocalFileLoader: Problem attempting to save to file:'"+filesystem_name+"':"+e.ToString());
 		}
 	}
+
+	public void rx_save(T value, string _file, string _directory){
+		filename = _file;
+		directory = _directory;
+		rx_scheduled_save.Value = value;
+	}
+
+	
 	//Internal
 	public Func<string,string> to_filesystem;
 	public Func<string,string> from_filesystem;
@@ -116,12 +138,26 @@ public class LocalFileLoader<T>: IDirectoryLoader<T>, IDirectorySaver<T> {
 			return to_filesystem(filename);
 		}
 	}
+	protected ReadOnlyReactiveProperty<UniRx.Tuple<string,string>> rx_file_location;
 
 	public LocalFileLoader(string _directory = "", string _file = ""){
 		filename = _file;
 		directory = _directory;
 		to_filesystem = file => directory+"/"+file+".yaml";
 		from_filesystem = fn => Path.GetFileNameWithoutExtension(fn);
+		
+		rx_file_location = rx_directory.Where(dir=>dir!="").CombineLatest(
+			rx_filename.Where(file=>file!=""), 
+			(dir,file)=>{
+				return UniRx.Tuple.Create(dir, file);
+			}
+		).ToReadOnlyReactiveProperty<UniRx.Tuple<string,string>>();
+		
+		rx_scheduled_save.WithLatestFrom(rx_file_location, (T value, UniRx.Tuple<string,string> location)=>{
+			return new {directory = location.Item1, filename = location.Item2, value = value};
+		}).Subscribe(data=>{
+			save(data.value, data.filename, data.directory);
+		});
 	}
 }
 

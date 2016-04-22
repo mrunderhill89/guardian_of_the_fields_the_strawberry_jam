@@ -75,7 +75,7 @@ public class ScoreboardV2 : BetterBehaviour {
 		.CombineLatest(rx_reverse_sort, (compare, reverse)=>{
 			compare.reverse = reverse;
 			return compare;
-		}).CombineLatest(SavedScoreComponent.saved_scores.rx_scores.ObserveContents(), (compare, evn)=>{
+		}).CombineLatest(SavedScoreComponent.rx_scores.ObserveContents(), (compare, evn)=>{
 			if (compare != null){
 				Array.Sort(evn.Contents, compare);
 			}

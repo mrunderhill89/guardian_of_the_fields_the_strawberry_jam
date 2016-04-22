@@ -77,8 +77,11 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 		public void save(Model value){
 			saver.save(value);
 		}
-		public IObservable<Model> rx_save{get{
-			return saver.rx_save;
+		public void rx_save(Model value){
+			saver.rx_save(value);
+		}
+		public IObservable<Model> rx_on_save{get{
+			return saver.rx_on_save;
 		}}
 	#endregion
 	#region Inherit from IFileLoader
@@ -111,6 +114,9 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 		public void save(Model value, string file){
 			saver.save(value,file);
 		}
+		public void rx_save(Model value, string file){
+			saver.rx_save(value, file);
+		}
 	#endregion
 	#region Inherit from IDirectoryLoader
 		public Model load(string file, string directory){
@@ -133,6 +139,9 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 	#region Inherit from IDirectorySaver
 		public void save(Model value, string file, string directory){
 			saver.save(value,file);
+		}
+		public void rx_save(Model value, string file, string directory){
+			saver.rx_save(value, file, directory);
 		}
 	#endregion
 	void Start(){

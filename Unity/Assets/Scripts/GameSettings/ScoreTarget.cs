@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using Vexe.Runtime.Types;
+using YamlDotNet.Serialization;
 using UnityEngine;
 
 public interface IScoreTarget{
@@ -53,7 +54,9 @@ public interface IScoreTarget{
 public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	//X Values
 		//Target
+	[YamlIgnore]
 	protected FloatReactiveProperty _rx_target = new FloatReactiveProperty(1.0f);
+	[DontSerialize][YamlIgnore]
 	public IObservable<float> rx_target{get{ return _rx_target; }}
 	[Show]
 	public float target {
@@ -62,7 +65,9 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 
 		//Minimum Accepted Value
+	[YamlIgnore]
 	protected FloatReactiveProperty _rx_min_accept = new FloatReactiveProperty(0.1f);
+	[DontSerialize][YamlIgnore]
 	public IObservable<float> rx_min_accept{get{ return _rx_min_accept; }}
 	[Show]
 	public float min_accept {
@@ -76,7 +81,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		}
 	}
 	protected IObservable<float> _rx_min_accept_true;
-	[DontSerialize][Show]
+	[DontSerialize][YamlIgnore]
 	public IObservable<float> rx_min_accept_true{
 		get{ 
 			if (_rx_min_accept_true == null){
@@ -89,6 +94,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 		//Maximum Accepted Value
 	protected FloatReactiveProperty _rx_max_accept = new FloatReactiveProperty(0.1f);
+	[YamlIgnore]
 	public IObservable<float> rx_max_accept{get{ return _rx_max_accept; }}
 	[Show]
 	public float max_accept {
@@ -102,7 +108,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		}
 	}
 	protected IObservable<float> _rx_max_accept_true;
-	[DontSerialize][Show]
+	[DontSerialize][YamlIgnore]
 	public IObservable<float> rx_max_accept_true{
 		get{ 
 			if (_rx_max_accept_true == null){
@@ -116,6 +122,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 
 		//Minimum Close Value
 	protected FloatReactiveProperty _rx_min_close = new FloatReactiveProperty(0.2f);
+	[YamlIgnore]
 	public IObservable<float> rx_min_close{get{ return _rx_min_close; }}
 	[Show]
 	public float min_close {
@@ -131,6 +138,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	
 		//Maximum Close Value
 	protected FloatReactiveProperty _rx_max_close = new FloatReactiveProperty(0.2f);
+	[YamlIgnore]
 	public IObservable<float> rx_max_close{get{ return _rx_max_close; }}
 	[Show]
 	public float max_close {
@@ -146,6 +154,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	
 		//Upper Limit
 	protected BoolReactiveProperty _rx_limit_upper = new BoolReactiveProperty(true);
+	[YamlIgnore]
 	public IObservable<bool> rx_limit_upper{get{ return _rx_limit_upper; }}
 	[Show]
 	public bool limit_upper {
@@ -154,6 +163,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 		//Lower Limit
 	protected BoolReactiveProperty _rx_limit_lower= new BoolReactiveProperty(true);
+	[YamlIgnore]
 	public IObservable<bool> rx_limit_lower{get{ return _rx_limit_lower; }}
 	[Show]
 	public bool limit_lower {
@@ -164,6 +174,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	//Y Values
 		//Flat Bonus
 	protected FloatReactiveProperty _rx_flat_bonus = new FloatReactiveProperty(1.0f);
+	[YamlIgnore]
 	public IObservable<float> rx_flat_bonus{get{ return _rx_flat_bonus; }}
 	[Show]
 	public float flat_bonus {
@@ -172,6 +183,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 		//Flat Penalty
 	protected FloatReactiveProperty _rx_flat_penalty = new FloatReactiveProperty(1.0f);
+	[YamlIgnore]
 	public IObservable<float> rx_flat_penalty{get{ return _rx_flat_penalty; }}
 	[Show]
 	public float flat_penalty {
@@ -180,6 +192,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 		//Range Bonus
 	protected FloatReactiveProperty _rx_range_bonus = new FloatReactiveProperty(1.0f);
+	[YamlIgnore]
 	public IObservable<float> rx_range_bonus{get{ return _rx_range_bonus; }}
 	[Show]
 	public float range_bonus {
@@ -188,6 +201,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 		//Range Penalty
 	protected FloatReactiveProperty _rx_range_penalty = new FloatReactiveProperty(1.0f);
+	[YamlIgnore]
 	public IObservable<float> rx_range_penalty{get{ return _rx_range_penalty; }}
 	[Show]
 	public float range_penalty {

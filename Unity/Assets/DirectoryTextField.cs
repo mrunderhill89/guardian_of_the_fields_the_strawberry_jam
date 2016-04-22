@@ -17,7 +17,8 @@ public class DirectoryTextField : BetterBehaviour {
 	void Start () {
 		if (loader != null){
 			loader.rx_directory.Subscribe(text=>{
-				input.text = text;
+				if (input != null && input.text != null)
+					input.text = text;
 			});
 		}
 	}

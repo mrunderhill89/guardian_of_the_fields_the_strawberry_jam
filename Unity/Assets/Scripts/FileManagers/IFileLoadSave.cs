@@ -24,4 +24,5 @@ public interface IFileLoader<T>: ILoader<T>, IFileLoader{
 
 public interface IFileSaver<T>: ISaver<T>, IFileLoader{
 	void save(T value, string file);
+	void rx_save(T value, string file);
 }

@@ -22,4 +22,5 @@ public interface IDirectoryLoader<T>: IFileLoader<T>, IDirectoryLoader{
 
 public interface IDirectorySaver<T>: IFileSaver<T>, IDirectoryLoader{
 	void save(T value, string file, string directory);
+	void rx_save(T value, string file, string directory);
 }
