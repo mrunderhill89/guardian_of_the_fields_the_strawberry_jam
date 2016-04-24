@@ -32,6 +32,8 @@
         max_accept: 0.1
         min_close: 0.2
         max_close: 0.2
+        limit_upper: true
+        limit_lower: true
         flat_bonus: 1
         flat_penalty: 1
         range_bonus: 1
@@ -55,9 +57,11 @@
       game_length: 1800
       start_hour: 6
       end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
   player_name: 
   time:
-    date_recorded: 2016-04-22T20:14:17.6662630Z
+    date_recorded: 2016-04-22T13:14:17.6662630-07:00
     played_for: 4.125031
   berries:
     categories:
@@ -73,3 +77,222 @@
     - id: 4
     - id: 5
     - id: 6
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.07
+      max_size: 0.09
+      max_ripeness: 2
+      density: 2500
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.5
+        max_accept: 0.5
+        min_close: 0.6
+        max_close: 0.6
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      berry_size:
+        target: 1
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 1800
+      start_hour: 6
+      end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
+  time:
+    date_recorded: 2016-04-24T08:20:11.2058650-07:00
+    played_for: 25.87902
+  berries:
+    categories:
+      gathered:
+        all_berries:
+        - weight: 1.284855
+          ripeness: 1.093071
+        - weight: 2.938014
+          ripeness: 1.3581
+        - weight: 1.157933
+          ripeness: 1.583165
+      dropped:
+        all_berries: []
+  baskets:
+    baskets:
+    - weight: 4.222868
+      count: 2
+      id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - id: 6
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.07
+      max_size: 0.09
+      max_ripeness: 2
+      density: 2500
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.5
+        max_accept: 0.5
+        min_close: 0.6
+        max_close: 0.6
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      berry_size:
+        target: 1
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 1800
+      start_hour: 6
+      end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
+  player_name: 
+  time:
+    date_recorded: 2016-04-24T20:21:14.8680580Z
+    played_for: 236.9019
+  berries:
+    categories:
+      gathered:
+        all_berries:
+        - weight: 2.8551
+          ripeness: 1.029621
+        - weight: 0.8699763
+          ripeness: 1.387246
+        - weight: 0.8473385
+          ripeness: 0.8997669
+        - weight: 1.51299
+          ripeness: 1.191913
+        - weight: 1.345052
+          ripeness: 0.9764552
+        - weight: 2.552624
+          ripeness: 0.9821633
+        - weight: 2.29956
+          ripeness: 0.9673503
+        - weight: 2.351034
+          ripeness: 1.201355
+        - weight: 1.34563
+          ripeness: 1.148452
+        - weight: 2.517046
+          ripeness: 1.016289
+        - weight: 0.8257638
+          ripeness: 0.5082356
+        - weight: 1.420048
+          ripeness: 0.6809964
+        - weight: 2.127648
+          ripeness: 0.7796615
+        - weight: 3.237211
+          ripeness: 1.325594
+        - weight: 1.161724
+          ripeness: 0.5740829
+        - weight: 1.951686
+          ripeness: 1.398783
+        - weight: 1.198311
+          ripeness: 0.8425602
+        - weight: 1.923845
+          ripeness: 1.359167
+        - weight: 0.6021737
+          ripeness: 1.022174
+        - weight: 2.936268
+          ripeness: 1.406729
+        - weight: 0.814059
+          ripeness: 1.421101
+        - weight: 1.281276
+          ripeness: 1.317878
+        - weight: 2.133733
+          ripeness: 0.9130391
+        - weight: 1.278293
+          ripeness: 0.6395078
+        - weight: 2.550321
+          ripeness: 1.046844
+      dropped:
+        all_berries: []
+  baskets:
+    baskets:
+    - weight: 15.97931
+      count: 9
+      id: 1
+    - weight: 16.36328
+      count: 9
+      id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - weight: 11.59612
+      count: 7
+      id: 6

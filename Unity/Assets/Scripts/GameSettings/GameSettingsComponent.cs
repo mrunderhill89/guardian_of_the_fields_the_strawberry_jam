@@ -80,9 +80,6 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 		public void rx_save(Model value){
 			saver.rx_save(value);
 		}
-		public IObservable<Model> rx_on_save{get{
-			return saver.rx_on_save;
-		}}
 	#endregion
 	#region Inherit from IFileLoader
 		public Model load(string file){

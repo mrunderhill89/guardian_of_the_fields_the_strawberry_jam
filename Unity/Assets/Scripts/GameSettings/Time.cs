@@ -39,6 +39,18 @@ public class Time : IEquatable<GameSettings.Time>
 			set{ rx_end_hour.Value = value;}
 		}
 
+		public FloatReactiveProperty rx_movement_speed = new FloatReactiveProperty();
+		public float movement_speed{
+			get{ return rx_movement_speed.Value; }
+			set{ rx_movement_speed.Value = value;}
+		}
+
+		public FloatReactiveProperty rx_slide_speed = new FloatReactiveProperty();
+		public float slide_speed{
+			get{ return rx_slide_speed.Value; }
+			set{ rx_slide_speed.Value = value;}
+		}
+
 		#endregion
 		public Time(){
 			rx_infinite_length.Subscribe ((value) => {
@@ -55,6 +67,8 @@ public class Time : IEquatable<GameSettings.Time>
 			game_length = 2400.0f;
 			start_hour = 6.0f;
 			end_hour = 18.0f;
+			movement_speed = 1.5f;
+			slide_speed = 0.1f;
 			return this;
 		}
 

@@ -18,5 +18,4 @@ public interface ILoader<T>{
 public interface ISaver<T>{
 	void save(T value);
 	void rx_save(T value);
-	IObservable<T> rx_on_save{get;}
 }

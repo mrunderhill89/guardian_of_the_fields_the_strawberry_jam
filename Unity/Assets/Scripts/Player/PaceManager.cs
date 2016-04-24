@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PaceManager : BetterBehaviour {
-	public float max_speed = 1.0f;
+	public float max_speed {
+		get{ return GameSettingsComponent.working_rules.time.movement_speed; }
+	}
 	public GameStateManager player_state;
 	[Serialize]
 	protected Dictionary<string,Vector2> state_data = new Dictionary<string,Vector2>();
@@ -18,7 +20,9 @@ public class PaceManager : BetterBehaviour {
 		return this;
 	}
 	
-	public float slide_speed = 0.1f;
+	public float slide_speed {
+		get{ return GameSettingsComponent.working_rules.time.slide_speed; }
+	}
 	public bool slide_forward {get;set;}
 	public bool slide_reverse {get;set;}
 	

@@ -33,3 +33,5 @@ time:
   game_length: 1800
   start_hour: 6
   end_hour: 18
+  movement_speed: 2
+  slide_speed: 0.2

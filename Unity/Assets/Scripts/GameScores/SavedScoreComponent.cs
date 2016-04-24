@@ -72,18 +72,26 @@ public class SavedScores{
 */
 
 public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
-	protected LocalFileLoader<Score[]> _local = new LocalFileLoader<Score[]>();
-	[Show]
-	public LocalFileLoader<Score[]> local{
-		get{
-			return _local;
+	protected IDirectoryLoader<Score[]> _loader;
+	public IDirectoryLoader<Score[]> loader{
+		get{ return _loader; }
+		private set{ 
+			_loader = value;
 		}
 	}
-	public IDirectoryLoader<Score[]> loader{
-		get{ return local; }
+
+	protected ISaver<Score> _saver;
+	public  ISaver<Score> saver{
+		get{ return _saver; }
+		private set{ 
+			_saver = value;
+		}
 	}
-	public  IDirectorySaver<Score[]> saver{
-		get{ return local; }
+
+	public SavedScoreController(){
+		var local = new LocalFileLoader<Score[]>();
+		loader = local;
+		saver = new FileAppendAdapter<Score>(local, local);
 	}
 
 	public void load_current(){
@@ -127,20 +135,12 @@ public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
 	//ISaver
 	//Save a single score
 	public void save(Score score){
-		//Add the score to the collection.
-		rx_scores.Add(score);
-		on_save.OnNext(score);
-		//As soon as we have a collection to save to, add our score to it and save it back out.
-		saver.rx_save(rx_scores.ToArray());
+		saver.save(score);
 	}
 	public void rx_save(Score score){
-		save(score);
+		saver.rx_save(score);
 	}
-	protected Subject<Score> on_save = new Subject<Score>();
-	public IObservable<Score> rx_on_save{
-		get{ return on_save; }
-	}
-	
+
 	public ReactiveCollection<Score> rx_scores = new ReactiveCollection<Score> ();
 	[Show]
 	public Score[] scores{
@@ -159,6 +159,7 @@ public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
 
 public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
 	protected static SavedScoreController controller = new SavedScoreController();
+
 	//ILoader
 	public Score[] load(){
 		return controller.load();
@@ -166,6 +167,7 @@ public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
 	public ReadOnlyReactiveProperty<Score[]> rx_load(){
 		return controller.rx_load();
 	}
+
 	//IFileLoader
 	public Score[] load(string _file){
 		return controller.load(_file);
@@ -173,8 +175,11 @@ public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
 	public ReadOnlyReactiveProperty<Score[]> rx_load(string file){
 		return controller.rx_load(file);
 	}
-	public string filename{get{ return controller.filename; } set{ controller.filename = value; }}
+
+	public string filename{ get{ return controller.filename; } set{ controller.filename = value; }}
+
 	public ReadOnlyReactiveProperty<string> rx_filename{get{ return controller.rx_filename; }}
+
 	//IDirectoryLoader
 	public Score[] load(string _file, string _directory){
 		return controller.load(_file, _directory);

@@ -46,7 +46,7 @@ public class RulesQuickSelect : BetterBehaviour {
 			quick_import.value = value;
 			if (value < quick_import_options.Count)
 				quick_import_options[value].rx_display_text.Subscribe(text=>{
-					if (quick_import.value == value)
+					if (quick_import != null && quick_import.value == value)
 						quick_import.captionText.text = text;
 				});
 		});
@@ -54,7 +54,7 @@ public class RulesQuickSelect : BetterBehaviour {
 		//Keep the box synced with the loader when possible.
 		loader.rx_filename.Subscribe((file)=>{
 			foreach (QuickImportOption opt in quick_import_options){
-				if (opt.option_name == file){
+				if (quick_import != null && opt.option_name == file){
 					quick_import.captionText.text = opt.rx_display_text.Value;
 				}
 			}

@@ -71,6 +71,7 @@
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryScale.cs" />
      <Compile Include="Assets\Scripts\Field\Strawberries\StrawberryStateMachine.cs" />
      <Compile Include="Assets\Scripts\Field\SunStateSystem.cs" />
+     <Compile Include="Assets\Scripts\FileManagers\FileAppendAdapter.cs" />
      <Compile Include="Assets\Scripts\FileManagers\IDirectoryLoadSave.cs" />
      <Compile Include="Assets\Scripts\FileManagers\IFileLoadSave.cs" />
      <Compile Include="Assets\Scripts\FileManagers\ILoadSave.cs" />
