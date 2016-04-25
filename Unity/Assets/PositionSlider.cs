@@ -6,7 +6,18 @@ public class PositionSlider : BetterBehaviour {
 	public float screen_start = 0.0f;
 	public float screen_finish = 0.0f;
 
-	public float target_finish = 1000.0f;
+	public const float default_distance = 500.0f;
+
+	public float target_finish 
+	{ 
+		get{
+			if (GameSettingsComponent.working_rules != null){
+				ScoreTarget distance_covered = GameSettingsComponent.working_rules.win_condition.distance_covered;
+				return distance_covered.target; 
+			}
+			return default_distance;
+		}
+	}
 	public bool loop = false;
 
 	public Transform target;

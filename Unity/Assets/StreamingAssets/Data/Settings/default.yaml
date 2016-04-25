@@ -28,6 +28,12 @@ win_condition:
     max_accept: 1.0
     min_close: 2.0
     max_close: 2.0
+  distance_covered:
+    target: 500.0
+    min_accept: 10.0
+    max_accept: 10.0
+    min_close: 20.0
+    max_close: 20.0
 time:
   end_early: true
   game_length: 1800

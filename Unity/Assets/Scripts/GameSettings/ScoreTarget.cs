@@ -290,6 +290,10 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		range_penalty = 0.0f;
 	}
 	
+	public bool is_disabled(){
+		return !(limit_lower || limit_upper);
+	}
+	
 	public ScoreTarget copy_from(IScoreTarget that){
 		target = that.target;
 		min_accept = that.min_accept;

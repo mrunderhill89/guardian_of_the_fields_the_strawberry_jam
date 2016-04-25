@@ -52,6 +52,17 @@
         range_bonus: 1
         range_penalty: 1
         epsilon: 1E-06
+      distance_covered:
+        target: 500
+        min_accept: 10
+        max_accept: 50
+        min_close: 50
+        max_close: 50
+        limit_upper: true
+        limit_lower: true
+        flat_penalty: 300
+        range_penalty: 300
+        epsilon: 1E-06
     time:
       end_early: true
       game_length: 1800
@@ -59,7 +70,6 @@
       end_hour: 18
       movement_speed: 1.5
       slide_speed: 0.1
-  player_name: 
   time:
     date_recorded: 2016-04-22T13:14:17.6662630-07:00
     played_for: 4.125031
@@ -131,6 +141,17 @@
         range_bonus: 1
         range_penalty: 1
         epsilon: 1E-06
+      distance_covered:
+        target: 500
+        min_accept: 10
+        max_accept: 50
+        min_close: 50
+        max_close: 50
+        limit_upper: true
+        limit_lower: true
+        flat_penalty: 300
+        range_penalty: 300
+        epsilon: 1E-06
     time:
       end_early: true
       game_length: 1800
@@ -138,6 +159,7 @@
       end_hour: 18
       movement_speed: 1.5
       slide_speed: 0.1
+  player_name: 
   time:
     date_recorded: 2016-04-24T08:20:11.2058650-07:00
     played_for: 25.87902
@@ -197,6 +219,8 @@
         max_accept: 0.1
         min_close: 0.2
         max_close: 0.2
+        limit_upper: true
+        limit_lower: true
         flat_bonus: 1
         flat_penalty: 1
         range_bonus: 1
@@ -215,6 +239,17 @@
         range_bonus: 1
         range_penalty: 1
         epsilon: 1E-06
+      distance_covered:
+        target: 500
+        min_accept: 10
+        max_accept: 50
+        min_close: 50
+        max_close: 50
+        limit_upper: true
+        limit_lower: true
+        flat_penalty: 300
+        range_penalty: 300
+        epsilon: 1E-06
     time:
       end_early: true
       game_length: 1800
@@ -222,9 +257,8 @@
       end_hour: 18
       movement_speed: 1.5
       slide_speed: 0.1
-  player_name: 
   time:
-    date_recorded: 2016-04-24T20:21:14.8680580Z
+    date_recorded: 2016-04-24T13:21:14.8680580-07:00
     played_for: 236.9019
   berries:
     categories:
@@ -295,4 +329,190 @@
     - id: 5
     - weight: 11.59612
       count: 7
+      id: 6
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.07
+      max_size: 0.09
+      max_ripeness: 2
+      density: 2500
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.5
+        max_accept: 0.5
+        min_close: 0.6
+        max_close: 0.6
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      berry_size:
+        target: 1
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+      distance_covered:
+        target: 100
+        min_accept: 10
+        max_accept: 10
+        min_close: 20
+        max_close: 20
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 1
+        range_penalty: 1
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 1800
+      start_hour: 6
+      end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
+  player_name: Kevin
+  time:
+    date_recorded: 2016-04-25T22:33:03.8002320Z
+    played_for: 520.7864
+  berries:
+    categories:
+      gathered:
+        all_berries:
+        - weight: 2.426175
+          ripeness: 0.8182064
+        - weight: 1.019744
+          ripeness: 1.425998
+        - weight: 1.151998
+          ripeness: 0.6678134
+        - weight: 0.5834689
+          ripeness: 0.8889553
+        - weight: 1.372288
+          ripeness: 0.794991
+        - weight: 3.689602
+          ripeness: 1.54276
+        - weight: 1.453466
+          ripeness: 1.277416
+        - weight: 1.000657
+          ripeness: 1.20403
+        - weight: 0.6520376
+          ripeness: 1.271922
+        - weight: 0.6142408
+          ripeness: 1.156625
+        - weight: 2.398926
+          ripeness: 1.370695
+        - weight: 1.64127
+          ripeness: 1.399548
+        - weight: 3.44449
+          ripeness: 1.245682
+        - weight: 1.882079
+          ripeness: 1.3855
+        - weight: 2.359107
+          ripeness: 1.256227
+        - weight: 0.8651374
+          ripeness: 1.496712
+        - weight: 2.123391
+          ripeness: 0.6708318
+        - weight: 1.426951
+          ripeness: 0.9646559
+        - weight: 0.8206405
+          ripeness: 0.9847626
+        - weight: 1.054576
+          ripeness: 1.596484
+        - weight: 2.362417
+          ripeness: 1.624564
+        - weight: 2.501754
+          ripeness: 0.8257254
+        - weight: 1.226151
+          ripeness: 1.529689
+        - weight: 0.5738175
+          ripeness: 1.031449
+        - weight: 0.5897222
+          ripeness: 1.010185
+        - weight: 0.9456193
+          ripeness: 1.261448
+        - weight: 1.039524
+          ripeness: 0.8284339
+        - weight: 0.8503754
+          ripeness: 0.5356291
+        - weight: 1.398595
+          ripeness: 0.8502613
+        - weight: 0.7281452
+          ripeness: 0.9142386
+        - weight: 1.539792
+          ripeness: 0.8886375
+        - weight: 1.65421
+          ripeness: 0.9513376
+        - weight: 2.197529
+          ripeness: 0.8754994
+        - weight: 2.055231
+          ripeness: 1.206607
+        - weight: 0.958994
+          ripeness: 0.4892154
+        - weight: 1.183899
+          ripeness: 0.8548735
+        - weight: 1.337326
+          ripeness: 0.526748
+        - weight: 2.19101
+          ripeness: 1.221527
+        - weight: 1.570517
+          ripeness: 1.408893
+        - weight: 3.415447
+          ripeness: 1.588824
+        - weight: 2.611959
+          ripeness: 1.555509
+        - weight: 2.78391
+          ripeness: 0.9781958
+        - weight: 0.7216697
+          ripeness: 0.6912526
+      dropped:
+        all_berries:
+        - weight: 1.222951
+          ripeness: 1.776971
+  baskets:
+    baskets:
+    - weight: 15.28457
+      count: 13
+      id: 1
+    - weight: 6.467592
+      count: 4
+      id: 2
+    - id: 3
+    - weight: 15.24955
+      count: 8
+      id: 4
+    - id: 5
+    - weight: 16.09699
+      count: 11
       id: 6

@@ -11,13 +11,14 @@ public class WinCondition : IEquatable<WinCondition>
 		public ScoreTarget ripeness {get; set;}
 		public ScoreTarget berry_size {get; set;}
 		public ScoreTarget basket_weight {get; set;}
+		public ScoreTarget distance_covered {get; set;}
 
 		#endregion
 		public WinCondition(){
 			ripeness = new ScoreTarget();
 			berry_size = new ScoreTarget();
 			basket_weight = new ScoreTarget();
-
+			distance_covered = new ScoreTarget();
 			initialize();
 		}
 
@@ -34,11 +35,23 @@ public class WinCondition : IEquatable<WinCondition>
 			basket_weight.min_accept = 1.0f;
 			basket_weight.max_accept = 1.0f;
 			basket_weight.min_close = 2.0f;
-			basket_weight.max_accept = 2.0f;
+			basket_weight.max_close = 2.0f;
 			basket_weight.flat_bonus = 100.0f;
 			basket_weight.flat_penalty = 100.0f;
 			basket_weight.range_bonus = 100.0f;
 			basket_weight.range_penalty = 100.0f;
+			
+			distance_covered.target = 500.0f;
+			distance_covered.min_accept = 10.0f;
+			distance_covered.max_accept = 10.0f;
+			distance_covered.min_close = 50.0f;
+			distance_covered.max_close = 50.0f;
+			distance_covered.limit_upper = false;
+			distance_covered.flat_bonus = 0.0f;
+			distance_covered.flat_penalty = 300.0f;
+			distance_covered.range_bonus = 0.0f;
+			distance_covered.range_penalty = 300.0f;
+
 			return this;
 		}
 		
@@ -50,6 +63,7 @@ public class WinCondition : IEquatable<WinCondition>
 			ripeness.copy_from(that.ripeness);
 			berry_size.copy_from(that.berry_size);
 			basket_weight.copy_from(that.basket_weight);
+			distance_covered.copy_from(that.distance_covered);
 			return this;
 		}
 		
@@ -58,6 +72,7 @@ public class WinCondition : IEquatable<WinCondition>
 				ripeness == that.ripeness
 				&& berry_size == that.berry_size
 				&& basket_weight == that.basket_weight
+				&& distance_covered == that.distance_covered
 			);
 		}
 	}
