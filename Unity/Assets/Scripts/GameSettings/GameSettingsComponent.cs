@@ -145,5 +145,23 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 		local.directory = Application.streamingAssetsPath + "/Data/Settings/";
 		working_rules = loader.load("default");
 	}
+	
+	public GameSettingsComponent parent = null;
+
+	public void apply(){
+		if (parent != null){
+			parent.current_rules.copy_from(current_rules);
+		} else {
+			working_rules.copy_from(current_rules);
+		}
+	}
+	public void revert(){
+		current_rules.copy_from(working_rules);
+		if (parent != null){
+			current_rules.copy_from(parent.current_rules);
+		} else {
+			current_rules.copy_from(working_rules);
+		}
+	}
 }
 

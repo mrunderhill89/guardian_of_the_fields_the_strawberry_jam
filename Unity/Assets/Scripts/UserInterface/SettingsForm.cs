@@ -30,6 +30,8 @@ public class SettingsForm : BetterBehaviour {
 	public InputField min_berry_weight;
 	public InputField min_basket_weight;
 	public InputField max_basket_weight;
+	public InputField distance_target;
+
 
 	//Sliders
 	public Slider min_ripeness;
@@ -53,6 +55,8 @@ public class SettingsForm : BetterBehaviour {
 		register_input_float (end_hour, (x => x.time.rx_end_hour));
 		register_slider (min_ripeness, (x => x.strawberry.rx_min_ripeness));
 		register_slider (max_ripeness, (x => x.strawberry.rx_max_ripeness));
+		
+		register_input_float (distance_target, (x => x.win_condition.distance_covered.rx_target));
 	}
 
 	public SettingsForm register_toggle(Toggle toggle, Func<GameSettings.Model, BoolReactiveProperty> get_property){
