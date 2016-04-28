@@ -1,0 +1,169 @@
+﻿names:
+  Native: English
+  English: English
+  Spanish: Inglés
+image_name: "united_states"
+entries:
+  berries_label: Strawberries
+  berries_gathered: Gathered
+  berry_ripe: Ripe
+  berry_overripe: Overripe
+  berry_underripe: Underripe
+  berry_small: Too Small
+  basket_label: Baskets
+  basket_single: Basket
+  basket_accepted: Accepted
+  basket_underweight: Underweight
+  basket_overweight: Overweight
+  basket_overflow: Overflowing
+  berries_dropped: Dropped
+  state_loading: Loading
+  state_look: Looking
+  state_pick: Picking
+  state_pack: Packing
+  state_weigh: Initial Weigh-In
+  state_rearrange: Rearrange Berries
+  state_final: Final Weigh-In
+  move_while_pack: Move while Packing
+  date: Date
+  time: Time
+  pace_label: 'Pace:'
+  pace_reverse: Reverse
+  pace_stop: Stop
+  pace_slow: Slow
+  pace_medium: Medium
+  pace_fast: Fast
+  pace_max: Max Speed
+  menu_start: Start Game
+  menu_language: Choose Language
+  menu_controls: Controls
+  menu_rules: Rules
+  menu_controls_and_instructions: Controls and Instructions
+  menu_settings: Game Settings
+  menu_scores: High Scores
+  menu_credits: Credits
+  menu_quit: Quit Game
+  menu_back: Back
+  menu_next: Next
+  menu_ok: OK
+  menu_cancel: Cancel
+  controls_up: Up
+  controls_left: Left
+  controls_down: Down
+  controls_right: Right
+  controls_fast: Speed Up
+  controls_slow: Slow Down
+  controls_stop: Stop
+  controls_forward: Forward
+  controls_space: Space
+  controls_slider: Click and drag to set pace.
+  controls_movement: Movement Controls
+  controls_picking: Strawberry Picking
+  controls_keyboard: Keyboard
+  controls_mouse: "Mouse (On-Screen)"
+  controls_keypad: "Arrow Keys and Number Pad"
+  controls_pov: Point of View
+  controls_pace: "Pace (Walking Speed)"
+  controls_left_click: "Left Click: Pick Up"
+  controls_left_hold: "Left Drag: Hold/Move"
+  controls_left_release: "Left Release: Drop"
+  controls_scroll_up: "Scroll Up: Push Away"
+  controls_scroll_down: "Scroll Down: Pull Towards"
+  controls_right_click: "Right Click: Nothing"
+  controls_left_mouse: Left Mouse Button
+  controls_right_mouse: Right Mouse Button
+  controls_mouse_wheel: Mouse Scroll Wheel
+  loading_splash:
+    Hello!
+    The game is taking a little time to set up the strawberry field for you.
+    In the meantime, you're welcome to look around and get a feel for the controls.
+    When the field is done loading, press the button below to start the clock.
+  tutorial_move: Use arrow keys or "WASD" to move around.
+  tutorial_speed: Press "E" or "Num 1" to speed up.
+  tutorial_slow: Press "Q" or "Num 1" to slow up.
+  tutorial_stop: Press "Space" or "Num 0" to stop.
+  tutorial_pick: Click and hold on a strawberry to pick it up.
+  tutorial_pick_scroll: Use the mouse wheel to pull the strawberry towards you.
+  tutorial_pack: Pick up a strawberry and carry it to these baskets.
+  tutorial_bend_to_pick_up: You need to bend down (down arrow or "S") to pick up a strawberry.
+  tutorial_rearrange: Rearrange strawberries before time runs out.
+  tutorial_midday: It's mid-day. The game ends when the sun goes down.
+  tutorial_time_up: Sunset is coming soon! Hurry up!
+  no_key: <No Key>
+  input_float: 'Decimal number (##.##)'
+  input_integer: 'Whole number (###)'
+  input_filename: Filename
+  file_load: Load
+  file_save: Save
+  file_clear: Clear
+  file_apply: Apply
+  file_revert: Revert
+  filename_default: Default
+  settings_seed: Random Number Seed
+  settings_debug: Debug Options
+  settings_max_berries: Max Berries in Field
+  settings_set_to_current: Use These Settings
+  settings_penalty_big: Big Penalty
+  settings_penalty_medium: Medium Penalty
+  settings_penalty_small: Small Penalty
+  settings_max_basket_weight: Maximum Basket Weight
+  settings_min_basket_weight: Minimum Basket Weight
+  settings_min_accepted_size: Min. Accepted Berry Size
+  settings_max_accepted_ripeness: Max. Accepted Ripeness
+  settings_min_accepted_ripeness: Min. Accepted Ripeness
+  settings_game_length: Game Length
+  settings_min_ripeness: Minimum Ripeness
+  settings_break_length: Break Length
+  settings_max_ripeness: Maximum Ripeness
+  settings_end_hour: End Hour
+  settings_start_hour: Start Hour
+  settings_break_distance: Break Distance
+  settings_min_size: Minimum Berry Size
+  settings_max_size: Maximum Berry Size
+  settings_randomize: Randomize
+  settings_density: Berry Weight Multiplier
+  settings_tutorial: Tutorial
+  time_date_recorded: Date Recorded
+  time_played_for: Played For
+  score_total_berries: Total Berries
+  score_total_weight: Total Weight
+  score_avg_weight: Average Weight
+  score_avg_ripeness: Average Ripeness
+  score_name: Name
+  score_default_name: Player
+  sort_date: Date Recorded
+  sort_accepted_berries: Accepted Strawberries
+  sort_accepted_baskets: Accepted Baskets
+  credits_title: "Guardians of the Fields: The Strawberry Jam"
+  credits_class: "Game Over: Game Design Class"
+  credits_dev_team: Development Team
+  credits_producer: Producer
+  credits_teacher: Teacher
+  credits_ta: Teaching Assistants
+  credits_designers: Game Designers
+  credits_prototype: Prototype Designers
+  credits_programmer: Lead Programmer
+  credits_artists: Artists
+  credits_sound: Sound Design
+  credits_students: Students/Assistant Designers
+  credits_thanks: Special Thanks
+  credits_farmworkers: And to the hundreds of thousands of farmworkers in California and nationwide, who grow our food every day!
+  credits_wrenner_gren: Wrenner-Gren Foundation
+  credits_digital_nest: Digital Nest
+  credits_pajaro_teachers: 
+    P�jaro Valley
+    Federation of Teachers
+  credits_migration:
+    PVUSD Migrant Education 
+    District XI
+  credits_UCSC:
+    University of California, 
+    Santa Cruz
+  credits_fresno_state: Fresno State University
+  credits_unity: Unity Technologies
+  time_finished: Finished
+  time_not_finished: Did Not Finish
+  debug_quick_start: Quick Start
+  debug_end_game: End Game
+  debug_free_berry: Make it Rain!
+  help_ripeness: Ripeness

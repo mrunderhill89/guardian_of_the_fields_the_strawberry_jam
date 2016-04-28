@@ -1,0 +1,35 @@
+randomness:
+  seed: 1451486966
+  randomize: true
+flags:
+  tutorial: true
+strawberry:
+  max_berries_in_field: 100
+  min_size: 0.12
+  max_size: 0.12
+  max_ripeness: 2
+  density: 2400
+breaks:
+  length: 5
+  distance: 50
+win_condition:
+  ripeness:
+    target: 1.0
+    min_accept: 0.5
+    max_accept: 0.5
+    min_close: 0.6
+    max_close: 0.6
+  berry_size:
+    limit_upper: false
+    limit_lower: false
+  basket_weight:
+    target: 16.0
+    min_accept: 2.0
+    max_accept: 2.0
+    min_close: 3.0
+    max_close: 3.0
+time:
+  end_early: true
+  game_length: 600
+  start_hour: 6
+  end_hour: 18
