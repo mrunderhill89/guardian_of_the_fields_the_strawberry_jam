@@ -27,15 +27,13 @@ entries:
   move_while_pack: Moverse mientras que Empaca
   date: Fecha
   time: Hora
+  pace_label: Paso
   pace_reverse: Reversa
   pace_stop: Detenido
   pace_slow: Lento
   pace_medium: Mediano
   pace_fast: Rapido
-  pace_label: Paso
   pace_max: Maxima Velocidad
-  language_english: Inglés
-  language_spanish: Español
   menu_start: Comienze el Juego
   menu_language: Elija su Idioma 
   menu_controls: Controles
@@ -49,6 +47,7 @@ entries:
   menu_next: Siguiente
   menu_ok: OK
   menu_cancel: Cancelar
+  menu_advanced: Avanzado
   controls_up: Arriba
   controls_left: Izquierda
   controls_down: Abajo
@@ -87,6 +86,7 @@ entries:
   tutorial_pick: Presione y detenga el boton del raton sobre una fresa para recogerla.
   tutorial_pick_scroll: Use la rueda del raton para acercar la fresa hacia usted.
   tutorial_pack: Pisque la fresa y pongala en una canasta.
+  tutorial_bend_to_pick_up: Es necesario que agacharse (flecha hacia abajo o "S") para recoger una fresa.
   tutorial_rearrange: Ordene sus fresas antes que se termine el tiempo.
   tutorial_midday: Es medio dia. El juego terminara cuando baje el sol.
   tutorial_time_up: "Ya casi baja el sol! Apurele!"
@@ -98,41 +98,46 @@ entries:
   file_save: Guarde
   file_apply: Aplicar
   file_revert: Revertir
+  settings_randomness: Incertidumbre
   settings_seed: Numerdo de Semillas Incierto
+  settings_randomize: Hacer Insierto
+  settings_misc: Otra Opciones
+  settings_tutorial: Tutorial
   settings_debug: Opciones de Depurracion
+  settings_strawberry_generation: Generación de la Fresas
   settings_max_berries: Limite de Fresas en el Campo
-  settings_set_to_current: Use estas Configuraciones
-  settings_penalty_big: Consecuencia Grande
-  settings_penalty_medium: Consecuencia Mediana
-  settings_penalty_small: "Consecuencia Pequeña"
+  settings_min_ripeness: Madurez Minima
+  settings_max_ripeness: Madurez Maxima
+  settings_min_size: "Tamaño de fresas minimo"
+  settings_max_size: "Tamaño de freas maximo"
+  settings_density: Multiplicador de Peso para Fresas
+  settings_time: Tiempo
+  settings_game_length: Tiempo del Juego
+  settings_start_hour: Hora de Inicio
+  settings_end_hour: Hora Final
+  settings_level_generation: Generación de Campo
+  settings_break_length: Tiempo del descanso
+  settings_break_distance: Distancia del descnso
+  settings_win_condition: Condición de Victoria
   settings_max_basket_weight: Peso de Canasta Maximo
   settings_min_basket_weight: Peso de Canasta Minimo
   settings_min_accepted_size: "Tamaño de fresas minimo"
   settings_max_accepted_ripeness: Madurez Maxima Aceptada
   settings_min_accepted_ripeness: Madurez Minima Aceptada
-  settings_game_length: Tiempo del Juego
-  settings_min_ripeness: Madurez Minima
-  settings_break_length: Tiempo del descanso
-  settings_max_ripeness: Madurez Maxima
-  settings_end_hour: Hora Final
-  settings_start_hour: Hora de Inicio
-  settings_break_distance: Distancia del descnso
-  settings_min_size: "Tamaño de fresas minimo"
-  settings_max_size: "Tamaño de freas maximo"
-  settings_randomize: Hacer Insierto
-  settings_density: Multiplicador de Peso para Fresas
-  settings_tutorial: Tutorial
+  settings_distance_and_speed: Distancia y Velocidad
+  settings_distance_target: Objetivo Distancia
+  settings_movement_speed: Velocidad de Movimiento
+  settings_slide_speed: Velocidad de Deslizarse
   score_total_berries: Fresas Totales
   score_total_weight: Peso Total
   score_avg_weight: Peso Promedio
   score_avg_ripeness: Madurez Promedia
   score_name: Nombre
+  score_default_name: Jugador
   time_date_recorded: Fecha Registrado
   time_played_for: Jugado Para
   time_finished: Terminado
   time_not_finished: No Terminó
-  language_english: Inglés
-  language_spanish: Español
   credits_title: "Guardianes de Los Campos: El Aprieto de Fresas"
   credits_class: "Game Over: Clase de Diseño de Juego"
   credits_dev_team: Equipo de Desarollo

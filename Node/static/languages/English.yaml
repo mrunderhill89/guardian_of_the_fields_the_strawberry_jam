@@ -1,11 +1,12 @@
 ﻿names:
   Native: English
-  English: English
   Spanish: Inglés
+  English: English
 image_name: "united_states"
 entries:
   berries_label: Strawberries
   berries_gathered: Gathered
+  berries_dropped: Dropped
   berry_ripe: Ripe
   berry_overripe: Overripe
   berry_underripe: Underripe
@@ -16,7 +17,6 @@ entries:
   basket_underweight: Underweight
   basket_overweight: Overweight
   basket_overflow: Overflowing
-  berries_dropped: Dropped
   state_loading: Loading
   state_look: Looking
   state_pick: Picking
@@ -27,7 +27,7 @@ entries:
   move_while_pack: Move while Packing
   date: Date
   time: Time
-  pace_label: 'Pace:'
+  pace_label: Pace
   pace_reverse: Reverse
   pace_stop: Stop
   pace_slow: Slow
@@ -47,6 +47,7 @@ entries:
   menu_next: Next
   menu_ok: OK
   menu_cancel: Cancel
+  menu_advanced: Advanced
   controls_up: Up
   controls_left: Left
   controls_down: Down
@@ -99,30 +100,36 @@ entries:
   file_apply: Apply
   file_revert: Revert
   filename_default: Default
+  settings_randomness: Randomness
   settings_seed: Random Number Seed
+  settings_randomize: Randomize
+  settings_misc: Miscellaneous
+  settings_tutorial: Tutorial
   settings_debug: Debug Options
+  settings_strawberry_generation: Strawberry Generation
   settings_max_berries: Max Berries in Field
-  settings_set_to_current: Use These Settings
-  settings_penalty_big: Big Penalty
-  settings_penalty_medium: Medium Penalty
-  settings_penalty_small: Small Penalty
+  settings_min_ripeness: Minimum Ripeness
+  settings_max_ripeness: Maximum Ripeness
+  settings_min_size: Minimum Berry Size
+  settings_max_size: Maximum Berry Size
+  settings_density: Berry Weight Multiplier
+  settings_time: Time
+  settings_game_length: Game Length
+  settings_start_hour: Start Hour
+  settings_end_hour: End Hour
+  settings_level_generation: Level Generation
+  settings_break_length: Break Length
+  settings_break_distance: Break Distance
+  settings_win_condition: Win Condition
   settings_max_basket_weight: Maximum Basket Weight
   settings_min_basket_weight: Minimum Basket Weight
   settings_min_accepted_size: Min. Accepted Berry Size
   settings_max_accepted_ripeness: Max. Accepted Ripeness
   settings_min_accepted_ripeness: Min. Accepted Ripeness
-  settings_game_length: Game Length
-  settings_min_ripeness: Minimum Ripeness
-  settings_break_length: Break Length
-  settings_max_ripeness: Maximum Ripeness
-  settings_end_hour: End Hour
-  settings_start_hour: Start Hour
-  settings_break_distance: Break Distance
-  settings_min_size: Minimum Berry Size
-  settings_max_size: Maximum Berry Size
-  settings_randomize: Randomize
-  settings_density: Berry Weight Multiplier
-  settings_tutorial: Tutorial
+  settings_distance_and_speed: Distance and Speed
+  settings_distance_target: Target Distance
+  settings_movement_speed: Movement Speed
+  settings_slide_speed: Slide Speed
   time_date_recorded: Date Recorded
   time_played_for: Played For
   score_total_berries: Total Berries
@@ -134,6 +141,8 @@ entries:
   sort_date: Date Recorded
   sort_accepted_berries: Accepted Strawberries
   sort_accepted_baskets: Accepted Baskets
+  language_english: English
+  language_spanish: Spanish
   credits_title: "Guardians of the Fields: The Strawberry Jam"
   credits_class: "Game Over: Game Design Class"
   credits_dev_team: Development Team
@@ -151,7 +160,7 @@ entries:
   credits_wrenner_gren: Wrenner-Gren Foundation
   credits_digital_nest: Digital Nest
   credits_pajaro_teachers: 
-    P�jaro Valley
+    Pájaro Valley
     Federation of Teachers
   credits_migration:
     PVUSD Migrant Education 
