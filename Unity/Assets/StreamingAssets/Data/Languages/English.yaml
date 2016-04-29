@@ -38,6 +38,8 @@ entries:
   menu_language: Choose Language
   menu_controls: Controls
   menu_rules: Rules
+  menu_rules_label: Game Rules
+  menu_rules_text: Not done yet. Stay tuned!
   menu_controls_and_instructions: Controls and Instructions
   menu_settings: Game Settings
   menu_scores: High Scores
