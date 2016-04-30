@@ -133,6 +133,7 @@ entries:
   score_avg_weight: Peso Promedio
   score_avg_ripeness: Madurez Promedia
   score_name: Nombre
+  score_score: Puntuación
   score_default_name: Jugador
   time_date_recorded: Fecha Registrado
   time_played_for: Jugado Para
