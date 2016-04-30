@@ -15,14 +15,17 @@ namespace GameScores
 			return date_recorded.ToLocalTime();
 		}
 		public float played_for {get; set;}
+		public float distance_covered {get; set;}
 		public TimeScore(){
 			date_recorded = DateTime.UtcNow;
 			played_for = 0.0f;
+			distance_covered = 0.0f;
 		}
 
 		public TimeScore copy_from(TimeScore that){
 			date_recorded = that.date_recorded;
 			played_for = that.played_for;
+			distance_covered = that.distance_covered;
 			return this;
 		}
 		public TimeScore copy_of(){

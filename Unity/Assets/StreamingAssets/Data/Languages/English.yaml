@@ -140,6 +140,7 @@ entries:
   score_avg_ripeness: Average Ripeness
   score_name: Name
   score_default_name: Player
+  score_score: Score
   sort_date: Date Recorded
   sort_accepted_berries: Accepted Strawberries
   sort_accepted_baskets: Accepted Baskets

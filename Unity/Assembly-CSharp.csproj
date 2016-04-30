@@ -86,6 +86,7 @@
      <Compile Include="Assets\Scripts\GameScores\IScoreSource.cs" />
      <Compile Include="Assets\Scripts\GameScores\SavedScoreComponent.cs" />
      <Compile Include="Assets\Scripts\GameScores\Score.cs" />
+     <Compile Include="Assets\Scripts\GameScores\ScoreDetailedForm.cs" />
      <Compile Include="Assets\Scripts\GameScores\ScoreMinimalFormV2.cs" />
      <Compile Include="Assets\Scripts\GameScores\ScoreboardV2.cs" />
      <Compile Include="Assets\Scripts\GameScores\StrawberryScore.cs" />
@@ -323,12 +324,6 @@
      <None Include="Assets\Plugins\YamlDotNet\Readme.txt" />
      <None Include="Assets\Double Sided Shaders\Double Sided Transparent Diffuse Bump.shader" />
      <None Include="Assets\Materials\StrawberryShader.shader" />
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

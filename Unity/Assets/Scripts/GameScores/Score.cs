@@ -36,6 +36,27 @@ namespace GameScores {
 			return remaining_time() <= 0.0f || accepted_baskets().Count() >= baskets.Count();
 		}
 
+		public float berry_score(string category = "gathered"){
+			return total_berries(category).Aggregate(0.0f, (sum, berry)=>{
+				return sum + settings.win_condition.evaluate_strawberry(berry);
+			});
+		}
+
+		public float basket_score(){
+			return baskets.baskets.Aggregate(0.0f, (sum, basket)=>{
+				return sum + settings.win_condition.evaluate_basket(basket);
+			});
+		}
+
+		public float distance_score(){
+			return 0.0f;
+		}
+		[Show]
+		public float final_score(){
+			return (berry_score("gathered") - berry_score("dropped"))
+				+ basket_score() + distance_score();
+		}
+
 		public float total_weight(string category = "gathered"){
 			return total_berries(category).Aggregate(0.0f, (sum, berry)=>{
 				return sum + berry.weight;
