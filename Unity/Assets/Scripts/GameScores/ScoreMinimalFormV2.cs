@@ -41,7 +41,7 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 		rx_score.Subscribe((s)=>{
 			if (s != null){
 				date_time.text = s.time.date_recorded_local().ToString();
-				score_text.text = s.final_score().ToString();
+				score_text.text = s.final_score().ToString("0.00");
 			}
 		});
 		

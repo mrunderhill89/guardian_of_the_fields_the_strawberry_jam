@@ -67,53 +67,59 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 		if (win == null)
 			win = GameSettingsComponent.working_rules.win_condition;
 			
-		rx_id_text = LanguageController.controller.rx_load_text("basket_single")
-			.CombineLatest(rx_score.SelectMany(rx_score.SelectMany(s=>s.rx_id)), (text, id)=>{
-				return text+" #"+id.ToString();
-			}).ToReadOnlyReactiveProperty<string>();
-		rx_id_text.Subscribe((text)=>{
-			if (id_text != null)
-				id_text.text = text;
-			if (id_text_3d != null)
-				id_text_3d.text = text;
-		});
+		if (id_text != null || id_text_3d != null){
+			rx_id_text = LanguageController.controller.rx_load_text("basket_single")
+				.CombineLatest(rx_score.SelectMany(rx_score.SelectMany(s=>s.rx_id)), (text, id)=>{
+					return text+" #"+id.ToString();
+				}).ToReadOnlyReactiveProperty<string>();
+			rx_id_text.Subscribe((text)=>{
+				if (id_text != null)
+					id_text.text = text;
+				if (id_text_3d != null)
+					id_text_3d.text = text;
+			});
+		}
 		
-		rx_count_text = rx_score
-			.SelectMany(s=>s.rx_count)
-			.Select(count=>count.ToString())
-			.ToReadOnlyReactiveProperty<string>();
-		rx_count_text.Subscribe((text)=>{
-			if (count != null)
-				count.text = text;
-			if (count_3d != null)
-				count_3d.text = text;
-		});
+		if (count != null || count_3d != null){
+			rx_count_text = rx_score
+				.SelectMany(s=>s.rx_count)
+				.Select(value=>value.ToString())
+				.ToReadOnlyReactiveProperty<string>();
+			rx_count_text.Subscribe((text)=>{
+				if (count != null)
+					count.text = text;
+				if (count_3d != null)
+					count_3d.text = text;
+			});
+		}
 		
-		rx_weight_text = rx_score
-			.SelectMany(s=>s.rx_weight)
-			.Select(weight=>weight.ToString("0.00"))
-			.ToReadOnlyReactiveProperty<string>();
-		rx_weight_text.Subscribe((text)=>{
-			if (weight != null)
-				weight.text = text;
-			if (weight_3d != null)
-				weight_3d.text = text;
-		});
-
+		if (weight != null || weight_3d != null){
+			rx_weight_text = rx_score
+				.SelectMany(s=>s.rx_weight)
+				.Select(value=>value.ToString("0.00"))
+				.ToReadOnlyReactiveProperty<string>();
+			rx_weight_text.Subscribe((text)=>{
+				if (weight != null)
+					weight.text = text;
+				if (weight_3d != null)
+					weight_3d.text = text;
+			});
+		}
+		
 		condition = rx_score.SelectMany(s=>{
-			return s.rx_weight.CombineLatest(s.rx_overflow, (weight,overflow)=>{
-				return new UniRx.Tuple<float,bool>(weight,overflow);
+			return s.rx_weight.CombineLatest(s.rx_overflow, (w,overflow)=>{
+				return new UniRx.Tuple<float,bool>(w,overflow);
 			});
 		}).CombineLatest (rx_win, (tuple, wc) => {
-			float weight = tuple.Item1;
+			float w = tuple.Item1;
 			bool overflow = tuple.Item2;
 			if (overflow){
 				return BasketCondition.Overflow;
 			}
-			if (wc.basket_weight.is_accept(weight)){
+			if (wc.basket_weight.is_accept(w)){
 				return BasketCondition.Accepted;
 			} else {
-				if (wc.basket_weight.is_over(weight)){
+				if (wc.basket_weight.is_over(w)){
 					return BasketCondition.Overweight;
 				} else {
 					return BasketCondition.Underweight;

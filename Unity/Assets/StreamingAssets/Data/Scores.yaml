@@ -21,10 +21,10 @@
         max_close: 0.6
         limit_upper: true
         limit_lower: true
-        flat_bonus: 1
-        flat_penalty: 1
-        range_bonus: 0
-        range_penalty: 0
+        flat_bonus: 0.1
+        flat_penalty: 0.1
+        range_bonus: 0.1
+        range_penalty: 0.1
         epsilon: 1E-06
       berry_size:
         target: 1
@@ -47,8 +47,8 @@
         limit_lower: true
         flat_bonus: 1
         flat_penalty: 1
-        range_bonus: 0
-        range_penalty: 0
+        range_bonus: 1
+        range_penalty: 1
         epsilon: 1E-06
       distance_covered:
         target: 500
