@@ -38,8 +38,34 @@ entries:
   menu_language: Choose Language
   menu_controls: Controls
   menu_rules: Rules
-  menu_rules_label: Game Rules
-  menu_rules_text: Not done yet. Stay tuned!
+  rules_top_label: Game Rules
+  rules_objective_text:
+    "The main objective of this game is to fill the six baskets on your cart with strawberries before the day is over. 
+You do this by picking up strawberries from the field and placing them into the baskets one-by-one."
+  rules_states_text:
+    "The main game is divided into three general states: Looking, Picking, and Packing. 
+You move between these states using the arrow keys or the W (up), A (left), S (down), and D (right) keys on your keyboard. 
+The compass at the top of the screen shows you which directions you can move in at any time, and you can check which state you're in using the green box at the bottom of the screen."
+  rules_looking_text: "The game starts in the \"Looking\" state. From here, you can turn left or right using the compass arrows or the keyboard.
+While in the Looking state, your cart will move on its own automatically.  You can change the speed of the cart using the slider at the bottom right, or with the keyboard controls.
+You can move backwards, but doing so is much slower than moving forwards, so you'll want to stop the cart early to pick up a strawberry instead of going past it by accident and backtracking."
+  rules_picking_text:
+    "As the cart moves, you will pass by strawberries in the field. In order to pick up strawberries, you need to be kneeling towards the ground.
+When facing left, right, or backwards, press S or the down arrow to bend down. While bending, the cart will stop moving on its own, though you can \"slide\" forwards or backwards slowly by using the arrows on either side of the screen. This can be useful if you stopped a bit too early or late and need to line up the screen with a strawberry. To pick up a strawberry, just click and hold the mouse button to drag it around. You can pull the strawberry towards you or push it away with the mouse wheel. Be careful to keep holding the mouse button while moving the strawberry around. If you let go, you'll drop the strawberry and will have to pick it up again."
+  rules_finding_strawberries_text:
+    "You can find strawberries hidden behind leaves by hovering the mouse over where you think they are. A purple outline will appear over a strawberry when it can be picked up.
+Once you have a strawberry, another outline will appear below the strawberry showing where it will fall once you let go."
+  rules_ripeness_text:
+    "Not every strawberry should be picked out of the field. Some are too ripe and will spoil on the way to the market. These tend to be dull red, purple, or even gray with mold. 
+Others aren't ripe enough, and need to be left in the field to ripen. These tend to be green, yellow, or very pale pink. Generally, the strawberries you want to pick will be bright red. At the bottom of the cart you'll find an index card with information on what color strawberries are acceptable."
+  rules_packing_text:
+    "Once you have a strawberry, you can place it in the baskets by turning to face forwards while holding onto it. You can also go to the Packing state by bending down while facing forwards in the Looking state. Strawberries are physical objects, so when you drop one into a basket it will jostle other berries nearby. 
+Don't overfill a basket! If you try to fit too many strawberries together or stack them on top of each other too high, a red square will appear over the top of the basket, indicating overflow. Strawberries that are above this square need to be rearranged so that they fit underneath it, or moved to a different basket. Each basket has an icon and a pair of numbers hovering above it. These represent the basket's status, the number of strawberries in it, and it's total weight. With the default rules, you'll want to pack 16 ounces of strawberries into each basket, though there's a bit of wiggle room of you're barely over or under the limit."
+  rules_endgame_text:
+    "The game ends automatically at the end of the day, indicated by the timer at the top of the screen. On the default settings, the day will last 30 minutes in real-world time.
+You can also end the game early with a button in the bottom right of the screen, but be sure you've gotten enough strawberries first! 
+In addition to filling baskets, you also need to cover a set distance with your cart (500m on default settings). The distance you've covered already is shown just under the timer. Your score will be penalized if you fall short.
+Once the game ends, you'll be given a summary of the berries you've gathered. Disqualified berries will be automatically removed from your baskets, and you'll be given one last chance to rearrange your strawberries to fit the weight requirements. Once you're done with that, you will be prompted for your name to add your score to the scoreboard."
   menu_controls_and_instructions: Controls and Instructions
   menu_settings: Game Settings
   menu_scores: High Scores
@@ -80,7 +106,7 @@ entries:
     Hello!
     The game is taking a little time to set up the strawberry field for you.
     In the meantime, you're welcome to look around and get a feel for the controls.
-    When the field is done loading, press the button below to start the clock.
+    When the field is done loading, press the "Start Game" button below to start the clock.
   tutorial_move: Use arrow keys or "WASD" to move around.
   tutorial_speed: Press "E" or "Num 1" to speed up.
   tutorial_slow: Press "Q" or "Num 1" to slow up.
