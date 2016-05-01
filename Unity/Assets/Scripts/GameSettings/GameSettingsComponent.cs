@@ -67,7 +67,7 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 		}
 	#region Inherit from ILoader
 		public Model load(){
-			return load();
+			return loader.load();
 		}
 		public ReadOnlyReactiveProperty<Model> rx_load(){
 			return loader.rx_load();

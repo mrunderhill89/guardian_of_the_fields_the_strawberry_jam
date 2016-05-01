@@ -56,6 +56,7 @@
      <Compile Include="Assets\PositionSlider.cs" />
      <Compile Include="Assets\RulesQuickSelect.cs" />
      <Compile Include="Assets\ScaleWithParent.cs" />
+     <Compile Include="Assets\ScoreTargetUI.cs" />
      <Compile Include="Assets\Scripts\Field\EmptyRowSetup.cs" />
      <Compile Include="Assets\Scripts\Field\Hazards\BeeSting.cs" />
      <Compile Include="Assets\Scripts\Field\LeafGenerator.cs" />
@@ -171,11 +172,13 @@
      <Compile Include="Assets\Scripts\UserInterface\PaceNameLabel.cs" />
      <Compile Include="Assets\Scripts\UserInterface\PlaceOnSliderUI.cs" />
      <Compile Include="Assets\Scripts\UserInterface\QuitGame.cs" />
+     <Compile Include="Assets\Scripts\UserInterface\RxUIAdapter.cs" />
      <Compile Include="Assets\Scripts\UserInterface\SettingsForm.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StartGame.cs" />
      <Compile Include="Assets\Scripts\UserInterface\StrawberryColorIcon.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TimeToText.cs" />
      <Compile Include="Assets\Scripts\UserInterface\TutorialHandler.cs" />
+     <Compile Include="Assets\SettingsScoreTargetAdapter.cs" />
      <Compile Include="Assets\SpinnerUI.cs" />
      <Compile Include="Assets\StrawberryFootprint.cs" />
      <Compile Include="Assets\TimeSlider.cs" />
