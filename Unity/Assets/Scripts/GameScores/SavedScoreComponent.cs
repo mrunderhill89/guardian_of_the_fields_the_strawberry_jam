@@ -80,22 +80,39 @@ public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
 		}
 	}
 
-	protected ISaver<Score> _saver;
-	public  ISaver<Score> saver{
-		get{ return _saver; }
+	protected ISaver<Score[]> _save_all;
+	public  ISaver<Score[]> save_all{
+		get{ return _save_all; }
 		private set{ 
-			_saver = value;
+			_save_all = value;
+		}
+	}
+
+	protected ISaver<Score> _save_one;
+	public  ISaver<Score> save_one{
+		get{ return _save_one; }
+		private set{ 
+			_save_one = value;
 		}
 	}
 
 	public SavedScoreController(){
 		var local = new LocalFileLoader<Score[]>();
 		loader = local;
-		saver = new FileAppendAdapter<Score>(local, local);
+		save_all = local;
+		save_one = new FileAppendAdapter<Score>(local, local);
 	}
 
 	public void load_current(){
 		scores = loader.load();
+	}
+	
+	public void save_current(){
+		save_all.save(scores);
+	}
+
+	public void clear_current(){
+		rx_scores.Clear();
 	}
 
 	//ILoader
@@ -135,10 +152,10 @@ public class SavedScoreController: IDirectoryLoader<Score[]>, ISaver<Score> {
 	//ISaver
 	//Save a single score
 	public void save(Score score){
-		saver.save(score);
+		save_one.save(score);
 	}
 	public void rx_save(Score score){
-		saver.rx_save(score);
+		save_one.rx_save(score);
 	}
 
 	public ReactiveCollection<Score> rx_scores = new ReactiveCollection<Score> ();
@@ -204,6 +221,18 @@ public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
 	}
 	public static ReactiveCollection<Score> rx_scores{
 		get{ return controller.rx_scores; }
+	}
+	
+	public void load_current(){
+		controller.load_current();
+	}
+
+	public void save_current(){
+		controller.save_current();
+	}
+	
+	public void clear_current(){
+		controller.clear_current();
 	}
 	
 	void Start(){
