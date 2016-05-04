@@ -12,19 +12,13 @@ public class DirectoryTextField : BetterBehaviour {
 	public InputField input;
 	public IDirectoryLoader loader;
 
-	// Use this for initialization
-
 	void Start () {
 		if (loader != null){
 			loader.rx_directory.Subscribe(text=>{
 				if (input != null && input.text != null)
 					input.text = text;
 			});
+			input.text = loader.directory;
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

@@ -155,6 +155,7 @@ public class GameSettingsComponent : BetterBehaviour, IDirectoryLoader<Model>, I
 			working_rules.copy_from(current_rules);
 		}
 	}
+
 	public void revert(){
 		current_rules.copy_from(working_rules);
 		if (parent != null){

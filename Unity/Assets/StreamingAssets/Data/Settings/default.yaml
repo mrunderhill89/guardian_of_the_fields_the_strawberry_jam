@@ -31,6 +31,12 @@ win_condition:
     max_accept: 0.1
     min_close: 0.2
     max_close: 0.2
+    limit_upper: true
+    limit_lower: true
+    flat_bonus: 1
+    flat_penalty: 1
+    range_bonus: 1
+    range_penalty: 1
     epsilon: 1E-06
   basket_weight:
     target: 16
