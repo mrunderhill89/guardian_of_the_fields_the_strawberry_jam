@@ -16,6 +16,7 @@ namespace GameScores
 		}
 		public float played_for {get; set;}
 		public float distance_covered {get; set;}
+
 		public TimeScore(){
 			date_recorded = DateTime.UtcNow;
 			played_for = 0.0f;

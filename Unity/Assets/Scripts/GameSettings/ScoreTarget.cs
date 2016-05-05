@@ -178,7 +178,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	
 	//Y Values
 		//Flat Bonus
-	protected FloatReactiveProperty _rx_flat_bonus = new FloatReactiveProperty(1.0f);
+	protected FloatReactiveProperty _rx_flat_bonus = new FloatReactiveProperty(0.0f);
 	[YamlIgnore]
 	public FloatReactiveProperty rx_flat_bonus{get{ return _rx_flat_bonus; }}
 	[Show]
@@ -187,7 +187,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		set{ _rx_flat_bonus.Value = value; }
 	}
 		//Flat Penalty
-	protected FloatReactiveProperty _rx_flat_penalty = new FloatReactiveProperty(1.0f);
+	protected FloatReactiveProperty _rx_flat_penalty = new FloatReactiveProperty(0.0f);
 	[YamlIgnore]
 	public FloatReactiveProperty rx_flat_penalty{get{ return _rx_flat_penalty; }}
 	[Show]
@@ -196,7 +196,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		set{ _rx_flat_penalty.Value = value; }
 	}
 		//Range Bonus
-	protected FloatReactiveProperty _rx_range_bonus = new FloatReactiveProperty(1.0f);
+	protected FloatReactiveProperty _rx_range_bonus = new FloatReactiveProperty(0.0f);
 	[YamlIgnore]
 	public FloatReactiveProperty rx_range_bonus{get{ return _rx_range_bonus; }}
 	[Show]
@@ -205,7 +205,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		set{ _rx_range_bonus.Value = value; }
 	}
 		//Range Penalty
-	protected FloatReactiveProperty _rx_range_penalty = new FloatReactiveProperty(1.0f);
+	protected FloatReactiveProperty _rx_range_penalty = new FloatReactiveProperty(0.0f);
 	[YamlIgnore]
 	public FloatReactiveProperty rx_range_penalty{get{ return _rx_range_penalty; }}
 	[Show]

@@ -49,7 +49,7 @@ namespace GameScores {
 		}
 
 		public float distance_score(){
-			return 0.0f;
+			return settings.win_condition.distance_covered.evaluate(time.distance_covered);
 		}
 		[Show]
 		public float final_score(){

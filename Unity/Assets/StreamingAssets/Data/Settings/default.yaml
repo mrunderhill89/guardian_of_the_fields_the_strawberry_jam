@@ -57,8 +57,8 @@ win_condition:
     max_close: 20
     limit_upper: true
     limit_lower: true
-    flat_bonus: 1
-    flat_penalty: 1
+    flat_bonus: 20
+    flat_penalty: 20
     range_bonus: 20
     range_penalty: 20
     epsilon: 1E-06

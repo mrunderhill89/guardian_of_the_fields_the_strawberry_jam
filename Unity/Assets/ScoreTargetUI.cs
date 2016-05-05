@@ -32,6 +32,7 @@ public class ScoreTargetUI : BetterBehaviour, IScoreTargetUI {
 	public InputField range_bonus;
 	public InputField range_penalty;
 
+	public ObjectVisibility hide_when_unlimited;
 
 	public RxUIAdapter adapter = new RxUIAdapter();
 	void Start () {
@@ -69,6 +70,16 @@ public class ScoreTargetUI : BetterBehaviour, IScoreTargetUI {
 		}).register_input_float(range_penalty, rx_valid_data.SelectMany(d=>d.rx_max_close), (value)=>{ //Range Penalty
 			if (data != null)
 				data.range_penalty = value;
+		});
+		rx_valid_data.SelectMany(d=>{
+			return d.rx_limit_upper.CombineLatest(
+					d.rx_limit_lower,
+					(upper, lower)=>{
+						return upper || lower;
+					});
+		}).DistinctUntilChanged().Subscribe((visible)=>{
+			if (hide_when_unlimited != null)
+				hide_when_unlimited.visible = visible;
 		});
 	}
 }

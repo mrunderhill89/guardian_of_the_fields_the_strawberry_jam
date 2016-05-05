@@ -217,7 +217,7 @@ public class SavedScoreComponent : BetterBehaviour, IDirectoryLoader<Score[]> {
 	
 	//Internal
 	public static void save_static(Score score){
-		controller.rx_save(score);
+		controller.save(score);
 	}
 	public static ReactiveCollection<Score> rx_scores{
 		get{ return controller.rx_scores; }

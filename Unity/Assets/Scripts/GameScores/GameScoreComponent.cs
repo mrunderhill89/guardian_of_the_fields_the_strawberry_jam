@@ -18,11 +18,13 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 		set { rx_score.Value = value;}
 	}
 	public GameTimer timer;
+	public Transform cart_position;
+
 	void Start () {
 		score = new Score();
 		if (timer == null)
 			timer = GetComponent<GameTimer> ();
-		GameSettingsComponent.rx_working_rules.Subscribe ((settings) => {
+		GameSettingsComponent.rx_working_rules.Take(1).Subscribe ((settings) => {
 			score.settings = settings;
 		});
 		score.baskets.rx_baskets = BasketComponent.rx_baskets.RxSelect(comp=>{
@@ -43,10 +45,11 @@ public class GameScoreComponent : BetterBehaviour, IScoreSource {
 			score.berries.get_category ("gathered").from_state_machine ("basket");
 			score.berries.get_category ("dropped").from_state_machine ("fall");
 		}
-		if (!lock_baskets) {
-		}
 		if (!lock_timer) {
 			score.time.played_for = timer.time.total;
+			if (cart_position != null){
+				score.time.distance_covered = cart_position.position.z;
+			}
 		}
 	}
 	
