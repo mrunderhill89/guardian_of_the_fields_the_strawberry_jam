@@ -22,8 +22,8 @@ win_condition:
     limit_lower: true
     flat_bonus: 0.1
     flat_penalty: 0.1
-    range_bonus: 0.1
-    range_penalty: 0.1
+    range_bonus: 0.6
+    range_penalty: 1
     epsilon: 1E-06
   berry_size:
     target: 0.08
@@ -31,12 +31,10 @@ win_condition:
     max_accept: 0.1
     min_close: 0.2
     max_close: 0.2
-    limit_upper: false
-    limit_lower: false
     flat_bonus: 1
     flat_penalty: 1
-    range_bonus: 1
-    range_penalty: 1
+    range_bonus: 0.2
+    range_penalty: 0.2
     epsilon: 1E-06
   basket_weight:
     target: 16
@@ -48,8 +46,8 @@ win_condition:
     limit_lower: true
     flat_bonus: 1
     flat_penalty: 1
-    range_bonus: 1
-    range_penalty: 1
+    range_bonus: 2
+    range_penalty: 2
     epsilon: 1E-06
   distance_covered:
     target: 500
@@ -61,13 +59,13 @@ win_condition:
     limit_lower: true
     flat_bonus: 1
     flat_penalty: 1
-    range_bonus: 1
-    range_penalty: 1
+    range_bonus: 20
+    range_penalty: 20
     epsilon: 1E-06
 time:
   end_early: true
   game_length: 1800
   start_hour: 6
   end_hour: 18
-  movement_speed: 2
-  slide_speed: 0.2
+  movement_speed: 1.5
+  slide_speed: 0.1

@@ -2,20 +2,30 @@
 using UnityEngine.UI;
 using System.Collections;
 using Vexe.Runtime.Types;
+using UniRx;
+
 public class StrawberryColorIcon : BetterBehaviour {
 
 	public Slider slider;
 	public Image icon;
-	[Show]
-	public float value{
-		get{return slider.value / StrawberryColor.max_quality;}
+	
+	[DontSerialize]
+	public ReadOnlyReactiveProperty<float> rx_value;
+
+	protected float clamp_value(float value){
+		return value / StrawberryColor.max_quality;
 	}
-	[Show]
-	public Color color{
-		get{return StrawberryColor.color_gradient.Evaluate(value);}
-	}
-	// Update is called once per frame
-	void Update () {
-		icon.color = color;
+
+	void Start() {
+		if (slider != null){
+			rx_value = slider.OnValueChangedAsObservable().Select<float, float>(
+				clamp_value).ToReadOnlyReactiveProperty<float>(clamp_value(slider.value));
+			rx_value.Subscribe(
+				value => {
+					if (icon != null)
+						icon.color = StrawberryColor.color_gradient.Evaluate(value);
+				}
+			);
+		}
 	}
 }

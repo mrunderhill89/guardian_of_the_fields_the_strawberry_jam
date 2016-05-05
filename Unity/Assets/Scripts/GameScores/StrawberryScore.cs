@@ -19,19 +19,6 @@ namespace GameScores
 			ripeness = value;
 			return this;
 		}
-		public bool is_overripe(float max_ripeness){
-			return ripeness > max_ripeness;
-		}
-		public bool is_underripe(float min_ripeness){
-			return ripeness < min_ripeness;
-		}
-		public bool is_underweight(float min_weight){
-			return weight < min_weight;
-		}
-		public bool is_eligible(float max_ripeness, float min_ripeness, float min_weight){
-			return !(is_overripe (max_ripeness) || is_underripe (min_ripeness) || is_underweight (min_weight));
-		}
-
 		public StrawberrySingleScore copy_from(StrawberrySingleScore that){
 			ripeness = that.ripeness;
 			weight = that.weight;
@@ -40,7 +27,6 @@ namespace GameScores
 		public StrawberrySingleScore copy_of(){
 			return new StrawberrySingleScore().copy_from(this);
 		}
-
 	}
 	public class StrawberryScore
 	{
@@ -57,13 +43,13 @@ namespace GameScores
 				return all_berries.Where(berry => win.is_strawberry_eligible(berry.ripeness, berry.weight));
 			}
 			public IEnumerable<StrawberrySingleScore> overripe(GameSettings.WinCondition win){
-				return all_berries.Where(berry => win.ripeness.is_over(berry.ripeness));
+				return all_berries.Where(berry => win.ripeness.is_over_accept(berry.ripeness));
 			}
 			public IEnumerable<StrawberrySingleScore> underripe(GameSettings.WinCondition win){
-				return all_berries.Where(berry =>win.ripeness.is_under(berry.ripeness));
+				return all_berries.Where(berry =>win.ripeness.is_under_accept(berry.ripeness));
 			}
 			public IEnumerable<StrawberrySingleScore> underweight(GameSettings.WinCondition win){
-				return all_berries.Where(berry => win.berry_size.is_under(berry.ripeness));
+				return all_berries.Where(berry => win.berry_size.is_under_accept(berry.ripeness));
 			}
 			[Show]
 			public RipenessSorter from_state_machine(string state_name){

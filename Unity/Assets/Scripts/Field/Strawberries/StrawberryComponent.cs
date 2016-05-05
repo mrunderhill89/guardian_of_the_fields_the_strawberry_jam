@@ -15,13 +15,13 @@ public class StrawberryComponent : BetterBehaviour {
 			;}
 	}
 	public bool is_under_ripe(){
-		return quality < GameSettingsComponent.working_rules.win_condition.ripeness.min_accept;
+		return GameSettingsComponent.working_rules.win_condition.ripeness.is_under_accept(quality);
 	}
 	public bool is_over_ripe(){
-		return quality > GameSettingsComponent.working_rules.win_condition.ripeness.max_accept;
+		return GameSettingsComponent.working_rules.win_condition.ripeness.is_over_accept(quality);
 	}
 	public bool is_under_size(){
-		return weight < GameSettingsComponent.working_rules.win_condition.berry_size.min_accept;
+		return GameSettingsComponent.working_rules.win_condition.berry_size.is_under_accept(quality);
 	}
 	public bool is_ineligible(){
 		return !GameSettingsComponent.working_rules.win_condition.ripeness.is_accept(quality) || 

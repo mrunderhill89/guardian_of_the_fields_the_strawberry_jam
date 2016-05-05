@@ -42,9 +42,14 @@ public interface IScoreTarget{
 	
 	bool is_close(float value);
 	bool is_accept(float value);
-	bool is_greater_than(float value);
+	
 	bool is_over(float value);
+	bool is_over_accept(float value);
+	bool is_over_close (float value);
+	
 	bool is_under(float value);
+	bool is_under_accept(float value);
+	bool is_under_close (float value);
 	
 	float evaluate(float value);
 	float flat_value(float value);
@@ -152,8 +157,8 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		}
 	}
 	
-		//Upper Limit
-	protected BoolReactiveProperty _rx_limit_upper = new BoolReactiveProperty(true);
+		//Upper Limit - If false, any value above the target is accepted.
+	protected BoolReactiveProperty _rx_limit_upper = new BoolReactiveProperty(false);
 	[YamlIgnore]
 	public IObservable<bool> rx_limit_upper{get{ return _rx_limit_upper; }}
 	[Show]
@@ -161,8 +166,8 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		get{ return _rx_limit_upper.Value; } 
 		set{ _rx_limit_upper.Value = value; }
 	}
-		//Lower Limit
-	protected BoolReactiveProperty _rx_limit_lower= new BoolReactiveProperty(true);
+		//Lower Limit - If false, any value below the target is accepted.
+	protected BoolReactiveProperty _rx_limit_lower= new BoolReactiveProperty(false);
 	[YamlIgnore]
 	public IObservable<bool> rx_limit_lower{get{ return _rx_limit_lower; }}
 	[Show]
@@ -216,39 +221,43 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		set{ _epsilon = Mathf.Max(value, 0.0f);}
 	}
 	
-	public bool is_close(float value){
-		if ((value < target && !limit_lower) || (value > target && !limit_upper))
-			return true;
-		if ((min_close < epsilon && value <= target) || (max_close < epsilon && value > target))
-			return false;
-		return value >= target-min_close && value <= target+max_close;
-	}
-	
-	public bool is_accept(float value){
-		if ((value < target && !limit_lower) || (value > target && !limit_upper))
-			return true;
-		if ((min_accept < epsilon && value <= target) || (max_accept < epsilon && value > target))
-			return false;
-		return value >= target-min_accept && value <= target+min_accept;
-	}
-
-	public bool is_greater_than(float value){
+	public bool is_over(float value){
 		return value > target;
 	}
 	
-	public bool is_over(float value){
-		return !is_accept(value) && is_greater_than(value);
+	public bool is_over_accept(float value){
+		return limit_upper && value > target + max_accept;
+	}
+	
+	public bool is_over_close(float value){
+		return limit_upper && value > target + max_close;
 	}
 	
 	public bool is_under(float value){
-		return !(is_accept(value) || is_greater_than(value));
+		return value < target;
 	}
 	
+	public bool is_under_accept(float value){
+		return limit_lower && value < target - min_accept;
+	}
+	
+	public bool is_under_close(float value){
+		return limit_lower && value < target - min_close;
+	}
+
+	public bool is_close(float value){
+		return !(is_over_close(value) || is_under_close(value));
+	}
+	
+	public bool is_accept(float value){
+		return !(is_over_accept(value) || is_under_accept(value));
+	}
+
 	public float evaluate(float value){
 		return flat_value(value) + range_value(value);
 	}
 	public float flat_value(float value){
-		if (!(limit_lower || is_greater_than(value)) || (!limit_upper && is_greater_than(value)) || is_accept(value))
+		if (is_accept(value))
 			return flat_bonus;
 		return -flat_penalty;
 	}
@@ -260,17 +269,17 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 			min_close > min_accept
 	*/
 	public float range_value(float value){
-		if (!(limit_lower || is_greater_than(value)) || (!limit_upper && is_greater_than(value)))
+		if ( (is_over(value) && !limit_upper) || (is_under(value) && !limit_lower) )
 			return range_bonus;
 		if (is_close(value)){
 			if (is_accept(value)){
-				if (is_greater_than(value)){
+				if (is_over(value)){
 					return range_bonus*Mathf.Clamp((1.0f + (target - value)/max_accept), 0.0f, 1.0f);
 				} else {
 					return range_bonus*Mathf.Clamp((value - target + min_accept)/min_accept, 0.0f, 1.0f);
 				}
 			} else {
-				if (is_greater_than(value)){
+				if (is_over(value)){
 					return (-range_penalty)*Mathf.Clamp((value - target - max_accept)/(max_close-max_accept), 0.0f, 1.0f);
 				} else {
 					return (-range_penalty)*Mathf.Clamp(1.0f - (value - target + min_close)/(min_close - min_accept), 0.0f, 1.0f);
@@ -312,6 +321,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		epsilon = that.epsilon;
 		return this;
 	}
+
 	public bool Equals (IScoreTarget that){
 		return System.Object.ReferenceEquals(this,that) || (
 			target == that.target

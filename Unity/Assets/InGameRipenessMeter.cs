@@ -11,6 +11,7 @@ public class InGameRipenessMeter : MonoBehaviour {
 	public SpriteRenderer sprite;
 	protected Material material;
 	public float max_distance = 0.3f;
+	public FloatReactiveProperty rx_value;
 	void Start () {
 		if (sprite == null)
 			sprite = GetComponent<SpriteRenderer>();
@@ -20,9 +21,23 @@ public class InGameRipenessMeter : MonoBehaviour {
 			}
 			sprite.material = material;
 			if (is_max){
-				GameSettingsComponent.working_rules.win_condition.ripeness.rx_max_accept_true.Subscribe(this.update);
+				GameSettingsComponent.working_rules.win_condition.ripeness.rx_max_accept_true.CombineLatest(
+					GameSettingsComponent.working_rules.win_condition.ripeness.rx_limit_upper,
+					(value, limited)=>{
+						if (limited)
+							return value;
+						return StrawberryColor.max_quality;
+					}
+				).Subscribe(this.update);
 			} else {
-				GameSettingsComponent.working_rules.win_condition.ripeness.rx_min_accept_true.Subscribe(this.update);
+				GameSettingsComponent.working_rules.win_condition.ripeness.rx_min_accept_true.CombineLatest(
+					GameSettingsComponent.working_rules.win_condition.ripeness.rx_limit_lower,
+					(value, limited)=>{
+						if (limited)
+							return value;
+						return 0.0f;
+					}
+				).Subscribe(this.update);
 			}
 		}
 	}

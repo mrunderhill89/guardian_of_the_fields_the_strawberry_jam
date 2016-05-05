@@ -1,1 +1,440 @@
-[]
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.08
+      max_size: 0.1
+      min_ripeness: 0.4
+      max_ripeness: 1.6
+      density: 2800
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.7
+        max_accept: 0.7
+        min_close: 0.8
+        max_close: 0.8
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 0.8
+        range_penalty: 0.8
+        epsilon: 1E-06
+      berry_size:
+        target: 0.08
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 0.2
+        range_penalty: 0.2
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 2
+        range_penalty: 2
+        epsilon: 1E-06
+      distance_covered:
+        target: 250
+        min_accept: 10
+        max_accept: 10
+        min_close: 20
+        max_close: 20
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 20
+        range_penalty: 20
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 600
+      start_hour: 6
+      end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
+  player_name: Kevin
+  time:
+    date_recorded: 2016-05-04T19:13:31.9380860-07:00
+    played_for: 227.5488
+  berries:
+    categories:
+      gathered:
+        all_berries:
+        - weight: 4.985725
+          ripeness: 1.560691
+        - weight: 4.356265
+          ripeness: 1.237381
+        - weight: 3.430743
+          ripeness: 0.5512936
+        - weight: 3.64822
+          ripeness: 0.7921953
+        - weight: 1.423193
+          ripeness: 1.168547
+        - weight: 4.074014
+          ripeness: 0.9341289
+        - weight: 3.309988
+          ripeness: 0.5740833
+        - weight: 0.9639943
+          ripeness: 0.8076773
+        - weight: 2.193447
+          ripeness: 0.6571316
+        - weight: 3.028439
+          ripeness: 1.041406
+        - weight: 2.866684
+          ripeness: 1.318946
+        - weight: 2.539915
+          ripeness: 0.8000767
+        - weight: 0.8188826
+          ripeness: 0.7604378
+        - weight: 5.66679
+          ripeness: 1.292965
+        - weight: 3.916445
+          ripeness: 0.667591
+        - weight: 3.36477
+          ripeness: 1.022241
+        - weight: 1.760804
+          ripeness: 1.251959
+        - weight: 3.033294
+          ripeness: 0.7284148
+        - weight: 3.786446
+          ripeness: 0.7496977
+        - weight: 4.173972
+          ripeness: 1.461599
+        - weight: 2.865201
+          ripeness: 0.4468855
+        - weight: 4.626459
+          ripeness: 0.8510213
+        - weight: 1.312429
+          ripeness: 0.5268006
+        - weight: 4.652595
+          ripeness: 0.9858576
+        - weight: 0.8251086
+          ripeness: 0.7978475
+        - weight: 1.980806
+          ripeness: 0.6933218
+        - weight: 2.919245
+          ripeness: 0.5232293
+        - weight: 2.193988
+          ripeness: 0.7856776
+        - weight: 4.047129
+          ripeness: 0.9006935
+        - weight: 1.887746
+          ripeness: 1.308905
+        - weight: 2.700283
+          ripeness: 0.9503987
+        - weight: 3.312523
+          ripeness: 1.253646
+        - weight: 2.512863
+          ripeness: 1.040529
+        - weight: 2.253988
+          ripeness: 0.9221575
+      dropped:
+        all_berries:
+        - weight: 1.695755
+          ripeness: 1.558534
+  baskets:
+    baskets:
+    - id: 1
+    - id: 2
+    - id: 3
+    - id: 4
+    - id: 5
+    - id: 6
+- settings:
+    randomness:
+      randomize: true
+    flags:
+      tutorial: true
+      cheats: true
+    strawberry:
+      max_berries_in_field: 40
+      min_size: 0.07
+      max_size: 0.09
+      max_ripeness: 2
+      density: 2500
+    breaks:
+      length: 5
+      distance: 50
+    win_condition:
+      ripeness:
+        target: 1
+        min_accept: 0.5
+        max_accept: 0.5
+        min_close: 0.6
+        max_close: 0.6
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 0.1
+        flat_penalty: 0.1
+        range_bonus: 0.6
+        range_penalty: 0.6
+        epsilon: 1E-06
+      berry_size:
+        target: 0.08
+        min_accept: 0.1
+        max_accept: 0.1
+        min_close: 0.2
+        max_close: 0.2
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 0.2
+        range_penalty: 0.2
+        epsilon: 1E-06
+      basket_weight:
+        target: 16
+        min_accept: 1
+        max_accept: 1
+        min_close: 2
+        max_close: 2
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 2
+        range_penalty: 2
+        epsilon: 1E-06
+      distance_covered:
+        target: 500
+        min_accept: 10
+        max_accept: 10
+        min_close: 20
+        max_close: 20
+        limit_upper: true
+        limit_lower: true
+        flat_bonus: 1
+        flat_penalty: 1
+        range_bonus: 20
+        range_penalty: 20
+        epsilon: 1E-06
+    time:
+      end_early: true
+      game_length: 1800
+      start_hour: 6
+      end_hour: 18
+      movement_speed: 1.5
+      slide_speed: 0.1
+  player_name: Kevin
+  time:
+    date_recorded: 2016-05-05T03:04:38.5515060Z
+    played_for: 33.49937
+  berries:
+    categories:
+      gathered:
+        all_berries:
+        - weight: 1.323682
+          ripeness: 1.727146
+        - weight: 1.431196
+          ripeness: 1.030453
+        - weight: 1.690248
+          ripeness: 1.118151
+        - weight: 1.240977
+          ripeness: 1.63994
+        - weight: 0.9622704
+          ripeness: 1.490575
+        - weight: 3.600489
+          ripeness: 1.680897
+        - weight: 1.363565
+          ripeness: 1.631383
+        - weight: 0.9383197
+          ripeness: 0.5985382
+        - weight: 2.650301
+          ripeness: 1.222638
+        - weight: 1.102241
+          ripeness: 0.7897164
+        - weight: 2.431876
+          ripeness: 1.969606
+        - weight: 2.747681
+          ripeness: 1.811497
+        - weight: 1.62564
+          ripeness: 1.505857
+        - weight: 0.7213675
+          ripeness: 0.4249575
+        - weight: 0.6914095
+          ripeness: 0.1200005
+        - weight: 2.06149
+          ripeness: 1.847704
+        - weight: 2.008256
+          ripeness: 0.7049607
+        - weight: 1.780669
+          ripeness: 0.9177739
+        - weight: 1.222895
+          ripeness: 0.6423408
+        - weight: 1.069786
+          ripeness: 0.5178099
+        - weight: 1.744208
+          ripeness: 1.788643
+        - weight: 0.7540594
+          ripeness: 1.014357
+        - weight: 2.024021
+          ripeness: 1.512444
+        - weight: 1.351143
+          ripeness: 1.749171
+        - weight: 3.339464
+          ripeness: 1.483396
+        - weight: 0.9733959
+          ripeness: 0.5013
+        - weight: 1.344668
+          ripeness: 1.406177
+        - weight: 2.032398
+          ripeness: 0.6725252
+        - weight: 1.517862
+          ripeness: 0.797968
+        - weight: 1.963175
+          ripeness: 1.552757
+        - weight: 1.06115
+          ripeness: 1.208737
+        - weight: 1.472269
+          ripeness: 0.8647619
+        - weight: 3.237602
+          ripeness: 1.237561
+        - weight: 2.394155
+          ripeness: 0.9993204
+        - weight: 0.8566643
+          ripeness: 0.5200913
+        - weight: 1.866124
+          ripeness: 1.746325
+        - weight: 2.518553
+          ripeness: 1.978989
+        - weight: 1.054839
+          ripeness: 1.369472
+        - weight: 1.507743
+          ripeness: 1.698111
+        - weight: 0.5825918
+          ripeness: 0.0996527
+        - weight: 1.294034
+          ripeness: 0.8112401
+        - weight: 2.905382
+          ripeness: 1.936003
+        - weight: 3.493147
+          ripeness: 1.787866
+        - weight: 2.692564
+          ripeness: 0.977257
+        - weight: 0.8359794
+          ripeness: 0.6687868
+        - weight: 1.661292
+          ripeness: 1.755136
+        - weight: 0.8627746
+          ripeness: 1.427383
+        - weight: 2.42412
+          ripeness: 0.8237796
+        - weight: 3.197821
+          ripeness: 1.888647
+        - weight: 2.146253
+          ripeness: 1.559409
+        - weight: 1.719535
+          ripeness: 1.904708
+        - weight: 2.860558
+          ripeness: 1.455164
+        - weight: 1.32864
+          ripeness: 0.5644687
+        - weight: 0.8715869
+          ripeness: 0.7493125
+        - weight: 2.316185
+          ripeness: 0.9681033
+        - weight: 1.85172
+          ripeness: 0.6281897
+        - weight: 2.047436
+          ripeness: 1.798667
+        - weight: 2.373629
+          ripeness: 0.7999113
+        - weight: 1.950671
+          ripeness: 1.469006
+        - weight: 1.230642
+          ripeness: 0.9173258
+        - weight: 2.687258
+          ripeness: 1.809701
+        - weight: 0.7408392
+          ripeness: 1.113262
+        - weight: 2.353183
+          ripeness: 1.998651
+        - weight: 0.508765
+          ripeness: 0.222435
+        - weight: 2.198643
+          ripeness: 1.333187
+        - weight: 3.354464
+          ripeness: 1.457426
+        - weight: 1.829437
+          ripeness: 1.371771
+        - weight: 0.4715123
+          ripeness: 0.7517773
+        - weight: 3.009804
+          ripeness: 1.385738
+        - weight: 0.5659601
+          ripeness: 0.1898732
+        - weight: 2.816752
+          ripeness: 1.172157
+        - weight: 0.5007299
+          ripeness: 0.3929093
+        - weight: 1.406925
+          ripeness: 0.6720787
+        - weight: 0.5162428
+          ripeness: 0.3482614
+        - weight: 1.02513
+          ripeness: 1.071266
+        - weight: 0.5382977
+          ripeness: 0.7443395
+        - weight: 1.676365
+          ripeness: 1.331377
+        - weight: 0.641583
+          ripeness: 0.2104567
+        - weight: 1.796271
+          ripeness: 0.6501523
+        - weight: 1.074646
+          ripeness: 0.8400658
+        - weight: 0.9654227
+          ripeness: 0.7246015
+        - weight: 1.414202
+          ripeness: 1.623318
+        - weight: 1.061332
+          ripeness: 0.9337907
+        - weight: 1.441099
+          ripeness: 1.037065
+        - weight: 3.236409
+          ripeness: 1.419498
+        - weight: 2.794985
+          ripeness: 1.399705
+      dropped:
+        all_berries:
+        - weight: 0.7176128
+          ripeness: 0.6844393
+  baskets:
+    baskets:
+    - weight: 15.60773
+      count: 11
+      id: 1
+    - weight: 11.14636
+      count: 6
+      id: 2
+    - weight: 15.5507
+      count: 8
+      id: 3
+    - weight: 15.78078
+      count: 9
+      id: 4
+    - weight: 15.49837
+      count: 11
+      id: 5
+    - weight: 15.64222
+      count: 8
+      id: 6
