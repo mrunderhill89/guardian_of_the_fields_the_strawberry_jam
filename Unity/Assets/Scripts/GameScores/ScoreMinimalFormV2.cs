@@ -20,6 +20,7 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 		get { return rx_score.Value; }
 		set { rx_score.Value = value; }
 	}
+	
 	//Date and Time
 	public Text date_time;
 	public Text player_name;
@@ -35,6 +36,10 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 			if(c != ' ') return false;
 		}
 		return true;
+	}
+	
+	public void SelectMyScore(){
+		ScoreDetailedForm.select_score(score);
 	}
 	
 	void Awake () {
@@ -59,5 +64,9 @@ public class ScoreMinimalFormV2 : BetterBehaviour, IScoreSource {
 			if (player_name.text != null)
 				player_name.text = t;
 		});
+	}
+	
+	void OnClick() {
+		Debug.Log("Clicked!");
 	}
 }

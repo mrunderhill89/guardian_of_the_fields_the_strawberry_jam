@@ -159,7 +159,7 @@ Once the game ends, you'll be given a summary of the berries you've gathered. Di
   settings_movement_speed: Movement Speed
   settings_slide_speed: Slide Speed
   time_date_recorded: Date Recorded
-  time_played_for: Played For
+  time_played_for: Play Time
   score_total_berries: Total Berries
   score_total_weight: Total Weight
   score_avg_weight: Average Weight
@@ -167,6 +167,8 @@ Once the game ends, you'll be given a summary of the berries you've gathered. Di
   score_name: Name
   score_default_name: Player
   score_score: Score
+  score_details: Details
+  score_distance: Distance
   sort_date: Date Recorded
   sort_accepted_berries: Accepted Strawberries
   sort_accepted_baskets: Accepted Baskets

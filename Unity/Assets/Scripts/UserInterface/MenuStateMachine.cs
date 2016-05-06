@@ -5,7 +5,7 @@ using UniRx;
 using Vexe.Runtime.Types;
 
 public class MenuStateMachine : BetterBehaviour {
-	public StateMachine fsm;
+	public static StateMachine fsm;
 	// Use this for initialization
 	void Start () {
 		if (fsm == null)
@@ -16,6 +16,8 @@ public class MenuStateMachine : BetterBehaviour {
 			, true
 		).add_child (
 			fsm.state ("scores")
+		).add_child (
+			fsm.state ("score_details")
 		).add_child (
 			fsm.state ("settings")
 		).add_child (
@@ -36,6 +38,14 @@ public class MenuStateMachine : BetterBehaviour {
 		}).new_transition("scores->main", t => {
 			t.chain_from(fsm.state("scores"))
 				.chain_to(fsm.state("main"))
+					.chain_auto_run(false);
+		}).new_transition("scores->details", t => {
+			t.chain_from(fsm.state("scores"))
+				.chain_to(fsm.state("score_details"))
+					.chain_auto_run(false);
+		}).new_transition("details->scores", t => {
+			t.chain_from(fsm.state("score_details"))
+				.chain_to(fsm.state("scores"))
 					.chain_auto_run(false);
 		}).new_transition("main->settings", t => {
 			t.chain_from(fsm.state("main"))

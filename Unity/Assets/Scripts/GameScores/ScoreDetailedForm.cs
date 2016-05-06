@@ -9,10 +9,14 @@ using GameScores;
 using UniRx;
 
 public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
-	protected ReactiveProperty<GameScores.Score> _rx_score 
-		= new ReactiveProperty<GameScores.Score>();
+	protected static Subject<Score> selected_scores = new Subject<Score>();
+	protected ReactiveProperty<Score> _rx_score;
 	public ReactiveProperty<Score> rx_score{
-		get { return _rx_score;}
+		get { 
+			if (_rx_score == null)
+				_rx_score = selected_scores.ToReactiveProperty<Score>();
+			return _rx_score; 
+		}
 		private set{ _rx_score = value;}
 	}
 	[Show]
@@ -24,15 +28,8 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	public Text date_time;
 	public Text play_time;
 	public Text game_length;
-	public Text finished;
 	public Text player_name;
 	
-	public Text total_weight;
-	public Text average_weight;
-	public Image average_ripeness;
-
-	[DontSerialize]
-	ReadOnlyReactiveProperty<string> rx_finished;
 	[DontSerialize]
 	ReadOnlyReactiveProperty<string> rx_player_name;
 	
@@ -45,15 +42,18 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 		return true;
 	}
 	
+	public static void select_score(Score s){
+		selected_scores.OnNext(s);
+	}
+	
 	void Awake () {
-		rx_score.Subscribe((s)=>{
+		selected_scores.Subscribe((s)=>{
 			if (s != null){
 				date_time.text = s.time.date_recorded_local().ToString();
 				play_time.text = GameTimer.to_stopwatch(s.time.played_for);
 				game_length.text = GameTimer.to_stopwatch(s.settings.time.game_length);
-				total_weight.text = s.total_weight("gathered").ToString("0.00");
-				average_weight.text = s.average_weight("gathered").ToString("0.00");
-				average_ripeness.color = StrawberryColor.get_color(s.average_ripeness("gathered"));
+				//Yeah, it's ugly abuse of static variables, but I'll fix it later.
+				MenuStateMachine.fsm.trigger_transition("scores->details");
 			}
 		});
 		
@@ -70,20 +70,6 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 		rx_player_name.Subscribe(t=>{
 			if (player_name.text != null)
 				player_name.text = t;
-		});
-		
-		rx_finished = rx_score.SelectMany(s=>{
-			if (s == null) return Observable.Never<String>();
-			if (s.finished()){
-				return LanguageController.controller.rx_load_text("time_finished");
-			}
-			return LanguageController.controller.rx_load_text("time_not_finished");
-		}).ToReadOnlyReactiveProperty<string>();
-		
-		rx_finished.Subscribe(t=>{
-			if (finished != null){
-				finished.text = t;
-			}
 		});
 	}
 }
