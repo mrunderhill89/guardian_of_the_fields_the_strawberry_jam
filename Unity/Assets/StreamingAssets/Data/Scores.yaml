@@ -74,6 +74,7 @@
   time:
     date_recorded: 2016-05-05T14:22:12.9330180-07:00
     played_for: 149.1971
+    distance_covered: 500
   berries:
     categories:
       gathered:
