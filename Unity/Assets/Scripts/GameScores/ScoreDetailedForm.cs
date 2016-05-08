@@ -48,6 +48,15 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	
 	public static Color score_bonus_color;
 	public static Color score_penalty_color;
+	public static Text format_score_text(Text t, float value, string format = "0.00"){
+		t.text = (value >= 0.0f?"+":"")+value.ToString(format);
+		if (value < 0){
+			t.color = score_penalty_color;
+		} else {
+			t.color = score_bonus_color;
+		}
+		return t;
+	}
 	
 	void Awake () {
 		selected_scores.Subscribe((s)=>{

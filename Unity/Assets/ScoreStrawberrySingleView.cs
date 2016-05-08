@@ -87,9 +87,9 @@ public class ScoreStrawberrySingleView : BetterBehaviour {
 					+ berry_weight.range_value(berry.weight); 
 				float total_score = flat_score + range_score;
 
-				flat_score_text.text = flat_score.ToString("0.00");
-				range_score_text.text = (range_score >= 0.0f?"+":"-")+range_score.ToString("0.00");
-				total_score_text.text = total_score.ToString("0.00");
+				ScoreDetailedForm.format_score_text(flat_score_text, flat_score);
+				ScoreDetailedForm.format_score_text(range_score_text, range_score);
+				ScoreDetailedForm.format_score_text(total_score_text, total_score);
 			} else {
 				//Hide the view if we don't have all the necessary data.
 				vis.visible = false;

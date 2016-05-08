@@ -32,8 +32,8 @@
         max_accept: 0.1
         min_close: 0.2
         max_close: 0.2
-        flat_bonus: 1
-        flat_penalty: 1
+        flat_bonus: 0
+        flat_penalty: 0
         range_bonus: 0.2
         range_penalty: 0.2
         epsilon: 1E-06
@@ -52,16 +52,16 @@
         epsilon: 1E-06
       distance_covered:
         target: 500
-        min_accept: 10
-        max_accept: 10
-        min_close: 20
-        max_close: 20
+        min_accept: 20
+        max_accept: 20
+        min_close: 50
+        max_close: 50
         limit_upper: true
         limit_lower: true
-        flat_bonus: 1
-        flat_penalty: 1
-        range_bonus: 20
-        range_penalty: 20
+        flat_bonus: 50
+        flat_penalty: 50
+        range_bonus: 50
+        range_penalty: 50
         epsilon: 1E-06
     time:
       end_early: true
