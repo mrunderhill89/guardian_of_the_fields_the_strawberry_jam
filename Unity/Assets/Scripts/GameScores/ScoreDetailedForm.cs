@@ -46,6 +46,9 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 		selected_scores.OnNext(s);
 	}
 	
+	public static Color score_bonus_color;
+	public static Color score_penalty_color;
+	
 	void Awake () {
 		selected_scores.Subscribe((s)=>{
 			if (s != null){
