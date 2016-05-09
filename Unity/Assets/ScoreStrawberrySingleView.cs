@@ -81,11 +81,9 @@ public class ScoreStrawberrySingleView : BetterBehaviour {
 				}
 				
 				//Score Views
-				float flat_score = ripeness.flat_value(berry.ripeness) 
-					+ berry_weight.flat_value(berry.weight);
-				float range_score = ripeness.range_value(berry.ripeness) 
-					+ berry_weight.range_value(berry.weight); 
-				float total_score = flat_score + range_score;
+				float flat_score = win.evaluate_strawberry_flat(berry);
+				float range_score = win.evaluate_strawberry_range(berry);
+				float total_score = win.evaluate_strawberry(berry);
 
 				ScoreDetailedForm.format_score_text(flat_score_text, flat_score);
 				ScoreDetailedForm.format_score_text(range_score_text, range_score);

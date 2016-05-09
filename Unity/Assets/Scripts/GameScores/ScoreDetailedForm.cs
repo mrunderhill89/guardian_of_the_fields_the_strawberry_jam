@@ -33,6 +33,8 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	[DontSerialize]
 	ReadOnlyReactiveProperty<string> rx_player_name;
 	
+	IDisposable select_subscription;
+	
 	public static bool IsNullOrWhiteSpace(string s){
 		if (s == null || s.Length <= 0) 
 			return true;
@@ -59,12 +61,12 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	}
 	
 	void Awake () {
-		selected_scores.Subscribe((s)=>{
+		select_subscription = selected_scores.Subscribe((s)=>{
 			if (s != null){
-				date_time.text = s.time.date_recorded_local().ToString();
-				play_time.text = GameTimer.to_stopwatch(s.time.played_for);
-				game_length.text = GameTimer.to_stopwatch(s.settings.time.game_length);
+				if (date_time != null)
+					date_time.text = s.time.date_recorded_local().ToString();
 				//Yeah, it's ugly abuse of static variables, but I'll fix it later.
+				score = s;
 				MenuStateMachine.fsm.trigger_transition("scores->details");
 			}
 		});
@@ -83,5 +85,9 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 			if (player_name != null)
 				player_name.text = t;
 		});
+	}
+	
+	void OnDestroy(){
+		select_subscription.Dispose();
 	}
 }

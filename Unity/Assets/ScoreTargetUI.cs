@@ -71,15 +71,10 @@ public class ScoreTargetUI : BetterBehaviour, IScoreTargetUI {
 			if (data != null)
 				data.range_penalty = value;
 		});
-		rx_valid_data.SelectMany(d=>{
-			return d.rx_limit_upper.CombineLatest(
-					d.rx_limit_lower,
-					(upper, lower)=>{
-						return upper || lower;
-					});
-		}).DistinctUntilChanged().Subscribe((visible)=>{
+		rx_valid_data.SelectMany(d=>d.rx_is_limited)
+		.DistinctUntilChanged().Subscribe((limited)=>{
 			if (hide_when_unlimited != null)
-				hide_when_unlimited.visible = visible;
+				hide_when_unlimited.visible = limited;
 		});
 	}
 }

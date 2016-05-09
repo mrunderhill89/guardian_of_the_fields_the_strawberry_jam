@@ -60,15 +60,30 @@ public class WinCondition : IEquatable<WinCondition>
 		}
 		
 		public float evaluate_strawberry(GameScores.StrawberrySingleScore berry){
-			return ripeness.evaluate(berry.ripeness) + berry_size.evaluate(berry.weight);
+			float ripe_score = ripeness.evaluate(berry.ripeness);
+			float size_score = berry_size.evaluate(berry.weight);
+			if (berry_size.is_limited && ripe_score > size_score)
+				return size_score;
+			else
+				return ripe_score;
 		}
 		
 		public float evaluate_strawberry_flat(GameScores.StrawberrySingleScore berry){
-			return ripeness.flat_value(berry.ripeness) + berry_size.flat_value(berry.weight);
+			float ripe_score = ripeness.flat_value(berry.ripeness);
+			float size_score = berry_size.flat_value(berry.weight);
+			if (berry_size.is_limited && ripe_score > size_score)
+				return size_score;
+			else
+				return ripe_score;
 		}
 
 		public float evaluate_strawberry_range(GameScores.StrawberrySingleScore berry){
-			return ripeness.range_value(berry.ripeness) + berry_size.range_value(berry.weight);
+			float ripe_score = ripeness.range_value(berry.ripeness);
+			float size_score = berry_size.range_value(berry.weight);
+			if (berry_size.is_limited && ripe_score > size_score)
+				return size_score;
+			else
+				return ripe_score;
 		}
 
 		public float evaluate_basket(GameScores.BasketSingleScore basket){

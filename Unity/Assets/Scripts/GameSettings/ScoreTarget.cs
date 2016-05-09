@@ -25,8 +25,10 @@ public interface IScoreTarget{
 
 	bool limit_upper{get; set;}
 	bool limit_lower{get; set;}
+	bool is_limited{get;}
 	IObservable<bool> rx_limit_upper{get;}
 	IObservable<bool> rx_limit_lower{get;}
+	IObservable<bool> rx_is_limited{get;}
 	
 	float flat_bonus{get; set;}
 	float flat_penalty{get; set;}
@@ -175,6 +177,22 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 		get{ return _rx_limit_lower.Value; } 
 		set{ _rx_limit_lower.Value = value; }
 	}
+
+	[YamlIgnore]
+	public bool is_limited{
+		get{ return limit_lower || limit_upper; }
+	}
+	protected ReadOnlyReactiveProperty<bool> _rx_is_limited;
+	[YamlIgnore]
+	public IObservable<bool> rx_is_limited{
+		get{
+			if (_rx_is_limited == null){
+				_rx_is_limited = rx_limit_lower.CombineLatest(rx_limit_upper, (lower,upper)=>lower || upper)
+					.ToReadOnlyReactiveProperty<bool>();
+			}
+			return _rx_is_limited;
+		}
+	}
 	
 	//Y Values
 		//Flat Bonus
@@ -300,7 +318,7 @@ public class ScoreTarget: IScoreTarget, IEquatable<IScoreTarget>{
 	}
 	
 	public bool is_disabled(){
-		return !(limit_lower || limit_upper);
+		return !is_limited;
 	}
 	
 	public ScoreTarget copy_from(IScoreTarget that){
