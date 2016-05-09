@@ -64,20 +64,32 @@ namespace GameScores
 				rx_overflow.Value = value;
 			}
 		}
+
 		public BasketSingleScore chain_overflow(bool value){
 			is_overflow = value;
 			return this;
 		}
+		
+		public float flat_score(ScoreTarget weight_target){
+			if (is_overflow){
+				//Overflowing baskets are automatic fails.
+				return weight_target.flat_penalty;
+			}
+			return weight_target.flat_value(weight);
+		}
 
-		public bool is_overweight(float max_weight){
-			return weight > max_weight;
+		public float range_score(ScoreTarget weight_target){
+			if (is_overflow){
+				//Overflowing baskets are automatic fails.
+				return weight_target.range_penalty;
+			}
+			return weight_target.range_value(weight);
 		}
-		public bool is_underweight(float min_weight){
-			return weight < min_weight;
+		
+		public float total_score(ScoreTarget weight_target){
+			return flat_score(weight_target) + range_score(weight_target);
 		}
-		public bool is_eligible(float max_weight, float min_weight){
-			return !(is_overflow || is_overweight (max_weight) || is_underweight (min_weight));
-		}
+
 
 		public BasketSingleScore(){
 			weight = 0.0f;
@@ -121,7 +133,18 @@ namespace GameScores
 			return baskets.Where (basket=>basket.is_overflow);
 		}
 
+		public float flat_score(GameSettings.WinCondition win){
+			return baskets.Aggregate(0.0f, (sum, basket)=>sum+basket.flat_score(win.basket_weight));
+		}
 		
+		public float range_score(GameSettings.WinCondition win){
+			return baskets.Aggregate(0.0f, (sum, basket)=>sum+basket.range_score(win.basket_weight));
+		}
+
+		public float total_score(GameSettings.WinCondition win){
+			return baskets.Aggregate(0.0f, (sum, basket)=>sum+basket.total_score(win.basket_weight));
+		}
+
 		public int Count(){
 			return rx_baskets.Count;
 		}

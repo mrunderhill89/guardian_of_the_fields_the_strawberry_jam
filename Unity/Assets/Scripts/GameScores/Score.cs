@@ -43,14 +43,13 @@ namespace GameScores {
 		}
 
 		public float basket_score(){
-			return baskets.baskets.Aggregate(0.0f, (sum, basket)=>{
-				return sum + settings.win_condition.evaluate_basket(basket);
-			});
+			return baskets.total_score(settings.win_condition);
 		}
 
 		public float distance_score(){
 			return settings.win_condition.distance_covered.evaluate(time.distance_covered);
 		}
+
 		[Show]
 		public float final_score(){
 			return (berry_score("gathered") - berry_score("dropped"))

@@ -80,7 +80,7 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 		}).ToReadOnlyReactiveProperty<string>();
 		
 		rx_player_name.Subscribe(t=>{
-			if (player_name.text != null)
+			if (player_name != null)
 				player_name.text = t;
 		});
 	}

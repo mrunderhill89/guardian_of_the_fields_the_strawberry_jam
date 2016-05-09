@@ -90,7 +90,7 @@ public class ScoreTimelineView : BetterBehaviour {
 		
 		//Average Speed
 		rx_player_time.CombineLatest(rx_player_distance, (time, distance)=>{
-			return distance/GameTimer.to_seconds(time);
+			return distance/time;
 		}).Subscribe(speed=>{
 			average_speed_text.text = speed.ToString("0.00")+" m/s";
 		});

@@ -35,6 +35,11 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 	public TextMesh weight_3d;
 	public Text id_text;
 	public TextMesh id_text_3d;
+	
+	public Text flat_score_text;
+	public Text range_score_text;
+	public Text total_score_text;
+	
 	public TooltipBroadcast tooltip;
 	public ObjectOpacity opacity;
 	public float off_opacity = 0.8f;
@@ -61,6 +66,7 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 	public static Dictionary<BasketCondition, string> language_keys = new Dictionary<BasketCondition, string>();
 	ReadOnlyReactiveProperty<BasketCondition> condition;
 
+	IObservable<UniRx.Tuple<BasketSingleScore, GameSettings.WinCondition>> rx_with_win;
 	void Start () {
 		if (component != null)
 			score = component.score_data;
@@ -127,6 +133,20 @@ public class BasketIcon : BetterBehaviour, IPointerOrMouseEnterHandler, IPointer
 			}
 		}).ToReadOnlyReactiveProperty<BasketCondition>();
 		
+		rx_with_win = rx_score.CombineLatest(rx_win, (s, w)=>{
+			return new UniRx.Tuple<BasketSingleScore, GameSettings.WinCondition>(s,w);
+		});
+		rx_with_win.Subscribe((tuple)=>{
+			if (flat_score_text != null){
+				ScoreDetailedForm.format_score_text(flat_score_text, tuple.Item2.evaluate_basket_flat(tuple.Item1));
+			}
+			if (range_score_text != null){
+				ScoreDetailedForm.format_score_text(range_score_text, tuple.Item2.evaluate_basket_range(tuple.Item1));
+			}
+			if (total_score_text != null){
+				ScoreDetailedForm.format_score_text(total_score_text, tuple.Item2.evaluate_basket(tuple.Item1));
+			}
+		});
 		
 		rx_tooltip_text = condition.Select(c=>language_keys[c]).ToReadOnlyReactiveProperty<string>();
 		rx_tooltip_text.Subscribe((key)=>{

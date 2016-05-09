@@ -63,9 +63,26 @@ public class WinCondition : IEquatable<WinCondition>
 			return ripeness.evaluate(berry.ripeness) + berry_size.evaluate(berry.weight);
 		}
 		
+		public float evaluate_strawberry_flat(GameScores.StrawberrySingleScore berry){
+			return ripeness.flat_value(berry.ripeness) + berry_size.flat_value(berry.weight);
+		}
+
+		public float evaluate_strawberry_range(GameScores.StrawberrySingleScore berry){
+			return ripeness.range_value(berry.ripeness) + berry_size.range_value(berry.weight);
+		}
+
 		public float evaluate_basket(GameScores.BasketSingleScore basket){
 			return basket_weight.evaluate(basket.weight);
 		}
+		
+		public float evaluate_basket_flat(GameScores.BasketSingleScore basket){
+			return basket_weight.flat_value(basket.weight);
+		}
+
+		public float evaluate_basket_range(GameScores.BasketSingleScore basket){
+			return basket_weight.range_value(basket.weight);
+		}
+
 		
 		public WinCondition copy_from(WinCondition that){
 			ripeness.copy_from(that.ripeness);

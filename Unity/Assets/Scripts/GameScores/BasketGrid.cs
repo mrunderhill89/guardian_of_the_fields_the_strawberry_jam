@@ -13,9 +13,9 @@ public class BasketGrid : BetterBehaviour {
 	public Transform place_icons_here;
 	public ReactiveCollection<GameObject> views = new ReactiveCollection<GameObject>();
 	[Show]
-	public static string ScorePrefab = "BasketIcon";
-	protected static GameObject _prefab = null;
-	public static GameObject prefab{
+	public string ScorePrefab = "BasketIcon";
+	protected GameObject _prefab = null;
+	public GameObject prefab{
 		get{
 			if (_prefab == null){
 				_prefab = Resources.Load(ScorePrefab) as GameObject;
