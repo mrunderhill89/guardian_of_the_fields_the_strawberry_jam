@@ -23,11 +23,15 @@ public class BasketGrid : BetterBehaviour {
 			return _prefab;
 		}
 	}
+	
+	IDisposable source_sub;
+	IDisposable add_sub;
+	IDisposable remove_sub;
 	void Start(){
 		views.ObserveRemove ().Subscribe ((evn) => {
 			Destroy(evn.Value);
 		});
-		source.rx_score.Subscribe((score)=>{
+		source_sub = source.rx_score.Subscribe((score)=>{
 			foreach(GameObject view in views){
 				Destroy(view);
 			}
@@ -37,10 +41,10 @@ public class BasketGrid : BetterBehaviour {
 				views.AddRange(score.baskets.rx_baskets.Select((basket)=>{
 					return create_icon(basket, score.settings.win_condition);
 				}));
-				score.baskets.rx_baskets.ObserveAdd().Subscribe((evn)=>{
+				add_sub = score.baskets.rx_baskets.ObserveAdd().Subscribe((evn)=>{
 					views.Add(create_icon(evn.Value, score.settings.win_condition));
 				});
-				score.baskets.rx_baskets.ObserveRemove().Subscribe((evn)=>{
+				remove_sub = score.baskets.rx_baskets.ObserveRemove().Subscribe((evn)=>{
 					views.RemoveAt(evn.Index);
 				});
 			}
@@ -56,5 +60,11 @@ public class BasketGrid : BetterBehaviour {
 	
 	void OnDestroy(){
 		views.Clear();
+		if (source_sub != null)
+			source_sub.Dispose();
+		if (add_sub != null)
+			add_sub.Dispose();
+		if (remove_sub != null)
+			remove_sub.Dispose();
 	}
 }

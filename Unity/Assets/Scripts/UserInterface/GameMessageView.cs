@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Vexe.Runtime.Types;
 using UniRx;
 
@@ -12,15 +13,22 @@ public class GameMessageView : BetterBehaviour {
 	public int max_messages = 5;
 	public float message_life = 3.0f;
 	float clear_next_message = 0.0f;
+	
+	IDisposable sub;
 	// Use this for initialization
 	void Start () {
-		GameMessages.message_stream.Subscribe ((msg) => {
+		sub = GameMessages.message_stream.Subscribe ((msg) => {
 			stored_messages.Enqueue(msg);
 			if (stored_messages.Count > max_messages){
 				stored_messages.Dequeue();
 			}
 			clear_next_message = msg.life;
 		});
+	}
+	
+	void OnDestroy (){
+		if (sub != null)
+			sub.Dispose();
 	}
 	
 	// Update is called once per frame

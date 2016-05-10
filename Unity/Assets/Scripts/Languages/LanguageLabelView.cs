@@ -46,6 +46,7 @@ public class LanguageLabelView: BetterBehaviour {
 	[DontSerialize]
 	public ILanguageController controller;
 
+	IDisposable sub;
 	void Start(){
 		if (ui_texts.Count == 0)
 			ui_texts.AddRange(GetComponents<Text>());
@@ -56,7 +57,7 @@ public class LanguageLabelView: BetterBehaviour {
 			controller = LanguageController.controller;
 		}
 		rx_value = controller.rx_get_language_label(rx_language);
-		rx_value.Subscribe((t)=>{
+		sub = rx_value.Subscribe((t)=>{
 			foreach(Text ui in ui_texts){
 				if (ui != null){
 					ui.text = t;
@@ -68,5 +69,10 @@ public class LanguageLabelView: BetterBehaviour {
 				}
 			}
 		});
+	}
+	
+	void OnDestroy(){
+		if (sub != null)
+			sub.Dispose();
 	}
 }

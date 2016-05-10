@@ -51,11 +51,12 @@ public class ScoreStrawberryView : BetterBehaviour {
 	public bool reverse = false;
 	
 	public string category = "Gathered";
+	IDisposable source_sub;
 	void Start(){
 		views.ObserveRemove ().Subscribe ((evn) => {
 			Destroy(evn.Value);
 		});
-		source.rx_score.Subscribe((score)=>{
+		source_sub = source.rx_score.Subscribe((score)=>{
 			foreach(GameObject view in views){
 				Destroy(view);
 			}
@@ -105,5 +106,7 @@ public class ScoreStrawberryView : BetterBehaviour {
 	
 	void OnDestroy(){
 		views.Clear();
+		if (source_sub != null)
+			source_sub.Dispose();
 	}
 }

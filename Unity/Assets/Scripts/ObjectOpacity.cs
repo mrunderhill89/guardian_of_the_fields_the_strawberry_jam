@@ -95,6 +95,11 @@ public class ObjectOpacity : BetterBehaviour {
 		}
 	}
 	
+	void OnDestroy(){
+		if (subscription != null)
+			subscription.Dispose();
+	}
+	
 	// Update is called once per frame
 	void Update () {
 		if (instant_drift){

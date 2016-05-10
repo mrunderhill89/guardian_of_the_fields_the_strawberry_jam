@@ -84,7 +84,7 @@ public class ObjectVisibility : BetterBehaviour {
 	
 	void update(bool vis){
 		foreach(GameObject obj in objects){
-				obj.SetActive(vis);
+			obj.SetActive(vis);
 		}
 		foreach(MonoBehaviour behavior in behaviors){
 			behavior.enabled = vis;

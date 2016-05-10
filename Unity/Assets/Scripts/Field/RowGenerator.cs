@@ -88,10 +88,12 @@ public class RowGenerator : BetterBehaviour {
 		return this;
 	}
 
+	IDisposable create_sub;
+	IDisposable destroy_sub;
 	void Awake () {
 		if (row == null)
 			row = GetComponent<RowHandler2> ();
-		row.creation.Subscribe ((int ci) => {
+		create_sub = row.creation.Subscribe ((int ci) => {
 			if (pattern.Count > 0){
 				string prefab = pattern[wrap(ci, pattern.Count)];
 				if (prefab != ""){
@@ -107,7 +109,7 @@ public class RowGenerator : BetterBehaviour {
 				}
 			}
 		});
-		row.destruction.Subscribe ((int di) => {
+		destroy_sub = row.destruction.Subscribe ((int di) => {
 			if (objects.ContainsKey(di)){
 				destruction.OnNext(objects[di]);
 				foreach(Action<GameObject> act in destroy_events){
@@ -119,4 +121,10 @@ public class RowGenerator : BetterBehaviour {
 		});
 	}
 	
+	void OnDestroy(){
+		if (create_sub != null)
+			create_sub.Dispose();
+		if (destroy_sub != null)
+			destroy_sub.Dispose();
+	}
 }

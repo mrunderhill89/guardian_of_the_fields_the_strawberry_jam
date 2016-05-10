@@ -13,6 +13,8 @@ public class FilenameTextField : BetterBehaviour {
 	public InputField filename;
 	public IDirectoryLoader directory_loader;
 	public IFileLoader file_loader;
+
+	//TODO: Change this over to RxUIAdapter.
 	void Start () {
 		if (file_loader != null && filename != null){
 			file_loader.rx_filename.Subscribe(text=>{

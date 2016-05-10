@@ -41,11 +41,11 @@ public class RowHandler2 : BetterBehaviour {
 	public ReactiveProperty<int> index = new ReactiveProperty<int>();
 
 
-
+	IDisposable index_sub;
 	void Start(){
 		if (target == null)
 			target = Camera.main.transform;
-		index.Subscribe ((int i) => {
+		index_sub = index.Subscribe ((int i) => {
 			fill (i-view_behind, i+view_ahead);
 		});
 		fill (0 - view_behind, view_ahead);
@@ -94,5 +94,10 @@ public class RowHandler2 : BetterBehaviour {
 		if (target != null) {
 			index.Value = pos_to_cell (target.position);
 		}
+	}
+	
+	void OnDestroy(){
+		if (index_sub != null)
+			index_sub.Dispose();
 	}
 }

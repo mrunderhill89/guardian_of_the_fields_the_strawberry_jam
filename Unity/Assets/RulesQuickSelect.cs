@@ -13,25 +13,31 @@ public class RulesQuickSelect : BetterBehaviour {
 	public Dropdown quick_import;
 	protected IFileLoader<GameSettings.Model> loader;
 
-	class QuickImportOption{
+	class QuickImportOption: IDisposable {
 		internal string option_name;
 		internal ReadOnlyReactiveProperty<string> rx_display_text;
 		internal Dropdown.OptionData dropdown_option;
+		IDisposable sub;
 		public QuickImportOption(string _name){
 			option_name = _name;
 			dropdown_option = new Dropdown.OptionData();
 			
 			rx_display_text = LanguageController.controller.rx_get_filename_label(_name);
 			
-			rx_display_text.Subscribe(t=>{
+			sub = rx_display_text.Subscribe(t=>{
 				dropdown_option.text = t;
 			});
+		}
+		public void Dispose(){
+			if (sub != null)
+				sub.Dispose();
 		}
 	}
 	
 	ReactiveCollection<QuickImportOption> quick_import_options = new ReactiveCollection<QuickImportOption>();
 	IntReactiveProperty default_option = new IntReactiveProperty(0);
-
+	IDisposable select_sub;
+	IDisposable loader_sub;
 	void Start () {
 		loader = GameSettingsComponent.loader;
 		quick_import.options.Clear();
@@ -52,7 +58,7 @@ public class RulesQuickSelect : BetterBehaviour {
 		});
 		
 		//Keep the box synced with the loader when possible.
-		loader.rx_filename.Subscribe((file)=>{
+		loader_sub = loader.rx_filename.Subscribe((file)=>{
 			foreach (QuickImportOption opt in quick_import_options){
 				if (quick_import != null && opt.option_name == file){
 					quick_import.captionText.text = opt.rx_display_text.Value;
@@ -60,7 +66,7 @@ public class RulesQuickSelect : BetterBehaviour {
 			}
 		});
 		
-		quick_import
+		select_sub = quick_import
 		.SelectFromCollection(quick_import_options, (opt, index)=>{
 			if (default_option.Value == 0 
 				&& string.Equals(opt.option_name, "default", StringComparison.CurrentCultureIgnoreCase)){
@@ -73,5 +79,13 @@ public class RulesQuickSelect : BetterBehaviour {
 		});
 		
 		quick_import_options.SetRange(loader.available_files().Select(name=>new QuickImportOption(name)));
+	}
+	
+	void OnDestroy(){
+		if (select_sub != null)
+			select_sub.Dispose();
+		if (loader_sub != null)
+			loader_sub.Dispose();
+		
 	}
 }
