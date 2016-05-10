@@ -50,6 +50,7 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	
 	public static Color score_bonus_color;
 	public static Color score_penalty_color;
+
 	public static Text format_score_text(Text t, float value, string format = "0.00"){
 		t.text = (value >= 0.0f?"+":"")+value.ToString(format);
 		if (value < 0){
@@ -88,6 +89,7 @@ public class ScoreDetailedForm : BetterBehaviour, IScoreSource {
 	}
 	
 	void OnDestroy(){
-		select_subscription.Dispose();
+		if (select_subscription != null)
+			select_subscription.Dispose();
 	}
 }

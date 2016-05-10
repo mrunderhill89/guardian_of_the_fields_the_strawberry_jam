@@ -35,103 +35,51 @@ public class SettingsForm : BetterBehaviour {
 	public Slider min_ripeness;
 	public Slider max_ripeness;
 
+	RxUIAdapter adapter = new RxUIAdapter();
+	
+	IObservable<T> get_property<T>(Func<GameSettings.Model, IObservable<T>> extract){
+		return data_component.rx_current_rules.Where(rules=> rules != null).SelectMany(extract);
+	}
+
 	void Start () {
-		register_toggle (randomize, (x => x.randomness.rx_randomize));
-		register_toggle (tutorial, (x => x.flags.rx_tutorial));
-		register_toggle (debug, (x => x.flags.rx_cheats));
-		register_input_int (rng_seed, (x => x.randomness.rx_seed));
-		register_input_int (max_berries, (x => x.strawberry.rx_max_berries_in_field));
-		register_input_float (min_size, (x => x.strawberry.rx_min_size));
-		register_input_float (max_size, (x => x.strawberry.rx_max_size));
-		register_input_float (density, (x => x.strawberry.rx_density));
-		register_input_int (break_distance, (x=> x.breaks.rx_distance));
-		register_input_int (break_length, (x=> x.breaks.rx_length));
-		register_input_float (game_length, (x => x.time.rx_game_length));
-		register_input_float (start_hour, (x => x.time.rx_start_hour));
-		register_input_float (end_hour, (x => x.time.rx_end_hour));
-		register_slider (min_ripeness, (x => x.strawberry.rx_min_ripeness));
-		register_slider (max_ripeness, (x => x.strawberry.rx_max_ripeness));
-		
-		register_input_float (movement_speed, (x => x.time.rx_movement_speed));
-		register_input_float (slide_speed, (x => x.time.rx_slide_speed));
+		adapter.register_toggle (randomize, get_property<bool>(rules => rules.randomness.rx_randomize),
+			(value)=>{data_component.current_rules.randomness.randomize = value;}
+		).register_toggle (tutorial, get_property<bool>(rules=> rules.flags.rx_tutorial),
+			(value)=>{data_component.current_rules.flags.tutorial = value;}
+		).register_toggle (debug, get_property<bool>(rules=> rules.flags.rx_cheats),
+			(value)=>{data_component.current_rules.flags.cheats = value;}
+		).register_input_int(rng_seed, get_property<int>(rules=> rules.randomness.rx_seed),
+			(value)=>{data_component.current_rules.randomness.seed = value;}
+		).register_input_int (max_berries, get_property<int>(rules=> rules.strawberry.rx_max_berries_in_field),
+			(value)=>{data_component.current_rules.strawberry.max_berries_in_field = value;}
+		).register_input_float (min_size, get_property<float>(rules=> rules.strawberry.rx_min_size),
+			(value)=>{data_component.current_rules.strawberry.min_size = value;}
+		).register_input_float (max_size, get_property<float>(rules => rules.strawberry.rx_max_size),
+			(value)=>{data_component.current_rules.strawberry.max_size = value;}
+		).register_input_float (density, get_property<float>(rules => rules.strawberry.rx_density),
+			(value)=>{data_component.current_rules.strawberry.density = value;}
+		).register_input_int (break_distance, get_property<int>(rules => rules.breaks.rx_distance),
+			(value)=>{data_component.current_rules.breaks.distance = value;}
+		).register_input_int (break_length, get_property<int>(rules => rules.breaks.rx_length),
+			(value)=>{data_component.current_rules.breaks.length = value;}
+		).register_input_float (game_length, get_property<float>(rules => rules.time.rx_game_length),
+			(value)=>{data_component.current_rules.time.game_length = value;}
+		).register_input_float (start_hour, get_property<float>(rules => rules.time.rx_start_hour),
+			(value)=>{data_component.current_rules.time.start_hour = value;}
+		).register_input_float (end_hour, get_property<float>(rules => rules.time.rx_end_hour),
+			(value)=>{data_component.current_rules.time.end_hour = value;}
+		).register_slider (min_ripeness, get_property<float>(rules => rules.strawberry.rx_min_ripeness),
+			(value)=>{data_component.current_rules.strawberry.min_ripeness = value;}
+		).register_slider (max_ripeness, get_property<float>(rules => rules.strawberry.rx_max_ripeness),
+			(value)=>{data_component.current_rules.strawberry.max_ripeness = value;}
+		).register_input_float (movement_speed, get_property<float>(rules => rules.time.rx_movement_speed),
+			(value)=>{data_component.current_rules.time.movement_speed = value;}
+		).register_input_float (slide_speed, get_property<float>(rules => rules.time.rx_slide_speed),
+			(value)=>{data_component.current_rules.time.slide_speed = value;}
+		);
 	}
 
-	public SettingsForm register_toggle(Toggle toggle, Func<GameSettings.Model, BoolReactiveProperty> get_property){
-		data_component.rx_current_rules
-			.SelectMany<GameSettings.Model, bool>((model)=>{
-				if (model == null) return Observable.Never<bool>();
-				return get_property(model).AsObservable<bool>();
-			})
-			.DistinctUntilChanged()
-			.Subscribe ((value) => {
-				toggle.isOn = value;
-			});
-		toggle.onValueChanged.AddListener ((value) => {
-			get_property(data_component.current_rules).Value = value;
-		});
-		return this;
-	}
-
-	public SettingsForm register_slider(Slider slider, Func<GameSettings.Model, FloatReactiveProperty> get_property){
-		data_component.rx_current_rules
-			.SelectMany<GameSettings.Model, float>((model)=>{
-				if (model == null) return Observable.Never<float>();
-				return get_property(model).AsObservable<float>();
-			}).DistinctUntilChanged()
-			.Subscribe ((value) => {
-				slider.value = value;
-			});
-		slider.onValueChanged.AddListener ((value) => {
-			get_property(data_component.current_rules).Value = value;
-		});
-		return this;
-	}
-
-	public SettingsForm register_input_int(InputField input, Func<GameSettings.Model, IntReactiveProperty> get_property){
-		data_component.rx_current_rules
-			.SelectMany<GameSettings.Model, int>((model)=>{
-				if (model == null) return Observable.Never<int>();
-				return get_property(model).AsObservable<int>();
-			}).DistinctUntilChanged()
-			.Subscribe ((value) => {
-				input.text = value.ToString();
-			});
-		input.onValueChange.AddListener ((value) => {
-			get_property(data_component.current_rules).Value = 
-				ParseIntOrDefault(input.text, get_property(data_component.current_rules).Value);
-		});
-		return this;
-	}
-
-	public SettingsForm register_input_float(InputField input, Func<GameSettings.Model, FloatReactiveProperty> get_property){
-		data_component.rx_current_rules
-			.SelectMany<GameSettings.Model, float>((model)=>{
-				if (model == null) return Observable.Never<float>();
-				return get_property(model).AsObservable<float>();
-			}).DistinctUntilChanged()
-			.Subscribe ((value) => {
-				input.text = value.ToString();
-			});
-		input.onValueChange.AddListener ((value) => {
-			get_property(data_component.current_rules).Value = 
-				ParseFloatOrDefault(input.text, get_property(data_component.current_rules).Value);
-		});
-		return this;
-	}
-
-	public static int ParseIntOrDefault(string s, int def)
-	{
-		int number;
-		if (int.TryParse(s, out number))
-			return number;
-		return def;
-	}
-
-	public static float ParseFloatOrDefault(string s, float def)
-	{
-		float number;
-		if (float.TryParse(s, out number))
-			return number;
-		return def;
+	void OnDestroy(){
+		adapter.Dispose();
 	}
 }

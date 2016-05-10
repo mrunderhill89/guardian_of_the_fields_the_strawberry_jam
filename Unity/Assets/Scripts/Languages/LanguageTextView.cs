@@ -49,6 +49,8 @@ public class LanguageTextView: BetterBehaviour {
 	[DontSerialize]
 	public ILanguageController controller;
 	
+	IDisposable subscription;
+	
 	void Start(){
 		if (ui_texts.Count == 0)
 			ui_texts.AddRange(GetComponents<Text>());
@@ -59,7 +61,7 @@ public class LanguageTextView: BetterBehaviour {
 			controller = LanguageController.controller;
 		}
 		rx_value = controller.rx_load_text(rx_key);
-		rx_value.Subscribe((t)=>{
+		subscription = rx_value.Subscribe((t)=>{
 			string full_text = prefix + t + suffix;
 			foreach(Text ui in ui_texts){
 				if (ui != null){
@@ -72,5 +74,10 @@ public class LanguageTextView: BetterBehaviour {
 				}
 			}
 		});
+	}
+	
+	void OnDestroy(){
+		if (subscription != null)
+			subscription.Dispose();
 	}
 }

@@ -151,13 +151,13 @@ public class LanguageControllerStatic : ILanguageController {
 		return rx_file.SelectMany(key=>rx_get_filename_label(key)).ToReadOnlyReactiveProperty<string>();
 	}
 	
-	public void load_all(IFileLoader<LanguageModel> loader){
+	public void load_all(){
 		foreach(string opt in loader.available_files()){
 			set_language(opt, loader.load(opt));
 		}
 	}
 	
-	public ILoader<LanguageModel> loader;
+	public IFileLoader<LanguageModel> loader;
 	static TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 }
 
@@ -193,8 +193,11 @@ public class LanguageController: BetterBehaviour, ILanguageController {
 	}
 	
 	void Start(){
-		LocalFileLoader<LanguageModel> local = new LocalFileLoader<LanguageModel>();
-		local.directory = Application.streamingAssetsPath + "/Data/Languages";
-		controller.load_all(local);
+		if (controller.loader == null){
+			LocalFileLoader<LanguageModel> local = new LocalFileLoader<LanguageModel>();
+			local.directory = Application.streamingAssetsPath + "/Data/Languages";
+			controller.loader = local;
+			controller.load_all();
+		}
 	}
 }

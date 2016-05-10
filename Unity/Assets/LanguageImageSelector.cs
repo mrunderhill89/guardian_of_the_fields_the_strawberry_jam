@@ -12,7 +12,8 @@ public class LanguageImageSelector : BetterBehaviour {
 	public Dictionary<string,Sprite> images = new Dictionary<string, Sprite>();
 	public ILanguageController controller;
 
-	// Use this for initialization
+	IDisposable subscription;
+	
 	void Start () {
 		if (target_image == null)
 			target_image = GetComponent<Image> ();
@@ -20,12 +21,17 @@ public class LanguageImageSelector : BetterBehaviour {
 			default_sprite = target_image.sprite;
 		if (controller == null)
 			controller = LanguageController.controller;
-		controller.rx_current_language_key.Subscribe ((string lang) => {
+		subscription = controller.rx_current_language_key.Subscribe ((string lang) => {
 			if (images.ContainsKey(lang)){
 				target_image.sprite = images[lang];
 			} else {
 				target_image.sprite = default_sprite;
 			}
 		});
+	}
+	
+	void OnDestroy(){
+		if (subscription != null)
+			subscription.Dispose();
 	}
 }
